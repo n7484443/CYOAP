@@ -1,17 +1,16 @@
 package design;
 
+import java.awt.Frame;
 import java.awt.Graphics;
-
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class Panel_Left_Side implements Panel{
 	public JPanel panel_side_variable;
-	public JFrame mother_frame;
+	public Frame mother_frame;
 	public JButton button;
 	
-	public void init(JFrame mother_frame) {
+	public void init(Frame mother_frame) {
 		this.mother_frame = mother_frame;
 		
 		panel_side_variable = new JPanel();
@@ -34,7 +33,7 @@ public class Panel_Left_Side implements Panel{
 	}
 
 	@Override
-	public void paint(Graphics g) {
+	public void paint(Graphics g, int top) {
 		// TODO Auto-generated method stub
 		
 	}

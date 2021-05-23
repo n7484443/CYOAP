@@ -1,10 +1,9 @@
 package design;
 
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
-
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -13,12 +12,12 @@ public class Panel_Main implements Panel {
 	public JPanel panel_text;
 	public JPanel panel_all;
 	public JLabel label_image;
-	public JFrame mother_frame;
+	public Frame mother_frame;
 	public ImageIcon image;
 	public Image image_size = null;
 	public boolean change = false;
 
-	public void init(JFrame mother_frame) {
+	public void init(Frame mother_frame) {
 		this.mother_frame = mother_frame;
 
 		panel_all = new JPanel();
@@ -28,7 +27,7 @@ public class Panel_Main implements Panel {
 		panel_all.add(panel_text);
 		panel_all.add(panel_image);
 		panel_image.add(label_image);
-		
+
 		panel_image.setLayout(null);
 		panel_text.setLayout(null);
 		panel_all.setLayout(null);
@@ -43,8 +42,7 @@ public class Panel_Main implements Panel {
 		panel_text.setLocation(mother_frame.getSize().width / 5, (int) (mother_frame.getSize().height / 3f * 2));
 		label_image.setSize(panel_image.getSize());
 		label_image.setLocation(panel_image.getLocation());
-		
-		
+
 		/*
 		 * describe = new JTextArea(); describe.setVisible(true); describe.setSize(200,
 		 * 100); describe.setPreferredSize(new Dimension(250, 100));
@@ -54,21 +52,23 @@ public class Panel_Main implements Panel {
 
 	@Override
 	public void update() {
-		if(change) {
+		if (change) {
 			if (image != null) {
-				var width = panel_image.getSize().width / image.getIconWidth();
-				var height = panel_image.getSize().height / image.getIconHeight();
-				float dx = Math.min(width, height);
-				width = (int) (image.getIconWidth() * dx);
-				height = (int) (image.getIconHeight() * dx);
-				label_image.setIcon(new ImageIcon(image.getImage().getScaledInstance(width, height, java.awt.Image.SCALE_DEFAULT)));
 				change = false;
 			}
 		}
 	}
 
 	@Override
-	public void paint(Graphics g) {
-		
+	public void paint(Graphics g, int top) {
+		if (image != null) {
+			float width = panel_image.getWidth() / image.getIconWidth();
+			float height = panel_image.getHeight() / image.getIconHeight();
+			boolean dx = height == Math.min(width, height);
+			float r = image.getIconWidth() / (float)image.getIconHeight();
+			int width_int = (int) (dx ? panel_image.getWidth() : (1/r) * panel_image.getHeight());
+			int height_int = (int) (dx ? r * panel_image.getHeight() : panel_image.getHeight());
+			g.drawImage(image.getImage(), panel_image.getLocation().x, top + panel_image.getLocation().y, width_int, height_int, null);
+		}
 	}
 }

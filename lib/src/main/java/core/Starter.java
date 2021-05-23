@@ -1,39 +1,44 @@
 package core;
 
-import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.MouseAdapter;
+import java.awt.image.BufferStrategy;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.TransferHandler;
-
 import com.formdev.flatlaf.FlatDarkLaf;
-
 import design.Panel_Left_Side;
 import design.Panel_Main;
 
-public class Starter extends JFrame implements Runnable{
-	private static final long serialVersionUID = 6729357859414168146L;
+public class Starter extends JFrame implements Runnable {
+	private static final long serialVersionUID = 1315572143966073521L;
+	
 	public static Starter starter;
 	public Panel_Left_Side panel_side;
 	public Panel_Main panel_main;
+	public Timer timer;
+	public Image image_buffer;
 
 	public void init() {
 		FlatDarkLaf.setup();
-		
-		this.setTitle("dd");
-		this.setSize(1920 / 2, 1080 / 2);
-		this.setVisible(true);
-		this.setResizable(false);
-		this.setLayout(null);
+		timer = new Timer();
+		setIgnoreRepaint(true);
+
+		setTitle("dd");
+		setSize(1920 / 2, 1080 / 2);
+		setVisible(true);
+		setResizable(false);
+		setLayout(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		image_buffer = createImage(this.getWidth(), this.getHeight());
 		setup();
 	}
 
@@ -42,44 +47,76 @@ public class Starter extends JFrame implements Runnable{
 		panel_main = new Panel_Main();
 		panel_side.init(this);
 		panel_main.init(this);
-		
+
 		var mouse_handler = new MouseHandler();
 		var file_handler = new FileDropHandler();
-		this.addMouseListener(mouse_handler);
-		this.setTransferHandler(file_handler);	
+		addMouseListener(mouse_handler);
+		setTransferHandler(file_handler);
 	}
-	//60fps 
+
+	// 60fps
 	public final int maxUps = 60;
-	public final int ups = 1000/maxUps;
-	public void update() throws InterruptedException {
-		int frame = 0;
-		while(true) {
-			long time = System.currentTimeMillis();
-			panel_side.update();
-			panel_main.update();
-			time -= System.currentTimeMillis();
-			Thread.sleep(ups - time);
-			
-			frame++;
-			if(frame > maxUps)frame = 0;
+	public final int maxFps = 60;
+
+	public void update(float interval) {
+		panel_side.update();
+		panel_main.update();
+	}
+
+	public void loop() throws InterruptedException {
+		float elapsedTime;
+		float accumulator = 0f;
+		float interval = 1f / maxUps;
+
+		while (true) {
+			elapsedTime = timer.getElapsedTime();
+			accumulator += elapsedTime;
+
+			//input();
+
+			while (accumulator >= interval) {
+				update(interval);
+				accumulator -= interval;
+			}
+
+			render();
+
+			//if (!window.isVSync()) {
+				sync();
+			//}
+		}
+
+	}
+
+	private void sync() {
+		float loopSlot = 1f / maxFps;
+		double endTime = timer.getLastLoopTime() + loopSlot;
+		while (timer.getTime() < endTime) {
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException ie) {
+			}
 		}
 	}
-	
+
 	public void update(File file) {
 		panel_main.image = new ImageIcon(file.getAbsolutePath());
 		panel_main.change = true;
 	}
-	
-	
-	@Override
-	public void paint(Graphics g) {
-		super.paint(g);
-		panel_main.paint(g);
-		panel_side.paint(g);
+
+	public void render() {
+		var g = image_buffer.getGraphics();
+		
+		this.paint(g);
+		panel_main.paint(g, this.getInsets().top);
+		panel_side.paint(g, this.getInsets().top);
+		
+		this.getGraphics().drawImage(image_buffer, 0, 0, null);
+		g.dispose();
 	}
-	
+
 	public Map<String, File> image_file = new HashMap<String, File>();
-	
+
 	public class FileDropHandler extends TransferHandler {
 		private static final long serialVersionUID = -7069254235375785714L;
 
@@ -108,7 +145,7 @@ public class Starter extends JFrame implements Runnable{
 			}
 
 			for (var file : files) {
-				if (file.getName().contains(".png")) {
+				if (file.getName().contains(".png") || file.getName().contains(".jpg")) {
 					image_file.put(file.getName(), file);
 					update(file);
 				} else if (file.getName().contains(".data")) {
@@ -122,15 +159,14 @@ public class Starter extends JFrame implements Runnable{
 
 	public class MouseHandler extends MouseAdapter {
 	}
-	
-	
+
 	@Override
 	public void run() {
 		System.out.println("Version|" + Core.version);
 		Starter.starter = this;
 		init();
 		try {
-			update();
+			loop();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

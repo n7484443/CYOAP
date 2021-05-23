@@ -1,9 +1,9 @@
 package core;
 
-import javax.swing.SwingUtilities;
-
 public class Core {
+	public static String version = "0.0.1";
 	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Starter());
+		new Thread(new Starter()).run();
+		//SwingUtilities.invokeLater(new Starter());
 	}
 }

@@ -1,7 +1,6 @@
 package core;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.MouseAdapter;
@@ -11,58 +10,72 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JButton;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.TransferHandler;
 
-import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.FlatDarkLaf;
+
+import design.Panel_Left_Side;
+import design.Panel_Main;
 
 public class Starter extends JFrame implements Runnable{
 	private static final long serialVersionUID = 6729357859414168146L;
 	public static Starter starter;
-	public JPanel panel_side_variable;
-	public JPanel panel_main;
-	public JTextArea describe;
+	public Panel_Left_Side panel_side;
+	public Panel_Main panel_main;
 
 	public void init() {
-		FlatLightLaf.setup();
+		FlatDarkLaf.setup();
 		
-		this.setTitle("");
+		this.setTitle("dd");
 		this.setSize(1920 / 2, 1080 / 2);
 		this.setVisible(true);
+		this.setResizable(false);
+		this.setLayout(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 		setup();
 	}
 
 	public void setup() {
-		panel_main = new JPanel();
-		panel_side_variable = new JPanel();
-		this.add(panel_main, BorderLayout.EAST);
-		this.add(panel_side_variable);
-
-		var but = new JButton();
-		but.setLocation(50, 50);
-		but.setVisible(true);
-		but.setSize(100, 50);
-		but.setText("Next");
-		panel_main.add(but);
-		panel_main.setVisible(true);
-		panel_main.setSize(200, 100);
-
-		describe = new JTextArea();
-		describe.setVisible(true);
-		describe.setSize(200, 100);
-		describe.setMaximumSize(new Dimension(250, 100));
-		panel_main.add(describe, BorderLayout.CENTER);
-
+		panel_side = new Panel_Left_Side();
+		panel_main = new Panel_Main();
+		panel_side.init(this);
+		panel_main.init(this);
+		
 		var mouse_handler = new MouseHandler();
 		var file_handler = new FileDropHandler();
 		this.addMouseListener(mouse_handler);
-		this.setTransferHandler(file_handler);
-		
+		this.setTransferHandler(file_handler);	
+	}
+	//60fps 
+	public final int maxUps = 60;
+	public final int ups = 1000/maxUps;
+	public void update() throws InterruptedException {
+		int frame = 0;
+		while(true) {
+			long time = System.currentTimeMillis();
+			panel_side.update();
+			panel_main.update();
+			time -= System.currentTimeMillis();
+			Thread.sleep(ups - time);
+			
+			frame++;
+			if(frame > maxUps)frame = 0;
+		}
+	}
+	
+	public void update(File file) {
+		panel_main.image = new ImageIcon(file.getAbsolutePath());
+		panel_main.change = true;
+	}
+	
+	
+	@Override
+	public void paint(Graphics g) {
+		super.paint(g);
+		panel_main.paint(g);
+		panel_side.paint(g);
 	}
 	
 	public Map<String, File> image_file = new HashMap<String, File>();
@@ -97,6 +110,7 @@ public class Starter extends JFrame implements Runnable{
 			for (var file : files) {
 				if (file.getName().contains(".png")) {
 					image_file.put(file.getName(), file);
+					update(file);
 				} else if (file.getName().contains(".data")) {
 					System.out.println(file.getName());
 				}
@@ -108,10 +122,17 @@ public class Starter extends JFrame implements Runnable{
 
 	public class MouseHandler extends MouseAdapter {
 	}
-
+	
+	
 	@Override
 	public void run() {
+		System.out.println("Version|" + Core.version);
 		Starter.starter = this;
 		init();
+		try {
+			update();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 }

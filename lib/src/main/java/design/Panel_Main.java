@@ -62,12 +62,12 @@ public class Panel_Main implements Panel {
 	@Override
 	public void paint(Graphics g, int top) {
 		if (image != null) {
-			float width = panel_image.getWidth() / image.getIconWidth();
-			float height = panel_image.getHeight() / image.getIconHeight();
-			boolean dx = height == Math.min(width, height);
-			float r = image.getIconWidth() / (float)image.getIconHeight();
-			int width_int = (int) (dx ? panel_image.getWidth() : (1/r) * panel_image.getHeight());
-			int height_int = (int) (dx ? r * panel_image.getHeight() : panel_image.getHeight());
+			float width = panel_image.getWidth() / (float)image.getIconWidth();
+			float height = panel_image.getHeight() / (float)image.getIconHeight();
+			float r = width < height ? width : height;
+			int width_int = (int) (r * image.getIconWidth());
+			int height_int = (int) (r * image.getIconHeight());
+			
 			g.drawImage(image.getImage(), panel_image.getLocation().x, top + panel_image.getLocation().y, width_int, height_int, null);
 		}
 	}

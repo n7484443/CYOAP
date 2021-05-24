@@ -4,7 +4,6 @@ import java.awt.Image;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.MouseAdapter;
-import java.awt.image.BufferStrategy;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;

@@ -1,9 +1,11 @@
 package design;
 
+import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.border.MatteBorder;
 
 public class Panel_Left_Side implements Panel{
 	public JPanel panel_side_variable;
@@ -25,6 +27,8 @@ public class Panel_Left_Side implements Panel{
 		button.setText("Next");
 		panel_side_variable.add(button);
 		panel_side_variable.setLayout(null);
+		panel_side_variable.setBorder(new MatteBorder(0, 0, 0, 1, Color.BLACK));
+		
 	}
 
 	@Override

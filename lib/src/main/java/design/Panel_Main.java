@@ -1,66 +1,87 @@
 package design;
 
-import java.awt.Frame;
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Image;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import java.awt.Insets;
 
-public class Panel_Main implements Panel {
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.border.MatteBorder;
+
+
+public class Panel_Main extends JPanel implements Panel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7976300570497450406L;
 	public JPanel panel_image;
 	public JPanel panel_text;
-	public JPanel panel_all;
-	public JLabel label_image;
-	public Frame mother_frame;
+	
+	public JScrollPane scrollpane_describe;
+	public JTextArea textArea_describe;
+	public JPanel mother_panel;
 	public ImageIcon image;
 	public Image image_size = null;
 	public boolean change = false;
 
-	public void init(Frame mother_frame) {
-		this.mother_frame = mother_frame;
-
-		panel_all = new JPanel();
-		panel_text = new JPanel();
+	public void init(JPanel mother_panel) {
+		this.mother_panel = mother_panel;
+		GridBagLayout layout = new GridBagLayout();
+		this.setLayout(layout);
+		
 		panel_image = new JPanel();
-		label_image = new JLabel();
-		panel_all.add(panel_text);
-		panel_all.add(panel_image);
-		panel_image.add(label_image);
+		panel_image.setBorder(new MatteBorder(0, 0, 1, 0, Color.BLACK));
+		panel_text = new JPanel();
+		
+		textArea_describe = new JTextArea(10, 50);
+		scrollpane_describe = new JScrollPane(textArea_describe, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollpane_describe.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+		panel_text.add(scrollpane_describe, BorderLayout.PAGE_END);
+		
+		var gbc = new GridBagConstraints();
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		gbc.weightx = 5;
+		gbc.weighty = 1;
+		gbc.gridwidth = 1;
+		gbc.gridheight = 1;
+		gbc.fill = GridBagConstraints.BOTH;
 
-		panel_image.setLayout(null);
-		panel_text.setLayout(null);
-		panel_all.setLayout(null);
+		var gbc_image = new GridBagConstraints();
+		gbc_image.gridx = 0;
+		gbc_image.gridy = 0;
+		gbc_image.weightx = 1;
+		gbc_image.weighty = 2;
+		gbc_image.gridwidth = 1;
+		gbc_image.gridheight = 2;
+		gbc_image.fill = GridBagConstraints.BOTH;
+		
+		var gbc_text = new GridBagConstraints();
+		gbc_text.gridx = 0;
+		gbc_text.gridy = 1;
+		gbc_text.weightx = 1;
+		gbc_text.weighty = 1;
+		gbc_text.gridwidth = 1;
+		gbc_text.gridheight = 1;
+		gbc_text.fill = GridBagConstraints.BOTH;
+		
+		this.add(panel_image, gbc_image);
+		this.add(panel_text, gbc_text);
+		
+		mother_panel.add(this, gbc);
 
-		panel_all.setSize(mother_frame.getSize().width / 5 * 4, mother_frame.getSize().height);
-		panel_all.setLocation(mother_frame.getSize().width / 5, 0);
-		mother_frame.add(panel_all);
-
-		panel_image.setSize(mother_frame.getSize().width / 5 * 4, (int) (mother_frame.getSize().height / 3f * 2));
-		panel_image.setLocation(mother_frame.getSize().width / 5, 0);
-		panel_text.setSize(mother_frame.getSize().width / 5 * 4, (int) (mother_frame.getSize().height / 3f * 1));
-		panel_text.setLocation(mother_frame.getSize().width / 5, (int) (mother_frame.getSize().height / 3f * 2));
-		label_image.setSize(panel_image.getSize());
-		label_image.setLocation(panel_image.getLocation());
-
-		/*
-		 * describe = new JTextArea(); describe.setVisible(true); describe.setSize(200,
-		 * 100); describe.setPreferredSize(new Dimension(250, 100));
-		 * panel_main.add(describe, BorderLayout.CENTER);
-		 */
 	}
-
+	
 	@Override
-	public void update() {
-		if (change) {
-			if (image != null) {
-				change = false;
-			}
-		}
-	}
-
-	@Override
-	public void paint(Graphics g, int top) {
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
 		if (image != null) {
 			float width = panel_image.getWidth() / (float)image.getIconWidth();
 			float height = panel_image.getHeight() / (float)image.getIconHeight();
@@ -68,7 +89,33 @@ public class Panel_Main implements Panel {
 			int width_int = (int) (r * image.getIconWidth());
 			int height_int = (int) (r * image.getIconHeight());
 			
-			g.drawImage(image.getImage(), panel_image.getLocation().x, top + panel_image.getLocation().y, width_int, height_int, null);
+			var insets = mother_panel.getParent().getInsets();
+			g.drawImage(image.getImage(), panel_image.getParent().getLocation().x + insets.left, panel_image.getParent().getLocation().y + insets.top, width_int, height_int, null);
+		}
+	}
+	
+	@Override
+	public void update() {
+		if (change) {
+			//textArea_describe.append("dd\n");
+			if (image != null) {
+				change = false;
+			}
+		}
+	}
+	
+	
+
+	@Override
+	public void paint(Graphics g, Insets insets) {
+		if (image != null) {
+			float width = panel_image.getWidth() / (float)image.getIconWidth();
+			float height = panel_image.getHeight() / (float)image.getIconHeight();
+			float r = width < height ? width : height;
+			int width_int = (int) (r * image.getIconWidth());
+			int height_int = (int) (r * image.getIconHeight());
+			
+			g.drawImage(image.getImage(), panel_image.getParent().getLocation().x + insets.left, panel_image.getParent().getLocation().y + insets.top, width_int, height_int, null);
 		}
 	}
 }

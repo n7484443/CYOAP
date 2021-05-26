@@ -1,10 +1,12 @@
 package design;
 
-import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.Insets;
+
+import javax.swing.JPanel;
 
 public interface Panel {
-	public void init(Frame mother_frame);
+	public void init(JPanel mother_panel);
 	public void update();
-	public void paint(Graphics g, int top);
+	public void paint(Graphics g, Insets insets);
 }

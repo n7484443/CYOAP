@@ -1,5 +1,7 @@
 package core;
 
+import java.awt.Dimension;
+import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -11,91 +13,57 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.TransferHandler;
-import com.formdev.flatlaf.FlatDarkLaf;
+//import com.formdev.flatlaf.FlatDarkLaf;
 import design.Panel_Left_Side;
 import design.Panel_Main;
 
-public class Starter extends JFrame implements Runnable {
+public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1315572143966073521L;
-	
-	public static Starter starter;
 	public Panel_Left_Side panel_side;
 	public Panel_Main panel_main;
-	public Timer timer;
+	public JPanel panel_all_contain;
 	public Image image_buffer;
 
 	public void init() {
-		FlatDarkLaf.setup();
-		timer = new Timer();
-		setIgnoreRepaint(true);
+		//FlatDarkLaf.setup();
 
 		setTitle("dd");
 		setSize(1920 / 2, 1080 / 2);
 		setVisible(true);
 		setResizable(false);
-		setLayout(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//setIgnoreRepaint(true);
 		
 		image_buffer = createImage(this.getWidth(), this.getHeight());
 		setup();
 	}
 
 	public void setup() {
+		GridBagLayout layout = new GridBagLayout();
+		
+		panel_all_contain = new JPanel();
+		panel_all_contain.setLayout(layout);
+		
 		panel_side = new Panel_Left_Side();
 		panel_main = new Panel_Main();
-		panel_side.init(this);
-		panel_main.init(this);
+		panel_side.init(panel_all_contain);
+		panel_main.init(panel_all_contain);
+		
+		panel_all_contain.setPreferredSize(new Dimension(1920 / 2, 1080 / 2));
+		getContentPane().add(panel_all_contain);
+		pack();
 
 		var mouse_handler = new MouseHandler();
 		var file_handler = new FileDropHandler();
 		addMouseListener(mouse_handler);
 		setTransferHandler(file_handler);
 	}
-
-	// 60fps
-	public final int maxUps = 60;
-	public final int maxFps = 60;
-
+	
 	public void update(float interval) {
 		panel_side.update();
 		panel_main.update();
-	}
-
-	public void loop() throws InterruptedException {
-		float elapsedTime;
-		float accumulator = 0f;
-		float interval = 1f / maxUps;
-
-		while (true) {
-			elapsedTime = timer.getElapsedTime();
-			accumulator += elapsedTime;
-
-			//input();
-
-			while (accumulator >= interval) {
-				update(interval);
-				accumulator -= interval;
-			}
-
-			render();
-
-			//if (!window.isVSync()) {
-				sync();
-			//}
-		}
-
-	}
-
-	private void sync() {
-		float loopSlot = 1f / maxFps;
-		double endTime = timer.getLastLoopTime() + loopSlot;
-		while (timer.getTime() < endTime) {
-			try {
-				Thread.sleep(1);
-			} catch (InterruptedException ie) {
-			}
-		}
 	}
 
 	public void update(File file) {
@@ -104,16 +72,11 @@ public class Starter extends JFrame implements Runnable {
 	}
 
 	public void render() {
-		var g = image_buffer.getGraphics();
 		
-		this.paint(g);
-		panel_main.paint(g, this.getInsets().top);
-		panel_side.paint(g, this.getInsets().top);
-		
-		this.getGraphics().drawImage(image_buffer, 0, 0, null);
-		g.dispose();
+		//var g = this.getGraphics();
+		//super.paint(g);
 	}
-
+	
 	public Map<String, File> image_file = new HashMap<String, File>();
 
 	public class FileDropHandler extends TransferHandler {
@@ -144,7 +107,7 @@ public class Starter extends JFrame implements Runnable {
 			}
 
 			for (var file : files) {
-				if (file.getName().contains(".png") || file.getName().contains(".jpg")) {
+				if (canRead(file)) {
 					image_file.put(file.getName(), file);
 					update(file);
 				} else if (file.getName().contains(".data")) {
@@ -155,19 +118,21 @@ public class Starter extends JFrame implements Runnable {
 			return true;
 		}
 	}
-
-	public class MouseHandler extends MouseAdapter {
+	
+	public boolean canRead(File file) {
+		var name = file.getName();
+		if(name.contains(".png")) {
+			return true;
+		}
+		if(name.contains(".jpg")) {
+			return true;
+		}
+		//if(name.contains(".webp")) {
+		//	return true;
+		//}
+		return false;
 	}
 
-	@Override
-	public void run() {
-		System.out.println("Version|" + Core.version);
-		Starter.starter = this;
-		init();
-		try {
-			loop();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+	public class MouseHandler extends MouseAdapter {
 	}
 }

@@ -1,33 +1,38 @@
 package design;
 
 import java.awt.Color;
-import java.awt.Frame;
+import java.awt.GridBagConstraints;
 import java.awt.Graphics;
+import java.awt.Insets;
+
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.MatteBorder;
 
 public class Panel_Left_Side implements Panel{
 	public JPanel panel_side_variable;
-	public Frame mother_frame;
+	public JPanel mother_panel;
 	public JButton button;
 	
-	public void init(Frame mother_frame) {
-		this.mother_frame = mother_frame;
-		
+	public void init(JPanel mother_panel) {
+		this.mother_panel = mother_panel;
 		panel_side_variable = new JPanel();
-		
-		panel_side_variable.setSize(mother_frame.getSize().width / 5, mother_frame.getSize().height);
-		panel_side_variable.setLocation(0, 0);
-		mother_frame.add(panel_side_variable);
-		
+
+		var gbc = new GridBagConstraints();
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.weightx = 1;
+		gbc.weighty = 1;
+		gbc.gridwidth = 1;
+		gbc.gridheight = 1;
+		gbc.fill = GridBagConstraints.BOTH;
+		mother_panel.add(panel_side_variable, gbc);
+
 		button = new JButton();
-		button.setLocation(50, 50);
-		button.setSize(100, 50);
 		button.setText("Next");
 		panel_side_variable.add(button);
-		panel_side_variable.setLayout(null);
 		panel_side_variable.setBorder(new MatteBorder(0, 0, 0, 1, Color.BLACK));
+		
 		
 	}
 
@@ -37,7 +42,7 @@ public class Panel_Left_Side implements Panel{
 	}
 
 	@Override
-	public void paint(Graphics g, int top) {
+	public void paint(Graphics g, Insets insets) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -7,13 +7,16 @@
  */
 
 plugins {
-    // Apply the java-library plugin for API and implementation separation.
-    id 'java-library'
-    id 'eclipse'
+	id 'java-library'
+	id 'eclipse'
+	id 'application'
+	id 'com.github.johnrengelman.shadow' version '7.0.0'
+	id 'org.openjfx.javafxplugin' version '0.0.10'
 }
 
 repositories {
     // Use Maven Central for resolving dependencies.
+    jcenter()
     mavenCentral()
 }
 sourceCompatibility = 16
@@ -21,5 +24,23 @@ targetCompatibility = 16
 
 dependencies {
 	implementation 'com.formdev:flatlaf:1.2'
-    implementation 'com.weblookandfeel:weblaf-ui:1.2.13'
+    implementation 'com.weblookandfeel:weblaf-ui:1.2.13' 
+    
+    implementation 'org.apache.commons:commons-math3:3.6.1'
+    implementation 'com.google.guava:guava:27.0.1-jre'
 }
+
+jar {
+    finalizedBy shadowJar
+    manifest {
+        attributes 'Main-Class': 'core.JavaFxMain'
+    }
+}
+
+javafx{
+	version="15.0.1"
+	modules = ['javafx.controls', 'javafx.fxml']
+}
+
+ext.moduleName = 'com.project.cyoap'
+mainClassName = 'core.JavaFxMain'

@@ -1,7 +1,5 @@
 package core;
 
-import javax.swing.SwingUtilities;
-
 public class Core implements Runnable{
 	public static MainFrame mainFrame;
 	

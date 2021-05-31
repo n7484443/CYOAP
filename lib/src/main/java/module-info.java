@@ -4,7 +4,7 @@ module com.project.cyoap{
 	requires javafx.fxml;
 	requires javafx.controls;
 	
-	exports core;	
-	exports design;
+	opens core;	
+	opens design;
 	opens design.controller;
 }

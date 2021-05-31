@@ -5,10 +5,16 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.TextField;
 
 public class MainGUIController implements Initializable{
 	@FXML
 	private Button buttonTest;
+	@FXML
+	private SplitPane MainGuiPane;
+	@FXML
+	public TextField TextInfo;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {

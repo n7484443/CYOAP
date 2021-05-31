@@ -16,7 +16,7 @@ public class JavaFxMain extends Application {
 		try {
 			URL url = Paths.get("./src/main/resources/lib/design/MainDesign.fxml").toUri().toURL();
 			Pane root = (Pane)FXMLLoader.load(url);
-			Scene scene = new Scene(root, 400, 400);
+			Scene scene = new Scene(root, 960, 540);
 			primaryStage.setTitle("CYOAP " + version);
 			primaryStage.setScene(scene);
 			
@@ -36,7 +36,7 @@ public class JavaFxMain extends Application {
 			e.printStackTrace();
 		}
 	}
-	public static String version = "0.0.5";
+	public static String version = "0.0.6";
 	
 	public void update(double time) {
 		

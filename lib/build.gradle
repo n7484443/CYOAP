@@ -22,12 +22,7 @@ repositories {
 sourceCompatibility = 16
 targetCompatibility = 16
 
-dependencies {
-	implementation 'com.formdev:flatlaf:1.2'
-    implementation 'com.weblookandfeel:weblaf-ui:1.2.13' 
-    
-    implementation 'org.apache.commons:commons-math3:3.6.1'
-    implementation 'com.google.guava:guava:27.0.1-jre'
+dependencies {    
 }
 
 jar {

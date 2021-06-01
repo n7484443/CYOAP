@@ -3,6 +3,8 @@ package core;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Paths;
+
+import core.VarData.ValueType;
 import design.controller.MainGUIController;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -42,7 +44,7 @@ public class JavaFxMain extends Application {
 			e.printStackTrace();
 		}
 	}
-	public static String version = "0.0.10";
+	public static String version = "0.0.11";
 	
 	public void update(double time) {
 		MainGUIController.instance.update();
@@ -59,6 +61,10 @@ public class JavaFxMain extends Application {
 	@Override
 	public void init() throws Exception {
 		super.init();
+		new VarData();
+		var x = new ValueType(VarData.types.ints, "dataTest");
+		x.setData(55);
+		VarData.var_value.add(x);
 	}
 	
 	@Override

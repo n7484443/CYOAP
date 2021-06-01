@@ -4,6 +4,9 @@ import java.io.File;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+
+import core.VarData;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -61,8 +64,6 @@ public class MainGUIController implements Initializable {
 			e.consume();
 		});
 		var_field.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-		for (int i = 0; i < 20; i++)
-			var_field.getItems().addAll("var_1", "어떤 변수");
 
 	}
 
@@ -75,6 +76,12 @@ public class MainGUIController implements Initializable {
 		if (dropped != null && image == null) {
 			image = new Image(dropped.get(0).toURI().toString());
 			imageView.setImage(image);
+		}
+		if(VarData.instance.isUpdated) {
+			VarData.instance.isUpdated = false;
+			List<String> name_list = VarData.var_value.stream().map(t->t.name).collect(Collectors.toList());
+			var_field.getItems().clear();
+			var_field.getItems().addAll(name_list);
 		}
 	}
 	

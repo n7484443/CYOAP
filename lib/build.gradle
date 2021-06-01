@@ -39,3 +39,4 @@ javafx{
 
 ext.moduleName = 'com.project.cyoap'
 mainClassName = 'core.JavaFxMain'
+compileJava.options.encoding = 'UTF-8'

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/16" fx:controller="design.controller.StartGUIController">
+   <children>
+      <VBox alignment="TOP_CENTER" prefHeight="540.0" prefWidth="960.0">
+         <children>
+            <Pane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Text layoutX="407.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Play">
+                     <font>
+                        <Font size="80.0" />
+                     </font>
+                  </Text>
+               </children>
+            </Pane>
+            <Pane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Text layoutX="384.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Make">
+                     <font>
+                        <Font size="80.0" />
+                     </font>
+                  </Text>
+               </children>
+            </Pane>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

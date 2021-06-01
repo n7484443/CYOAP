@@ -1,5 +1,6 @@
 package core;
 
+import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Paths;
 import design.controller.MainGUIController;
@@ -11,14 +12,19 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class JavaFxMain extends Application {
+	public Pane loadFXML(String path) throws IOException {
+		URL url = Paths.get(path).toUri().toURL();
+		Pane root = (Pane)FXMLLoader.load(url);
+		return root;
+	}
+	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		try {
-			URL url = Paths.get("./src/main/resources/lib/design/MainDesign.fxml").toUri().toURL();
-			Pane root = (Pane)FXMLLoader.load(url);
-			Scene scene = new Scene(root, 960, 540);
+			Scene scene_main = new Scene(loadFXML("./src/main/resources/lib/design/MainDesign.fxml"), 960, 540);
+			Scene scene_start = new Scene(loadFXML("./src/main/resources/lib/design/StartDesign.fxml"), 960, 540);
 			primaryStage.setTitle("CYOAP " + version);
-			primaryStage.setScene(scene);
+			primaryStage.setScene(scene_main);
 			
 			final long startNanoTime = System.nanoTime();
 			
@@ -36,7 +42,7 @@ public class JavaFxMain extends Application {
 			e.printStackTrace();
 		}
 	}
-	public static String version = "0.0.9";
+	public static String version = "0.0.10";
 	
 	public void update(double time) {
 		MainGUIController.instance.update();

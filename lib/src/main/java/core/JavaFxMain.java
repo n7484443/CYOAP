@@ -36,7 +36,7 @@ public class JavaFxMain extends Application {
 			e.printStackTrace();
 		}
 	}
-	public static String version = "0.0.7";
+	public static String version = "0.0.6";
 	
 	public void update(double time) {
 		

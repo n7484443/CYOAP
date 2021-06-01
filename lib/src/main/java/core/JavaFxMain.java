@@ -3,6 +3,7 @@ package core;
 import java.net.URL;
 import java.nio.file.Paths;
 
+import design.controller.MainGUIController;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -30,13 +31,13 @@ public class JavaFxMain extends Application {
 					render();
 				}
 			}.start();
-			
+			primaryStage.setResizable(false);
 			primaryStage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	public static String version = "0.0.7";
+	public static String version = "0.0.8";
 	
 	public void update(double time) {
 		

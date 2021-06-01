@@ -17,7 +17,7 @@ public class MainGUIController implements Initializable{
 	@FXML
 	private Button buttonTest;
 	@FXML
-	private SplitPane MainGuiPane;
+	public static SplitPane MainGuiPane;
 	@FXML
 	public TextField TextInfo;
 	@FXML
@@ -51,9 +51,8 @@ public class MainGUIController implements Initializable{
             e.setDropCompleted(success);
             e.consume();
 		});
-		
 		var_field.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-		var_field.getItems().addAll("var_1", "어떤 변수");
+		for(int i = 0; i < 20; i++)var_field.getItems().addAll("var_1", "어떤 변수");
+		
 	}
-	
 }

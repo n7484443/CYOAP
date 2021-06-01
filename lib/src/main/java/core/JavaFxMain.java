@@ -2,7 +2,6 @@ package core;
 
 import java.net.URL;
 import java.nio.file.Paths;
-
 import design.controller.MainGUIController;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -37,14 +36,14 @@ public class JavaFxMain extends Application {
 			e.printStackTrace();
 		}
 	}
-	public static String version = "0.0.8";
+	public static String version = "0.0.9";
 	
 	public void update(double time) {
-		
+		MainGUIController.instance.update();
 	}
 	
 	public void render() {
-		
+		MainGUIController.instance.render();
 	}
 
 	public static void main(String[] args) {

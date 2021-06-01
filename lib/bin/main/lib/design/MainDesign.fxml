@@ -2,32 +2,32 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="design.controller.MainGUIController">
    <children>
       <SplitPane fx:id="MainGuiPane" dividerPositions="0.18" prefHeight="540.0" prefWidth="960.0" snapToPixel="false">
         <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="538.0" prefWidth="173.0" SplitPane.resizableWithParent="false">
+          <AnchorPane maxHeight="538.0" maxWidth="169.0" minHeight="538.0" minWidth="169.0" prefHeight="538.0" prefWidth="169.0" SplitPane.resizableWithParent="false">
                <children>
                   <TextField layoutX="4.0" layoutY="3.0" />
-                  <ScrollPane hbarPolicy="NEVER" layoutX="1.0" layoutY="29.0" prefHeight="511.0" prefWidth="169.0" vbarPolicy="ALWAYS">
-                    <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="508.0" prefWidth="168.0">
-                           <children>
-                              <ListView fx:id="var_field" prefHeight="511.0" prefWidth="161.0" />
-                           </children></AnchorPane>
-                    </content>
-                  </ScrollPane>
+                  <ListView fx:id="var_field" layoutX="4.0" layoutY="32.0" prefHeight="503.0" prefWidth="161.0" />
                </children>
             </AnchorPane>
-          <AnchorPane fx:id="DescribePane" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" SplitPane.resizableWithParent="false">
+          <AnchorPane fx:id="DescribePane" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <Button fx:id="buttonTest" layoutX="728.0" layoutY="502.0" mnemonicParsing="false" text="Next" />
-                  <TextField fx:id="TextInfo" layoutX="5.0" layoutY="339.0" prefHeight="193.0" prefWidth="773.0" />
+                  <Button fx:id="buttonTest" layoutX="738.0" layoutY="513.0" mnemonicParsing="false" text="Save" />
+                  <TextArea fx:id="TextInfo" layoutX="7.0" layoutY="293.0" prefHeight="217.0" prefWidth="771.0" />
+                  <HBox alignment="CENTER" prefHeight="284.0" prefWidth="783.0">
+                     <children>
+                        <ImageView fx:id="imageView" fitHeight="284.0" fitWidth="783.0" pickOnBounds="true" preserveRatio="true" />
+                     </children>
+                  </HBox>
                </children>
             </AnchorPane>
         </items>

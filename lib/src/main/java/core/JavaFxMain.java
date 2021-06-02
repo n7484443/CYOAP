@@ -1,32 +1,30 @@
 package core;
 
-import java.io.IOException;
-import java.net.URL;
-import java.nio.file.Paths;
+import java.io.File;
 
 import core.VarData.ValueType;
-import design.controller.MainGUIController;
+import design.controller.MakeGUIController;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import util.LoadUtil;
 
 public class JavaFxMain extends Application {
-	public Pane loadFXML(String path) throws IOException {
-		URL url = Paths.get(path).toUri().toURL();
-		Pane root = (Pane)FXMLLoader.load(url);
-		return root;
-	}
+	public static JavaFxMain instance;
+	public Stage stage;
+	public Scene scene_make;
+	public Scene scene_start;
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		try {
-			Scene scene_main = new Scene(loadFXML("./src/main/resources/lib/design/MainDesign.fxml"), 960, 540);
-			Scene scene_start = new Scene(loadFXML("./src/main/resources/lib/design/StartDesign.fxml"), 960, 540);
-			primaryStage.setTitle("CYOAP " + version);
-			primaryStage.setScene(scene_main);
+			instance = this;
+			stage = primaryStage;
+			scene_make = new Scene(LoadUtil.loadFXML("./src/main/resources/lib/design/Design_Make.fxml"), 960, 540);
+			scene_start = new Scene(LoadUtil.loadFXML("./src/main/resources/lib/design/Design_Start.fxml"), 960, 540);
+			stage.setTitle("CYOAP " + version);
+			stage.setScene(scene_start);
 			
 			final long startNanoTime = System.nanoTime();
 			
@@ -38,20 +36,33 @@ public class JavaFxMain extends Application {
 					render();
 				}
 			}.start();
-			primaryStage.setResizable(false);
-			primaryStage.show();
+			stage.setResizable(false);
+			stage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	public static String version = "0.0.11";
+	public static String version = "0.1.1";
 	
 	public void update(double time) {
-		MainGUIController.instance.update();
+		MakeGUIController.instance.update();
 	}
 	
 	public void render() {
-		MainGUIController.instance.render();
+		MakeGUIController.instance.render();
+	}
+	public File directory;
+	public void loadFiles(File directory) {
+		this.directory = directory;
+		var hasConfig = false;
+		for(var file : directory.listFiles()) {
+			if(file.getName().equals("setting.json")) {
+				hasConfig = true;
+			}
+		}
+		if(!hasConfig) {
+			
+		}
 	}
 
 	public static void main(String[] args) {
@@ -62,9 +73,10 @@ public class JavaFxMain extends Application {
 	public void init() throws Exception {
 		super.init();
 		new VarData();
-		var x = new ValueType(VarData.types.ints, "dataTest");
-		x.setData(55);
-		VarData.var_value.add(x);
+		var x = new ValueType(123f);
+		var y = new ValueType(12);
+		VarData.setValue("dataTest", x);
+		VarData.setValue("dataTest2", y);
 	}
 	
 	@Override

@@ -1,14 +1,14 @@
-package core;
+package cyoap_main.core;
 
 import java.io.File;
 
-import core.VarData.ValueType;
-import design.controller.MakeGUIController;
+import cyoap_main.core.VarData.ValueType;
+import cyoap_main.design.controller.MakeGUIController;
+import cyoap_main.util.LoadUtil;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import util.LoadUtil;
 
 public class JavaFxMain extends Application {
 	public static JavaFxMain instance;
@@ -20,9 +20,10 @@ public class JavaFxMain extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		try {
 			instance = this;
+			new LoadUtil();
 			stage = primaryStage;
-			scene_make = new Scene(LoadUtil.loadFXML("./src/main/resources/lib/design/Design_Make.fxml"), 960, 540);
-			scene_start = new Scene(LoadUtil.loadFXML("./src/main/resources/lib/design/Design_Start.fxml"), 960, 540);
+			scene_make = new Scene(LoadUtil.instance.loadFXML("/lib/design/Design_Make.fxml"), 960, 540);
+			scene_start = new Scene(LoadUtil.instance.loadFXML("/lib/design/Design_Start.fxml"), 960, 540);
 			stage.setTitle("CYOAP " + version);
 			stage.setScene(scene_start);
 			
@@ -42,7 +43,7 @@ public class JavaFxMain extends Application {
 			e.printStackTrace();
 		}
 	}
-	public static String version = "0.1.1";
+	public static String version = "0.1.2";
 	
 	public void update(double time) {
 		MakeGUIController.instance.update();

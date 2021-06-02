@@ -10,8 +10,8 @@ plugins {
 	id 'java-library'
 	id 'eclipse'
 	id 'application'
-	id 'com.github.johnrengelman.shadow' version '7.0.0'
 	id 'org.openjfx.javafxplugin' version '0.0.10'
+	id 'org.beryx.jlink' version '2.24.0'
 }
 
 repositories {
@@ -26,18 +26,24 @@ dependencies {
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.2'
 }
 
-jar {
-    finalizedBy shadowJar
-    manifest {
-        attributes 'Main-Class': 'core.JavaFxMain'
-    }
-}
-
 javafx{
 	version="16"
 	modules = ['javafx.controls', 'javafx.fxml']
 }
 
-ext.moduleName = 'com.project.cyoap'
-mainClassName = 'core.JavaFxMain'
+ext.moduleName = 'cyoap_module'
+application.mainModule = 'cyoap_module'
+mainClassName = 'cyoap_main.core.JavaFxMain'
 compileJava.options.encoding = 'UTF-8'
+
+sourceSets {
+    main {
+        output.setResourcesDir(java.outputDir)
+    }
+}
+
+jlink {
+    launcher {
+        name = 'hellofx'
+    }
+}

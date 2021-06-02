@@ -1,13 +1,13 @@
-package design.controller;
+package cyoap_main.design.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import core.JavaFxMain;
+import cyoap_main.core.JavaFxMain;
+import cyoap_main.util.LoadUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.Pane;
-import util.LoadUtil;
 
 public class StartGUIController implements Initializable {
 	@FXML

@@ -1,4 +1,4 @@
-package core;
+package cyoap_main.core;
 
 import java.util.HashMap;
 import java.util.Map;

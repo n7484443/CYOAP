@@ -1,4 +1,4 @@
-package design.controller;
+package cyoap_main.design.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,13 +11,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import core.JavaFxMain;
-import core.VarData;
-import core.VarData.ValueType;
-import design.DataSet;
+import cyoap_main.core.JavaFxMain;
+import cyoap_main.core.VarData;
+import cyoap_main.design.DataSet;
+import cyoap_main.util.Analyser;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -95,7 +94,7 @@ public class MakeGUIController implements Initializable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		analyse(data.describe);
+		Analyser.analyse(data.describe);
 	}
 	
 	public void load() {
@@ -116,31 +115,6 @@ public class MakeGUIController implements Initializable {
 
 	public MakeGUIController() {
 		MakeGUIController.instance = this;
-	}
-	
-	public void analyse(String str) {
-		if(str.contains("{")) {
-			String newstr = str;
-			while(newstr.contains("{")) {
-				var start = newstr.indexOf("{");
-				var end = newstr.indexOf("}");
-				String innerstr = newstr.substring(start + 1, end);
-				innerstr = innerstr.replaceAll(" ", "").replaceAll("\n", "");
-				if(innerstr.contains("+=")) {
-					var s = innerstr.replace("+", "").split("=");
-					System.out.println(s[0]);
-					VarData.changeValue(s[0], new ValueType(s[1]));
-				}else if(innerstr.contains("-=")) {
-					var s = innerstr.replace("-", "").split("=");
-					VarData.changeValue(s[0], new ValueType("-" + s[1]));
-				}else if(innerstr.contains("=")){
-					var s = innerstr.split("=");
-					VarData.setValue(s[0], new ValueType(s[1]));
-				}
-				
-				newstr = newstr.substring(end + 1);
-			}
-		}
 	}
 	
 	public Image image = null;

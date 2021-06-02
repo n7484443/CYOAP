@@ -11,6 +11,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class JavaFxMain extends Application {
+	public static String version = "0.1.3";
+	
 	public static JavaFxMain instance;
 	public Stage stage;
 	public Scene scene_make;
@@ -43,7 +45,6 @@ public class JavaFxMain extends Application {
 			e.printStackTrace();
 		}
 	}
-	public static String version = "0.1.2";
 	
 	public void update(double time) {
 		MakeGUIController.instance.update();

@@ -5,4 +5,5 @@ open module cyoap_module{
 	requires javafx.controls;
 	requires com.fasterxml.jackson.annotation;
 	requires com.fasterxml.jackson.databind;
+	requires java.xml;
 }

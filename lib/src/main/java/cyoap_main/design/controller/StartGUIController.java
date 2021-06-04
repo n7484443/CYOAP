@@ -22,7 +22,6 @@ public class StartGUIController implements Initializable {
 		pane_make.setOnMouseClicked(e->{
 			var directory = LoadUtil.loadFolder();
 			JavaFxMain.instance.loadFiles(directory);
-			JavaFxMain.instance.stage.setScene(JavaFxMain.instance.scene_make);
 		});
 	}
 	

@@ -12,6 +12,11 @@ public class VarData {
 		var_map.put(name, value);
 		isUpdated = true;
 	}
+
+
+	public static boolean hasValue(String name) {
+		return var_map.containsKey(name);
+	}
 	
 	public static void changeValue(String name, ValueType value) {
 		var v = var_map.get(name);
@@ -71,18 +76,6 @@ public class VarData {
 			return types.nulls;
 		}
 
-		public <T> types getTypeFromData(String input) {
-			if (input.contains("&i"))
-				return types.ints;
-			if (input.contains("&f"))
-				return types.floats;
-			if (input.contains("&s"))
-				return types.strings;
-			if (input.contains("&b"))
-				return types.booleans;
-			return types.nulls;
-		}
-
 		public ValueType(types t) {
 			this.type = t;
 		}
@@ -92,12 +85,13 @@ public class VarData {
 			setData(data);
 		}
 		
-		public <T> ValueType(String data) {
-			if(data.isEmpty()) {
-				System.err.println("!!! empty name or empty data");
-				return;
-			}
-			setDataFromData(data);
+		public ValueType(ValueType v) {
+			this.type = v.type;
+			this.data = v.data;
+		}
+		
+		public ValueType() {
+			this.type = types.nulls;
 		}
 
 		public <T> void setData(T b) {
@@ -105,25 +99,6 @@ public class VarData {
 				data = ((boolean) b ? "true" : "false");
 			else
 				data = b.toString();
-		}
-
-		public <T> void setDataFromData(String s) {
-			if (s.contains("&i")) {
-				this.type = types.ints;
-				this.data = s.replace("&i", "");
-			}else if (s.contains("&f")) {
-				this.type = types.floats;
-				this.data = s.replace("&f", "");
-			}else if (s.contains("&s")) {
-				this.type = types.strings;
-				this.data = s.replace("&s", "");
-			}else if (s.contains("&b")) {
-				this.type = types.booleans;
-				this.data = s.replace("&b", "");
-			}else {
-				this.type = types.nulls;
-				this.data = s;
-			}
 		}
 
 		@SuppressWarnings("unchecked")
@@ -137,6 +112,109 @@ public class VarData {
 			if (type.equals(types.ints))
 				return (T) (Integer.valueOf(data));
 			return (T) Boolean.FALSE;
+		}
+
+		public void add(ValueType a) {
+			if(a == null) {
+				System.err.println("null error!");
+				return;
+			}
+			if(this.type.equals(types.strings)) {
+				data += a.data;
+			}else if(this.type.equals(a.type) && !this.type.equals(types.booleans)) {
+				float d1 = Float.valueOf(this.data);
+				float d2 = Float.valueOf(a.data);
+				if(this.type.equals(types.floats)) {
+					this.data = String.valueOf(d1 + d2);
+				}else {
+					this.data = String.valueOf((int)(d1 + d2));
+				}
+			}else if(this.type.equals(types.floats) && a.type.equals(types.ints)) {
+				float d1 = Float.valueOf(this.data);
+				float d2 = Float.valueOf(a.data);
+				this.data = String.valueOf(d1 + d2);
+			}else{
+				System.err.println("type error!");
+			}
+		}
+		
+		public void sub(ValueType a) {
+			if(a == null) {
+				System.err.println("null error!");
+				return;
+			}
+			if(this.type.equals(a.type) && !this.type.equals(types.booleans) && !this.type.equals(types.strings)) {
+				float d1 = Float.valueOf(this.data);
+				float d2 = Float.valueOf(a.data);
+				if(this.type.equals(types.floats)) {
+					this.data = String.valueOf(d1 + d2);
+				}else {
+					this.data = String.valueOf((int)(d1 + d2));
+				}
+			}else if(this.type.equals(types.floats) && a.type.equals(types.ints)) {
+				float d1 = Float.valueOf(this.data);
+				float d2 = Float.valueOf(a.data);
+				this.data = String.valueOf(d1 + d2);
+			}else{
+				System.err.println("type error!");
+			}
+		}
+		
+		public void mul(ValueType a) {
+			if(a == null) {
+				System.err.println("null error!");
+				return;
+			}
+			if(this.type.equals(a.type) && !this.type.equals(types.booleans) && !this.type.equals(types.strings)) {
+				float d1 = Float.valueOf(this.data);
+				float d2 = Float.valueOf(a.data);
+				if(this.type.equals(types.floats)) {
+					this.data = String.valueOf(d1 * d2);
+				}else {
+					this.data = String.valueOf((int)(d1 * d2));
+				}
+			}else if(this.type.equals(types.floats) && a.type.equals(types.ints)) {
+				float d1 = Float.valueOf(this.data);
+				float d2 = Float.valueOf(a.data);
+				this.data = String.valueOf(d1 * d2);
+			}else{
+				System.err.println("type error!");
+			}
+		}
+		
+		public void div(ValueType a) {
+			if(a == null) {
+				System.err.println("null error!");
+				return;
+			}
+			if(this.type.equals(a.type) && !this.type.equals(types.booleans) && !this.type.equals(types.strings)) {
+				if(this.type.equals(types.floats)) {
+					float d1 = Float.valueOf(this.data);
+					float d2 = Float.valueOf(a.data);
+					this.data = String.valueOf(d1 / d2);
+				}else {
+					int d1 = Integer.valueOf(this.data);
+					int d2 = Integer.valueOf(a.data);
+					this.data = String.valueOf(d1 / d2);
+				}
+			}else if(this.type.equals(types.floats) && a.type.equals(types.ints)) {
+				float d1 = Float.valueOf(this.data);
+				float d2 = Float.valueOf(a.data);
+				this.data = String.valueOf(d1 / d2);
+			}else{
+				System.err.println("type error!");
+			}
+		}
+		
+		public void set(ValueType a) {
+			if(this.type.equals(types.nulls)) {
+				this.type = a.type;
+				this.data = a.data;
+			}else if(this.type.equals(a.type)) {
+				this.data = a.data;
+			}else if(this.type.equals(types.floats) && a.type.equals(types.ints)) {
+				this.data = a.data;
+			}
 		}
 	}
 }

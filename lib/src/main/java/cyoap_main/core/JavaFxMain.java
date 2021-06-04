@@ -11,7 +11,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class JavaFxMain extends Application {
-	public static String version = "0.1.3";
+	public static String version = "0.1.4";
 	
 	public static JavaFxMain instance;
 	public Stage stage;
@@ -55,6 +55,7 @@ public class JavaFxMain extends Application {
 	}
 	public File directory;
 	public void loadFiles(File directory) {
+		if(directory == null)return;
 		this.directory = directory;
 		var hasConfig = false;
 		for(var file : directory.listFiles()) {
@@ -65,6 +66,7 @@ public class JavaFxMain extends Application {
 		if(!hasConfig) {
 			
 		}
+		JavaFxMain.instance.stage.setScene(JavaFxMain.instance.scene_make);
 	}
 
 	public static void main(String[] args) {

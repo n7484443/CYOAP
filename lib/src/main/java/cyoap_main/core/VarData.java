@@ -80,6 +80,11 @@ public class VarData {
 			this.type = t;
 		}
 		
+		public ValueType(types t, String data) {
+			this.type = t;
+			this.data = data;
+		}
+		
 		public <T> ValueType(T data) {
 			this.type = getType(data);
 			setData(data);

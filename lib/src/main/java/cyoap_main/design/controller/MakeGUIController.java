@@ -176,7 +176,7 @@ public class MakeGUIController implements Initializable {
 				dataSetList.forEach(d -> d.updatePos(-local_x, -local_y));
 			}
 		});
-		var_type.getItems().addAll("&i | int", "&f | float", "&b | boolean", "&s | string");
+		var_type.getItems().addAll("&b | boolean", " \"\" | string", "floor | 내림", "ceil | 올림", "round | 반올림");
 		var_type.setOnMouseClicked(e -> {
 			if (e.getButton().equals(MouseButton.PRIMARY)) {
 				if (e.getClickCount() == 2) {
@@ -184,10 +184,11 @@ public class MakeGUIController implements Initializable {
 					var anchor = text_info.getAnchor();
 					var caret = text_info.getCaretPosition();
 					String text = switch (index) {
-					case 0 -> addTextIntoString(text_info.getText(), anchor, caret, "&i");
-					case 1 -> addTextIntoString(text_info.getText(), anchor, caret, "&f");
-					case 2 -> addTextIntoString(text_info.getText(), anchor, caret, "&b");
-					case 3 -> addTextIntoString(text_info.getText(), anchor, caret, "&s");
+					case 0 -> addTextIntoString(text_info.getText(), anchor, caret, "&b");
+					case 1 -> addTextIntoString(text_info.getText(), anchor, caret, "\" \"");
+					case 2 -> addTextIntoString(text_info.getText(), anchor, caret, "floor( )");
+					case 3 -> addTextIntoString(text_info.getText(), anchor, caret, "ceil( )");
+					case 4 -> addTextIntoString(text_info.getText(), anchor, caret, "round( )");
 					default -> "";
 					};
 					text_info.setText(text);
@@ -204,6 +205,9 @@ public class MakeGUIController implements Initializable {
 	}
 
 	public String addTextIntoString(String str, int anchor, int caret, String add) {
+		if(str == null) {
+			str = new String();
+		}
 		var before = str.substring(0, Math.min(anchor, caret));
 		var after = str.substring(Math.max(anchor, caret));
 		return before + add + after;

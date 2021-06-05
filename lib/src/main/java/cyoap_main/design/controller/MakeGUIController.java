@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cyoap_main.core.JavaFxMain;
 import cyoap_main.core.VarData;
-import cyoap_main.design.DataSet;
+import cyoap_main.design.ChoiceSet;
 import cyoap_main.util.Analyser;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -76,7 +76,7 @@ public class MakeGUIController implements Initializable {
 
 	public List<File> dropped;
 
-	public List<DataSet> dataSetList = new ArrayList<DataSet>();
+	public List<ChoiceSet> choiceSetList = new ArrayList<ChoiceSet>();
 
 	public double local_x = 0;
 	public double local_y = 0;
@@ -173,7 +173,7 @@ public class MakeGUIController implements Initializable {
 				if (local_y <= min_y)
 					local_y = min_y;
 
-				dataSetList.forEach(d -> d.updatePos(-local_x, -local_y));
+				choiceSetList.forEach(d -> d.updatePos(-local_x, -local_y));
 			}
 		});
 		var_type.getItems().addAll("&b | boolean", " \"\" | string", "floor | 내림", "ceil | 올림", "round | 반올림");
@@ -198,9 +198,9 @@ public class MakeGUIController implements Initializable {
 	}
 
 	public void makeNewComp(Pane pane, double posx, double posy, double updatex, double updatey) {
-		DataSet dataSet = new DataSet(posx, posy);
+		ChoiceSet dataSet = new ChoiceSet(posx, posy);
 		dataSet.setUp(pane);
-		dataSetList.add(dataSet);
+		choiceSetList.add(dataSet);
 		dataSet.updatePos(updatex, updatey);
 	}
 
@@ -228,7 +228,7 @@ public class MakeGUIController implements Initializable {
 				nowEditDataSet.string_image_name = image.getUrl();
 			nowEditDataSet.update();
 		}
-		DataSet data = new DataSet(text_title.getText(), builder.toString().replaceAll("\n\n", "\n"), this.image);
+		ChoiceSet data = new ChoiceSet(text_title.getText(), builder.toString().replaceAll("\n\n", "\n"), this.image);
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
 			OutputStreamWriter writer = new OutputStreamWriter(
@@ -248,7 +248,7 @@ public class MakeGUIController implements Initializable {
 					new FileInputStream(
 							JavaFxMain.instance.directory.getAbsolutePath() + "/" + text_title.getText() + ".json"),
 					StandardCharsets.UTF_8);
-			var data = objectMapper.readValue(writer, DataSet.class);
+			var data = objectMapper.readValue(writer, ChoiceSet.class);
 			this.text_info.setText(data.string_title);
 			this.text_title.setText(data.string_describe);
 		} catch (IOException e) {
@@ -291,15 +291,15 @@ public class MakeGUIController implements Initializable {
 		}
 	}
 
-	public void loadFromDataSet(DataSet dataSet) {
+	public void loadFromDataSet(ChoiceSet dataSet) {
 		this.text_title.setText(dataSet.string_title);
 		this.text_info.setText(dataSet.string_describe);
 		if (dataSet.string_image_name != null && !dataSet.string_image_name.isEmpty())
 			this.image = new Image(dataSet.string_image_name);
 	}
 
-	public DataSet nowEditDataSet;
-	public DataSet nowMouseInDataSet;
+	public ChoiceSet nowEditDataSet;
+	public ChoiceSet nowMouseInDataSet;
 
 	public void changeTab(Tab tab) {
 		tabpane_make.getSelectionModel().select(tab);

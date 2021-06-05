@@ -294,8 +294,17 @@ public class Analyser {
 		case "print" -> {
 
 		}
+		//if ( 조건, 결과)
+		//elseif ( 조건, 결과)
+		//else ( 결과)
 		case "if" -> {
-
+			
+		}
+		case "elseif" -> {
+			
+		}
+		case "else" -> {
+			
 		}
 		case "floor" -> {
 			float f;

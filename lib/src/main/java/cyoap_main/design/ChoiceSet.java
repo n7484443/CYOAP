@@ -20,7 +20,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class DataSet {
+public class ChoiceSet {
 	public String string_title;
 	public String string_describe;
 	public String string_image_name;
@@ -36,19 +36,19 @@ public class DataSet {
 	public double posx;
 	public double posy;
 
-	public DataSet(String title, String describe, Image image) {
+	public ChoiceSet(String title, String describe, Image image) {
 		this(title, describe, image != null ? image.getUrl() : null, 0, 0);
 	}
 
-	public DataSet(double posx, double posy) {
+	public ChoiceSet(double posx, double posy) {
 		this(null, null, null, posx, posy);
 	}
 
-	public DataSet(String title, String describe) {
+	public ChoiceSet(String title, String describe) {
 		this(title, describe, null, 0, 0);
 	}
 
-	public DataSet(String title, String describe, String image_name, double posx, double posy) {
+	public ChoiceSet(String title, String describe, String image_name, double posx, double posy) {
 		this.string_title = title;
 		this.string_describe = describe;
 		this.string_image_name = image_name;

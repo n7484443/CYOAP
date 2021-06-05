@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.Pane?>
 
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/16">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/16" fx:controller="cyoap_main.design.controller.PlayGUIController">
    <children>
       <Pane prefHeight="540.0" prefWidth="960.0" />
    </children>

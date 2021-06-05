@@ -87,6 +87,4 @@ public class JavaFxMain extends Application {
 	public void stop() throws Exception {
 		super.stop();
 	}
-	
-	
 }

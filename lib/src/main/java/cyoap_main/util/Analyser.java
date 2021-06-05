@@ -32,7 +32,7 @@ public class Analyser {
 	/*
 	 * 문자 입력->텍스트와 문법을 분리
 	 */
-	public static String[] parser(String str) {
+	public static List<String> parser(String str) {
 		if (str == null)
 			return null;
 		if (str.chars().filter(e -> e == ((char) '{')).count() != str.chars().filter(e -> e == ((char) '}')).count()) {
@@ -44,16 +44,20 @@ public class Analyser {
 			List<String> str_func = new ArrayList<String>();
 			var first_str = str.split("\\{");
 			for (int i = 0; i < first_str.length; i++) {
-				var second_str = first_str[i].split("\\}");
-				str_func.add(second_str[0]);
-				if (second_str.length == 2) {
-					str_text.add(second_str[1]);
+				if(i == 0) {
+					str_text.add(first_str[0]);
+				}else {
+					var second_str = first_str[i].split("\\}");
+					str_func.add(second_str[0]);
+					if (second_str.length == 2) {
+						str_text.add(second_str[1]);
+					}
 				}
 			}
 			analyse(str_func);
-			return str_text.toArray(new String[0]);
+			return str_text;
 		} else
-			return new String[] { str };
+			return null;
 	}
 
 	public static Pair<List<Integer>, List<String>> replace(String s) {
@@ -217,7 +221,6 @@ public class Analyser {
 				if (func.get(j + 1) == function) {
 					// func ( data )
 					if (func.get(j + 3) == others_string) {
-						System.out.println(VarData.getValue(data.get(j + 3)).data);
 						datas = function_find(data.get(j + 1), VarData.getValue(data.get(j + 3)));
 					} else {
 						datas = function_find(data.get(j + 1), data.get(j + 3));

@@ -75,19 +75,19 @@ public class MakeGUIController implements Initializable {
 	public Tab tab_position;
 
 	public List<File> dropped;
-	
+
 	public List<DataSet> dataSetList = new ArrayList<DataSet>();
 
-	double local_x = 0;
-	double local_y = 0;
-	double move_x = 0;
-	double move_y = 0;
-	double start_x = 0;
-	double start_y = 0;
-	int min_x = -500;
-	int min_y = -500;
-	int max_x = 500;
-	int max_y = 500;
+	public double local_x = 0;
+	public double local_y = 0;
+	public double move_x = 0;
+	public double move_y = 0;
+	public double start_x = 0;
+	public double start_y = 0;
+	public int min_x = -500;
+	public int min_y = -500;
+	public int max_x = 500;
+	public int max_y = 500;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -144,27 +144,37 @@ public class MakeGUIController implements Initializable {
 		});
 
 		menu_create.setOnAction(e -> {
-			Bounds boundsInScene = pane_position.localToScene(pane_position.getBoundsInLocal());
-			makeNewComp(pane_position, start_x - boundsInScene.getMinX(), start_y - boundsInScene.getMinY());
+			Bounds boundsInScene = pane_describe.localToScene(pane_describe.getBoundsInLocal());
+			makeNewComp(pane_position, local_x + start_x - boundsInScene.getMinX(),
+					local_y + start_y - boundsInScene.getMinY(), -local_x, -local_y);
+		});
+		
+		menu_delete.setOnAction(e -> {
+			if(nowMouseInDataSet != null) {
+				pane_position.getChildren().remove(nowMouseInDataSet.vbox);
+				nowMouseInDataSet = null;
+			}
 		});
 
 		pane_position.setOnMouseDragged(e -> {
-			double movex = sensitivity * (e.getSceneX() - start_x);
-			double movey = sensitivity * (e.getSceneY() - start_y);
-			local_x += movex;
-			local_y += movey;
-			start_x = e.getSceneX();
-			start_y = e.getSceneY();
-			if (local_x >= max_x)
-				local_x = max_x;
-			if (local_y >= max_y)
-				local_y = max_y;
-			if (local_x <= min_x)
-				local_x = min_x;
-			if (local_y <= min_y)
-				local_y = min_y;
-			
-			dataSetList.forEach(d -> d.updatePos(local_x, local_y));
+			if (e.getButton().equals(MouseButton.PRIMARY)) {
+				double movex = sensitivity * (e.getSceneX() - start_x);
+				double movey = sensitivity * (e.getSceneY() - start_y);
+				local_x -= movex;
+				local_y -= movey;
+				start_x = e.getSceneX();
+				start_y = e.getSceneY();
+				if (local_x >= max_x)
+					local_x = max_x;
+				if (local_y >= max_y)
+					local_y = max_y;
+				if (local_x <= min_x)
+					local_x = min_x;
+				if (local_y <= min_y)
+					local_y = min_y;
+
+				dataSetList.forEach(d -> d.updatePos(-local_x, -local_y));
+			}
 		});
 		var_type.getItems().addAll("&i | int", "&f | float", "&b | boolean", "&s | string");
 		var_type.setOnMouseClicked(e -> {
@@ -186,10 +196,11 @@ public class MakeGUIController implements Initializable {
 		});
 	}
 
-	public void makeNewComp(Pane pane, double posx, double posy) {
+	public void makeNewComp(Pane pane, double posx, double posy, double updatex, double updatey) {
 		DataSet dataSet = new DataSet(posx, posy);
 		dataSet.setUp(pane);
 		dataSetList.add(dataSet);
+		dataSet.updatePos(updatex, updatey);
 	}
 
 	public String addTextIntoString(String str, int anchor, int caret, String add) {
@@ -206,10 +217,11 @@ public class MakeGUIController implements Initializable {
 		StringBuilder builder = new StringBuilder();
 		if (text != null)
 			text.stream().forEach(t -> builder.append(t));
-		if(nowEditDataSet != null) {
+		if (nowEditDataSet != null) {
 			nowEditDataSet.string_title = text_title.getText();
 			nowEditDataSet.string_describe = text_info.getText();
-			if(image != null)nowEditDataSet.string_image_name = image.getUrl();
+			if (image != null)
+				nowEditDataSet.string_image_name = image.getUrl();
 			nowEditDataSet.update();
 		}
 		DataSet data = new DataSet(text_title.getText(), builder.toString().replaceAll("\n\n", "\n"), this.image);
@@ -242,6 +254,9 @@ public class MakeGUIController implements Initializable {
 
 	public void next() {
 		MakeGUIController.instance.changeTab(MakeGUIController.instance.tab_position);
+		this.text_info.setText(null);
+		this.text_title.setText(null);
+		this.imageView.setImage(null);
 	}
 
 	public MakeGUIController() {
@@ -273,18 +288,17 @@ public class MakeGUIController implements Initializable {
 	}
 
 	public void loadFromDataSet(DataSet dataSet) {
-		this.text_info.setText(dataSet.string_title);
-		this.text_title.setText(dataSet.string_describe);
+		this.text_title.setText(dataSet.string_title);
+		this.text_info.setText(dataSet.string_describe);
 		if (dataSet.string_image_name != null && !dataSet.string_image_name.isEmpty())
 			this.image = new Image(dataSet.string_image_name);
 	}
-	
+
 	public DataSet nowEditDataSet;
-	
+	public DataSet nowMouseInDataSet;
+
 	public void changeTab(Tab tab) {
-		save();
 		tabpane_make.getSelectionModel().select(tab);
-		System.out.println(tab.getId());
 	}
-	
+
 }

@@ -4,13 +4,11 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import cyoap_main.design.controller.MakeGUIController;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
@@ -76,19 +74,35 @@ public class DataSet {
 		area.setMouseTransparent(true);
 		image.setMouseTransparent(true);
 
-		EventHandler<? super MouseEvent> t = e -> {
+		vbox.setOnMouseClicked(e -> {
 			if (e.getButton().equals(MouseButton.PRIMARY)) {
 				if (e.getClickCount() == 2) {
 					MakeGUIController.instance.nowEditDataSet = this;
+					MakeGUIController.instance.loadFromDataSet(this);
 					MakeGUIController.instance.changeTab(MakeGUIController.instance.tab_describe);
 				}
 			}
-		};
-
-		vbox.setOnMouseClicked(t);
+		});
+		vbox.setOnMouseDragged(e -> {
+			if (e.getButton().equals(MouseButton.MIDDLE)) {
+				double movex = MakeGUIController.instance.sensitivity * (e.getSceneX() - MakeGUIController.instance.start_x);
+				double movey = MakeGUIController.instance.sensitivity * (e.getSceneY() - MakeGUIController.instance.start_y);
+				MakeGUIController.instance.start_x = e.getSceneX();
+				MakeGUIController.instance.start_y = e.getSceneY();
+				updateRealPos(movex, movey);
+			}
+		});
+		vbox.setOnMouseEntered(e -> {
+			MakeGUIController.instance.nowMouseInDataSet = this;
+		});
 		pane.getChildren().add(vbox);
 	}
 
+	@JsonIgnore
+	public double local_x = 0;
+	@JsonIgnore
+	public double local_y = 0;
+	
 	public void update() {
 		this.area.setText(string_describe);
 		this.title.setText(string_title);
@@ -99,6 +113,12 @@ public class DataSet {
 
 	public void updatePos(double moveX, double moveY) {
 		vbox.relocate(posx + moveX, posy + moveY);
-		System.out.println(moveX + ":" + moveY);
+	}
+	
+
+	public void updateRealPos(double moveX, double moveY) {
+		posx += moveX;
+		posy += moveY;
+		vbox.relocate(posx - MakeGUIController.instance.local_x, posy - MakeGUIController.instance.local_y);
 	}
 }

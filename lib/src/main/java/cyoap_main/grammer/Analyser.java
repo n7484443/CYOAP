@@ -1,11 +1,10 @@
-package cyoap_main.util;
+package cyoap_main.grammer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import cyoap_main.core.VarData;
-import cyoap_main.core.VarData.ValueType;
-import cyoap_main.core.VarData.types;
+import cyoap_main.grammer.VarData.ValueType;
+import cyoap_main.grammer.VarData.types;
 import javafx.util.Pair;
 
 public class Analyser {
@@ -149,31 +148,31 @@ public class Analyser {
 					} else if (isDigit) {
 						if (func_int_List.get(size) == others_string) {
 							func_string_List.set(size, func_string_List.get(size) + c);
-						}else if (func_int_List.get(size) == ints) {
-							if (c == '.') {
-								func_string_List.set(size, func_string_List.get(size) + c);
-								func_int_List.set(size, floats);
-								if (!isStringDouble(func_string_List.get(size))) {
-									System.err.println("error! float has more than two point(.)");
-								}
-							} else {
-								func_string_List.set(size, func_string_List.get(size) + c);
-							}
+						} else if (func_int_List.get(size) == ints) {
+							func_string_List.set(size, func_string_List.get(size) + c);
 						} else if (func_int_List.get(size) == floats) {
 							func_string_List.set(size, func_string_List.get(size) + c);
 						} else {
 							func_string_List.add(String.valueOf(c));
 							func_int_List.add(ints);
 						}
-					} else if (!isDigit){
-						if(func_int_List.get(size) == others_string) {
+					} else if (!isDigit) {
+						if (func_int_List.get(size) == ints) {
+							if (c == '.') {
+								func_string_List.set(size, func_string_List.get(size) + c);
+								func_int_List.set(size, floats);
+								if (!isStringDouble(func_string_List.get(size))) {
+									System.err.println("error! float has more than two point(.)");
+								}
+							}
+						}else if (func_int_List.get(size) == others_string) {
 							func_string_List.set(size, func_string_List.get(size) + c);
 							if (func_string_List.get(size).toLowerCase().equals("true")) {
 								func_int_List.set(size, trues);
 							} else if (func_string_List.get(size).toLowerCase().equals("false")) {
 								func_int_List.set(size, falses);
 							}
-						}else {
+						} else {
 							func_string_List.add(String.valueOf(c));
 							func_int_List.add(others_string);
 							if (func_string_List.get(size).toLowerCase().equals("true")) {
@@ -202,68 +201,154 @@ public class Analyser {
 		}
 	}
 
+	public static types getTypeFromInt(int t) {
+		switch (t) {
+		case ints:
+			return types.ints;
+		case floats:
+			return types.floats;
+		case booleans:
+			return types.booleans;
+		case strs:
+			return types.strings;
+		case function:
+			return types.functions;
+		default:
+			return types.nulls;
+		}
+	}
+
+	// 같은 값이 반환시->다음값으로
+	public static Pair<Recursive_Parser, Integer> create_parser(int i, List<Integer> func, List<String> data,
+			Recursive_Parser motherParser) {
+		if(i >= func.size())return new Pair<Recursive_Parser, Integer>(motherParser, i);
+		if (func.get(i) == function_start) {
+			while (true) {
+				var inner = create_parser(i + 1, func, data, motherParser);
+				if (inner == null) {
+					System.out.println("break");
+					break;
+				}
+				i = inner.getValue();
+				var inner_parser = inner.getKey();
+				if (inner_parser == motherParser) {
+					i++;
+					continue;
+				}
+				
+				motherParser.add(inner_parser);
+			}
+			return new Pair<Recursive_Parser, Integer>(motherParser, i);
+		} else if (func.get(i) == function_end) {
+			return null;
+		} else if (func.get(i) == function) {
+			Recursive_Parser func_parser = new Recursive_Parser();
+			func_parser.value = new ValueType(getTypeFromInt(function));
+			func_parser.value.setData(data.get(i));
+			return create_parser(i + 1, func, data, func_parser);
+		} else if (func.get(i) == function_comma) {
+			i++;
+			return new Pair<Recursive_Parser, Integer>(motherParser, i);
+		} else if (func.get(i) == others_string) {
+			Recursive_Parser new_parser = new Recursive_Parser();
+			new_parser.value = new ValueType(VarData.getValue(data.get(i)));
+
+			Recursive_Parser function_parser = new Recursive_Parser();
+
+			if (func.get(i + 1) == plus) {
+				function_parser.value = new ValueType(getTypeFromInt(function));
+				function_parser.value.data = "plus";
+				function_parser.add(new_parser);
+				var v = create_parser(i + 2, func, data, function_parser);
+				i = v.getValue();
+				function_parser.add(v.getKey());
+				return new Pair<Recursive_Parser, Integer>(function_parser, i);
+			} else if (func.get(i + 1) == minus) {
+				function_parser.value = new ValueType(getTypeFromInt(function));
+				function_parser.value.data = "minus";
+				function_parser.add(new_parser);
+				var v = create_parser(i + 2, func, data, function_parser);
+				i = v.getValue();
+				function_parser.add(v.getKey());
+				return new Pair<Recursive_Parser, Integer>(function_parser, i);
+			} else if (func.get(i + 1) == multi) {
+				function_parser.value = new ValueType(getTypeFromInt(function));
+				function_parser.value.data = "multi";
+				function_parser.add(new_parser);
+				var v = create_parser(i + 2, func, data, function_parser);
+				i = v.getValue();
+				function_parser.add(v.getKey());
+				return new Pair<Recursive_Parser, Integer>(function_parser, i);
+			} else if (func.get(i + 1) == div) {
+				function_parser.value = new ValueType(getTypeFromInt(function));
+				function_parser.value.data = "div";
+				function_parser.add(new_parser);
+				var v = create_parser(i + 2, func, data, function_parser);
+				i = v.getValue();
+				function_parser.add(v.getKey());
+				return new Pair<Recursive_Parser, Integer>(function_parser, i);
+			}
+
+			return new Pair<Recursive_Parser, Integer>(new_parser, i);
+		} else {
+			Recursive_Parser new_parser = new Recursive_Parser();
+			new_parser.value = new ValueType(getTypeFromInt(func.get(i)));
+			new_parser.value.setData(data.get(i));
+			return new Pair<Recursive_Parser, Integer>(new_parser, i);
+		}
+	}
+
 	public static void analyse(Pair<List<Integer>, List<String>> analysed_data) {
 		var func = analysed_data.getKey();
 		var data = analysed_data.getValue();
 
-		//for (int i = 0; i < data.size(); i++) {
-		//	System.out.println(func.get(i) + ":" + data.get(i));
-		//}
-
-		for (int i = 0; i < data.size(); i++) {
-			if (func.get(i) == equal) {
-				ValueType vatype = null;
-				int j = i;
-				String name = "";
-				if (func.get(i + 1) == ints) {
-					vatype = new ValueType(types.ints);
-					name = data.get(i - 1);
-				} else if (func.get(i + 1) == floats) {
-					vatype = new ValueType(types.floats);
-					name = data.get(i - 1);
-				} else if (func.get(i + 1) == booleans) {
-					vatype = new ValueType(types.booleans);
-					name = data.get(i - 1);
-					j++;
-				} else if (func.get(i + 1) == strs) {
-					vatype = new ValueType(types.strings);
-					name = data.get(i - 1);
-				} else {
-					if (func.get(i - 1) == others_string) {
-						vatype = VarData.getValue(data.get(i - 1));
-						if (vatype == null) {
-							vatype = new ValueType();
-							name = data.get(i - 1);
-						}
-					} else if (func.get(i - 2) == others_string) {
-						vatype = VarData.getValue(data.get(i - 2));
-						name = data.get(i - 2);
-					}
-				}
-
-				// func ( data )
-				ValueType datas = null;
-				if (func.get(j + 1) == function) {
-					ValueType v = checkValueType(data.get(j + 3), func.get(j + 3));
-					datas = function_find(data.get(j + 1), v);
-				} else {
-					datas = checkValueType(data.get(j + 1), func.get(j + 1));
-				}
-
-				if (func.get(i - 1) == plus) {
-					vatype.add(datas);
-				} else if (func.get(i - 1) == minus) {
-					vatype.sub(datas);
-				} else if (func.get(i - 1) == multi) {
-					vatype.mul(datas);
-				} else if (func.get(i - 1) == div) {
-					vatype.div(datas);
-				} else {
-					vatype.set(datas);
-				}
-				VarData.setValue(name, vatype);
+		int equal_pos = func.indexOf(equal);
+		Recursive_Parser parser = new Recursive_Parser();
+		for (int i = equal_pos + 1; i < data.size(); i++) {
+			System.out.println(func.get(i) + ":" + data.get(i));
+		}
+		System.out.println("end parser");
+		var parser_ans = create_parser(equal_pos + 1, func, data, parser);
+		parser_ans.getKey().checkParser(0);
+		System.out.println("recursive parse end");
+		String name = "";
+		ValueType vatype = null;
+		if (func.get(equal_pos - 1) == others_string) {
+			name = data.get(equal_pos - 1);
+			if(VarData.hasValue(data.get(equal_pos - 1))) {
+				vatype = VarData.getValue(data.get(equal_pos - 1));
+			}else {
+				vatype = new ValueType();
+			}
+		} else if (func.get(equal_pos - 2) == others_string) {
+			name = data.get(equal_pos - 2);
+			if(VarData.hasValue(data.get(equal_pos - 2))) {
+				vatype = VarData.getValue(data.get(equal_pos - 2));
+			}else {
+				System.err.println("non exist name!");
 			}
 		}
+		System.out.println("left side end");
+		ValueType datas = parser_ans.getKey().unzip();
+
+		if (func.get(equal_pos - 1) == plus) {
+			vatype.add(datas);
+		} else if (func.get(equal_pos - 1) == minus) {
+			vatype.sub(datas);
+		} else if (func.get(equal_pos - 1) == multi) {
+			vatype.mul(datas);
+		} else if (func.get(equal_pos - 1) == div) {
+			vatype.div(datas);
+		} else {
+			vatype.set(datas);
+		}
+		VarData.setValue(name, vatype);
+		System.out.println("all parsing end");
+
+		// for (int i = 0; i < data.size(); i++) {
+		// System.out.println(func.get(i) + ":" + data.get(i));
+		// }
+
 	}
 
 	public static ValueType checkValueType(String data, int ty) {
@@ -286,61 +371,6 @@ public class Analyser {
 	public static ValueType innerLoop_right(List<Integer> func, List<String> data, ValueType v) {
 
 		return v;
-	}
-
-	public static ValueType function_find(String func_name, ValueType input) {
-		ValueType val = new ValueType(input);
-		switch (func_name) {
-		case "print" -> {
-
-		}
-		//if ( 조건, 결과)
-		//elseif ( 조건, 결과)
-		//else ( 결과)
-		case "if" -> {
-			
-		}
-		case "elseif" -> {
-			
-		}
-		case "else" -> {
-			
-		}
-		case "floor" -> {
-			float f;
-			if (val.type.equals(types.ints)) {
-				int i = val.getData();
-				f = i;
-			} else {
-				f = val.getData();
-			}
-			val.setData(String.valueOf((int) Math.floor(f)));
-			return val;
-		}
-		case "round" -> {
-			float f;
-			if (val.type.equals(types.ints)) {
-				int i = val.getData();
-				f = i;
-			} else {
-				f = val.getData();
-			}
-			val.setData(String.valueOf((int) Math.round(f)));
-			return val;
-		}
-		case "ceil" -> {
-			float f;
-			if (val.type.equals(types.ints)) {
-				int i = val.getData();
-				f = i;
-			} else {
-				f = val.getData();
-			}
-			val.setData(String.valueOf((int) Math.ceil(f)));
-			return val;
-		}
-		}
-		return val;
 	}
 
 	public static void analyse(List<String> str_list) {

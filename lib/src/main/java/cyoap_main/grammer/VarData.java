@@ -1,7 +1,9 @@
-package cyoap_main.core;
+package cyoap_main.grammer;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import cyoap_main.grammer.FunctionList.Function_for_d;
 
 public class VarData {
 	public static VarData instance;
@@ -42,7 +44,7 @@ public class VarData {
 	}
 	
 	public enum types {
-		ints("int"), floats("float"), strings("String"), booleans("boolean"), nulls("null");
+		ints("int"), floats("float"), strings("String"), booleans("boolean"), nulls("null"), functions("function");
 
 		String toStr;
 
@@ -59,6 +61,10 @@ public class VarData {
 		VarData.instance = this;
 		isUpdated = false;
 	}
+	
+
+
+	
 
 	public static class ValueType {
 		public String data;
@@ -73,6 +79,9 @@ public class VarData {
 				return types.strings;
 			if (data instanceof Boolean)
 				return types.booleans;
+			if (data instanceof Function_for_d) {
+				return types.functions;
+			}
 			return types.nulls;
 		}
 
@@ -116,6 +125,8 @@ public class VarData {
 				return (T) (Float.valueOf(data));
 			if (type.equals(types.ints))
 				return (T) (Integer.valueOf(data));
+			if (type.equals(types.functions))
+				return (T) (FunctionList.getFunction(data));
 			return (T) Boolean.FALSE;
 		}
 

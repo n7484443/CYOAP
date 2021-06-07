@@ -2,8 +2,9 @@ package cyoap_main.core;
 
 import java.io.File;
 
-import cyoap_main.core.VarData.ValueType;
 import cyoap_main.design.controller.MakeGUIController;
+import cyoap_main.grammer.VarData;
+import cyoap_main.grammer.VarData.ValueType;
 import cyoap_main.util.LoadUtil;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -11,7 +12,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class JavaFxMain extends Application {
-	public static String version = "0.1.7";
+	public static String version = "0.1.8";
 	
 	public static JavaFxMain instance;
 	public Stage stage;

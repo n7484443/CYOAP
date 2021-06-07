@@ -15,9 +15,9 @@ import java.util.ResourceBundle;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cyoap_main.core.JavaFxMain;
-import cyoap_main.core.VarData;
 import cyoap_main.design.ChoiceSet;
-import cyoap_main.util.Analyser;
+import cyoap_main.grammer.Analyser;
+import cyoap_main.grammer.VarData;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;

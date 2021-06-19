@@ -28,16 +28,11 @@ public class Recursive_Parser {
 
 	public int checkParser(int i) {
 		if(value != null)System.out.println(i + ":" + value.data + ":" + value.type);
-		boolean b = true;
 		for(int k = 0; k < 3; k++) {
 			if(child_node[k] != null) {
 				i++;
 				i = child_node[k].checkParser(i);
-			}else b = false;
-		}
-		
-		if(b) {
-			if(value != null)System.out.println(i + ":" + value.data + ":" + value.type);
+			}
 		}
 		return i;
 	}

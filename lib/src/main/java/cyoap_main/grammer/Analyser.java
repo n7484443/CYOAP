@@ -219,81 +219,85 @@ public class Analyser {
 	}
 
 	// 같은 값이 반환시->다음값으로
+	// null 일때->함수 입력 끝
+	public static Recursive_Parser parser_null = null;
+	public static Recursive_Parser parser_comma = new Recursive_Parser();
 	public static Pair<Recursive_Parser, Integer> create_parser(int i, List<Integer> func, List<String> data,
 			Recursive_Parser motherParser) {
 		if(i >= func.size())return new Pair<Recursive_Parser, Integer>(motherParser, i);
 		if (func.get(i) == function_start) {
 			while (true) {
 				var inner = create_parser(i + 1, func, data, motherParser);
-				if (inner == null) {
-					System.out.println("break");
-					break;
-				}
 				i = inner.getValue();
 				var inner_parser = inner.getKey();
-				if (inner_parser == motherParser) {
+				if (inner_parser == parser_comma) {
 					i++;
 					continue;
+				}else if(inner_parser == null) {
+					System.out.println("break");
+					break;
 				}
 				
 				motherParser.add(inner_parser);
 			}
 			return new Pair<Recursive_Parser, Integer>(motherParser, i);
 		} else if (func.get(i) == function_end) {
-			return null;
+			return new Pair<Recursive_Parser, Integer>(parser_null, i);
 		} else if (func.get(i) == function) {
 			Recursive_Parser func_parser = new Recursive_Parser();
-			func_parser.value = new ValueType(getTypeFromInt(function));
+			func_parser.value = new ValueType(types.functions);
 			func_parser.value.setData(data.get(i));
 			return create_parser(i + 1, func, data, func_parser);
 		} else if (func.get(i) == function_comma) {
 			i++;
-			return new Pair<Recursive_Parser, Integer>(motherParser, i);
-		} else if (func.get(i) == others_string) {
+			return new Pair<Recursive_Parser, Integer>(parser_comma, i);
+		} else{
 			Recursive_Parser new_parser = new Recursive_Parser();
-			new_parser.value = new ValueType(VarData.getValue(data.get(i)));
+			if(func.get(i) == others_string) {
+				new_parser.value = new ValueType(VarData.getValue(data.get(i)));
+			}else {
+				new_parser.value = new ValueType(getTypeFromInt(func.get(i)));
+				new_parser.value.setData(data.get(i));
+			}
 
 			Recursive_Parser function_parser = new Recursive_Parser();
 
-			if (func.get(i + 1) == plus) {
-				function_parser.value = new ValueType(getTypeFromInt(function));
-				function_parser.value.data = "plus";
-				function_parser.add(new_parser);
-				var v = create_parser(i + 2, func, data, function_parser);
-				i = v.getValue();
-				function_parser.add(v.getKey());
-				return new Pair<Recursive_Parser, Integer>(function_parser, i);
-			} else if (func.get(i + 1) == minus) {
-				function_parser.value = new ValueType(getTypeFromInt(function));
-				function_parser.value.data = "minus";
-				function_parser.add(new_parser);
-				var v = create_parser(i + 2, func, data, function_parser);
-				i = v.getValue();
-				function_parser.add(v.getKey());
-				return new Pair<Recursive_Parser, Integer>(function_parser, i);
-			} else if (func.get(i + 1) == multi) {
-				function_parser.value = new ValueType(getTypeFromInt(function));
-				function_parser.value.data = "multi";
-				function_parser.add(new_parser);
-				var v = create_parser(i + 2, func, data, function_parser);
-				i = v.getValue();
-				function_parser.add(v.getKey());
-				return new Pair<Recursive_Parser, Integer>(function_parser, i);
-			} else if (func.get(i + 1) == div) {
-				function_parser.value = new ValueType(getTypeFromInt(function));
-				function_parser.value.data = "div";
-				function_parser.add(new_parser);
-				var v = create_parser(i + 2, func, data, function_parser);
-				i = v.getValue();
-				function_parser.add(v.getKey());
-				return new Pair<Recursive_Parser, Integer>(function_parser, i);
+			if (func.size() >= i + 2) {
+				if (func.get(i + 1) == plus) {
+					function_parser.value = new ValueType(getTypeFromInt(function));
+					function_parser.value.data = "plus";
+					function_parser.add(new_parser);
+					var v = create_parser(i + 2, func, data, function_parser);
+					i = v.getValue();
+					function_parser.add(v.getKey());
+					return new Pair<Recursive_Parser, Integer>(function_parser, i);
+				} else if (func.get(i + 1) == minus) {
+					function_parser.value = new ValueType(types.functions);
+					function_parser.value.data = "minus";
+					function_parser.add(new_parser);
+					var v = create_parser(i + 2, func, data, function_parser);
+					i = v.getValue();
+					function_parser.add(v.getKey());
+					return new Pair<Recursive_Parser, Integer>(function_parser, i);
+				} else if (func.get(i + 1) == multi) {
+					function_parser.value = new ValueType(types.functions);
+					function_parser.value.data = "multi";
+					function_parser.add(new_parser);
+					var v = create_parser(i + 2, func, data, function_parser);
+					i = v.getValue();
+					function_parser.add(v.getKey());
+					return new Pair<Recursive_Parser, Integer>(function_parser, i);
+				} else if (func.get(i + 1) == div) {
+					function_parser.value = new ValueType(types.functions);
+					function_parser.value.data = "div";
+					function_parser.add(new_parser);
+					var v = create_parser(i + 2, func, data, function_parser);
+					i = v.getValue();
+					function_parser.add(v.getKey());
+					return new Pair<Recursive_Parser, Integer>(function_parser, i);
+				}
 			}
 
-			return new Pair<Recursive_Parser, Integer>(new_parser, i);
-		} else {
-			Recursive_Parser new_parser = new Recursive_Parser();
-			new_parser.value = new ValueType(getTypeFromInt(func.get(i)));
-			new_parser.value.setData(data.get(i));
 			return new Pair<Recursive_Parser, Integer>(new_parser, i);
 		}
 	}
@@ -304,12 +308,10 @@ public class Analyser {
 
 		int equal_pos = func.indexOf(equal);
 		Recursive_Parser parser = new Recursive_Parser();
-		for (int i = equal_pos + 1; i < data.size(); i++) {
-			System.out.println(func.get(i) + ":" + data.get(i));
-		}
+		
 		System.out.println("end parser");
 		var parser_ans = create_parser(equal_pos + 1, func, data, parser);
-		parser_ans.getKey().checkParser(0);
+		//parser_ans.getKey().checkParser(0);
 		System.out.println("recursive parse end");
 		String name = "";
 		ValueType vatype = null;

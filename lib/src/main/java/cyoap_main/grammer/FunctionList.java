@@ -1,5 +1,7 @@
 package cyoap_main.grammer;
 
+import java.util.Random;
+
 import cyoap_main.grammer.VarData.ValueType;
 import cyoap_main.grammer.VarData.types;
 
@@ -45,11 +47,24 @@ public class FunctionList {
 		return input;
 	};
 	
+	public final static Func_one func_rand = (input) -> {
+		float f;
+		if (input.type.equals(types.ints)) {
+			int i = input.getData();
+			f = (new Random()).nextInt(i);
+		} else {
+			f = (new Random()).nextFloat();
+		}
+		input.setData(f);
+		return input;
+	};
+	
 	public final static Func_two func_plus = (a, b) -> {
 		if(b == null) {
 			System.err.println("null error!");
 			return null;
 		}
+		System.out.println("plusTest:" + a.data + ":" + b.data);
 		if(a.type.equals(types.strings)) {
 			a.data += b.data;
 			return a;
@@ -187,6 +202,8 @@ public class FunctionList {
 			return func_multi;
 		case "div":
 			return func_div;
+		case "random":
+			return func_rand;
 		default:
 			return null;
 		}

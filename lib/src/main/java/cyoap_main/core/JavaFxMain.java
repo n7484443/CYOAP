@@ -12,7 +12,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class JavaFxMain extends Application {
-	public static String version = "0.1.8";
+	public static String version = "0.1.9";
 	
 	public static JavaFxMain instance;
 	public Stage stage;

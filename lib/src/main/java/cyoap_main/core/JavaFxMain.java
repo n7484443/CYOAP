@@ -12,12 +12,13 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class JavaFxMain extends Application {
-	public static String version = "0.1.9";
+	public static String version = "0.1.10";
 	
 	public static JavaFxMain instance;
 	public Stage stage;
 	public Scene scene_make;
 	public Scene scene_start;
+	public Scene scene_play;
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -27,6 +28,7 @@ public class JavaFxMain extends Application {
 			stage = primaryStage;
 			scene_make = new Scene(LoadUtil.instance.loadFXML("/lib/design/Design_Make.fxml"), 960, 540);
 			scene_start = new Scene(LoadUtil.instance.loadFXML("/lib/design/Design_Start.fxml"), 960, 540);
+			scene_play = new Scene(LoadUtil.instance.loadFXML("/lib/design/Design_Play.fxml"), 960, 540);
 			stage.setTitle("CYOAP " + version);
 			stage.setScene(scene_start);
 			
@@ -67,7 +69,6 @@ public class JavaFxMain extends Application {
 		if(!hasConfig) {
 			
 		}
-		JavaFxMain.instance.stage.setScene(JavaFxMain.instance.scene_make);
 	}
 
 	public static void main(String[] args) {

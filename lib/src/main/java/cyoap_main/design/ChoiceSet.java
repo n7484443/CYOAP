@@ -1,5 +1,8 @@
 package cyoap_main.design;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -19,19 +22,18 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.PUBLIC_ONLY)
 public class ChoiceSet {
 	public String string_title;
 	public String string_describe;
 	public String string_image_name;
-	@JsonIgnore
-	public VBox vbox = new VBox();
-	@JsonIgnore
-	public ImageView image = new ImageView();
-	@JsonIgnore
-	public TextArea area = new TextArea();
-	@JsonIgnore
-	public Text title = new Text();
+	
+	private VBox vbox = new VBox();
+	private ImageView image = new ImageView();
+	private TextArea area = new TextArea();
+	private Text title = new Text();
+	
+	public List<ChoiceSet> subChoiceSet = new ArrayList<ChoiceSet>();
 
 	public double posx;
 	public double posy;
@@ -90,6 +92,7 @@ public class ChoiceSet {
 				MakeGUIController.instance.start_x = e.getSceneX();
 				MakeGUIController.instance.start_y = e.getSceneY();
 				updateRealPos(movex, movey);
+				
 			}
 		});
 		vbox.setOnMouseEntered(e -> {
@@ -97,18 +100,13 @@ public class ChoiceSet {
 		});
 		pane.getChildren().add(vbox);
 	}
-
-	@JsonIgnore
-	public double local_x = 0;
-	@JsonIgnore
-	public double local_y = 0;
 	
 	public void update() {
 		this.area.setText(string_describe);
 		this.title.setText(string_title);
 		if (this.string_image_name != null && !this.string_image_name.isEmpty())
 			this.image.setImage(new Image(this.string_image_name));
-
+		
 	}
 
 	public void updatePos(double moveX, double moveY) {
@@ -120,5 +118,10 @@ public class ChoiceSet {
 		posx += moveX;
 		posy += moveY;
 		vbox.relocate(posx - MakeGUIController.instance.local_x, posy - MakeGUIController.instance.local_y);
+	}
+	
+	@JsonIgnore
+	public VBox getVbox() {
+		return vbox;
 	}
 }

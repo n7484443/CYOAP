@@ -151,7 +151,7 @@ public class MakeGUIController implements Initializable {
 		
 		menu_delete.setOnAction(e -> {
 			if(nowMouseInDataSet != null) {
-				pane_position.getChildren().remove(nowMouseInDataSet.vbox);
+				pane_position.getChildren().remove(nowMouseInDataSet.getVbox());
 				nowMouseInDataSet = null;
 			}
 		});

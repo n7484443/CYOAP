@@ -17,11 +17,15 @@ public class StartGUIController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		pane_play.setOnMouseClicked(e->{
+			var directory = LoadUtil.loadFolder();
+			JavaFxMain.instance.loadFiles(directory);
+			JavaFxMain.instance.stage.setScene(JavaFxMain.instance.scene_play);
 		});
 		
 		pane_make.setOnMouseClicked(e->{
 			var directory = LoadUtil.loadFolder();
 			JavaFxMain.instance.loadFiles(directory);
+			JavaFxMain.instance.stage.setScene(JavaFxMain.instance.scene_make);
 		});
 	}
 	

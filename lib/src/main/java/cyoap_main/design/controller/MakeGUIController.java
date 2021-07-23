@@ -151,7 +151,7 @@ public class MakeGUIController implements Initializable {
 		
 		menu_delete.setOnAction(e -> {
 			if(nowMouseInDataSet != null) {
-				pane_position.getChildren().remove(nowMouseInDataSet.getVbox());
+				pane_position.getChildren().remove(nowMouseInDataSet.getAnchorPane());
 				nowMouseInDataSet = null;
 			}
 		});
@@ -176,6 +176,7 @@ public class MakeGUIController implements Initializable {
 				choiceSetList.forEach(d -> d.updatePos(-local_x, -local_y));
 			}
 		});
+		
 		var_type.getItems().addAll("&b | boolean", " \"\" | string", "floor | 내림", "ceil | 올림", "round | 반올림");
 		var_type.setOnMouseClicked(e -> {
 			if (e.getButton().equals(MouseButton.PRIMARY)) {

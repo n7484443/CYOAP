@@ -89,6 +89,8 @@ public class MakeGUIController implements Initializable {
 	public int max_x = 500;
 	public int max_y = 500;
 
+	public float scale = 1.0f;
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		button_save.setOnMouseClicked(e -> {
@@ -143,6 +145,9 @@ public class MakeGUIController implements Initializable {
 			}
 		});
 
+		pane_position.setOnScroll(e-> {
+			scale += (e.getDeltaY()/40.0)/2;
+		});
 		menu_create.setOnAction(e -> {
 			Bounds boundsInScene = pane_describe.localToScene(pane_describe.getBoundsInLocal());
 			makeNewComp(pane_position, local_x + start_x - boundsInScene.getMinX(),

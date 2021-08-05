@@ -12,7 +12,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class JavaFxMain extends Application {
-	public static String version = "0.1.12";
+	public static String version = "0.1.13";
 	
 	public static JavaFxMain instance;
 	public Stage stage;
@@ -20,15 +20,18 @@ public class JavaFxMain extends Application {
 	public Scene scene_start;
 	public Scene scene_play;
 	
+	public int window_width = 1920/2;
+	public int window_height = 1080/2;
+	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		try {
 			instance = this;
 			new LoadUtil();
 			stage = primaryStage;
-			scene_make = new Scene(LoadUtil.instance.loadFXML("/lib/design/Design_Make.fxml"), 960, 540);
-			scene_start = new Scene(LoadUtil.instance.loadFXML("/lib/design/Design_Start.fxml"), 960, 540);
-			scene_play = new Scene(LoadUtil.instance.loadFXML("/lib/design/Design_Play.fxml"), 960, 540);
+			scene_make = new Scene(LoadUtil.instance.loadFXML("/lib/design/Design_Make.fxml"), window_width, window_height);
+			scene_start = new Scene(LoadUtil.instance.loadFXML("/lib/design/Design_Start.fxml"), window_width, window_height);
+			scene_play = new Scene(LoadUtil.instance.loadFXML("/lib/design/Design_Play.fxml"), window_width, window_height);
 			stage.setTitle("CYOAP " + version);
 			stage.setScene(scene_start);
 			
@@ -42,7 +45,7 @@ public class JavaFxMain extends Application {
 					render();
 				}
 			}.start();
-			stage.setResizable(false);
+			stage.setResizable(true);
 			stage.show();
 		} catch (Exception e) {
 			e.printStackTrace();

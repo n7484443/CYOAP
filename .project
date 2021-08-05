@@ -3,15 +3,8 @@
 	<name>CYOAP</name>
 	<comment></comment>
 	<projects/>
-	<natures>
-		<nature>org.eclipse.buildship.core.gradleprojectnature</nature>
-	</natures>
-	<buildSpec>
-		<buildCommand>
-			<name>org.eclipse.buildship.core.gradleprojectbuilder</name>
-			<arguments/>
-		</buildCommand>
-	</buildSpec>
+	<natures/>
+	<buildSpec/>
 	<linkedResources/>
 	<filteredResources/>
 </projectDescription>

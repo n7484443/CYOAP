@@ -14,6 +14,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
@@ -31,6 +32,7 @@ public class ChoiceSet {
 	public String string_image_name;
 
 	private AnchorPane pane = new AnchorPane();
+	private BorderPane border_pane = new BorderPane();
 	private VBox vbox = new VBox();
 	private HBox hbox = new HBox();
 	private ImageView image = new ImageView();
@@ -77,22 +79,26 @@ public class ChoiceSet {
 		pane.getChildren().add(vbox);
 		pane.setLayoutX(posx);
 		pane.setLayoutY(posy);
-
-		vbox.getChildren().addAll(title, image, area, hbox);
-		vbox.setBorder(new Border(
+		pane.setBorder(new Border(
 				new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+
+		vbox.getChildren().addAll(border_pane, hbox);
+		border_pane.setTop(title);
+		border_pane.setCenter(image);
+		border_pane.setBottom(area);
+		//border_pane.setBorder(new Border(
+		//		new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+
 		vbox.setAlignment(Pos.CENTER);
 		area.setEditable(false);
 
-		area.setMaxWidth(200);
-		area.setMaxHeight(100);
+		border_pane.setPrefWidth(200);
+		border_pane.setPrefHeight(100);
+		area.setPrefHeight(100);
 		image.setPreserveRatio(true);
 		image.setFitWidth(200);
-		area.prefWidthProperty().bind(pane.prefWidthProperty());
-
-		title.setMouseTransparent(true);
-		area.setMouseTransparent(true);
-		image.setMouseTransparent(true);
+		
+		border_pane.setMouseTransparent(true);
 
 		pane.setOnMouseClicked(e -> {
 			if (e.getButton().equals(MouseButton.PRIMARY)) {
@@ -177,6 +183,8 @@ public class ChoiceSet {
 			sub.choiceSet_parent.getAnchorPane().getChildren().remove(sub.getAnchorPane());
 		}
 		this.hbox.getChildren().add(sub.getAnchorPane());
+		this.area.setPrefWidth(this.vbox.getWidth());
+		System.out.println(area.getPrefWidth() + ":" + this.vbox.getWidth());
 	}
 
 	public void updatePos(double moveX, double moveY) {

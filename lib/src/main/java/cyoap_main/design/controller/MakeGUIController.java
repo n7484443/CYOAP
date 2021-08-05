@@ -267,6 +267,8 @@ public class MakeGUIController implements Initializable {
 		this.text_info.setText(null);
 		this.text_title.setText(null);
 		this.imageView.setImage(null);
+		this.image = null;
+		this.dropped = null;
 	}
 
 	public MakeGUIController() {

@@ -16,7 +16,7 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cyoap_main.design.controller.MakeGUIController">
    <children>
-      <SplitPane fx:id="pane_mainGui" dividerPositions="0.18" prefHeight="540.0" prefWidth="960.0" snapToPixel="false">
+      <SplitPane fx:id="pane_mainGui" dividerPositions="0.5" prefHeight="540.0" prefWidth="960.0" snapToPixel="false">
         <items>
           <AnchorPane maxHeight="538.0" maxWidth="169.0" minHeight="538.0" minWidth="169.0" prefHeight="538.0" prefWidth="169.0" SplitPane.resizableWithParent="false">
                <children>

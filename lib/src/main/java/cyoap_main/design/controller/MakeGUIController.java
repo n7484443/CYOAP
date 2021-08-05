@@ -66,6 +66,8 @@ public class MakeGUIController implements Initializable {
 	@FXML
 	public MenuItem menu_delete;
 	@FXML
+	public MenuItem menu_connect;
+	@FXML
 	public ContextMenu menu_mouse;
 	@FXML
 	public TabPane tabpane_make;

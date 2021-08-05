@@ -36,6 +36,7 @@
                           <items>
                             <MenuItem fx:id="menu_create" mnemonicParsing="false" text="Create" />
                             <MenuItem fx:id="menu_delete" mnemonicParsing="false" text="Delete" />
+                            <MenuItem fx:id="menu_connect" mnemonicParsing="false" text="Connect" />
                           </items>
                         </ContextMenu>
                      </contextMenu>

@@ -7,12 +7,10 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import cyoap_main.design.controller.MakeGUIController;
-import javafx.geometry.Pos;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.BorderStroke;
@@ -21,7 +19,6 @@ import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
@@ -31,9 +28,9 @@ public class ChoiceSet {
 	public String string_describe;
 	public String string_image_name;
 
-	private AnchorPane pane = new AnchorPane();
+	private BorderPane pane = new BorderPane();
 	private BorderPane border_pane = new BorderPane();
-	private VBox vbox = new VBox();
+	private BorderPane middle_pane = new BorderPane();
 	private HBox hbox = new HBox();
 	private ImageView image = new ImageView();
 	private TextArea area = new TextArea();
@@ -76,20 +73,22 @@ public class ChoiceSet {
 	}
 
 	public void setUp(Pane pane_mother) {
-		pane.getChildren().add(vbox);
 		pane.setLayoutX(posx);
 		pane.setLayoutY(posy);
 		pane.setBorder(new Border(
-				new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-
-		vbox.getChildren().addAll(border_pane, hbox);
+				new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(2), BorderWidths.DEFAULT)));
+		pane.setTop(border_pane);
+		pane.setCenter(middle_pane);
+		pane.setBottom(hbox);
+		
+		middle_pane.setPrefHeight(20);
+		
 		border_pane.setTop(title);
 		border_pane.setCenter(image);
 		border_pane.setBottom(area);
-		//border_pane.setBorder(new Border(
-		//		new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-
-		vbox.setAlignment(Pos.CENTER);
+		border_pane.setBorder(new Border(
+				new BorderStroke(null, null, Color.BLACK, null, null, null, BorderStrokeStyle.DASHED, null, new CornerRadii(2), new BorderWidths(2), null)));
+		
 		area.setEditable(false);
 
 		border_pane.setPrefWidth(200);
@@ -183,8 +182,7 @@ public class ChoiceSet {
 			sub.choiceSet_parent.getAnchorPane().getChildren().remove(sub.getAnchorPane());
 		}
 		this.hbox.getChildren().add(sub.getAnchorPane());
-		this.area.setPrefWidth(this.vbox.getWidth());
-		System.out.println(area.getPrefWidth() + ":" + this.vbox.getWidth());
+		this.area.setPrefWidth(this.pane.getWidth());
 	}
 
 	public void updatePos(double moveX, double moveY) {
@@ -198,7 +196,7 @@ public class ChoiceSet {
 	}
 
 	@JsonIgnore
-	public AnchorPane getAnchorPane() {
+	public BorderPane getAnchorPane() {
 		return pane;
 	}
 }

@@ -22,7 +22,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.PUBLIC_ONLY)
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.PUBLIC_ONLY, setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class ChoiceSet {
 	public String string_title;
 	public String string_describe;
@@ -51,7 +51,9 @@ public class ChoiceSet {
 			return true;
 		return false;
 	}
-
+	public ChoiceSet() {
+		this("title", "", null, 0, 0);
+	}
 	public ChoiceSet(String title, String describe, Image image) {
 		this(title, describe, image != null ? image.getUrl() : null, 0, 0);
 	}
@@ -161,6 +163,23 @@ public class ChoiceSet {
 		if (a_ymin + a_height < b_ymin)
 			return false;
 		if (a_ymin > b_ymin + b_height)
+			return false;
+		return true;
+	}
+	
+	public boolean check_intersect(ChoiceSet a, double x, double y) {
+		var a_xmin = a.posx;
+		var a_ymin = a.posy;
+		var a_width = a.getAnchorPane().getLayoutBounds().getWidth();
+		var a_height = a.getAnchorPane().getLayoutBounds().getHeight();
+
+		if (a_xmin + a_width < x)
+			return false;
+		if (a_xmin > x)
+			return false;
+		if (a_ymin + a_height < y)
+			return false;
+		if (a_ymin > y)
 			return false;
 		return true;
 	}

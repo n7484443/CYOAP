@@ -11,6 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Stream;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -92,14 +93,14 @@ public class MakeGUIController implements Initializable {
 	public int max_y = 500;
 
 	public float scale = 1.0f;
-	
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		button_save.setOnMouseClicked(e -> {
-			save();
+			save_describe_pane();
 		});
 		button_next.setOnMouseClicked(e -> {
-			save();
+			save_describe_pane();
 			next();
 		});
 		pane_describe.setOnDragOver(e -> {
@@ -147,17 +148,19 @@ public class MakeGUIController implements Initializable {
 			}
 		});
 
-		pane_position.setOnScroll(e-> {
-			scale += (e.getDeltaY()/40.0)/2;
+		pane_position.setOnScroll(e -> {
+			scale += (e.getDeltaY() / 40.0) / 2;
 		});
 		menu_create.setOnAction(e -> {
 			Bounds boundsInScene = pane_describe.localToScene(pane_describe.getBoundsInLocal());
 			makeNewComp(pane_position, local_x + start_x - boundsInScene.getMinX(),
 					local_y + start_y - boundsInScene.getMinY(), -local_x, -local_y);
 		});
-		
+
 		menu_delete.setOnAction(e -> {
-			if(nowMouseInDataSet != null) {
+			Bounds boundsInScene = pane_describe.localToScene(pane_describe.getBoundsInLocal());
+			if (nowMouseInDataSet != null && nowMouseInDataSet.check_intersect(nowMouseInDataSet,
+					local_x + start_x - boundsInScene.getMinX(), local_y + start_y - boundsInScene.getMinY())) {
 				pane_position.getChildren().remove(nowMouseInDataSet.getAnchorPane());
 				nowMouseInDataSet = null;
 			}
@@ -183,7 +186,7 @@ public class MakeGUIController implements Initializable {
 				choiceSetList.forEach(d -> d.updatePos(-local_x, -local_y));
 			}
 		});
-		
+
 		var_type.getItems().addAll("&b | boolean", " \"\" | string", "floor | 내림", "ceil | 올림", "round | 반올림");
 		var_type.setOnMouseClicked(e -> {
 			if (e.getButton().equals(MouseButton.PRIMARY)) {
@@ -213,7 +216,7 @@ public class MakeGUIController implements Initializable {
 	}
 
 	public String addTextIntoString(String str, int anchor, int caret, String add) {
-		if(str == null) {
+		if (str == null) {
 			str = new String();
 		}
 		var before = str.substring(0, Math.min(anchor, caret));
@@ -223,7 +226,16 @@ public class MakeGUIController implements Initializable {
 
 	public double sensitivity = 1f;
 
-	public void save() {
+	public void save_shortcut() {
+		save_describe_pane();
+		save_position_pane();
+	}
+
+	public void load_shortcut() {
+		loadToDataSet();
+	}
+
+	public void save_describe_pane() {
 		VarData.isUpdated = true;
 		var text = Analyser.parser(text_info.getText());
 		StringBuilder builder = new StringBuilder();
@@ -236,29 +248,49 @@ public class MakeGUIController implements Initializable {
 				nowEditDataSet.string_image_name = image.getUrl();
 			nowEditDataSet.update();
 		}
-		ChoiceSet data = new ChoiceSet(text_title.getText(), builder.toString().replaceAll("\n\n", "\n"), this.image);
+	}
+
+	public void save_position_pane() {
+		ObjectMapper objectMapper = new ObjectMapper();
+		File dir = new File(JavaFxMain.instance.directory.getAbsolutePath() + "/choiceSet");
+		if (!dir.exists()) {
+			dir.mkdir();
+		}
 		try {
-			ObjectMapper objectMapper = new ObjectMapper();
-			OutputStreamWriter writer = new OutputStreamWriter(
-					new FileOutputStream(
-							JavaFxMain.instance.directory.getAbsolutePath() + "/" + text_title.getText() + ".json"),
-					StandardCharsets.UTF_8);
-			objectMapper.writeValue(writer, data);
+			for (var choiceSet : choiceSetList) {
+				OutputStreamWriter writer = new OutputStreamWriter(
+						new FileOutputStream(dir.getAbsolutePath() + "/" + text_title.getText() + ".json"),
+						StandardCharsets.UTF_8);
+				objectMapper.writeValue(writer, choiceSet);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
+	public void clearNodeOnPanePosition() {
+		this.choiceSetList.clear();
+		this.pane_position.getChildren().clear();
+	}
+
 	public void loadToDataSet() {
+		clearNodeOnPanePosition();
+		var path = new File(JavaFxMain.instance.directory.getAbsolutePath() + "/choiceSet");
+		var file_list = Stream.of(path.list()).filter(name -> name.endsWith(".json")).toList();
+		ObjectMapper objectMapper = new ObjectMapper();
 		try {
-			ObjectMapper objectMapper = new ObjectMapper();
-			InputStreamReader writer = new InputStreamReader(
-					new FileInputStream(
-							JavaFxMain.instance.directory.getAbsolutePath() + "/" + text_title.getText() + ".json"),
-					StandardCharsets.UTF_8);
-			var data = objectMapper.readValue(writer, ChoiceSet.class);
-			this.text_info.setText(data.string_title);
-			this.text_title.setText(data.string_describe);
+			for (var file : file_list) {
+				System.out.println(file.toString());
+
+				InputStreamReader writer = new InputStreamReader(
+						new FileInputStream(path.getAbsolutePath() + "/" + file), StandardCharsets.UTF_8);
+
+				var data = objectMapper.readValue(writer, ChoiceSet.class);
+				data.setUp(this.pane_position);
+				this.choiceSetList.add(data);
+				this.text_info.setText(data.string_title);
+				this.text_title.setText(data.string_describe);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -19,6 +19,7 @@ import cyoap_main.core.JavaFxMain;
 import cyoap_main.design.ChoiceSet;
 import cyoap_main.grammer.Analyser;
 import cyoap_main.grammer.VarData;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
@@ -36,6 +37,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -151,18 +153,25 @@ public class MakeGUIController implements Initializable {
 		pane_position.setOnScroll(e -> {
 			scale += (e.getDeltaY() / 40.0) / 2;
 		});
-		menu_create.setOnAction(e -> {
-			Bounds boundsInScene = pane_describe.localToScene(pane_describe.getBoundsInLocal());
-			makeNewComp(pane_position, local_x + start_x - boundsInScene.getMinX(),
-					local_y + start_y - boundsInScene.getMinY(), -local_x, -local_y);
-		});
 
-		menu_delete.setOnAction(e -> {
-			Bounds boundsInScene = pane_describe.localToScene(pane_describe.getBoundsInLocal());
-			if (nowMouseInDataSet != null && nowMouseInDataSet.check_intersect(nowMouseInDataSet,
-					local_x + start_x - boundsInScene.getMinX(), local_y + start_y - boundsInScene.getMinY())) {
-				pane_position.getChildren().remove(nowMouseInDataSet.getAnchorPane());
-				nowMouseInDataSet = null;
+		menu_mouse.addEventFilter(MouseEvent.MOUSE_RELEASED, e -> {
+			if (e.getButton() != MouseButton.PRIMARY) {
+				e.consume();
+			}
+		});
+		menu_mouse.setOnAction(e -> {
+			var menu = (MenuItem)e.getTarget();
+			if (menu == menu_create) {
+				Bounds boundsInScene = pane_describe.localToScene(pane_describe.getBoundsInLocal());
+				makeNewComp(pane_position, local_x + start_x - boundsInScene.getMinX(),
+						local_y + start_y - boundsInScene.getMinY(), -local_x, -local_y);
+			} else if (menu == menu_delete) {
+				Bounds boundsInScene = pane_describe.localToScene(pane_describe.getBoundsInLocal());
+				if (nowMouseInDataSet != null && nowMouseInDataSet.check_intersect(nowMouseInDataSet,
+						local_x + start_x - boundsInScene.getMinX(), local_y + start_y - boundsInScene.getMinY())) {
+					pane_position.getChildren().remove(nowMouseInDataSet.getAnchorPane());
+					nowMouseInDataSet = null;
+				}
 			}
 		});
 
@@ -259,7 +268,7 @@ public class MakeGUIController implements Initializable {
 		try {
 			for (var choiceSet : choiceSetList) {
 				OutputStreamWriter writer = new OutputStreamWriter(
-						new FileOutputStream(dir.getAbsolutePath() + "/" + text_title.getText() + ".json"),
+						new FileOutputStream(dir.getAbsolutePath() + "/" + choiceSet.string_title + ".json"),
 						StandardCharsets.UTF_8);
 				objectMapper.writeValue(writer, choiceSet);
 			}
@@ -287,6 +296,7 @@ public class MakeGUIController implements Initializable {
 
 				var data = objectMapper.readValue(writer, ChoiceSet.class);
 				data.setUp(this.pane_position);
+				data.update();
 				this.choiceSetList.add(data);
 				this.text_info.setText(data.string_title);
 				this.text_title.setText(data.string_describe);
@@ -303,6 +313,7 @@ public class MakeGUIController implements Initializable {
 		this.imageView.setImage(null);
 		this.image = null;
 		this.dropped = null;
+		this.nowEditDataSet = null;
 	}
 
 	public MakeGUIController() {

@@ -73,7 +73,6 @@ public class ChoiceSet {
 		this.posx = posx;
 		this.posy = posy;
 	}
-
 	public void setUp(Pane pane_mother) {
 		pane.setLayoutX(posx);
 		pane.setLayoutY(posy);

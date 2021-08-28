@@ -16,7 +16,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class JavaFxMain extends Application {
-	public static String version = "0.2.2";
+	public static String version = "0.2.3";
 
 	public static JavaFxMain instance;
 	public Stage stage;
@@ -38,16 +38,24 @@ public class JavaFxMain extends Application {
 			scene_make.addEventHandler(KeyEvent.KEY_PRESSED, (e) -> {
 				KeyCombination comb_save = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
 				KeyCombination comb_load = new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN);
+				KeyCombination comb_undo = new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN);
+				KeyCombination comb_redo = new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN);
 				if (comb_save.match(e)) {
 					System.out.println("Save ShortCut");
 					MakeGUIController.instance.save_shortcut();
 				}else if (comb_load.match(e)) {
 					System.out.println("Load ShortCut");
 					MakeGUIController.instance.load_shortcut();
+				}else if (comb_undo.match(e)) {
+					System.out.println("Undo ShortCut");
+					MakeGUIController.instance.undo_shortcut();
+				}else if (comb_redo.match(e)) {
+					System.out.println("Redo ShortCut");
+					MakeGUIController.instance.redo_shortcut();
 				}
 			});
 			scene_start = new Scene(LoadUtil.instance.loadFXML("/lib/design/Design_Start.fxml"), window_width,
-					window_height);
+					window_height); 
 			scene_play = new Scene(LoadUtil.instance.loadFXML("/lib/design/Design_Play.fxml"), window_width,
 					window_height);
 			stage.setTitle("CYOAP " + version);

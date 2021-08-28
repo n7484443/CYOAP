@@ -29,9 +29,9 @@ public class Analyser {
 	public static final int function_end = 22;// )
 	public static final int function_comma = 23;// ,
 	public static final int function_semi = 24;// ;
-
+	
 	/*
-	 * 문자 입력->텍스트와 문법을 분리 {} 내부에 문법 사용 즉, 실제 사용 가능한 것은 [], () 정도.
+	 * 문자 입력->텍스트와 문법을 분리 {} 내부에 문법 사용. 즉, 실제 사용 가능한 것은 [], () 정도.
 	 */
 	public static List<String> parser(String str) {
 		if (str == null)

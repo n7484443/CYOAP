@@ -11,27 +11,31 @@ import java.util.stream.Stream;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cyoap_main.core.JavaFxMain;
 import cyoap_main.design.ChoiceSet;
-import cyoap_main.unit.AbstractPlatform;
-import cyoap_main.unit.PlayPlatform;
+import cyoap_main.design.platform.AbstractPlatform;
+import cyoap_main.design.platform.PlayPlatform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 
-public class PlayGUIController implements Initializable {
+public class PlayGUIController implements Initializable, PlatformGuiController {
 	public static PlayGUIController instance;
 
-	public AbstractPlatform platform = new PlayPlatform();
+	public AbstractPlatform platform;
 	
 	@FXML
 	public AnchorPane pane_play;
+	@FXML
+	public ImageView imageview_background;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
 	}
 
-	private void load() {
-		platform.clearNodeOnPanePosition(this.pane_play);
+	public void load() {
+		platform.clearNodeOnPanePosition();
 		var path = new File(JavaFxMain.instance.directory.getAbsolutePath() + "/choiceSet");
 		var file_list = Stream.of(path.list()).filter(name -> name.endsWith(".json")).toList();
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -54,5 +58,16 @@ public class PlayGUIController implements Initializable {
 	}	
 	public PlayGUIController() {
 		instance = this;
+		platform = new PlayPlatform(instance);
+	}
+
+	@Override
+	public ImageView getBackgroundImageView() {
+		return imageview_background;
+	}
+
+	@Override
+	public Pane getPane() {
+		return pane_play;
 	}
 }

@@ -16,14 +16,18 @@ public class ChoiceSet {
 	public String string_title;
 	public String string_describe;
 	public String string_image_name;
-	
-	private ChoiceSetGuiComponent guiComponent = new ChoiceSetGuiComponent();
+
+	@JsonIgnore
+	public ChoiceSetGuiComponent guiComponent = new ChoiceSetGuiComponent();
 	
 	public int flag = 0;
+	
 	@JsonIgnore
 	public final int flag_selectable = 1;
 
 	public List<ChoiceSet> choiceSet_child = new ArrayList<ChoiceSet>();
+
+	@JsonIgnore
 	public ChoiceSet choiceSet_parent = null;
 
 	public double posx;
@@ -57,7 +61,8 @@ public class ChoiceSet {
 		this.posy = posy;
 	}
 	public void setUp(Pane pane_mother) {
-		guiComponent.setUp(pane_mother, this);
+		guiComponent.setUp(this);
+		pane_mother.getChildren().add(guiComponent.pane);
 	}
 
 	public boolean check_intersect(ChoiceSet a, ChoiceSet b) {
@@ -108,12 +113,8 @@ public class ChoiceSet {
 
 		this.choiceSet_child.add(sub);
 		sub.choiceSet_parent = this;
-
-		if (sub.choiceSet_parent != null) {
-			sub.choiceSet_parent.getAnchorPane().getChildren().remove(sub.getAnchorPane());
-		}
-		guiComponent.hbox.getChildren().add(sub.getAnchorPane());
-		guiComponent.area.setPrefWidth(guiComponent.pane.getWidth());
+		
+		guiComponent.addSubChoiceSetComp(sub);
 	}
 
 	public void updatePos(double moveX, double moveY) {

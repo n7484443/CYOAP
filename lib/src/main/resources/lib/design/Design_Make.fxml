@@ -28,9 +28,6 @@
             <TabPane fx:id="tabpane_make" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                   <Tab fx:id="tab_position" text="Position">
-                    <content>
-                      <AnchorPane fx:id="pane_position" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                    </content>
                      <contextMenu>
                         <ContextMenu fx:id="menu_mouse">
                           <items>
@@ -40,6 +37,12 @@
                           </items>
                         </ContextMenu>
                      </contextMenu>
+                      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                         <children>
+                            <ImageView fx:id="imageview_background" fitHeight="512.0" fitWidth="783.0" pickOnBounds="true" preserveRatio="true" />
+                            <AnchorPane fx:id="pane_position" minHeight="0.0" minWidth="0.0" prefHeight="510.0" prefWidth="783.0" />
+                           </children>
+                        </AnchorPane>
                   </Tab>
                 <Tab fx:id="tab_describe" text="Describe">
                      <content>
@@ -52,7 +55,7 @@
                               <TextField fx:id="text_title" alignment="CENTER" layoutX="6.0" layoutY="3.0" prefHeight="22.0" prefWidth="771.0" text="Title" />
                               <HBox alignment="CENTER" layoutY="28.0" prefHeight="231.0" prefWidth="783.0">
                                  <children>
-                                    <ImageView fx:id="imageView" fitHeight="227.0" fitWidth="779.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fx:id="imageview_describe" fitHeight="227.0" fitWidth="779.0" pickOnBounds="true" preserveRatio="true" />
                                  </children>
                               </HBox>
                            </children>

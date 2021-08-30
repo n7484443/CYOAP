@@ -17,13 +17,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cyoap_main.core.JavaFxMain;
 import cyoap_main.design.ChoiceSet;
+import cyoap_main.design.platform.AbstractPlatform;
+import cyoap_main.design.platform.MakePlatform;
 import cyoap_main.grammer.Analyser;
 import cyoap_main.grammer.VarData;
-import cyoap_main.unit.AbstractPlatform;
-import cyoap_main.unit.MakePlatform;
 import cyoap_main.unit.command.AbstractCommand;
 import cyoap_main.unit.command.CreateCommand;
 import cyoap_main.unit.command.DeleteCommand;
+import cyoap_main.util.LoadUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
@@ -44,8 +45,9 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 
-public class MakeGUIController implements Initializable {
+public class MakeGUIController implements Initializable, PlatformGuiController {
 	public static MakeGUIController instance;
 	@FXML
 	public AnchorPane pane_position;
@@ -66,7 +68,7 @@ public class MakeGUIController implements Initializable {
 	@FXML
 	public ListView<String> var_type;
 	@FXML
-	public ImageView imageView;
+	public ImageView imageview_describe;
 	@FXML
 	public MenuItem menu_create;
 	@FXML
@@ -81,12 +83,15 @@ public class MakeGUIController implements Initializable {
 	public Tab tab_describe;
 	@FXML
 	public Tab tab_position;
+	@FXML
+	public ImageView imageview_background;
 
 	public List<File> dropped;
 
 	public List<AbstractCommand> commandList = new ArrayList<AbstractCommand>();
-	public AbstractPlatform platform = new MakePlatform();
-
+	public AbstractPlatform platform;
+	
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		button_save.setOnMouseClicked(e -> {
@@ -110,9 +115,6 @@ public class MakeGUIController implements Initializable {
 				dropped = db.getFiles();
 				success = true;
 			}
-			/*
-			 * let the source know whether the string was successfully transferred and used
-			 */
 			e.setDropCompleted(success);
 			e.consume();
 		});
@@ -129,6 +131,24 @@ public class MakeGUIController implements Initializable {
 			}
 		});
 		var_field.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+		
+		pane_position.setOnDragOver(e -> {
+			if (e.getGestureSource() == null && e.getDragboard().hasFiles()) {
+				/* allow for both copying and moving, whatever user chooses */
+				e.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+			}
+			e.consume();
+		});
+		pane_position.setOnDragDropped(e -> {
+			Dragboard db = e.getDragboard();
+			var success = false;
+			if (db.hasFiles()) {
+				platform.image_file = db.getFiles().get(0);
+				success = true;
+			}
+			e.setDropCompleted(success);
+			e.consume();
+		});
 		pane_position.setOnMousePressed(e -> {
 			platform.start_x = e.getSceneX();
 			platform.start_y = e.getSceneY();
@@ -155,12 +175,15 @@ public class MakeGUIController implements Initializable {
 			if (menu == menu_create) {
 				Bounds boundsInScene = pane_describe.localToScene(pane_describe.getBoundsInLocal());
 				excuteCommand(new CreateCommand(platform.local_x + platform.start_x - boundsInScene.getMinX(),
-						platform.local_y + platform.start_y - boundsInScene.getMinY(), -platform.local_x, -platform.local_y, pane_position));
+						platform.local_y + platform.start_y - boundsInScene.getMinY(), -platform.local_x,
+						-platform.local_y, pane_position));
 			} else if (menu == menu_delete) {
 				Bounds boundsInScene = pane_describe.localToScene(pane_describe.getBoundsInLocal());
 				if (nowMouseInDataSet != null && nowMouseInDataSet.check_intersect(nowMouseInDataSet,
-						platform.local_x + platform.start_x - boundsInScene.getMinX(), platform.local_y + platform.start_y - boundsInScene.getMinY())) {
-					excuteCommand(new DeleteCommand(nowMouseInDataSet, platform.local_x, platform.local_x, pane_position));
+						platform.local_x + platform.start_x - boundsInScene.getMinX(),
+						platform.local_y + platform.start_y - boundsInScene.getMinY())) {
+					excuteCommand(
+							new DeleteCommand(nowMouseInDataSet, platform.local_x, platform.local_x, pane_position));
 				}
 			}
 		});
@@ -206,7 +229,7 @@ public class MakeGUIController implements Initializable {
 			}
 		});
 	}
-	
+
 	public String addTextIntoString(String str, int anchor, int caret, String add) {
 		if (str == null) {
 			str = new String();
@@ -254,8 +277,9 @@ public class MakeGUIController implements Initializable {
 	}
 
 	public void loadToDataSet() {
-		platform.clearNodeOnPanePosition(this.pane_position);
+		platform.clearNodeOnPanePosition();
 		var path = new File(JavaFxMain.instance.directory.getAbsolutePath() + "/choiceSet");
+		if(!path.exists())return;
 		var file_list = Stream.of(path.list()).filter(name -> name.endsWith(".json")).toList();
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
@@ -275,13 +299,19 @@ public class MakeGUIController implements Initializable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		for(var v : platform.choiceSetList) {
+			LoadUtil.setupChoiceSet(v);
+		}
+		for(var v : platform.choiceSetList) {
+			LoadUtil.loadChoiceSetParents(v);
+		}
 	}
 
 	public void next() {
 		MakeGUIController.instance.changeTab(MakeGUIController.instance.tab_position);
 		this.text_info.setText(null);
 		this.text_title.setText(null);
-		this.imageView.setImage(null);
+		this.imageview_describe.setImage(null);
 		this.image = null;
 		this.dropped = null;
 		this.nowEditDataSet = null;
@@ -289,6 +319,7 @@ public class MakeGUIController implements Initializable {
 
 	public MakeGUIController() {
 		MakeGUIController.instance = this;
+		platform = new MakePlatform(instance);
 	}
 
 	public Image image = null;
@@ -296,7 +327,7 @@ public class MakeGUIController implements Initializable {
 	public void update() {
 		if (dropped != null && image == null) {
 			image = new Image(dropped.get(0).toURI().toString());
-			imageView.setImage(image);
+			imageview_describe.setImage(image);
 		}
 		if (VarData.isUpdated) {
 			VarData.isUpdated = false;
@@ -308,6 +339,7 @@ public class MakeGUIController implements Initializable {
 			var_field.getItems().clear();
 			var_field.getItems().setAll(name_list);
 		}
+		platform.update();
 	}
 
 	public void render() {
@@ -347,7 +379,7 @@ public class MakeGUIController implements Initializable {
 	}
 
 	public void redoCommand() {
-		if(command_now < commandList.size() - 1) {
+		if (command_now < commandList.size() - 1) {
 			command_now += 1;
 			var command = commandList.get(command_now);
 			command.excute();
@@ -369,5 +401,15 @@ public class MakeGUIController implements Initializable {
 
 	public void redo_shortcut() {
 		redoCommand();
+	}
+
+	@Override
+	public ImageView getBackgroundImageView() {
+		return imageview_background;
+	}
+
+	@Override
+	public Pane getPane() {
+		return pane_position;
 	}
 }

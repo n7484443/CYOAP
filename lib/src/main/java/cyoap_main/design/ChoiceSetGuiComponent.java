@@ -32,7 +32,7 @@ public class ChoiceSetGuiComponent {
 		
 	}
 	
-	public void setUp(Pane pane_mother, ChoiceSet dataSet) {
+	public void setUp(ChoiceSet dataSet) {
 		motherChoiceSet = dataSet;
 		pane.setLayoutX(dataSet.posx);
 		pane.setLayoutY(dataSet.posy);
@@ -101,7 +101,6 @@ public class ChoiceSetGuiComponent {
 		pane.setOnMouseEntered(e -> {
 			MakeGUIController.instance.nowMouseInDataSet = dataSet;
 		});
-		pane_mother.getChildren().add(pane);
 	}
 	
 	public void update() {
@@ -109,9 +108,18 @@ public class ChoiceSetGuiComponent {
 		title.setText(motherChoiceSet.string_title);
 		if (motherChoiceSet.string_image_name != null && !motherChoiceSet.string_image_name.isEmpty())
 			image.setImage(new Image(motherChoiceSet.string_image_name));
+		
 	}
 	
 	public void updatePos(double moveX, double moveY) {
 		pane.relocate(moveX, moveY);
+	}
+	
+	public void addSubChoiceSetComp(ChoiceSet sub) {
+		if (sub.choiceSet_parent != null) {
+			sub.choiceSet_parent.getAnchorPane().getChildren().remove(sub.getAnchorPane());
+		}
+		hbox.getChildren().add(sub.getAnchorPane());
+		area.setPrefWidth(pane.getWidth());
 	}
 }

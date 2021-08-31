@@ -5,7 +5,8 @@
 build
 
 *.class
-
+.project
+.classpath
 ### Eclipse ###
 .metadata
 bin/

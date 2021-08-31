@@ -8,18 +8,18 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cyoap_main.design.controller.PlayGUIController">
    <children>
-      <Pane prefHeight="540.0" prefWidth="960.0">
+      <Pane prefHeight="675.0" prefWidth="1200.0">
          <children>
-            <HBox prefHeight="540.0" prefWidth="960.0">
+            <HBox prefHeight="675.0" prefWidth="1200.0">
                <children>
-                  <Pane prefHeight="200.0" prefWidth="300.0">
+                  <Pane prefHeight="675.0" prefWidth="109.0">
                      <children>
-                        <ListView fx:id="var_field" layoutX="5.0" layoutY="5.0" prefHeight="530.0" prefWidth="104.0" />
+                        <ListView fx:id="var_field" layoutX="5.0" layoutY="5.0" prefHeight="664.0" prefWidth="104.0" />
                      </children>
                   </Pane>
-                  <AnchorPane fx:id="pane_play" prefHeight="540.0" prefWidth="1032.0">
+                  <AnchorPane fx:id="pane_play" prefHeight="675.0" prefWidth="1092.0">
                      <children>
-                        <ImageView fx:id="imageview_background" fitHeight="540.0" fitWidth="846.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="imageview_background" fitHeight="675.0" fitWidth="1092.0" pickOnBounds="true" preserveRatio="true" />
                      </children></AnchorPane>
                </children>
             </HBox>

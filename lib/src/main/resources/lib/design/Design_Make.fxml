@@ -13,16 +13,18 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cyoap_main.design.controller.MakeGUIController">
    <children>
-      <SplitPane fx:id="pane_mainGui" dividerPositions="0.5" prefHeight="540.0" prefWidth="960.0" snapToPixel="false">
+      <SplitPane fx:id="pane_mainGui" dividerPositions="0.5" prefHeight="675.0" prefWidth="1200.0" snapToPixel="false">
         <items>
-          <AnchorPane maxHeight="538.0" maxWidth="169.0" minHeight="538.0" minWidth="169.0" prefHeight="538.0" prefWidth="169.0" SplitPane.resizableWithParent="false">
+          <AnchorPane maxHeight="794.0" maxWidth="169.0" minHeight="538.0" minWidth="169.0" prefHeight="794.0" prefWidth="169.0" SplitPane.resizableWithParent="false">
                <children>
                   <TextField layoutX="4.0" layoutY="3.0" />
-                  <ListView fx:id="var_field" layoutX="4.0" layoutY="32.0" prefHeight="406.0" prefWidth="161.0" />
-                  <ListView fx:id="var_type" layoutX="4.0" layoutY="441.0" prefHeight="95.0" prefWidth="161.0" />
+                  <ListView fx:id="view_var_field" layoutX="4.0" layoutY="32.0" prefHeight="425.0" prefWidth="161.0" />
+                  <ListView fx:id="view_var_type" layoutX="4.0" layoutY="462.0" prefHeight="105.0" prefWidth="161.0" />
+                  <ListView fx:id="view_command_timeline" layoutX="4.0" layoutY="572.0" prefHeight="95.0" prefWidth="161.0" />
                </children>
             </AnchorPane>
             <TabPane fx:id="tabpane_make" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
@@ -37,23 +39,23 @@
                           </items>
                         </ContextMenu>
                      </contextMenu>
-                      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                      <Pane prefHeight="200.0" prefWidth="200.0">
                          <children>
-                            <ImageView fx:id="imageview_background" fitHeight="512.0" fitWidth="783.0" pickOnBounds="true" preserveRatio="true" />
-                            <AnchorPane fx:id="pane_position" minHeight="0.0" minWidth="0.0" prefHeight="510.0" prefWidth="783.0" />
+                            <ImageView fx:id="imageview_background" fitHeight="645.0" fitWidth="1023.0" pickOnBounds="true" preserveRatio="true" />
+                            <AnchorPane fx:id="pane_position" minHeight="0.0" minWidth="0.0" prefHeight="645.0" prefWidth="1023.0" />
                            </children>
-                        </AnchorPane>
+                        </Pane>
                   </Tab>
                 <Tab fx:id="tab_describe" text="Describe">
                      <content>
                       <AnchorPane fx:id="pane_describe" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                            <children>
-                              <Button fx:id="button_next" layoutX="736.0" layoutY="484.0" mnemonicParsing="false" text="Next" />
-                              <TextArea fx:id="text_info" layoutX="6.0" layoutY="262.0" prefHeight="217.0" prefWidth="771.0" />
-                              <RadioButton layoutX="6.0" layoutY="487.0" mnemonicParsing="false" text="DarkMode" />
-                              <Button fx:id="button_save" layoutX="690.0" layoutY="484.0" mnemonicParsing="false" text="Save" />
-                              <TextField fx:id="text_title" alignment="CENTER" layoutX="6.0" layoutY="3.0" prefHeight="22.0" prefWidth="771.0" text="Title" />
-                              <HBox alignment="CENTER" layoutY="28.0" prefHeight="231.0" prefWidth="783.0">
+                              <Button fx:id="button_next" layoutX="976.0" layoutY="608.0" mnemonicParsing="false" text="Next" />
+                              <TextArea fx:id="text_info" layoutX="6.0" layoutY="318.0" prefHeight="282.0" prefWidth="1012.0" />
+                              <RadioButton layoutX="6.0" layoutY="611.0" mnemonicParsing="false" text="DarkMode" />
+                              <Button fx:id="button_save" layoutX="930.0" layoutY="608.0" mnemonicParsing="false" text="Save" />
+                              <TextField fx:id="text_title" alignment="CENTER" layoutX="6.0" layoutY="3.0" prefHeight="22.0" prefWidth="1012.0" text="Title" />
+                              <HBox alignment="CENTER" layoutX="6.0" layoutY="31.0" prefHeight="281.0" prefWidth="1011.0">
                                  <children>
                                     <ImageView fx:id="imageview_describe" fitHeight="227.0" fitWidth="779.0" pickOnBounds="true" preserveRatio="true" />
                                  </children>

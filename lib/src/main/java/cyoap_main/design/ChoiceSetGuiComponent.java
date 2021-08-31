@@ -12,7 +12,6 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
@@ -26,10 +25,14 @@ public class ChoiceSetGuiComponent {
 	public Text title = new Text();
 	
 	public ChoiceSet motherChoiceSet;
-	
+
+	public int color;
 
 	public ChoiceSetGuiComponent() {
 		
+	}
+	public ChoiceSetGuiComponent(int color) {
+		this.color = color;
 	}
 	
 	public void setUp(ChoiceSet dataSet) {
@@ -59,7 +62,7 @@ public class ChoiceSetGuiComponent {
 		image.setFitWidth(200);
 		
 		border_pane.setMouseTransparent(true);
-
+		
 		pane.setOnMouseClicked(e -> {
 			if (e.getButton().equals(MouseButton.PRIMARY)) {
 				if (e.getClickCount() == 2) {
@@ -78,7 +81,7 @@ public class ChoiceSetGuiComponent {
 						* (e.getSceneY() - MakeGUIController.instance.platform.start_y);
 				MakeGUIController.instance.platform.start_x = e.getSceneX();
 				MakeGUIController.instance.platform.start_y = e.getSceneY();
-				dataSet.updateRealPos(movex, movey);
+				dataSet.updatePosition(movex, movey);
 
 			}
 		});
@@ -101,6 +104,8 @@ public class ChoiceSetGuiComponent {
 		pane.setOnMouseEntered(e -> {
 			MakeGUIController.instance.nowMouseInDataSet = dataSet;
 		});
+		
+		pane.setStyle("-fx-background-color: #" + Integer.toHexString(color));
 	}
 	
 	public void update() {

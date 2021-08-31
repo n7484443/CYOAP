@@ -16,7 +16,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class JavaFxMain extends Application {
-	public static String version = "0.2.4";
+	public static String version = "0.2.5";
 
 	public static JavaFxMain instance;
 	public Stage stage;
@@ -24,8 +24,8 @@ public class JavaFxMain extends Application {
 	public Scene scene_start;
 	public Scene scene_play;
 
-	public int window_width = 1920 / 2;
-	public int window_height = 1080 / 2;
+	public int window_width = (int) (1920 / 2 * 1.25f);//1200
+	public int window_height = (int) (1080 / 2 * 1.25f);//675
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {

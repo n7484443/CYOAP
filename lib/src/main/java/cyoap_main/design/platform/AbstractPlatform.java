@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import cyoap_main.design.ChoiceSet;
 import cyoap_main.design.controller.PlatformGuiController;
 import javafx.scene.image.Image;
@@ -25,6 +27,10 @@ public class AbstractPlatform {
 	public Image image = null;
 	public File image_file = null; 
 	public PlatformGuiController guiController;
+	public int flag = 0;
+	@JsonIgnore
+	public final int flag_maximize = 1<<0;
+	public final int flag_center = 1<<1;
 
 	public AbstractPlatform(PlatformGuiController guiController) {
 		this.guiController = guiController;
@@ -39,6 +45,15 @@ public class AbstractPlatform {
 		if (image_file != null && image == null) {
 			image = new Image(image_file.toURI().toString());
 			guiController.getBackgroundImageView().setImage(image);
+			
+			var f_image = image.getWidth()/image.getHeight();
+			var f_frame = guiController.getPane().getMaxWidth()/guiController.getPane().getMaxWidth();
+			
+			if(f_image < f_frame) {
+				guiController.getBackgroundImageView().setFitWidth(guiController.getPane().getMaxWidth());
+			}else {
+				guiController.getBackgroundImageView().setFitHeight(guiController.getPane().getMaxHeight());
+			}
 		}
 	}
 }

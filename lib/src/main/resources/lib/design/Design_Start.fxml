@@ -8,11 +8,11 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cyoap_main.design.controller.StartGUIController">
    <children>
-      <VBox alignment="TOP_CENTER" prefHeight="540.0" prefWidth="960.0">
+      <VBox alignment="TOP_CENTER" prefHeight="675.0" prefWidth="1200.0">
          <children>
             <Pane fx:id="pane_play" prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <Text layoutX="407.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Play">
+                  <Text layoutX="527.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Play">
                      <font>
                         <Font size="80.0" />
                      </font>
@@ -21,7 +21,7 @@
             </Pane>
             <Pane fx:id="pane_make" prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <Text layoutX="384.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Make">
+                  <Text layoutX="504.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Make">
                      <font>
                         <Font size="80.0" />
                      </font>

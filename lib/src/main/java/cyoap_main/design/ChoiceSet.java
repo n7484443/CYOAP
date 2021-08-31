@@ -17,8 +17,9 @@ public class ChoiceSet {
 	public String string_describe;
 	public String string_image_name;
 
+	public final int color = 0x0067A3;//blue
 	@JsonIgnore
-	public ChoiceSetGuiComponent guiComponent = new ChoiceSetGuiComponent();
+	public ChoiceSetGuiComponent guiComponent = new ChoiceSetGuiComponent(color);
 	
 	public int flag = 0;
 	
@@ -116,14 +117,24 @@ public class ChoiceSet {
 		
 		guiComponent.addSubChoiceSetComp(sub);
 	}
-
-	public void updatePos(double moveX, double moveY) {
+	//화면상의 위치
+	public void updateCoordinate(double moveX, double moveY) {
 		guiComponent.updatePos(posx + moveX, posy + moveY);
 	}
-
-	public void updateRealPos(double moveX, double moveY) {
+	//실제 위치
+	public void updatePosition(double moveX, double moveY) {
 		posx += moveX;
 		posy += moveY;
+		guiComponent.updatePos(posx - MakeGUIController.instance.platform.local_x, posy - MakeGUIController.instance.platform.local_y);
+	}
+	
+	public void setCoordinate(double coordX, double coordY) {
+		guiComponent.updatePos(coordX, coordY);
+	}
+	
+	public void setPosition(double posX, double posY) {
+		posx = posX;
+		posy = posY;
 		guiComponent.updatePos(posx - MakeGUIController.instance.platform.local_x, posy - MakeGUIController.instance.platform.local_y);
 	}
 

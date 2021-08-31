@@ -11,4 +11,9 @@ public class MoveCommand extends AbstractCommand{
 		
 	}
 
+	@Override
+	public String getName() {
+		return "Move Node";
+	}
+
 }

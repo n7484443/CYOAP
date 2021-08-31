@@ -64,9 +64,11 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 	@FXML
 	public TextField text_title;
 	@FXML
-	public ListView<String> var_field;
+	public ListView<String> view_var_field;
 	@FXML
-	public ListView<String> var_type;
+	public ListView<String> view_var_type;
+	@FXML
+	public ListView<String> view_command_timeline;
 	@FXML
 	public ImageView imageview_describe;
 	@FXML
@@ -88,6 +90,7 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 
 	public List<File> dropped;
 
+	public boolean isCommandListUpdated = false;
 	public List<AbstractCommand> commandList = new ArrayList<AbstractCommand>();
 	public AbstractPlatform platform;
 	
@@ -118,10 +121,10 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 			e.setDropCompleted(success);
 			e.consume();
 		});
-		var_field.setOnMouseClicked(e -> {
+		view_var_field.setOnMouseClicked(e -> {
 			if (e.getButton().equals(MouseButton.PRIMARY)) {
 				if (e.getClickCount() == 2) {
-					var varable = var_field.getSelectionModel().getSelectedIndex();
+					var varable = view_var_field.getSelectionModel().getSelectedIndex();
 					if (varable >= 0) {
 						var text = addTextIntoString(text_info.getText(), text_info.getAnchor(),
 								text_info.getCaretPosition(), "{" + VarData.var_map.keySet().toArray()[varable] + "}");
@@ -130,7 +133,7 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 				}
 			}
 		});
-		var_field.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+		view_var_field.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		
 		pane_position.setOnDragOver(e -> {
 			if (e.getGestureSource() == null && e.getDragboard().hasFiles()) {
@@ -176,14 +179,14 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 				Bounds boundsInScene = pane_describe.localToScene(pane_describe.getBoundsInLocal());
 				excuteCommand(new CreateCommand(platform.local_x + platform.start_x - boundsInScene.getMinX(),
 						platform.local_y + platform.start_y - boundsInScene.getMinY(), -platform.local_x,
-						-platform.local_y, pane_position));
+						-platform.local_y));
 			} else if (menu == menu_delete) {
 				Bounds boundsInScene = pane_describe.localToScene(pane_describe.getBoundsInLocal());
 				if (nowMouseInDataSet != null && nowMouseInDataSet.check_intersect(nowMouseInDataSet,
 						platform.local_x + platform.start_x - boundsInScene.getMinX(),
 						platform.local_y + platform.start_y - boundsInScene.getMinY())) {
 					excuteCommand(
-							new DeleteCommand(nowMouseInDataSet, platform.local_x, platform.local_x, pane_position));
+							new DeleteCommand(nowMouseInDataSet, platform.local_x, platform.local_x));
 				}
 			}
 		});
@@ -205,15 +208,15 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 				if (platform.local_y <= platform.min_y)
 					platform.local_y = platform.min_y;
 
-				platform.choiceSetList.forEach(d -> d.updatePos(-platform.local_x, -platform.local_y));
+				platform.choiceSetList.forEach(d -> d.updateCoordinate(-platform.local_x, -platform.local_y));
 			}
 		});
 
-		var_type.getItems().addAll("&b | boolean", " \"\" | string", "floor | 내림", "ceil | 올림", "round | 반올림");
-		var_type.setOnMouseClicked(e -> {
+		view_var_type.getItems().addAll("&b | boolean", " \"\" | string", "floor | 내림", "ceil | 올림", "round | 반올림");
+		view_var_type.setOnMouseClicked(e -> {
 			if (e.getButton().equals(MouseButton.PRIMARY)) {
 				if (e.getClickCount() == 2) {
-					var index = var_type.getSelectionModel().getSelectedIndex();
+					var index = view_var_type.getSelectionModel().getSelectedIndex();
 					var anchor = text_info.getAnchor();
 					var caret = text_info.getCaretPosition();
 					String text = switch (index) {
@@ -336,8 +339,18 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 				var value = VarData.var_map.get(key);
 				name_list.add(key + "  |  " + value.data + "  |  " + value.type.toString());
 			}
-			var_field.getItems().clear();
-			var_field.getItems().setAll(name_list);
+			view_var_field.getItems().clear();
+			view_var_field.getItems().setAll(name_list);
+		}
+		if (isCommandListUpdated) {
+			isCommandListUpdated = false;
+			List<String> name_list = new ArrayList<String>();
+			for (var command : commandList) {
+				name_list.add(command.getName());
+			}
+			view_command_timeline.getItems().clear();
+			view_command_timeline.getItems().setAll(name_list);
+			view_command_timeline.getSelectionModel().select(command_now);
 		}
 		platform.update();
 	}
@@ -368,6 +381,7 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 		}
 		commandList.add(command);
 		command_now = commandList.size() - 1;
+		isCommandListUpdated = true;
 	}
 
 	public void undoCommand() {
@@ -375,6 +389,7 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 			var command = commandList.get(command_now);
 			command.undo();
 			command_now -= 1;
+			isCommandListUpdated = true;
 		}
 	}
 
@@ -383,6 +398,7 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 			command_now += 1;
 			var command = commandList.get(command_now);
 			command.excute();
+			isCommandListUpdated = true;
 		}
 	}
 

@@ -12,4 +12,9 @@ public class TextChangeCommand extends AbstractCommand{
 		
 	}
 
+	@Override
+	public String getName() {
+		return "Change Text";
+	}
+
 }

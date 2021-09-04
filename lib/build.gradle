@@ -28,7 +28,7 @@ dependencies {
 
 javafx{
 	version="16"
-	modules = ['javafx.controls', 'javafx.fxml']
+	modules = ['javafx.controls', 'javafx.fxml', 'javafx.swing']
 }
 
 ext.moduleName = 'cyoap_module'

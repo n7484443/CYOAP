@@ -3,6 +3,7 @@ package cyoap_main.util;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+
 import cyoap_main.core.JavaFxMain;
 import cyoap_main.design.ChoiceSet;
 import javafx.fxml.FXMLLoader;
@@ -31,17 +32,17 @@ public class LoadUtil {
 		for (var c : choiceSet.choiceSet_child) {
 			if (!c.choiceSet_child.isEmpty()) {
 				setupChoiceSet(c);
-			}else {
+			} else {
 				c.guiComponent.setUp(c);
 			}
 		}
 	}
-	
+
 	public static void loadChoiceSetParents(ChoiceSet choiceSet) {
 		for (var c : choiceSet.choiceSet_child) {
 			if (!c.choiceSet_child.isEmpty()) {
 				loadChoiceSetParents(c);
-			}else {
+			} else {
 				c.choiceSet_parent = choiceSet;
 				choiceSet.guiComponent.hbox.getChildren().add(c.getAnchorPane());
 			}

@@ -1,5 +1,6 @@
 package cyoap_main.design.controller;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -13,6 +14,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
+import javax.imageio.ImageIO;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cyoap_main.core.JavaFxMain;
@@ -25,9 +28,11 @@ import cyoap_main.unit.command.AbstractCommand;
 import cyoap_main.unit.command.CreateCommand;
 import cyoap_main.unit.command.DeleteCommand;
 import cyoap_main.util.LoadUtil;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ListView;
@@ -46,11 +51,14 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.transform.Transform;
 
 public class MakeGUIController implements Initializable, PlatformGuiController {
 	public static MakeGUIController instance;
 	@FXML
 	public AnchorPane pane_position;
+	@FXML
+	public Pane pane_position_parent;
 	@FXML
 	public static SplitPane pane_mainGui;
 	@FXML
@@ -78,6 +86,8 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 	@FXML
 	public MenuItem menu_connect;
 	@FXML
+	public MenuItem menu_saveAsImage;
+	@FXML
 	public ContextMenu menu_mouse;
 	@FXML
 	public TabPane tabpane_make;
@@ -93,8 +103,7 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 	public boolean isCommandListUpdated = false;
 	public List<AbstractCommand> commandList = new ArrayList<AbstractCommand>();
 	public AbstractPlatform platform;
-	
-	
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		button_save.setOnMouseClicked(e -> {
@@ -134,7 +143,7 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 			}
 		});
 		view_var_field.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-		
+
 		pane_position.setOnDragOver(e -> {
 			if (e.getGestureSource() == null && e.getDragboard().hasFiles()) {
 				/* allow for both copying and moving, whatever user chooses */
@@ -175,19 +184,34 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 		});
 		menu_mouse.setOnAction(e -> {
 			var menu = (MenuItem) e.getTarget();
+			Bounds boundsInScene = pane_describe.localToScene(pane_describe.getBoundsInLocal());
+			var posx = platform.local_x + platform.start_x - boundsInScene.getMinX();
+			var posy = platform.local_y + platform.start_y - boundsInScene.getMinY();
 			if (menu == menu_create) {
-				Bounds boundsInScene = pane_describe.localToScene(pane_describe.getBoundsInLocal());
-				excuteCommand(new CreateCommand(platform.local_x + platform.start_x - boundsInScene.getMinX(),
-						platform.local_y + platform.start_y - boundsInScene.getMinY(), -platform.local_x,
-						-platform.local_y));
+				excuteCommand(new CreateCommand(posx, posy, -platform.local_x, -platform.local_y));
 			} else if (menu == menu_delete) {
-				Bounds boundsInScene = pane_describe.localToScene(pane_describe.getBoundsInLocal());
-				if (nowMouseInDataSet != null && nowMouseInDataSet.check_intersect(nowMouseInDataSet,
-						platform.local_x + platform.start_x - boundsInScene.getMinX(),
-						platform.local_y + platform.start_y - boundsInScene.getMinY())) {
-					excuteCommand(
-							new DeleteCommand(nowMouseInDataSet, platform.local_x, platform.local_x));
+				if (nowMouseInDataSet != null && nowMouseInDataSet.check_intersect(nowMouseInDataSet, posx, posy)) {
+					excuteCommand(new DeleteCommand(nowMouseInDataSet, platform.local_x, platform.local_x));
 				}
+			} else if (menu == menu_saveAsImage) {
+				var width_before = this.getPane().getWidth();
+				var height_before = this.getPane().getHeight();
+				var pixel_scale = 1f;
+				var width_after = (platform.max_x - platform.min_x) * pixel_scale;
+				var height_after = (platform.max_y - platform.min_y) * pixel_scale;
+
+				pane_position_parent.getChildren().remove(pane_position);
+				this.getPane().setPrefSize(width_after, height_after);
+				System.out.println(this.getPane().getWidth() + ":" + this.getPane().getHeight());
+
+				this.platform.updatePositionAll((platform.min_x + platform.local_x), (platform.min_y + platform.local_y));
+
+				capture(width_after, height_after, pixel_scale);
+
+				this.platform.updatePositionAll(-(platform.min_x + platform.local_x), -(platform.min_y + platform.local_y));
+
+				pane_position_parent.getChildren().add(pane_position);
+				this.getPane().setPrefSize(width_before, height_before);
 			}
 		});
 
@@ -231,6 +255,21 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 				}
 			}
 		});
+	}
+
+	public void capture(double width_after, double height_after, float pixelScale) {
+		var spa = new SnapshotParameters();
+		spa.setTransform(Transform.scale(pixelScale, pixelScale));
+		var writeableImage = this.getPane().snapshot(spa, null);
+
+		BufferedImage tempImg = SwingFXUtils.fromFXImage(writeableImage, null);
+		String imageType = "png";
+		File f = new File(JavaFxMain.instance.directory.getAbsolutePath() + File.separator + "file." + imageType);
+		try {
+			ImageIO.write(tempImg, imageType, f);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public String addTextIntoString(String str, int anchor, int caret, String add) {
@@ -282,7 +321,8 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 	public void loadToDataSet() {
 		platform.clearNodeOnPanePosition();
 		var path = new File(JavaFxMain.instance.directory.getAbsolutePath() + "/choiceSet");
-		if(!path.exists())return;
+		if (!path.exists())
+			return;
 		var file_list = Stream.of(path.list()).filter(name -> name.endsWith(".json")).toList();
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
@@ -302,10 +342,10 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		for(var v : platform.choiceSetList) {
+		for (var v : platform.choiceSetList) {
 			LoadUtil.setupChoiceSet(v);
 		}
-		for(var v : platform.choiceSetList) {
+		for (var v : platform.choiceSetList) {
 			LoadUtil.loadChoiceSetParents(v);
 		}
 	}

@@ -56,4 +56,16 @@ public class AbstractPlatform {
 			}
 		}
 	}
+	
+	public void updateCoordinateAll(double x, double y) {
+		for(var node:choiceSetList) {
+			node.updateCoordinate(x, y);
+		}
+	}
+	
+	public void updatePositionAll(double x, double y) {
+		for(var node:choiceSetList) {
+			node.updatePosition(x, y);
+		}
+	}
 }

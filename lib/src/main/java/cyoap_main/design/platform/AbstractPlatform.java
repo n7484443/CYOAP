@@ -55,6 +55,11 @@ public class AbstractPlatform {
 				guiController.getBackgroundImageView().setFitHeight(guiController.getPane().getMaxHeight());
 			}
 		}
+		updateMouseCoordinate();
+	}
+	
+	public void updateMouseCoordinate() {
+		choiceSetList.forEach(d -> d.updateCoordinate(-local_x, -local_y));
 	}
 	
 	public void updateCoordinateAll(double x, double y) {

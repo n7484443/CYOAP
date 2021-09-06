@@ -60,7 +60,7 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 	@FXML
 	public Pane pane_position_parent;
 	@FXML
-	public static SplitPane pane_mainGui;
+	public SplitPane pane_mainGui;
 	@FXML
 	public AnchorPane pane_describe;
 	@FXML
@@ -102,7 +102,7 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 
 	public boolean isCommandListUpdated = false;
 	public List<AbstractCommand> commandList = new ArrayList<AbstractCommand>();
-	public AbstractPlatform platform;
+	public static AbstractPlatform platform;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -204,11 +204,13 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 				this.getPane().setPrefSize(width_after, height_after);
 				System.out.println(this.getPane().getWidth() + ":" + this.getPane().getHeight());
 
-				this.platform.updatePositionAll((platform.min_x + platform.local_x), (platform.min_y + platform.local_y));
+				platform.updatePositionAll((platform.min_x + platform.local_x),
+						(platform.min_y + platform.local_y));
 
 				capture(width_after, height_after, pixel_scale);
 
-				this.platform.updatePositionAll(-(platform.min_x + platform.local_x), -(platform.min_y + platform.local_y));
+				platform.updatePositionAll(-(platform.min_x + platform.local_x),
+						-(platform.min_y + platform.local_y));
 
 				pane_position_parent.getChildren().add(pane_position);
 				this.getPane().setPrefSize(width_before, height_before);
@@ -231,8 +233,7 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 					platform.local_x = platform.min_x;
 				if (platform.local_y <= platform.min_y)
 					platform.local_y = platform.min_y;
-
-				platform.choiceSetList.forEach(d -> d.updateCoordinate(-platform.local_x, -platform.local_y));
+				platform.updateMouseCoordinate();
 			}
 		});
 
@@ -335,7 +336,7 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 				var data = objectMapper.readValue(writer, ChoiceSet.class);
 				data.setUp(this.pane_position);
 				data.update();
-				this.platform.choiceSetList.add(data);
+				platform.choiceSetList.add(data);
 				this.text_info.setText(data.string_title);
 				this.text_title.setText(data.string_describe);
 			}
@@ -467,5 +468,10 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 	@Override
 	public Pane getPane() {
 		return pane_position;
+	}
+
+	@Override
+	public AbstractPlatform getPlatform() {
+		return platform;
 	}
 }

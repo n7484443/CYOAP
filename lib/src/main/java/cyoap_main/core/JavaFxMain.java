@@ -20,7 +20,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class JavaFxMain extends Application {
-	public static String version = "0.2.6";
+	public static String version = "0.2.7";
 
 	public static JavaFxMain instance;
 	public Stage stage;
@@ -28,8 +28,8 @@ public class JavaFxMain extends Application {
 	public Scene scene_start;
 	public Scene scene_play;
 
-	public int window_width = (int) (1920 / 2 * 1.25f);//1200
-	public int window_height = (int) (1080 / 2 * 1.25f);//675
+	public int window_width = (int) (1920 / 2 * 1.25f);// 1200
+	public int window_height = (int) (1080 / 2 * 1.25f);// 675
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -43,23 +43,24 @@ public class JavaFxMain extends Application {
 				KeyCombination comb_save = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
 				KeyCombination comb_load = new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN);
 				KeyCombination comb_undo = new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN);
-				KeyCombination comb_redo = new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN);
+				KeyCombination comb_redo = new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN,
+						KeyCombination.SHIFT_DOWN);
 				if (comb_save.match(e)) {
 					System.out.println("Save ShortCut");
 					MakeGUIController.instance.save_shortcut();
-				}else if (comb_load.match(e)) {
+				} else if (comb_load.match(e)) {
 					System.out.println("Load ShortCut");
 					MakeGUIController.instance.load_shortcut();
-				}else if (comb_undo.match(e)) {
+				} else if (comb_undo.match(e)) {
 					System.out.println("Undo ShortCut");
 					MakeGUIController.instance.undo_shortcut();
-				}else if (comb_redo.match(e)) {
+				} else if (comb_redo.match(e)) {
 					System.out.println("Redo ShortCut");
 					MakeGUIController.instance.redo_shortcut();
 				}
 			});
 			scene_start = new Scene(LoadUtil.instance.loadFXML("/lib/design/Design_Start.fxml"), window_width,
-					window_height); 
+					window_height);
 			scene_play = new Scene(LoadUtil.instance.loadFXML("/lib/design/Design_Play.fxml"), window_width,
 					window_height);
 			stage.setTitle("CYOAP " + version);
@@ -120,14 +121,14 @@ public class JavaFxMain extends Application {
 		var y = new ValueType(12);
 		VarData.setValue("dataTest", x);
 		VarData.setValue("dataTest2", y);
-		
+
 		Iterator<ImageReader> readers = ImageIO.getImageReadersByFormatName("JPEG");
 		while (readers.hasNext()) {
-		    System.out.println("reader: " + readers.next());
+			System.out.println("reader: " + readers.next());
 		}
 		readers = ImageIO.getImageReadersByFormatName("webp");
 		while (readers.hasNext()) {
-		    System.out.println("reader: " + readers.next());
+			System.out.println("reader: " + readers.next());
 		}
 		ImageIO.scanForPlugins();
 	}

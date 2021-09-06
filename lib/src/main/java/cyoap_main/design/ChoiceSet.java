@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import cyoap_main.design.controller.MakeGUIController;
 import javafx.scene.image.Image;
@@ -17,18 +19,19 @@ public class ChoiceSet {
 	public String string_describe;
 	public String string_image_name;
 
-	public final int color = 0x0067A3;//blue
+	public final int color = 0x0067A3;// blue
 	@JsonIgnore
 	public ChoiceSetGuiComponent guiComponent = new ChoiceSetGuiComponent(color);
-	
+
 	public int flag = 0;
-	
+
 	@JsonIgnore
 	public final int flag_selectable = 1;
 
+	@JsonManagedReference
 	public List<ChoiceSet> choiceSet_child = new ArrayList<ChoiceSet>();
-
-	@JsonIgnore
+	
+	@JsonBackReference
 	public ChoiceSet choiceSet_parent = null;
 
 	public double posx;
@@ -39,9 +42,11 @@ public class ChoiceSet {
 			return true;
 		return false;
 	}
+
 	public ChoiceSet() {
 		this("title", "", null, 0, 0);
 	}
+
 	public ChoiceSet(String title, String describe, Image image) {
 		this(title, describe, image != null ? image.getUrl() : null, 0, 0);
 	}
@@ -61,6 +66,7 @@ public class ChoiceSet {
 		this.posx = posx;
 		this.posy = posy;
 	}
+
 	public void setUp(Pane pane_mother) {
 		guiComponent.setUp(this);
 		pane_mother.getChildren().add(guiComponent.pane);
@@ -87,7 +93,7 @@ public class ChoiceSet {
 			return false;
 		return true;
 	}
-	
+
 	public boolean check_intersect(ChoiceSet a, double x, double y) {
 		var a_xmin = a.posx;
 		var a_ymin = a.posy;
@@ -109,33 +115,45 @@ public class ChoiceSet {
 		guiComponent.update();
 	}
 
-	public void addSubChoiceSet(ChoiceSet sub) {
-		MakeGUIController.instance.platform.choiceSetList.remove(sub);
+	public void combineSubChoiceSet(ChoiceSet sub) {
+		MakeGUIController.platform.choiceSetList.remove(sub);
 
 		this.choiceSet_child.add(sub);
 		sub.choiceSet_parent = this;
-		
-		guiComponent.addSubChoiceSetComp(sub);
+
+		guiComponent.combineSubChoiceSetComponenet(sub);
 	}
-	//화면상의 위치
+
+	public void seperateSubChoiceSet(ChoiceSet sub) {
+		this.choiceSet_child.remove(sub);
+		MakeGUIController.platform.choiceSetList.add(sub);
+		sub.choiceSet_parent = null;
+
+		guiComponent.seperateSubChoiceSetComponenet(sub);
+	}
+
+	// 화면상의 위치
 	public void updateCoordinate(double moveX, double moveY) {
 		guiComponent.updatePos(posx + moveX, posy + moveY);
 	}
-	//실제 위치
+
+	// 실제 위치
 	public void updatePosition(double moveX, double moveY) {
 		posx += moveX;
 		posy += moveY;
-		guiComponent.updatePos(posx - MakeGUIController.instance.platform.local_x, posy - MakeGUIController.instance.platform.local_y);
+		guiComponent.updatePos(posx - MakeGUIController.platform.local_x,
+				posy - MakeGUIController.platform.local_y);
 	}
-	
+
 	public void setCoordinate(double coordX, double coordY) {
 		guiComponent.updatePos(coordX, coordY);
 	}
-	
+
 	public void setPosition(double posX, double posY) {
 		posx = posX;
 		posy = posY;
-		guiComponent.updatePos(posx - MakeGUIController.instance.platform.local_x, posy - MakeGUIController.instance.platform.local_y);
+		guiComponent.updatePos(posx - MakeGUIController.platform.local_x,
+				posy - MakeGUIController.platform.local_y);
 	}
 
 	@JsonIgnore

@@ -16,14 +16,14 @@ public class DeleteCommand extends AbstractCommand {
 	@Override
 	public void excute() {
 		control.getPane().getChildren().remove(choiceSet.getAnchorPane());
-		control.platform.choiceSetList.remove(choiceSet);
+		control.getPlatform().choiceSetList.remove(choiceSet);
 		control.nowMouseInDataSet = null;
 	}
 
 	@Override
 	public void undo() {
 		choiceSet.setUp(control.getPane());
-		control.platform.choiceSetList.add(choiceSet);
+		control.getPlatform().choiceSetList.add(choiceSet);
 		choiceSet.updateCoordinate(-localx, -localy);
 	}
 

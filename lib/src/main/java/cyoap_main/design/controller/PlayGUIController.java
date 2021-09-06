@@ -70,4 +70,9 @@ public class PlayGUIController implements Initializable, PlatformGuiController {
 	public Pane getPane() {
 		return pane_play;
 	}
+
+	@Override
+	public AbstractPlatform getPlatform() {
+		return platform;
+	}
 }

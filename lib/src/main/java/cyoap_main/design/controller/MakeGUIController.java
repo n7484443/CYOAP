@@ -304,7 +304,11 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 	public void save_position_pane() {
 		ObjectMapper objectMapper = new ObjectMapper();
 		File dir = new File(JavaFxMain.instance.directory.getAbsolutePath() + "/choiceSet");
-		if (!dir.exists()) {
+		if(dir.exists()) {
+			for(var f : dir.listFiles()) {
+				f.delete();
+			}
+		}else {
 			dir.mkdir();
 		}
 		try {

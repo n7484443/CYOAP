@@ -9,6 +9,7 @@ import javax.imageio.ImageReader;
 import cyoap_main.design.controller.MakeGUIController;
 import cyoap_main.grammer.VarData;
 import cyoap_main.grammer.VarData.ValueType;
+import cyoap_main.util.FontLoader;
 import cyoap_main.util.LoadUtil;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -20,7 +21,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class JavaFxMain extends Application {
-	public static String version = "0.2.7";
+	public static String version = "0.2.8";
 
 	public static JavaFxMain instance;
 	public Stage stage;
@@ -36,6 +37,7 @@ public class JavaFxMain extends Application {
 		try {
 			instance = this;
 			new LoadUtil();
+			new FontLoader();
 			stage = primaryStage;
 			scene_make = new Scene(LoadUtil.instance.loadFXML("/lib/design/Design_Make.fxml"), window_width,
 					window_height);

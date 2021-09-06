@@ -1,10 +1,6 @@
 package cyoap_main.core;
 
 import java.io.File;
-import java.util.Iterator;
-
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
 
 import cyoap_main.design.controller.MakeGUIController;
 import cyoap_main.grammer.VarData;
@@ -21,7 +17,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class JavaFxMain extends Application {
-	public static String version = "0.2.8";
+	public static String version = "0.2.9";
 
 	public static JavaFxMain instance;
 	public Stage stage;
@@ -123,16 +119,6 @@ public class JavaFxMain extends Application {
 		var y = new ValueType(12);
 		VarData.setValue("dataTest", x);
 		VarData.setValue("dataTest2", y);
-
-		Iterator<ImageReader> readers = ImageIO.getImageReadersByFormatName("JPEG");
-		while (readers.hasNext()) {
-			System.out.println("reader: " + readers.next());
-		}
-		readers = ImageIO.getImageReadersByFormatName("webp");
-		while (readers.hasNext()) {
-			System.out.println("reader: " + readers.next());
-		}
-		ImageIO.scanForPlugins();
 	}
 
 	@Override

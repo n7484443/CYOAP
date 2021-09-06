@@ -2,7 +2,19 @@ package cyoap_main.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Stream;
 
 import cyoap_main.core.JavaFxMain;
 import cyoap_main.design.ChoiceSet;
@@ -23,6 +35,31 @@ public class LoadUtil {
 		return root;
 	}
 
+	public static List<Path> getSubPath(String url) throws URISyntaxException, IOException {
+		URI uri = LoadUtil.class.getResource(url).toURI();
+		Path myPath;
+		if (uri.getScheme().equals("jar")) {
+            FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.<String, Object>emptyMap());
+            myPath = fileSystem.getPath(url);
+        } else {
+            myPath = Paths.get(uri);
+        }
+        Stream<Path> walk = Files.walk(myPath, 1);
+        boolean b = true;
+        List<Path> pathList = new ArrayList<Path>();
+        for (Iterator<Path> it = walk.iterator(); it.hasNext();){
+        	if(b) {
+        		b = false;
+        		pathList.add(it.next());
+        	}else {
+            	it.next();
+        	}
+        }
+        walk.close();
+		
+		return pathList;
+	}
+	
 	public static File loadFolder() {
 		DirectoryChooser chooser = new DirectoryChooser();
 		return chooser.showDialog(JavaFxMain.instance.stage);

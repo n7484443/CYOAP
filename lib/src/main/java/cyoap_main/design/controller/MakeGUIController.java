@@ -428,6 +428,14 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 		command_now = commandList.size() - 1;
 		isCommandListUpdated = true;
 	}
+	public void addCommand(AbstractCommand command) {
+		for (int i = command_now + 1; i < commandList.size(); i++) {
+			commandList.remove(i);
+		}
+		commandList.add(command);
+		command_now = commandList.size() - 1;
+		isCommandListUpdated = true;
+	}
 
 	public void undoCommand() {
 		if (command_now >= 0) {

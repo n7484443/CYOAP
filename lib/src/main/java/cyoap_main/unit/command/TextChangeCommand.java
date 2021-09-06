@@ -16,5 +16,4 @@ public class TextChangeCommand extends AbstractCommand{
 	public String getName() {
 		return "Change Text";
 	}
-
 }

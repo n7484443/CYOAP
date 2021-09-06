@@ -2,6 +2,7 @@ package cyoap_main.design;
 
 import cyoap_main.design.controller.MakeGUIController;
 import cyoap_main.unit.command.CombineCommand;
+import cyoap_main.unit.command.MoveCommand;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -77,6 +78,9 @@ public class ChoiceSetGuiComponent {
 		});
 		pane.setOnMouseDragged(e -> {
 			if (e.getButton().equals(MouseButton.MIDDLE)) {
+				if (moveCommand == null) {
+					moveCommand = new MoveCommand(dataSet.posx, dataSet.posy, dataSet);
+				}
 				double movex = MakeGUIController.instance.sensitivity
 						* (e.getSceneX() - MakeGUIController.platform.start_x);
 				double movey = MakeGUIController.instance.sensitivity
@@ -84,11 +88,16 @@ public class ChoiceSetGuiComponent {
 				MakeGUIController.platform.start_x = e.getSceneX();
 				MakeGUIController.platform.start_y = e.getSceneY();
 				dataSet.updatePosition(movex, movey);
-
 			}
 		});
 		pane.setOnMouseReleased(e -> {
 			if (e.getButton().equals(MouseButton.MIDDLE)) {
+				if(moveCommand.start_x != dataSet.posx || moveCommand.start_y != dataSet.posy) {
+					moveCommand.setEnd(dataSet.posx, dataSet.posy);
+					MakeGUIController.instance.addCommand(moveCommand);
+				}
+				moveCommand = null;
+
 				ChoiceSet final_choice = null;
 				for (var choiceSet : MakeGUIController.platform.choiceSetList) {
 					if (choiceSet == dataSet)
@@ -109,6 +118,8 @@ public class ChoiceSetGuiComponent {
 
 		pane.setStyle("-fx-background-color: #" + Integer.toHexString(color));
 	}
+
+	public MoveCommand moveCommand = null;
 
 	public void update() {
 		area.setText(motherChoiceSet.string_describe);

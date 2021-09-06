@@ -25,7 +25,7 @@
                   <ListView fx:id="view_var_field" layoutX="4.0" layoutY="32.0" prefHeight="369.0" prefWidth="161.0" />
                   <ListView fx:id="view_var_type" layoutX="4.0" layoutY="407.0" prefHeight="126.0" prefWidth="161.0" />
                   <ListView fx:id="view_command_timeline" layoutX="4.0" layoutY="540.0" prefHeight="105.0" prefWidth="161.0" />
-                  <RadioButton layoutX="4.0" layoutY="651.0" mnemonicParsing="false" prefHeight="16.0" prefWidth="81.0" text="DarkMode" />
+                  <RadioButton layoutX="4.0" layoutY="651.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="95.0" text="DarkMode" />
                </children>
             </AnchorPane>
             <TabPane fx:id="tabpane_make" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
@@ -52,9 +52,9 @@
                      <content>
                       <AnchorPane fx:id="pane_describe" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                            <children>
-                              <Button fx:id="button_next" layoutX="977.0" layoutY="619.0" mnemonicParsing="false" text="Next" />
-                              <TextArea fx:id="text_info" layoutX="6.0" layoutY="318.0" prefHeight="298.0" prefWidth="1012.0" />
-                              <Button fx:id="button_save" layoutX="930.0" layoutY="619.0" mnemonicParsing="false" text="Save" />
+                              <Button fx:id="button_next" layoutX="971.0" layoutY="614.0" mnemonicParsing="false" text="Next" />
+                              <TextArea fx:id="text_info" layoutX="6.0" layoutY="318.0" prefHeight="294.0" prefWidth="1012.0" />
+                              <Button fx:id="button_save" layoutX="917.0" layoutY="614.0" mnemonicParsing="false" text="Save" />
                               <TextField fx:id="text_title" alignment="CENTER" layoutX="6.0" layoutY="3.0" prefHeight="22.0" prefWidth="1012.0" text="Title" />
                               <HBox alignment="CENTER" layoutX="6.0" layoutY="31.0" prefHeight="281.0" prefWidth="1011.0">
                                  <children>

@@ -26,7 +26,7 @@ public class ChoiceSet {
 	public int flag = 0;
 
 	@JsonIgnore
-	public final int flag_selectable = 1;
+	public final int flagPosition_selectable = 0;
 
 	@JsonManagedReference
 	public List<ChoiceSet> choiceSet_child = new ArrayList<ChoiceSet>();
@@ -36,12 +36,6 @@ public class ChoiceSet {
 
 	public double posx;
 	public double posy;
-
-	public boolean checkFlag(int flag, int check) {
-		if ((flag & check) > 0)
-			return true;
-		return false;
-	}
 
 	public ChoiceSet() {
 		this("title", "", null, 0, 0);

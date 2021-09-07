@@ -196,7 +196,7 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 			} else if (menu == menu_saveAsImage) {
 				var width_before = this.getPane().getWidth();
 				var height_before = this.getPane().getHeight();
-				var pixel_scale = 1f;
+				var pixel_scale = 5f;
 				var width_after = (platform.max_x - platform.min_x) * pixel_scale;
 				var height_after = (platform.max_y - platform.min_y) * pixel_scale;
 
@@ -421,12 +421,7 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 
 	public void excuteCommand(AbstractCommand command) {
 		command.excute();
-		for (int i = command_now + 1; i < commandList.size(); i++) {
-			commandList.remove(i);
-		}
-		commandList.add(command);
-		command_now = commandList.size() - 1;
-		isCommandListUpdated = true;
+		addCommand(command);
 	}
 	public void addCommand(AbstractCommand command) {
 		for (int i = command_now + 1; i < commandList.size(); i++) {

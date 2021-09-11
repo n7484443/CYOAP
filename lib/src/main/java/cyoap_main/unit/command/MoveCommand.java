@@ -3,19 +3,19 @@ package cyoap_main.unit.command;
 import cyoap_main.design.ChoiceSet;
 
 public class MoveCommand extends AbstractCommand{
-	public double start_x;
-	public double start_y;
-	public double end_x;
-	public double end_y;
+	public float start_x;
+	public float start_y;
+	public float end_x;
+	public float end_y;
 	public ChoiceSet choiceset;
 	
-	public MoveCommand(double start_x, double start_y, ChoiceSet choiceset) {
+	public MoveCommand(float start_x, float start_y, ChoiceSet choiceset) {
 		this.start_x = start_x;
 		this.start_y = start_y;
 		this.choiceset = choiceset;
 	}
 	
-	public void setEnd(double end_x, double end_y) {
+	public void setEnd(float end_x, float end_y) {
 		this.end_x = end_x;
 		this.end_y = end_y;
 	}

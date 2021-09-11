@@ -103,7 +103,8 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 	public boolean isCommandListUpdated = false;
 	public List<AbstractCommand> commandList = new ArrayList<AbstractCommand>();
 	public static AbstractPlatform platform;
-
+	
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		button_save.setOnMouseClicked(e -> {
@@ -185,8 +186,8 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 		menu_mouse.setOnAction(e -> {
 			var menu = (MenuItem) e.getTarget();
 			Bounds boundsInScene = pane_describe.localToScene(pane_describe.getBoundsInLocal());
-			var posx = platform.local_x + platform.start_x - boundsInScene.getMinX();
-			var posy = platform.local_y + platform.start_y - boundsInScene.getMinY();
+			var posx = (float)(platform.local_x + platform.start_x - boundsInScene.getMinX());
+			var posy = (float)(platform.local_y + platform.start_y - boundsInScene.getMinY());
 			if (menu == menu_create) {
 				excuteCommand(new CreateCommand(posx, posy, -platform.local_x, -platform.local_y));
 			} else if (menu == menu_delete) {

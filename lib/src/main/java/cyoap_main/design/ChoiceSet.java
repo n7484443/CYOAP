@@ -9,6 +9,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import cyoap_main.design.controller.MakeGUIController;
+import cyoap_main.unit.Bound2f;
+import cyoap_main.unit.Vector2f;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -34,31 +36,40 @@ public class ChoiceSet {
 	@JsonBackReference
 	public ChoiceSet choiceSet_parent = null;
 
-	public double posx;
-	public double posy;
+	public float posx;
+	public float posy;
+	public float width;
+	public float height;
+	
+	@JsonIgnore
+	public Bound2f bound;
 
 	public ChoiceSet() {
-		this("title", "", null, 0, 0);
+		this("title", "describe", null, 0, 0, 0, 0);
 	}
 
 	public ChoiceSet(String title, String describe, Image image) {
-		this(title, describe, image != null ? image.getUrl() : null, 0, 0);
+		this(title, describe, image != null ? image.getUrl() : null, 0, 0, 0, 0);
 	}
 
-	public ChoiceSet(double posx, double posy) {
-		this(null, null, null, posx, posy);
+	public ChoiceSet(float posx, float posy) {
+		this("title", "describe", null, posx, posy, 0, 0);
 	}
 
 	public ChoiceSet(String title, String describe) {
-		this(title, describe, null, 0, 0);
+		this(title, describe, null, 0, 0, 0, 0);
 	}
 
-	public ChoiceSet(String title, String describe, String image_name, double posx, double posy) {
+	public ChoiceSet(String title, String describe, String image_name, float posx, float posy, float width, float height) {
 		this.string_title = title;
 		this.string_describe = describe;
 		this.string_image_name = image_name;
 		this.posx = posx;
 		this.posy = posy;
+		this.width = width;
+		this.height = height;
+		
+		bound = new Bound2f(posx, posy, getWidth(), getHeight());
 	}
 
 	public void setUp(Pane pane_mother) {
@@ -67,48 +78,35 @@ public class ChoiceSet {
 	}
 
 	public boolean check_intersect(ChoiceSet a, ChoiceSet b) {
-		var a_xmin = a.posx;
-		var a_ymin = a.posy;
-		var a_width = a.getAnchorPane().getLayoutBounds().getWidth();
-		var a_height = a.getAnchorPane().getLayoutBounds().getHeight();
-
-		var b_xmin = b.posx;
-		var b_ymin = b.posy;
-		var b_width = b.getAnchorPane().getLayoutBounds().getWidth();
-		var b_height = b.getAnchorPane().getLayoutBounds().getHeight();
-
-		if (a_xmin + a_width < b_xmin)
-			return false;
-		if (a_xmin > b_xmin + b_width)
-			return false;
-		if (a_ymin + a_height < b_ymin)
-			return false;
-		if (a_ymin > b_ymin + b_height)
-			return false;
-		return true;
+		return a.bound.intersect(b.bound);
 	}
+	
 
-	public boolean check_intersect(ChoiceSet a, double x, double y) {
-		var a_xmin = a.posx;
-		var a_ymin = a.posy;
-		var a_width = a.getAnchorPane().getLayoutBounds().getWidth();
-		var a_height = a.getAnchorPane().getLayoutBounds().getHeight();
-
-		if (a_xmin + a_width < x)
-			return false;
-		if (a_xmin > x)
-			return false;
-		if (a_ymin + a_height < y)
-			return false;
-		if (a_ymin > y)
-			return false;
-		return true;
+	public boolean check_intersect(ChoiceSet a, float x,  float y) {
+		return a.bound.intersect(new Vector2f(x, y));
 	}
-
+	
+	@JsonIgnore
+	public float getWidth() {
+		return width == 0 ? (float)getAnchorPane().getLayoutBounds().getWidth() : width;
+	}
+	@JsonIgnore
+	public float getHeight() {
+		return height == 0 ? (float)getAnchorPane().getLayoutBounds().getHeight() : height;
+	}
+	
 	public void update() {
 		guiComponent.update();
+		updateBounds();
 	}
 
+	public void updateBounds() {
+		bound.x = posx;
+		bound.y = posy;
+		bound.width = getWidth();
+		bound.height = getHeight();
+	}
+	
 	public void combineSubChoiceSet(ChoiceSet sub) {
 		MakeGUIController.platform.choiceSetList.remove(sub);
 
@@ -129,6 +127,7 @@ public class ChoiceSet {
 	// 화면상의 위치
 	public void updateCoordinate(double moveX, double moveY) {
 		guiComponent.updatePos(posx + moveX, posy + moveY);
+		updateBounds();
 	}
 
 	// 실제 위치
@@ -137,17 +136,20 @@ public class ChoiceSet {
 		posy += moveY;
 		guiComponent.updatePos(posx - MakeGUIController.platform.local_x,
 				posy - MakeGUIController.platform.local_y);
+		updateBounds();
 	}
 
 	public void setCoordinate(double coordX, double coordY) {
 		guiComponent.updatePos(coordX, coordY);
+		updateBounds();
 	}
 
-	public void setPosition(double posX, double posY) {
+	public void setPosition(float posX, float posY) {
 		posx = posX;
 		posy = posY;
 		guiComponent.updatePos(posx - MakeGUIController.platform.local_x,
 				posy - MakeGUIController.platform.local_y);
+		updateBounds();
 	}
 
 	@JsonIgnore

@@ -1,6 +1,8 @@
 package cyoap_main.design;
 
 import cyoap_main.design.controller.MakeGUIController;
+import cyoap_main.unit.Bound2f;
+import cyoap_main.unit.Vector2f;
 import cyoap_main.unit.command.CombineCommand;
 import cyoap_main.unit.command.MoveCommand;
 import javafx.scene.control.TextArea;
@@ -92,20 +94,31 @@ public class ChoiceSetGuiComponent {
 		});
 		pane.setOnMouseReleased(e -> {
 			if (e.getButton().equals(MouseButton.MIDDLE)) {
-				if(moveCommand.start_x != dataSet.posx || moveCommand.start_y != dataSet.posy) {
+				if (moveCommand.start_x != dataSet.posx || moveCommand.start_y != dataSet.posy) {
 					moveCommand.setEnd(dataSet.posx, dataSet.posy);
 					MakeGUIController.instance.addCommand(moveCommand);
 				}
 				moveCommand = null;
 
 				ChoiceSet final_choice = null;
+				Bound2f bound = new Bound2f(dataSet.bound);
+				float mul = 0.8f;
+				bound.x += bound.width * (1f - mul) * 0.5f;
+				bound.y += bound.height * (1f - mul) * 0.5f;
+				bound.width *= mul;
+				bound.height *= mul;
 				for (var choiceSet : MakeGUIController.platform.choiceSetList) {
 					if (choiceSet == dataSet)
 						continue;
-					if (dataSet.check_intersect(dataSet, choiceSet)) {
+					if (bound.intersect(choiceSet.bound)) {
 						final_choice = choiceSet;
 						break;
 					}
+				}
+				Vector2f v = MakeGUIController.platform.checkLine2(dataSet, 10f);
+				if (v != null) {
+					dataSet.posx = v.x == 0 ? dataSet.posx : v.x;
+					dataSet.posy = v.y == 0 ? dataSet.posy : v.y;
 				}
 				if (final_choice != null) {
 					MakeGUIController.instance.excuteCommand(new CombineCommand(final_choice, dataSet));

@@ -1,10 +1,10 @@
 package cyoap_main.design;
 
+import cyoap_main.command.CombineCommand;
+import cyoap_main.command.MoveCommand;
 import cyoap_main.design.controller.MakeGUIController;
 import cyoap_main.unit.Bound2f;
 import cyoap_main.unit.Vector2f;
-import cyoap_main.unit.command.CombineCommand;
-import cyoap_main.unit.command.MoveCommand;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -95,7 +95,11 @@ public class ChoiceSetGuiComponent {
 		pane.setOnMouseReleased(e -> {
 			if (e.getButton().equals(MouseButton.MIDDLE)) {
 				if (moveCommand.start_x != dataSet.posx || moveCommand.start_y != dataSet.posy) {
-					moveCommand.setEnd(dataSet.posx, dataSet.posy);
+					var v = moveCommand.checkOutline(this.motherChoiceSet, dataSet.posx, dataSet.posy);
+					dataSet.posx = v.x;
+					dataSet.posy = v.y;
+					
+					moveCommand.setEnd(v.x, v.y);
 					MakeGUIController.instance.addCommand(moveCommand);
 				}
 				moveCommand = null;
@@ -115,7 +119,7 @@ public class ChoiceSetGuiComponent {
 						break;
 					}
 				}
-				Vector2f v = MakeGUIController.platform.checkLine2(dataSet, 10f);
+				Vector2f v = MakeGUIController.platform.checkLine(dataSet, 10f);
 				if (v != null) {
 					dataSet.posx = v.x == 0 ? dataSet.posx : v.x;
 					dataSet.posy = v.y == 0 ? dataSet.posy : v.y;
@@ -137,9 +141,9 @@ public class ChoiceSetGuiComponent {
 	public void update() {
 		area.setText(motherChoiceSet.string_describe);
 		title.setText(motherChoiceSet.string_title);
+		pane.setStyle("-fx-background-color: #" + Integer.toHexString(color));
 		if (motherChoiceSet.string_image_name != null && !motherChoiceSet.string_image_name.isEmpty())
 			image.setImage(new Image(motherChoiceSet.string_image_name));
-
 	}
 
 	public void updatePos(double moveX, double moveY) {

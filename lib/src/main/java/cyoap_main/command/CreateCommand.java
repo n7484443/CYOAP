@@ -1,16 +1,15 @@
-package cyoap_main.unit.command;
+package cyoap_main.command;
 
 import cyoap_main.design.ChoiceSet;
 
 public class CreateCommand extends AbstractCommand{
-	public double localx;
-	public double localy;
 	public ChoiceSet choiceSet;
 	
-	public CreateCommand(float x, float y, double local_x, double local_y) {
+	public CreateCommand(float x, float y) {
 		choiceSet = new ChoiceSet(x, y);
-		this.localx = local_x;
-		this.localy = local_y;
+		var v = checkOutline(choiceSet, x, y);
+		choiceSet.posx = v.x;
+		choiceSet.posy = v.y;
 	}
 	@Override
 	public void excute() {

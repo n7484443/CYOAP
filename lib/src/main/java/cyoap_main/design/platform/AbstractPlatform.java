@@ -18,10 +18,10 @@ public class AbstractPlatform {
 	public List<ChoiceSet> choiceSetList = new ArrayList<ChoiceSet>();
 	public double local_x = 0;// local position of screen
 	public double local_y = 0;
-	public int min_x = -500;
-	public int min_y = -500;
-	public int max_x = 500;
-	public int max_y = 500;
+	public int min_x = -800;
+	public int min_y = -800;
+	public int max_x = 800;
+	public int max_y = 800;
 	public float scale = 1.0f;
 
 	@JsonIgnore
@@ -46,70 +46,23 @@ public class AbstractPlatform {
 	public final int flag_center = 1 << 1;
 
 	public Vector2f checkLine(ChoiceSet choiceSet, float bias) {
-		List<Float> pointList_x_before = new ArrayList<Float>();
-		List<Float> pointList_y_before = new ArrayList<Float>();
-
-		for (var choice : choiceSetList) {
-			pointList_x_before.add(choice.posx);
-			pointList_x_before.add(choice.posx + choiceSet.getWidth());
-			pointList_y_before.add(choice.posx);
-			pointList_y_before.add(choice.posx + choiceSet.getHeight());
-		}
-		List<Float> pointList_x = new ArrayList<Float>();
-		List<Float> pointList_y = new ArrayList<Float>();
-
-		roop: for (int i = 0; i < pointList_x_before.size(); i++) {
-			for (int j = 0; j < pointList_x.size(); j++) {
-				if (Math.abs(pointList_x_before.get(i) - pointList_x.get(j)) < 1E-6) {
-					continue roop;
-				}
-			}
-			pointList_x.add(pointList_x_before.get(i));
-		}
-
-		roop: for (int i = 0; i < pointList_y_before.size(); i++) {
-			for (int j = 0; j < pointList_y.size(); j++) {
-				if (Math.abs(pointList_y_before.get(i) - pointList_y.get(j)) < 1E-6) {
-					continue roop;
-				}
-			}
-			pointList_y.add(pointList_y_before.get(i));
-		}
-
 		var x_min = choiceSet.posx;
 		var y_min = choiceSet.posy;
 		var x_max = x_min + choiceSet.getWidth();
 		var y_max = y_min + choiceSet.getHeight();
-		for (var x : pointList_x) {
-			if (Math.abs(x - x_min) < bias)
-				return new Vector2f(x, 0);
-			if (Math.abs(x - x_max) < bias)
-				return new Vector2f(x, 0);
-		}
-		for (var y : pointList_y) {
-			if (Math.abs(y - y_min) < bias)
-				return new Vector2f(0, y);
-			if (Math.abs(y - y_max) < bias)
-				return new Vector2f(0, y);
-		}
-		return null;
-	}
 
-	public Vector2f checkLine2(ChoiceSet choiceSet, float bias) {
-		var x_min = choiceSet.posx;
-		var y_min = choiceSet.posy;
-		var x_max = x_min + choiceSet.getWidth();
-		var y_max = y_min + choiceSet.getHeight();
-		
 		float x_new = Float.MAX_VALUE;
 		float y_new = Float.MAX_VALUE;
-		
+
 		for (var choice : choiceSetList) {
-			if(choice == choiceSet)continue;
+			if (choice == choiceSet)
+				continue;
 			var x_min2 = choice.posx;
 			var y_min2 = choice.posy;
 			var x_max2 = x_min2 + choice.getWidth();
 			var y_max2 = y_min2 + choice.getHeight();
+			var x_half2 = x_min2 + choice.getWidth() / 2;
+			var y_half2 = y_min2 + choice.getHeight() / 2;
 
 			if (Math.abs(x_min - x_min2) < bias)
 				x_new = x_min2;
@@ -120,6 +73,11 @@ public class AbstractPlatform {
 			if (Math.abs(x_max - x_max2) < bias)
 				x_new = x_max2 - choiceSet.getWidth();
 
+			if (Math.abs(x_min - x_half2) < bias)
+				x_new = x_half2;
+			if (Math.abs(x_max - x_half2) < bias)
+				x_new = x_half2 - choiceSet.getWidth();
+
 			if (Math.abs(y_min - y_min2) < bias)
 				y_new = y_min2;
 			if (Math.abs(y_min - y_max2) < bias)
@@ -128,6 +86,11 @@ public class AbstractPlatform {
 				y_new = y_min2 - choiceSet.getHeight();
 			if (Math.abs(y_max - y_max2) < bias)
 				y_new = y_max2 - choiceSet.getHeight();
+
+			if (Math.abs(y_min - y_half2) < bias)
+				y_new = y_half2;
+			if (Math.abs(y_max - y_half2) < bias)
+				y_new = y_half2 - choiceSet.getHeight();
 		}
 		if (x_new == Float.MAX_VALUE && y_new == Float.MAX_VALUE) {
 			return null;
@@ -150,6 +113,7 @@ public class AbstractPlatform {
 	public void clearNodeOnPanePosition() {
 		choiceSetList.clear();
 		guiController.getPane().getChildren().clear();
+		guiController.getPane().getChildren().add(guiController.getBackgroundImageView());
 	}
 
 	public void update() {
@@ -158,12 +122,12 @@ public class AbstractPlatform {
 			guiController.getBackgroundImageView().setImage(image);
 
 			var f_image = image.getWidth() / image.getHeight();
-			var f_frame = guiController.getPane().getMaxWidth() / guiController.getPane().getMaxWidth();
+			var f_frame = (max_y - min_y) / (max_x - min_x);
 
 			if (f_image < f_frame) {
-				guiController.getBackgroundImageView().setFitWidth(guiController.getPane().getMaxWidth());
+				guiController.getBackgroundImageView().setFitWidth(max_x - min_x);
 			} else {
-				guiController.getBackgroundImageView().setFitHeight(guiController.getPane().getMaxHeight());
+				guiController.getBackgroundImageView().setFitHeight(max_y - min_y);
 			}
 		}
 		updateMouseCoordinate();
@@ -171,6 +135,7 @@ public class AbstractPlatform {
 
 	public void updateMouseCoordinate() {
 		choiceSetList.forEach(d -> d.updateCoordinate(-local_x, -local_y));
+		guiController.getBackgroundImageView().relocate(min_x - local_x, min_y - local_y);
 	}
 
 	public void updateCoordinateAll(double x, double y) {

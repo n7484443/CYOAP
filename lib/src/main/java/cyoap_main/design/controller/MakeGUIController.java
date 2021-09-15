@@ -18,15 +18,16 @@ import javax.imageio.ImageIO;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import cyoap_main.command.AbstractCommand;
+import cyoap_main.command.CreateCommand;
+import cyoap_main.command.DeleteCommand;
 import cyoap_main.core.JavaFxMain;
 import cyoap_main.design.ChoiceSet;
 import cyoap_main.design.platform.AbstractPlatform;
 import cyoap_main.design.platform.MakePlatform;
 import cyoap_main.grammer.Analyser;
 import cyoap_main.grammer.VarData;
-import cyoap_main.unit.command.AbstractCommand;
-import cyoap_main.unit.command.CreateCommand;
-import cyoap_main.unit.command.DeleteCommand;
+import cyoap_main.util.FlagUtil;
 import cyoap_main.util.LoadUtil;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
@@ -37,6 +38,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
@@ -58,8 +60,6 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 	@FXML
 	public AnchorPane pane_position;
 	@FXML
-	public Pane pane_position_parent;
-	@FXML
 	public SplitPane pane_mainGui;
 	@FXML
 	public AnchorPane pane_describe;
@@ -71,6 +71,8 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 	public TextArea text_info;
 	@FXML
 	public TextField text_title;
+	@FXML
+	public TextField text_color;
 	@FXML
 	public ListView<String> view_var_field;
 	@FXML
@@ -97,14 +99,17 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 	public Tab tab_position;
 	@FXML
 	public ImageView imageview_background;
+	@FXML
+	public RadioButton button_darkmode;
+	@FXML
+	public RadioButton button_outline;
 
 	public List<File> dropped;
 
 	public boolean isCommandListUpdated = false;
 	public List<AbstractCommand> commandList = new ArrayList<AbstractCommand>();
 	public static AbstractPlatform platform;
-	
-	
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		button_save.setOnMouseClicked(e -> {
@@ -186,10 +191,10 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 		menu_mouse.setOnAction(e -> {
 			var menu = (MenuItem) e.getTarget();
 			Bounds boundsInScene = pane_describe.localToScene(pane_describe.getBoundsInLocal());
-			var posx = (float)(platform.local_x + platform.start_x - boundsInScene.getMinX());
-			var posy = (float)(platform.local_y + platform.start_y - boundsInScene.getMinY());
+			var posx = (float) (platform.local_x + platform.start_x - boundsInScene.getMinX());
+			var posy = (float) (platform.local_y + platform.start_y - boundsInScene.getMinY());
 			if (menu == menu_create) {
-				excuteCommand(new CreateCommand(posx, posy, -platform.local_x, -platform.local_y));
+				excuteCommand(new CreateCommand(posx, posy));
 			} else if (menu == menu_delete) {
 				if (nowMouseInDataSet != null && nowMouseInDataSet.check_intersect(nowMouseInDataSet, posx, posy)) {
 					excuteCommand(new DeleteCommand(nowMouseInDataSet, platform.local_x, platform.local_x));
@@ -197,24 +202,20 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 			} else if (menu == menu_saveAsImage) {
 				var width_before = this.getPane().getWidth();
 				var height_before = this.getPane().getHeight();
-				var pixel_scale = 5f;
-				var width_after = (platform.max_x - platform.min_x) * pixel_scale;
-				var height_after = (platform.max_y - platform.min_y) * pixel_scale;
+				var pixel_scale = 4f;
+				var t = Math.max((platform.max_x - platform.min_x) / width_before,
+						(platform.max_y - platform.min_y) / height_before);
+				var width_after = (platform.max_x - platform.min_x) / t;
+				var height_after = (platform.max_y - platform.min_y) / t;
 
-				pane_position_parent.getChildren().remove(pane_position);
-				this.getPane().setPrefSize(width_after, height_after);
-				System.out.println(this.getPane().getWidth() + ":" + this.getPane().getHeight());
+				this.getPane().resize(width_after, height_after);
 
-				platform.updatePositionAll((platform.min_x + platform.local_x),
-						(platform.min_y + platform.local_y));
+				platform.updatePositionAll(platform.local_x, platform.local_y);
 
-				capture(width_after, height_after, pixel_scale);
+				capture(pixel_scale);
 
-				platform.updatePositionAll(-(platform.min_x + platform.local_x),
-						-(platform.min_y + platform.local_y));
-
-				pane_position_parent.getChildren().add(pane_position);
-				this.getPane().setPrefSize(width_before, height_before);
+				platform.updatePositionAll(-platform.local_x, -platform.local_y);
+				this.getPane().resize(width_before, height_before);
 			}
 		});
 
@@ -226,10 +227,10 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 				platform.local_y -= movey;
 				platform.start_x = e.getSceneX();
 				platform.start_y = e.getSceneY();
-				if (platform.local_x >= platform.max_x)
-					platform.local_x = platform.max_x;
-				if (platform.local_y >= platform.max_y)
-					platform.local_y = platform.max_y;
+				if (platform.local_x + this.getPane().getWidth() >= platform.max_x)
+					platform.local_x = platform.max_x - this.getPane().getWidth();
+				if (platform.local_y + this.getPane().getHeight() >= platform.max_y)
+					platform.local_y = platform.max_y - this.getPane().getHeight();
 				if (platform.local_x <= platform.min_x)
 					platform.local_x = platform.min_x;
 				if (platform.local_y <= platform.min_y)
@@ -259,7 +260,7 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 		});
 	}
 
-	public void capture(double width_after, double height_after, float pixelScale) {
+	public void capture(float pixelScale) {
 		var spa = new SnapshotParameters();
 		spa.setTransform(Transform.scale(pixelScale, pixelScale));
 		var writeableImage = this.getPane().snapshot(spa, null);
@@ -299,17 +300,31 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 			if (image != null)
 				nowEditDataSet.string_image_name = image.getUrl();
 			nowEditDataSet.update();
+			int t = 0x0067A3;
+			try {
+				t = Integer.valueOf(text_color.getText(), 16);
+			} catch (NumberFormatException e) {
+			}
+			if (nowEditDataSet.color != t) {
+				nowEditDataSet.updateColor(t);
+			}
+			if (FlagUtil.getFlag(nowEditDataSet.flag, ChoiceSet.flagPosition_selectable) != this.button_outline
+					.isSelected()) {
+				nowEditDataSet.flag = FlagUtil.setFlag(nowEditDataSet.flag, ChoiceSet.flagPosition_selectable,
+						this.button_outline.isSelected());
+				nowEditDataSet.updateFlag();
+			}
 		}
 	}
 
 	public void save_position_pane() {
 		ObjectMapper objectMapper = new ObjectMapper();
 		File dir = new File(JavaFxMain.instance.directory.getAbsolutePath() + "/choiceSet");
-		if(dir.exists()) {
-			for(var f : dir.listFiles()) {
+		if (dir.exists()) {
+			for (var f : dir.listFiles()) {
 				f.delete();
 			}
-		}else {
+		} else {
 			dir.mkdir();
 		}
 		try {
@@ -342,8 +357,7 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 				data.setUp(this.pane_position);
 				data.update();
 				platform.choiceSetList.add(data);
-				this.text_info.setText(data.string_title);
-				this.text_title.setText(data.string_describe);
+				data.updateFlag();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -359,7 +373,10 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 	public void next() {
 		MakeGUIController.instance.changeTab(MakeGUIController.instance.tab_position);
 		this.text_info.setText(null);
-		this.text_title.setText(null);
+		this.text_title.setText("Title");
+		this.text_color.setText("Color");
+		this.button_outline.setSelected(false);
+		;
 		this.imageview_describe.setImage(null);
 		this.image = null;
 		this.dropped = null;
@@ -378,6 +395,7 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 			image = new Image(dropped.get(0).toURI().toString());
 			imageview_describe.setImage(image);
 		}
+
 		if (VarData.isUpdated) {
 			VarData.isUpdated = false;
 			List<String> name_list = new ArrayList<String>();
@@ -407,10 +425,13 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 	}
 
 	public void loadFromDataSet(ChoiceSet dataSet) {
-		this.text_title.setText(dataSet.string_title);
-		this.text_info.setText(dataSet.string_describe);
+		text_title.setText(dataSet.string_title);
+		text_info.setText(dataSet.string_describe);
+		text_color.setText(Integer.toHexString(dataSet.color));
 		if (dataSet.string_image_name != null && !dataSet.string_image_name.isEmpty())
 			this.image = new Image(dataSet.string_image_name);
+		button_outline.setSelected(FlagUtil.getFlag(dataSet.flag, ChoiceSet.flagPosition_selectable));
+		dataSet.updateFlag();
 	}
 
 	public ChoiceSet nowEditDataSet;
@@ -424,6 +445,7 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 		command.excute();
 		addCommand(command);
 	}
+
 	public void addCommand(AbstractCommand command) {
 		for (int i = command_now + 1; i < commandList.size(); i++) {
 			commandList.remove(i);

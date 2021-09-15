@@ -1,4 +1,4 @@
-package cyoap_main.unit.command;
+package cyoap_main.command;
 
 import cyoap_main.design.ChoiceSet;
 import cyoap_main.design.controller.MakeGUIController;

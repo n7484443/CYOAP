@@ -1,4 +1,4 @@
-package cyoap_main.unit.command;
+package cyoap_main.command;
 
 public class TextChangeCommand extends AbstractCommand{
 

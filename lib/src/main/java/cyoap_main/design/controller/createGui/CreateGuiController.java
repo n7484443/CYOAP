@@ -1,4 +1,4 @@
-package cyoap_main.design.controller;
+package cyoap_main.design.controller.createGui;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -23,6 +23,7 @@ import cyoap_main.command.CreateCommand;
 import cyoap_main.command.DeleteCommand;
 import cyoap_main.core.JavaFxMain;
 import cyoap_main.design.ChoiceSet;
+import cyoap_main.design.controller.PlatformGuiController;
 import cyoap_main.design.platform.AbstractPlatform;
 import cyoap_main.design.platform.MakePlatform;
 import cyoap_main.grammer.Analyser;
@@ -33,6 +34,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
@@ -47,6 +49,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -55,8 +58,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.transform.Transform;
 
-public class MakeGUIController implements Initializable, PlatformGuiController {
-	public static MakeGUIController instance;
+public class CreateGuiController implements Initializable, PlatformGuiController {
+	public static CreateGuiController instance;
 	@FXML
 	public AnchorPane pane_position;
 	@FXML
@@ -200,22 +203,10 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 					excuteCommand(new DeleteCommand(nowMouseInDataSet, platform.local_x, platform.local_x));
 				}
 			} else if (menu == menu_saveAsImage) {
-				var width_before = this.getPane().getWidth();
-				var height_before = this.getPane().getHeight();
-				var pixel_scale = 4f;
-				var t = Math.max((platform.max_x - platform.min_x) / width_before,
-						(platform.max_y - platform.min_y) / height_before);
-				var width_after = (platform.max_x - platform.min_x) / t;
-				var height_after = (platform.max_y - platform.min_y) / t;
-
-				this.getPane().resize(width_after, height_after);
-
-				platform.updatePositionAll(platform.local_x, platform.local_y);
-
-				capture(pixel_scale);
-
-				platform.updatePositionAll(-platform.local_x, -platform.local_y);
-				this.getPane().resize(width_before, height_before);
+				var v = PixelScaleGuiController.instance.anchorPane_slider;
+				this.getPane().getChildren().add(v);
+				v.setLayoutX(this.getPane().getWidth()/2f - boundsInScene.getMinX() + v.getWidth()/2f);
+				v.setLayoutY(this.getPane().getHeight()/2f - boundsInScene.getMinY() + v.getHeight()/2f);
 			}
 		});
 
@@ -261,9 +252,24 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 	}
 
 	public void capture(float pixelScale) {
+		this.getPane().getChildren().remove(PixelScaleGuiController.instance.anchorPane_slider);
+		
+		var width_before = this.getPane().getWidth();
+		var height_before = this.getPane().getHeight();
+		var width_after = (platform.max_x - platform.min_x);
+		var height_after = (platform.max_y - platform.min_y);
+
+		this.getPane().resize(width_after, height_after);
+		System.out.println(this.getPane().getWidth() + ":" + this.getPane().getHeight());
+
+		platform.updatePositionAll(platform.local_x, platform.local_y);
+
 		var spa = new SnapshotParameters();
 		spa.setTransform(Transform.scale(pixelScale, pixelScale));
-		var writeableImage = this.getPane().snapshot(spa, null);
+		spa.setViewport(new Rectangle2D(platform.min_x * pixelScale, platform.min_y * pixelScale,
+				platform.max_x - platform.min_x, platform.max_y - platform.min_y));
+		var writeableImage = this.getPane().snapshot(spa, new WritableImage(
+				(int) (this.getPane().getWidth() * pixelScale), (int) (this.getPane().getHeight() * pixelScale)));
 
 		BufferedImage tempImg = SwingFXUtils.fromFXImage(writeableImage, null);
 		String imageType = "png";
@@ -273,6 +279,9 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		platform.updatePositionAll(-platform.local_x, -platform.local_y);
+		this.getPane().resize(width_before, height_before);
 	}
 
 	public String addTextIntoString(String str, int anchor, int caret, String add) {
@@ -371,7 +380,7 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 	}
 
 	public void next() {
-		MakeGUIController.instance.changeTab(MakeGUIController.instance.tab_position);
+		CreateGuiController.instance.changeTab(CreateGuiController.instance.tab_position);
 		this.text_info.setText(null);
 		this.text_title.setText("Title");
 		this.text_color.setText("Color");
@@ -383,8 +392,8 @@ public class MakeGUIController implements Initializable, PlatformGuiController {
 		this.nowEditDataSet = null;
 	}
 
-	public MakeGUIController() {
-		MakeGUIController.instance = this;
+	public CreateGuiController() {
+		CreateGuiController.instance = this;
 		platform = new MakePlatform(instance);
 	}
 

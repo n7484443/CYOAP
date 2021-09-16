@@ -1,7 +1,7 @@
 package cyoap_main.command;
 
 import cyoap_main.design.ChoiceSet;
-import cyoap_main.design.controller.MakeGUIController;
+import cyoap_main.design.controller.createGui.CreateGuiController;
 
 public class CombineCommand extends AbstractCommand {
 	public ChoiceSet choiceSet_parent;
@@ -20,7 +20,7 @@ public class CombineCommand extends AbstractCommand {
 	@Override
 	public void undo() {
 		choiceSet_parent.seperateSubChoiceSet(choiceSet_children);
-		MakeGUIController.platform.updateMouseCoordinate();
+		CreateGuiController.platform.updateMouseCoordinate();
 	}
 
 	@Override

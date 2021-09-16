@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import cyoap_main.design.controller.MakeGUIController;
+import cyoap_main.design.controller.createGui.CreateGuiController;
 import cyoap_main.unit.Bound2f;
 import cyoap_main.unit.Vector2f;
 import cyoap_main.util.FlagUtil;
@@ -119,7 +119,7 @@ public class ChoiceSet {
 	}
 
 	public void combineSubChoiceSet(ChoiceSet sub) {
-		MakeGUIController.platform.choiceSetList.remove(sub);
+		CreateGuiController.platform.choiceSetList.remove(sub);
 
 		this.choiceSet_child.add(sub);
 		sub.choiceSet_parent = this;
@@ -129,7 +129,7 @@ public class ChoiceSet {
 
 	public void seperateSubChoiceSet(ChoiceSet sub) {
 		this.choiceSet_child.remove(sub);
-		MakeGUIController.platform.choiceSetList.add(sub);
+		CreateGuiController.platform.choiceSetList.add(sub);
 		sub.choiceSet_parent = null;
 
 		guiComponent.seperateSubChoiceSetComponenet(sub);
@@ -161,7 +161,7 @@ public class ChoiceSet {
 	public void updatePosition(double moveX, double moveY) {
 		posx += moveX;
 		posy += moveY;
-		guiComponent.updatePos(posx - MakeGUIController.platform.local_x, posy - MakeGUIController.platform.local_y);
+		guiComponent.updatePos(posx - CreateGuiController.platform.local_x, posy - CreateGuiController.platform.local_y);
 		updateBounds();
 	}
 
@@ -173,7 +173,7 @@ public class ChoiceSet {
 	public void setPosition(float posX, float posY) {
 		posx = posX;
 		posy = posY;
-		guiComponent.updatePos(posx - MakeGUIController.platform.local_x, posy - MakeGUIController.platform.local_y);
+		guiComponent.updatePos(posx - CreateGuiController.platform.local_x, posy - CreateGuiController.platform.local_y);
 		updateBounds();
 	}
 

@@ -124,9 +124,12 @@ public class AbstractPlatform {
 			var f_image = image.getWidth() / image.getHeight();
 			var f_frame = (max_y - min_y) / (max_x - min_x);
 
+			guiController.getBackgroundImageView().setSmooth(true);
 			if (f_image < f_frame) {
 				guiController.getBackgroundImageView().setFitWidth(max_x - min_x);
+				guiController.getBackgroundImageView().setFitHeight(max_y - min_y);
 			} else {
+				guiController.getBackgroundImageView().setFitWidth(max_x - min_x);
 				guiController.getBackgroundImageView().setFitHeight(max_y - min_y);
 			}
 		}
@@ -142,11 +145,13 @@ public class AbstractPlatform {
 		for (var node : choiceSetList) {
 			node.updateCoordinate(x, y);
 		}
+		guiController.getBackgroundImageView().relocate(min_x - local_x + x, min_y - local_y + y);
 	}
 
 	public void updatePositionAll(double x, double y) {
 		for (var node : choiceSetList) {
 			node.updatePosition(x, y);
 		}
+		guiController.getBackgroundImageView().relocate(min_x - local_x + x, min_y - local_y + y);
 	}
 }

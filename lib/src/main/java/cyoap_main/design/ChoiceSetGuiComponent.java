@@ -2,7 +2,7 @@ package cyoap_main.design;
 
 import cyoap_main.command.CombineCommand;
 import cyoap_main.command.MoveCommand;
-import cyoap_main.design.controller.MakeGUIController;
+import cyoap_main.design.controller.createGui.CreateGuiController;
 import cyoap_main.unit.Bound2f;
 import cyoap_main.unit.Vector2f;
 import javafx.scene.control.TextArea;
@@ -71,9 +71,9 @@ public class ChoiceSetGuiComponent {
 		pane.setOnMouseClicked(e -> {
 			if (e.getButton().equals(MouseButton.PRIMARY)) {
 				if (e.getClickCount() == 2) {
-					MakeGUIController.instance.nowEditDataSet = dataSet;
-					MakeGUIController.instance.loadFromDataSet(dataSet);
-					MakeGUIController.instance.changeTab(MakeGUIController.instance.tab_describe);
+					CreateGuiController.instance.nowEditDataSet = dataSet;
+					CreateGuiController.instance.loadFromDataSet(dataSet);
+					CreateGuiController.instance.changeTab(CreateGuiController.instance.tab_describe);
 					e.consume();
 				}
 			}
@@ -83,12 +83,12 @@ public class ChoiceSetGuiComponent {
 				if (moveCommand == null) {
 					moveCommand = new MoveCommand(dataSet.posx, dataSet.posy, dataSet);
 				}
-				double movex = MakeGUIController.instance.sensitivity
-						* (e.getSceneX() - MakeGUIController.platform.start_x);
-				double movey = MakeGUIController.instance.sensitivity
-						* (e.getSceneY() - MakeGUIController.platform.start_y);
-				MakeGUIController.platform.start_x = e.getSceneX();
-				MakeGUIController.platform.start_y = e.getSceneY();
+				double movex = CreateGuiController.instance.sensitivity
+						* (e.getSceneX() - CreateGuiController.platform.start_x);
+				double movey = CreateGuiController.instance.sensitivity
+						* (e.getSceneY() - CreateGuiController.platform.start_y);
+				CreateGuiController.platform.start_x = e.getSceneX();
+				CreateGuiController.platform.start_y = e.getSceneY();
 				dataSet.updatePosition(movex, movey);
 			}
 		});
@@ -100,7 +100,7 @@ public class ChoiceSetGuiComponent {
 					dataSet.posy = v.y;
 					
 					moveCommand.setEnd(v.x, v.y);
-					MakeGUIController.instance.addCommand(moveCommand);
+					CreateGuiController.instance.addCommand(moveCommand);
 				}
 				moveCommand = null;
 
@@ -111,7 +111,7 @@ public class ChoiceSetGuiComponent {
 				bound.y += bound.height * (1f - mul) * 0.5f;
 				bound.width *= mul;
 				bound.height *= mul;
-				for (var choiceSet : MakeGUIController.platform.choiceSetList) {
+				for (var choiceSet : CreateGuiController.platform.choiceSetList) {
 					if (choiceSet == dataSet)
 						continue;
 					if (bound.intersect(choiceSet.bound)) {
@@ -119,18 +119,18 @@ public class ChoiceSetGuiComponent {
 						break;
 					}
 				}
-				Vector2f v = MakeGUIController.platform.checkLine(dataSet, 10f);
+				Vector2f v = CreateGuiController.platform.checkLine(dataSet, 10f);
 				if (v != null) {
 					dataSet.posx = v.x == 0 ? dataSet.posx : v.x;
 					dataSet.posy = v.y == 0 ? dataSet.posy : v.y;
 				}
 				if (final_choice != null) {
-					MakeGUIController.instance.excuteCommand(new CombineCommand(final_choice, dataSet));
+					CreateGuiController.instance.excuteCommand(new CombineCommand(final_choice, dataSet));
 				}
 			}
 		});
 		pane.setOnMouseEntered(e -> {
-			MakeGUIController.instance.nowMouseInDataSet = dataSet;
+			CreateGuiController.instance.nowMouseInDataSet = dataSet;
 		});
 
 		pane.setStyle("-fx-background-color: #" + Integer.toHexString(color));
@@ -160,7 +160,7 @@ public class ChoiceSetGuiComponent {
 
 	public void seperateSubChoiceSetComponenet(ChoiceSet sub) {
 		hbox.getChildren().remove(sub.getAnchorPane());
-		MakeGUIController.instance.pane_position.getChildren().add(sub.getAnchorPane());
+		CreateGuiController.instance.pane_position.getChildren().add(sub.getAnchorPane());
 		area.setPrefWidth(pane.getWidth());
 
 	}

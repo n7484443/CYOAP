@@ -2,7 +2,7 @@ package cyoap_main.core;
 
 import java.io.File;
 
-import cyoap_main.design.controller.MakeGUIController;
+import cyoap_main.design.controller.createGui.CreateGuiController;
 import cyoap_main.grammer.VarData;
 import cyoap_main.grammer.VarData.ValueType;
 import cyoap_main.util.FontLoader;
@@ -17,7 +17,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class JavaFxMain extends Application {
-	public static String version = "0.3.1";
+	public static String version = "0.3.2";
 
 	public static JavaFxMain instance;
 	public Stage stage;
@@ -45,22 +45,24 @@ public class JavaFxMain extends Application {
 						KeyCombination.SHIFT_DOWN);
 				if (comb_save.match(e)) {
 					System.out.println("Save ShortCut");
-					MakeGUIController.instance.save_shortcut();
+					CreateGuiController.instance.save_shortcut();
 				} else if (comb_load.match(e)) {
 					System.out.println("Load ShortCut");
-					MakeGUIController.instance.load_shortcut();
+					CreateGuiController.instance.load_shortcut();
 				} else if (comb_undo.match(e)) {
 					System.out.println("Undo ShortCut");
-					MakeGUIController.instance.undo_shortcut();
+					CreateGuiController.instance.undo_shortcut();
 				} else if (comb_redo.match(e)) {
 					System.out.println("Redo ShortCut");
-					MakeGUIController.instance.redo_shortcut();
+					CreateGuiController.instance.redo_shortcut();
 				}
 			});
 			scene_start = new Scene(LoadUtil.instance.loadFXML("/lib/design/Design_Start.fxml"), window_width,
 					window_height);
 			scene_play = new Scene(LoadUtil.instance.loadFXML("/lib/design/Design_Play.fxml"), window_width,
 					window_height);
+
+			LoadUtil.instance.loadFXML("/lib/design/Design_Make_Slider.fxml");
 			stage.setTitle("CYOAP " + version);
 			stage.setScene(scene_start);
 
@@ -82,11 +84,11 @@ public class JavaFxMain extends Application {
 	}
 
 	public void update(double time) {
-		MakeGUIController.instance.update();
+		CreateGuiController.instance.update();
 	}
 
 	public void render() {
-		MakeGUIController.instance.render();
+		CreateGuiController.instance.render();
 	}
 
 	public File directory;

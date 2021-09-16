@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import cyoap_main.core.JavaFxMain;
+import cyoap_main.design.controller.createGui.CreateGuiController;
 import cyoap_main.util.LoadUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,7 +28,7 @@ public class StartGUIController implements Initializable {
 			var directory = LoadUtil.loadFolder();
 			JavaFxMain.instance.loadFiles(directory);
 			JavaFxMain.instance.stage.setScene(JavaFxMain.instance.scene_make);
-			MakeGUIController.instance.load_shortcut();
+			CreateGuiController.instance.load_shortcut();
 		});
 	}
 	

@@ -115,6 +115,14 @@ public class AbstractPlatform {
 		guiController.getPane().getChildren().clear();
 		guiController.getPane().getChildren().add(guiController.getBackgroundImageView());
 	}
+	
+	public void setNodeDepth() {
+		for(var c : choiceSetList) {
+			var gui = c.guiComponent.pane;
+			gui.setViewOrder(0.0d);
+		}
+		guiController.getBackgroundImageView().setViewOrder(10.0d);
+	}
 
 	public void update() {
 		if (image_file != null && image == null) {
@@ -134,6 +142,7 @@ public class AbstractPlatform {
 			}
 		}
 		updateMouseCoordinate();
+		setNodeDepth();
 	}
 
 	public void updateMouseCoordinate() {

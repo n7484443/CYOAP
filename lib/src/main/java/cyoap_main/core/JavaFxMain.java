@@ -17,11 +17,11 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class JavaFxMain extends Application {
-	public static String version = "0.3.2";
+	public static String version = "0.3.3";
 
 	public static JavaFxMain instance;
 	public Stage stage;
-	public Scene scene_make;
+	public Scene scene_create;
 	public Scene scene_start;
 	public Scene scene_play;
 
@@ -35,9 +35,9 @@ public class JavaFxMain extends Application {
 			new LoadUtil();
 			new FontLoader();
 			stage = primaryStage;
-			scene_make = new Scene(LoadUtil.instance.loadFXML("/lib/design/Design_Make.fxml"), window_width,
+			scene_create = new Scene(LoadUtil.instance.loadFXML("/lib/design/Design_Create.fxml"), window_width,
 					window_height);
-			scene_make.addEventHandler(KeyEvent.KEY_PRESSED, (e) -> {
+			scene_create.addEventHandler(KeyEvent.KEY_PRESSED, (e) -> {
 				KeyCombination comb_save = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
 				KeyCombination comb_load = new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN);
 				KeyCombination comb_undo = new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN);
@@ -61,8 +61,9 @@ public class JavaFxMain extends Application {
 					window_height);
 			scene_play = new Scene(LoadUtil.instance.loadFXML("/lib/design/Design_Play.fxml"), window_width,
 					window_height);
+			scene_create.getStylesheets().add(LoadUtil.instance.loadCss("/lib/css/style.css"));
 
-			LoadUtil.instance.loadFXML("/lib/design/Design_Make_Slider.fxml");
+			LoadUtil.instance.loadFXML("/lib/design/Design_Create_Slider.fxml");
 			stage.setTitle("CYOAP " + version);
 			stage.setScene(scene_start);
 

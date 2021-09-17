@@ -5,7 +5,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane  fx:id="anchorPane_slider" prefHeight="77.0" prefWidth="181.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cyoap_main.design.controller.createGui.PixelScaleGuiController">
+<AnchorPane fx:id="anchorPane_slider" prefHeight="77.0" prefWidth="181.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cyoap_main.design.controller.createGui.PixelScaleGuiController">
    <children>
       <Slider fx:id="slider_pixelScale" layoutX="7.0" layoutY="14.0" prefHeight="16.0" prefWidth="123.0" />
       <Button fx:id="button_pixelScale" layoutX="61.0" layoutY="42.0" mnemonicParsing="false" text="Capture" />

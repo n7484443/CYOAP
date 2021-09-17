@@ -2,3 +2,6 @@
 	-fx-font-size: 10pt;
 	-fx-font-family: "NanumGothic";
 }
+#anchorPane_slider,#menu_mouse,#pane_choiceset{
+	-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 3, 3);
+}

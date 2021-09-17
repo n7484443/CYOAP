@@ -31,11 +31,11 @@ public class ChoiceSet {
 	public int color = 0x0067A3;// blue
 	@JsonIgnore
 	public ChoiceSetGuiComponent guiComponent = new ChoiceSetGuiComponent(color);
-
-	public int flag = 0;
-
+	
 	@JsonIgnore
 	public static final int flagPosition_selectable = 0;
+	
+	public int flag = flagPosition_selectable;
 
 	@JsonManagedReference
 	public List<ChoiceSet> choiceSet_child = new ArrayList<ChoiceSet>();

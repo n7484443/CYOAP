@@ -49,6 +49,7 @@ public class ChoiceSetGuiComponent {
 		pane.setTop(border_pane);
 		pane.setCenter(middle_pane);
 		pane.setBottom(hbox);
+		pane.setId("pane_choiceset");
 
 		middle_pane.setPrefHeight(20);
 
@@ -77,6 +78,8 @@ public class ChoiceSetGuiComponent {
 					e.consume();
 				}
 			}
+			this.pane.toFront();
+			this.pane.setViewOrder(-2.0d);
 		});
 		pane.setOnMouseDragged(e -> {
 			if (e.getButton().equals(MouseButton.MIDDLE)) {
@@ -91,6 +94,8 @@ public class ChoiceSetGuiComponent {
 				CreateGuiController.platform.start_y = e.getSceneY();
 				dataSet.updatePosition(movex, movey);
 			}
+			this.pane.toFront();
+			this.pane.setViewOrder(-2.0d);
 		});
 		pane.setOnMouseReleased(e -> {
 			if (e.getButton().equals(MouseButton.MIDDLE)) {
@@ -128,6 +133,7 @@ public class ChoiceSetGuiComponent {
 					CreateGuiController.instance.excuteCommand(new CombineCommand(final_choice, dataSet));
 				}
 			}
+			this.pane.setViewOrder(0.0d);
 		});
 		pane.setOnMouseEntered(e -> {
 			CreateGuiController.instance.nowMouseInDataSet = dataSet;

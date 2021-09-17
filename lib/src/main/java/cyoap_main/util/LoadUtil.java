@@ -34,6 +34,11 @@ public class LoadUtil {
 		Pane root = (Pane) FXMLLoader.load(url);
 		return root;
 	}
+	
+
+	public String loadCss(String path) throws IOException {
+		return LoadUtil.class.getResource(path).toString();
+	}
 
 	public static List<Path> getSubPath(String url) throws URISyntaxException, IOException {
 		URI uri = LoadUtil.class.getResource(url).toURI();

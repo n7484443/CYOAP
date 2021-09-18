@@ -2,6 +2,10 @@
 	-fx-font-size: 10pt;
 	-fx-font-family: "NanumGothic";
 }
+#pane_make,#pane_create{
+	-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 3, 3);
+	-fx-background-color: derive(#525252,20%);
+}
 #anchorPane_slider,#menu_mouse,#pane_choiceset{
 	-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 3, 3);
 }

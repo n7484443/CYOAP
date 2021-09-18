@@ -14,7 +14,7 @@ public class StartGUIController implements Initializable {
 	@FXML
 	public Pane pane_play;
 	@FXML
-	public Pane pane_make;
+	public Pane pane_create;
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		pane_play.setOnMouseClicked(e->{
@@ -24,7 +24,7 @@ public class StartGUIController implements Initializable {
 			PlayGUIController.instance.load();
 		});
 		
-		pane_make.setOnMouseClicked(e->{
+		pane_create.setOnMouseClicked(e->{
 			var directory = LoadUtil.loadFolder();
 			JavaFxMain.instance.loadFiles(directory);
 			JavaFxMain.instance.stage.setScene(JavaFxMain.instance.scene_create);

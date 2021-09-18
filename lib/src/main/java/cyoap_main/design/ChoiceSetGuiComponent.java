@@ -17,6 +17,9 @@ import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
 
 public class ChoiceSetGuiComponent {
@@ -31,6 +34,10 @@ public class ChoiceSetGuiComponent {
 	public ChoiceSet motherChoiceSet;
 
 	public int color;
+	
+	public static Border border_default = new Border(new BorderStroke(Color.BLACK,
+			new BorderStrokeStyle(StrokeType.OUTSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 10, 0, null),
+			new CornerRadii(2), new BorderWidths(1)));
 
 	public ChoiceSetGuiComponent() {
 
@@ -44,8 +51,7 @@ public class ChoiceSetGuiComponent {
 		motherChoiceSet = dataSet;
 		pane.setLayoutX(dataSet.posx);
 		pane.setLayoutY(dataSet.posy);
-		pane.setBorder(new Border(
-				new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(2), BorderWidths.DEFAULT)));
+		pane.setBorder(border_default);
 		pane.setTop(border_pane);
 		pane.setCenter(middle_pane);
 		pane.setBottom(hbox);
@@ -99,11 +105,12 @@ public class ChoiceSetGuiComponent {
 		});
 		pane.setOnMouseReleased(e -> {
 			if (e.getButton().equals(MouseButton.MIDDLE)) {
+				if(moveCommand == null)return;
 				if (moveCommand.start_x != dataSet.posx || moveCommand.start_y != dataSet.posy) {
 					var v = moveCommand.checkOutline(this.motherChoiceSet, dataSet.posx, dataSet.posy);
 					dataSet.posx = v.x;
 					dataSet.posy = v.y;
-					
+
 					moveCommand.setEnd(v.x, v.y);
 					CreateGuiController.instance.addCommand(moveCommand);
 				}

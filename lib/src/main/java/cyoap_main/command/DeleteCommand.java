@@ -25,6 +25,7 @@ public class DeleteCommand extends AbstractCommand {
 		choiceSet.setUp(control.getPane());
 		control.getPlatform().choiceSetList.add(choiceSet);
 		choiceSet.updateCoordinate(-localx, -localy);
+		choiceSet.updateFlag();
 	}
 
 	@Override

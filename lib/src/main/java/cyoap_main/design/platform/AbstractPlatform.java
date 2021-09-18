@@ -19,9 +19,9 @@ public class AbstractPlatform {
 	public double local_x = 0;// local position of screen
 	public double local_y = 0;
 	public int min_x = -800;
-	public int min_y = -800;
+	public int min_y = -1600;
 	public int max_x = 800;
-	public int max_y = 800;
+	public int max_y = 1600;
 	public float scale = 1.0f;
 
 	@JsonIgnore

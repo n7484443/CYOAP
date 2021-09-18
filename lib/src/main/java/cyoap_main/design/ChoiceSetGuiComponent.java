@@ -33,7 +33,7 @@ public class ChoiceSetGuiComponent {
 
 	public ChoiceSet motherChoiceSet;
 
-	public int color;
+	public Color color;
 	
 	public static Border border_default = new Border(new BorderStroke(Color.BLACK,
 			new BorderStrokeStyle(StrokeType.OUTSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 10, 0, null),
@@ -43,7 +43,7 @@ public class ChoiceSetGuiComponent {
 
 	}
 
-	public ChoiceSetGuiComponent(int color) {
+	public ChoiceSetGuiComponent(Color color) {
 		this.color = color;
 	}
 
@@ -146,7 +146,7 @@ public class ChoiceSetGuiComponent {
 			CreateGuiController.instance.nowMouseInDataSet = dataSet;
 		});
 
-		pane.setStyle("-fx-background-color: #" + Integer.toHexString(color));
+		pane.setStyle("-fx-background-color: #" + color.toString().substring(0, 8));
 	}
 
 	public MoveCommand moveCommand = null;
@@ -154,7 +154,7 @@ public class ChoiceSetGuiComponent {
 	public void update() {
 		area.setText(motherChoiceSet.string_describe);
 		title.setText(motherChoiceSet.string_title);
-		pane.setStyle("-fx-background-color: #" + Integer.toHexString(color));
+		pane.setStyle("-fx-background-color: #" + color.toString().substring(0, 8));
 		if (motherChoiceSet.string_image_name != null && !motherChoiceSet.string_image_name.isEmpty())
 			image.setImage(new Image(motherChoiceSet.string_image_name));
 	}

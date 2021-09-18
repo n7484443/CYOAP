@@ -30,6 +30,7 @@ import cyoap_main.design.platform.AbstractPlatform;
 import cyoap_main.design.platform.MakePlatform;
 import cyoap_main.grammer.Analyser;
 import cyoap_main.grammer.VarData;
+import cyoap_main.util.ColorUtil;
 import cyoap_main.util.FlagUtil;
 import cyoap_main.util.LoadUtil;
 import javafx.embed.swing.SwingFXUtils;
@@ -39,6 +40,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
@@ -68,6 +70,8 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 	@FXML
 	public AnchorPane pane_describe;
 	@FXML
+	public AnchorPane pane_general;
+	@FXML
 	public Button button_save;
 	@FXML
 	public Button button_next;
@@ -76,7 +80,7 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 	@FXML
 	public TextField text_title;
 	@FXML
-	public TextField text_color;
+	public ColorPicker colorpicker;
 	@FXML
 	public ListView<String> view_var_field;
 	@FXML
@@ -101,6 +105,8 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 	public Tab tab_describe;
 	@FXML
 	public Tab tab_position;
+	@FXML
+	public Tab tab_generalSetting;
 	@FXML
 	public ImageView imageview_background;
 	@FXML
@@ -321,7 +327,8 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 			nowEditDataSet.update();
 			int t = 0x0067A3;
 			try {
-				t = Integer.valueOf(text_color.getText(), 16);
+				System.out.println(colorpicker.getValue().hashCode());
+				t = colorpicker.getValue().hashCode();
 			} catch (NumberFormatException e) {
 			}
 			if (nowEditDataSet.color != t) {
@@ -393,9 +400,8 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 		CreateGuiController.instance.changeTab(CreateGuiController.instance.tab_position);
 		this.text_info.clear();
 		this.text_title.setText("Title");
-		this.text_color.setText("Color");
+		this.colorpicker.setValue(ColorUtil.getColorFromHex(0x0067A3));
 		this.button_outline.setSelected(false);
-		;
 		this.imageview_describe.setImage(null);
 		this.image = null;
 		this.dropped = null;
@@ -447,7 +453,7 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 		text_title.setText(dataSet.string_title);
 		text_info.clear();
 		text_info.appendText(dataSet.string_describe);
-		text_color.setText(Integer.toHexString(dataSet.color));
+		colorpicker.setValue(ColorUtil.getColorFromHex(dataSet.color));
 		if (dataSet.string_image_name != null && !dataSet.string_image_name.isEmpty()) {
 			this.image = new Image(dataSet.string_image_name);
 			imageview_describe.setImage(image);

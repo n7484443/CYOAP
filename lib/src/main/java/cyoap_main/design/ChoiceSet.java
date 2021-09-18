@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import cyoap_main.design.controller.createGui.CreateGuiController;
 import cyoap_main.unit.Bound2f;
 import cyoap_main.unit.Vector2f;
+import cyoap_main.util.ColorUtil;
 import cyoap_main.util.FlagUtil;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
@@ -22,9 +23,9 @@ public class ChoiceSet {
 	public String string_describe;
 	public String string_image_name;
 
-	public int color = 0x0067A3;// blue
+	public int color = 0x0067A3FF;// blue
 	@JsonIgnore
-	public ChoiceSetGuiComponent guiComponent = new ChoiceSetGuiComponent(color);
+	public ChoiceSetGuiComponent guiComponent = new ChoiceSetGuiComponent(ColorUtil.getColorFromHex(color));
 	
 	@JsonIgnore
 	public static final int flagPosition_selectable = 0;
@@ -100,7 +101,7 @@ public class ChoiceSet {
 	public void update() {
 		guiComponent.update();
 		updateBounds();
-		if(guiComponent.color != this.color) {
+		if(guiComponent.color.hashCode() != this.color) {
 			updateColor(color);
 		}
 	}
@@ -131,7 +132,7 @@ public class ChoiceSet {
 
 	public void updateColor(int color) {
 		this.color = color;
-		this.guiComponent.color = color;
+		this.guiComponent.color = ColorUtil.getColorFromHex(color);
 		this.guiComponent.pane.setStyle("-fx-background-color: #" + Integer.toHexString(color));
 	}
 	

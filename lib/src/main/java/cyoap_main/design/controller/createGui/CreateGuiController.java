@@ -16,6 +16,8 @@ import java.util.stream.Stream;
 
 import javax.imageio.ImageIO;
 
+import org.fxmisc.richtext.StyleClassedTextArea;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cyoap_main.command.AbstractCommand;
@@ -45,7 +47,6 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -70,8 +71,8 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 	public Button button_save;
 	@FXML
 	public Button button_next;
-	@FXML
-	public TextArea text_info;
+	
+	public StyleClassedTextArea text_info;
 	@FXML
 	public TextField text_title;
 	@FXML
@@ -115,6 +116,13 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		text_info = new StyleClassedTextArea();
+		pane_describe.getChildren().add(1,text_info);
+		text_info.setPrefWidth(1012);
+		text_info.setPrefHeight(285);
+		text_info.setLayoutX(6);
+		text_info.setLayoutY(327);
+		
 		button_save.setOnMouseClicked(e -> {
 			save_describe_pane();
 		});
@@ -146,7 +154,8 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 					if (varable >= 0) {
 						var text = addTextIntoString(text_info.getText(), text_info.getAnchor(),
 								text_info.getCaretPosition(), "{" + VarData.var_map.keySet().toArray()[varable] + "}");
-						text_info.setText(text);
+						text_info.clear();
+						text_info.appendText(text);
 					}
 				}
 			}
@@ -245,7 +254,8 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 					case 4 -> addTextIntoString(text_info.getText(), anchor, caret, "round( )");
 					default -> "";
 					};
-					text_info.setText(text);
+					text_info.clear();
+					text_info.appendText(text);
 				}
 			}
 		});
@@ -381,7 +391,7 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 
 	public void next() {
 		CreateGuiController.instance.changeTab(CreateGuiController.instance.tab_position);
-		this.text_info.setText(null);
+		this.text_info.clear();
 		this.text_title.setText("Title");
 		this.text_color.setText("Color");
 		this.button_outline.setSelected(false);
@@ -435,10 +445,13 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 
 	public void loadFromDataSet(ChoiceSet dataSet) {
 		text_title.setText(dataSet.string_title);
-		text_info.setText(dataSet.string_describe);
+		text_info.clear();
+		text_info.appendText(dataSet.string_describe);
 		text_color.setText(Integer.toHexString(dataSet.color));
-		if (dataSet.string_image_name != null && !dataSet.string_image_name.isEmpty())
+		if (dataSet.string_image_name != null && !dataSet.string_image_name.isEmpty()) {
 			this.image = new Image(dataSet.string_image_name);
+			imageview_describe.setImage(image);
+		}
 		button_outline.setSelected(FlagUtil.getFlag(dataSet.flag, ChoiceSet.flagPosition_selectable));
 		dataSet.updateFlag();
 	}

@@ -8,4 +8,5 @@ open module cyoap_module{
 	requires java.xml;
 	requires javafx.base;
 	requires javafx.swing;
+	requires org.fxmisc.richtext;
 }

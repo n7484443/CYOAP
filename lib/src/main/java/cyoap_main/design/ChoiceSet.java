@@ -138,7 +138,6 @@ public class ChoiceSet {
 	public void updateFlag() {
 		if(FlagUtil.getFlag(flag, flagPosition_selectable)) {
 			guiComponent.pane.setBorder(null);
-			System.out.println("checked");
 		}else {
 			guiComponent.pane.setBorder(ChoiceSetGuiComponent.border_default);
 		}

@@ -1,6 +1,6 @@
 .root{
 	-fx-font-size: 10pt;
-	-fx-font-family: "NanumGothic";
+	-fx-font-family: NanumGothic;
 }
 #pane_make,#pane_create{
 	-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 3, 3);

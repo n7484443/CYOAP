@@ -13,7 +13,6 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
 
 <AnchorPane stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cyoap_main.design.controller.createGui.CreateGuiController">
 	<children>
@@ -57,13 +56,10 @@
 										<Button fx:id="button_next" layoutX="971.0" layoutY="614.0" mnemonicParsing="false" text="Next" />
 										<Button fx:id="button_save" layoutX="917.0" layoutY="614.0" mnemonicParsing="false" text="Save" />
 										<TextField fx:id="text_title" alignment="CENTER" layoutX="6.0" layoutY="3.0" prefHeight="22.0" prefWidth="1012.0" text="Title" />
-										<HBox alignment="CENTER" layoutX="6.0" layoutY="34.0" prefHeight="286.0" prefWidth="1012.0">
-											<children>
-												<ImageView fx:id="imageview_describe" fitHeight="266.0" fitWidth="609.0" pickOnBounds="true" preserveRatio="true" />
-											</children>
-										</HBox>
-										<RadioButton fx:id="button_outline" layoutX="114.0" layoutY="617.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="134.0" text="Remove OutLine" />
+												<ImageView fx:id="imageview_describe" fitHeight="576.0" fitWidth="400.0" layoutX="6.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true" />
+										<RadioButton fx:id="button_outline" layoutX="893.0" layoutY="34.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="125.0" text="외곽선 제거" />
                               			<ColorPicker fx:id="colorpicker" layoutX="6.0" layoutY="614.0" prefHeight="25.0" prefWidth="102.0" />
+                              			<RadioButton fx:id="button_horizon" layoutX="893.0" layoutY="58.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="125.0" text="가로로 설정" />
 									</children>
 								</AnchorPane>
 							</content>

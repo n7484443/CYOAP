@@ -13,13 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Stream;
-
 import javax.imageio.ImageIO;
-
-import org.fxmisc.richtext.StyleClassedTextArea;
-
+import org.fxmisc.richtext.InlineCssTextArea;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import cyoap_main.command.AbstractCommand;
 import cyoap_main.command.CreateCommand;
 import cyoap_main.command.DeleteCommand;
@@ -30,7 +26,6 @@ import cyoap_main.design.platform.AbstractPlatform;
 import cyoap_main.design.platform.MakePlatform;
 import cyoap_main.grammer.Analyser;
 import cyoap_main.grammer.VarData;
-import cyoap_main.util.ColorUtil;
 import cyoap_main.util.FlagUtil;
 import cyoap_main.util.LoadUtil;
 import javafx.embed.swing.SwingFXUtils;
@@ -58,7 +53,15 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.transform.Transform;
 
 public class CreateGuiController implements Initializable, PlatformGuiController {
@@ -75,8 +78,6 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 	public Button button_save;
 	@FXML
 	public Button button_next;
-	
-	public StyleClassedTextArea text_info;
 	@FXML
 	public TextField text_title;
 	@FXML
@@ -113,6 +114,13 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 	public RadioButton button_darkmode;
 	@FXML
 	public RadioButton button_outline;
+	@FXML
+	public RadioButton button_horizon;
+
+	public BorderPane pane_text_editor = new BorderPane();
+	public VBox pane_setting = new VBox();
+	public InlineCssTextArea text_editor = new InlineCssTextArea();
+	public ColorPicker colorpicker_text_editor = new ColorPicker();
 
 	public List<File> dropped;
 
@@ -122,13 +130,39 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		text_info = new StyleClassedTextArea();
-		pane_describe.getChildren().add(1,text_info);
-		text_info.setPrefWidth(1012);
-		text_info.setPrefHeight(285);
-		text_info.setLayoutX(6);
-		text_info.setLayoutY(327);
-		
+		pane_describe.getChildren().add(1, pane_text_editor);
+
+		pane_text_editor.setPrefWidth(893 - 412 - 6);
+		pane_text_editor.setPrefHeight(574);
+		pane_text_editor.setLayoutX(412);
+		pane_text_editor.setLayoutY(32);
+
+		pane_setting.setPrefHeight(30);
+		pane_setting.setBorder(new Border(new BorderStroke(null, null, Color.BLACK, null, null, null,
+				BorderStrokeStyle.DASHED, null, new CornerRadii(2), new BorderWidths(2), null)));
+		pane_setting.getChildren().add(colorpicker_text_editor);
+		colorpicker_text_editor.getStyleClass().add("button");
+
+		pane_text_editor.setTop(pane_setting);
+		pane_text_editor.setCenter(text_editor);
+
+		try {
+			// text_editor.setWrapText(true);
+			text_editor.getStylesheets().add(LoadUtil.instance.loadCss("/lib/css/texteditor.css"));
+			text_editor.getStyleClass().add("text-editor");
+			text_editor.setStyle("-color-text: white ;");
+
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		colorpicker_text_editor.valueProperty().addListener(e -> {
+			var range = text_editor.getSelection();
+			text_editor.setStyle(range.getStart(), range.getEnd(),
+					"-color-text: #" + colorpicker_text_editor.getValue().toString().replace("0x", "") + ";");
+		});
+
+		colorpicker.getStyleClass().add("button");
+
 		button_save.setOnMouseClicked(e -> {
 			save_describe_pane();
 		});
@@ -158,10 +192,11 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 				if (e.getClickCount() == 2) {
 					var varable = view_var_field.getSelectionModel().getSelectedIndex();
 					if (varable >= 0) {
-						var text = addTextIntoString(text_info.getText(), text_info.getAnchor(),
-								text_info.getCaretPosition(), "{" + VarData.var_map.keySet().toArray()[varable] + "}");
-						text_info.clear();
-						text_info.appendText(text);
+						var text = addTextIntoString(text_editor.getText(), text_editor.getAnchor(),
+								text_editor.getCaretPosition(),
+								"{" + VarData.var_map.keySet().toArray()[varable] + "}");
+						text_editor.clear();
+						text_editor.appendText(text);
 					}
 				}
 			}
@@ -219,9 +254,9 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 				}
 			} else if (menu == menu_saveAsImage) {
 				var v = PixelScaleGuiController.instance.anchorPane_slider;
-				this.getPane().getChildren().add(v);
-				v.setLayoutX(this.getPane().getWidth()/2f - boundsInScene.getMinX() + v.getWidth()/2f);
-				v.setLayoutY(this.getPane().getHeight()/2f - boundsInScene.getMinY() + v.getHeight()/2f);
+				this.getChoicePane().getChildren().add(v);
+				v.setLayoutX(this.getChoicePane().getWidth() / 2f - boundsInScene.getMinX() + v.getWidth() / 2f);
+				v.setLayoutY(this.getChoicePane().getHeight() / 2f - boundsInScene.getMinY() + v.getHeight() / 2f);
 			}
 		});
 
@@ -233,10 +268,10 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 				platform.local_y -= movey;
 				platform.start_x = e.getSceneX();
 				platform.start_y = e.getSceneY();
-				if (platform.local_x + this.getPane().getWidth() >= platform.max_x)
-					platform.local_x = platform.max_x - this.getPane().getWidth();
-				if (platform.local_y + this.getPane().getHeight() >= platform.max_y)
-					platform.local_y = platform.max_y - this.getPane().getHeight();
+				if (platform.local_x + this.getChoicePane().getWidth() >= platform.max_x)
+					platform.local_x = platform.max_x - this.getChoicePane().getWidth();
+				if (platform.local_y + this.getChoicePane().getHeight() >= platform.max_y)
+					platform.local_y = platform.max_y - this.getChoicePane().getHeight();
 				if (platform.local_x <= platform.min_x)
 					platform.local_x = platform.min_x;
 				if (platform.local_y <= platform.min_y)
@@ -250,33 +285,33 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 			if (e.getButton().equals(MouseButton.PRIMARY)) {
 				if (e.getClickCount() == 2) {
 					var index = view_var_type.getSelectionModel().getSelectedIndex();
-					var anchor = text_info.getAnchor();
-					var caret = text_info.getCaretPosition();
+					var anchor = text_editor.getAnchor();
+					var caret = text_editor.getCaretPosition();
 					String text = switch (index) {
-					case 0 -> addTextIntoString(text_info.getText(), anchor, caret, "&b");
-					case 1 -> addTextIntoString(text_info.getText(), anchor, caret, "\" \"");
-					case 2 -> addTextIntoString(text_info.getText(), anchor, caret, "floor( )");
-					case 3 -> addTextIntoString(text_info.getText(), anchor, caret, "ceil( )");
-					case 4 -> addTextIntoString(text_info.getText(), anchor, caret, "round( )");
+					case 0 -> addTextIntoString(text_editor.getText(), anchor, caret, "&b");
+					case 1 -> addTextIntoString(text_editor.getText(), anchor, caret, "\" \"");
+					case 2 -> addTextIntoString(text_editor.getText(), anchor, caret, "floor( )");
+					case 3 -> addTextIntoString(text_editor.getText(), anchor, caret, "ceil( )");
+					case 4 -> addTextIntoString(text_editor.getText(), anchor, caret, "round( )");
 					default -> "";
 					};
-					text_info.clear();
-					text_info.appendText(text);
+					text_editor.clear();
+					text_editor.appendText(text);
 				}
 			}
 		});
 	}
 
 	public void capture(float pixelScale) {
-		this.getPane().getChildren().remove(PixelScaleGuiController.instance.anchorPane_slider);
-		
-		var width_before = this.getPane().getWidth();
-		var height_before = this.getPane().getHeight();
+		this.getChoicePane().getChildren().remove(PixelScaleGuiController.instance.anchorPane_slider);
+
+		var width_before = this.getChoicePane().getWidth();
+		var height_before = this.getChoicePane().getHeight();
 		var width_after = (platform.max_x - platform.min_x);
 		var height_after = (platform.max_y - platform.min_y);
 
-		this.getPane().resize(width_after, height_after);
-		System.out.println(this.getPane().getWidth() + ":" + this.getPane().getHeight());
+		this.getChoicePane().resize(width_after, height_after);
+		System.out.println(this.getChoicePane().getWidth() + ":" + this.getChoicePane().getHeight());
 
 		platform.updatePositionAll(platform.local_x, platform.local_y);
 
@@ -284,8 +319,9 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 		spa.setTransform(Transform.scale(pixelScale, pixelScale));
 		spa.setViewport(new Rectangle2D(platform.min_x * pixelScale, platform.min_y * pixelScale,
 				platform.max_x - platform.min_x, platform.max_y - platform.min_y));
-		var writeableImage = this.getPane().snapshot(spa, new WritableImage(
-				(int) (this.getPane().getWidth() * pixelScale), (int) (this.getPane().getHeight() * pixelScale)));
+		var writeableImage = this.getChoicePane().snapshot(spa,
+				new WritableImage((int) (this.getChoicePane().getWidth() * pixelScale),
+						(int) (this.getChoicePane().getHeight() * pixelScale)));
 
 		BufferedImage tempImg = SwingFXUtils.fromFXImage(writeableImage, null);
 		String imageType = "png";
@@ -297,7 +333,7 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 		}
 
 		platform.updatePositionAll(-platform.local_x, -platform.local_y);
-		this.getPane().resize(width_before, height_before);
+		this.getChoicePane().resize(width_before, height_before);
 	}
 
 	public String addTextIntoString(String str, int anchor, int caret, String add) {
@@ -315,25 +351,22 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 
 	public void save_describe_pane() {
 		VarData.isUpdated = true;
-		var text = Analyser.parser(text_info.getText());
+		var text = Analyser.parser(text_editor.getText());
 		StringBuilder builder = new StringBuilder();
 		if (text != null)
 			text.stream().forEach(t -> builder.append(t));
 		if (nowEditDataSet != null) {
 			nowEditDataSet.string_title = text_title.getText();
-			nowEditDataSet.string_describe = text_info.getText();
+			nowEditDataSet.string_describe = text_editor.getText();
 			if (image != null)
 				nowEditDataSet.string_image_name = image.getUrl();
 			nowEditDataSet.update();
-			int t = 0x0067A3;
+			Color t = ChoiceSet.baseColor;
 			try {
-				System.out.println(colorpicker.getValue().hashCode());
-				t = colorpicker.getValue().hashCode();
+				t = colorpicker.getValue();
 			} catch (NumberFormatException e) {
 			}
-			if (nowEditDataSet.color != t) {
-				nowEditDataSet.updateColor(t);
-			}
+			nowEditDataSet.updateColor(t);
 			if (FlagUtil.getFlag(nowEditDataSet.flag, ChoiceSet.flagPosition_selectable) != this.button_outline
 					.isSelected()) {
 				nowEditDataSet.flag = FlagUtil.setFlag(nowEditDataSet.flag, ChoiceSet.flagPosition_selectable,
@@ -398,9 +431,9 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 
 	public void next() {
 		CreateGuiController.instance.changeTab(CreateGuiController.instance.tab_position);
-		this.text_info.clear();
+		this.text_editor.clear();
 		this.text_title.setText("Title");
-		this.colorpicker.setValue(ColorUtil.getColorFromHex(0x0067A3));
+		this.colorpicker.setValue(ChoiceSet.baseColor);
 		this.button_outline.setSelected(false);
 		this.imageview_describe.setImage(null);
 		this.image = null;
@@ -451,9 +484,9 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 
 	public void loadFromDataSet(ChoiceSet dataSet) {
 		text_title.setText(dataSet.string_title);
-		text_info.clear();
-		text_info.appendText(dataSet.string_describe);
-		colorpicker.setValue(ColorUtil.getColorFromHex(dataSet.color));
+		text_editor.clear();
+		text_editor.appendText(dataSet.string_describe);
+		colorpicker.setValue(dataSet.color);
 		if (dataSet.string_image_name != null && !dataSet.string_image_name.isEmpty()) {
 			this.image = new Image(dataSet.string_image_name);
 			imageview_describe.setImage(image);
@@ -524,7 +557,7 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 	}
 
 	@Override
-	public Pane getPane() {
+	public Pane getChoicePane() {
 		return pane_position;
 	}
 

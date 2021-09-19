@@ -7,15 +7,14 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import cyoap_main.design.controller.createGui.CreateGuiController;
 import cyoap_main.unit.Bound2f;
 import cyoap_main.unit.Vector2f;
-import cyoap_main.util.ColorUtil;
 import cyoap_main.util.FlagUtil;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.PUBLIC_ONLY, setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class ChoiceSet {
@@ -23,13 +22,17 @@ public class ChoiceSet {
 	public String string_describe;
 	public String string_image_name;
 
-	public int color = 0x0067A3FF;// blue
 	@JsonIgnore
-	public ChoiceSetGuiComponent guiComponent = new ChoiceSetGuiComponent(ColorUtil.getColorFromHex(color));
-	
+	public static final Color baseColor = Color.web("#96d9ff");
+
+	public Color color = baseColor;// blue
+
+	@JsonIgnore
+	public ChoiceSetGuiComponent guiComponent = new ChoiceSetGuiComponent(color);
+
 	@JsonIgnore
 	public static final int flagPosition_selectable = 0;
-	
+
 	public int flag = flagPosition_selectable;
 
 	@JsonManagedReference
@@ -101,9 +104,7 @@ public class ChoiceSet {
 	public void update() {
 		guiComponent.update();
 		updateBounds();
-		if(guiComponent.color.hashCode() != this.color) {
-			updateColor(color);
-		}
+		updateColor();
 	}
 
 	public void updateBounds() {
@@ -130,16 +131,23 @@ public class ChoiceSet {
 		guiComponent.seperateSubChoiceSetComponenet(sub);
 	}
 
-	public void updateColor(int color) {
-		this.color = color;
-		this.guiComponent.color = ColorUtil.getColorFromHex(color);
-		this.guiComponent.pane.setStyle("-fx-background-color: #" + Integer.toHexString(color));
+	public void updateColor(Color t) {
+		if (this.color != t) {
+			this.color = t;
+			this.guiComponent.color = t;
+			this.guiComponent.updateColor();
+		}
 	}
-	
+
+	public void updateColor() {
+		this.guiComponent.color = color;
+		this.guiComponent.updateColor();
+	}
+
 	public void updateFlag() {
-		if(FlagUtil.getFlag(flag, flagPosition_selectable)) {
+		if (FlagUtil.getFlag(flag, flagPosition_selectable)) {
 			guiComponent.pane.setBorder(null);
-		}else {
+		} else {
 			guiComponent.pane.setBorder(ChoiceSetGuiComponent.border_default);
 		}
 	}
@@ -154,7 +162,8 @@ public class ChoiceSet {
 	public void updatePosition(double moveX, double moveY) {
 		posx += moveX;
 		posy += moveY;
-		guiComponent.updatePos(posx - CreateGuiController.platform.local_x, posy - CreateGuiController.platform.local_y);
+		guiComponent.updatePos(posx - CreateGuiController.platform.local_x,
+				posy - CreateGuiController.platform.local_y);
 		updateBounds();
 	}
 
@@ -166,12 +175,21 @@ public class ChoiceSet {
 	public void setPosition(float posX, float posY) {
 		posx = posX;
 		posy = posY;
-		guiComponent.updatePos(posx - CreateGuiController.platform.local_x, posy - CreateGuiController.platform.local_y);
+		guiComponent.updatePos(posx - CreateGuiController.platform.local_x,
+				posy - CreateGuiController.platform.local_y);
 		updateBounds();
 	}
 
 	@JsonIgnore
 	public BorderPane getAnchorPane() {
 		return guiComponent.pane;
+	}
+
+	public String getColor() {
+		return color.toString();
+	}
+
+	public void setColor(String s) {
+		updateColor(Color.web(s));
 	}
 }

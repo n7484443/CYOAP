@@ -13,14 +13,14 @@ public class CreateCommand extends AbstractCommand{
 	}
 	@Override
 	public void excute() {
-		choiceSet.setUp(control.getPane());
+		choiceSet.setUp(control.getChoicePane());
 		control.getPlatform().choiceSetList.add(choiceSet);
 		choiceSet.setPosition(choiceSet.posx, choiceSet.posy);
 	}
 
 	@Override
 	public void undo() {
-		control.getPane().getChildren().remove(choiceSet.getAnchorPane());
+		control.getChoicePane().getChildren().remove(choiceSet.getAnchorPane());
 		control.getPlatform().choiceSetList.remove(choiceSet);
 		control.nowMouseInDataSet = null;
 	}

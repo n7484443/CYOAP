@@ -1,11 +1,12 @@
 package cyoap_main.design;
 
+import org.fxmisc.richtext.StyleClassedTextArea;
+
 import cyoap_main.command.CombineCommand;
 import cyoap_main.command.MoveCommand;
 import cyoap_main.design.controller.createGui.CreateGuiController;
 import cyoap_main.unit.Bound2f;
 import cyoap_main.unit.Vector2f;
-import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
@@ -16,6 +17,7 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
@@ -24,17 +26,17 @@ import javafx.scene.text.Text;
 
 public class ChoiceSetGuiComponent {
 	public BorderPane pane = new BorderPane();
-	public BorderPane border_pane = new BorderPane();
-	public BorderPane middle_pane = new BorderPane();
+	public BorderPane pane_border = new BorderPane();
+	public Pane pane_middle = new Pane();
 	public HBox hbox = new HBox();
 	public ImageView image = new ImageView();
-	public TextArea area = new TextArea();
+	public StyleClassedTextArea area = new StyleClassedTextArea();
 	public Text title = new Text();
 
 	public ChoiceSet motherChoiceSet;
 
 	public Color color;
-	
+
 	public static Border border_default = new Border(new BorderStroke(Color.BLACK,
 			new BorderStrokeStyle(StrokeType.OUTSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 10, 0, null),
 			new CornerRadii(2), new BorderWidths(1)));
@@ -52,28 +54,28 @@ public class ChoiceSetGuiComponent {
 		pane.setLayoutX(dataSet.posx);
 		pane.setLayoutY(dataSet.posy);
 		pane.setBorder(border_default);
-		pane.setTop(border_pane);
-		pane.setCenter(middle_pane);
+		pane.setTop(pane_border);
+		pane.setCenter(pane_middle);
 		pane.setBottom(hbox);
 		pane.setId("pane_choiceset");
 
-		middle_pane.setPrefHeight(20);
+		pane_middle.setPrefHeight(20);
 
-		border_pane.setTop(title);
-		border_pane.setCenter(image);
-		border_pane.setBottom(area);
-		border_pane.setBorder(new Border(new BorderStroke(null, null, Color.BLACK, null, null, null,
+		pane_border.setTop(title);
+		pane_border.setCenter(image);
+		pane_border.setBottom(area);
+		pane_border.setBorder(new Border(new BorderStroke(null, null, Color.BLACK, null, null, null,
 				BorderStrokeStyle.DASHED, null, new CornerRadii(2), new BorderWidths(2), null)));
 
 		area.setEditable(false);
 
-		border_pane.setPrefWidth(200);
-		border_pane.setPrefHeight(100);
+		pane_border.setPrefWidth(200);
+		pane_border.setPrefHeight(100);
 		area.setPrefHeight(100);
 		image.setPreserveRatio(true);
 		image.setFitWidth(200);
 
-		border_pane.setMouseTransparent(true);
+		pane_border.setMouseTransparent(true);
 
 		pane.setOnMouseClicked(e -> {
 			if (e.getButton().equals(MouseButton.PRIMARY)) {
@@ -105,7 +107,8 @@ public class ChoiceSetGuiComponent {
 		});
 		pane.setOnMouseReleased(e -> {
 			if (e.getButton().equals(MouseButton.MIDDLE)) {
-				if(moveCommand == null)return;
+				if (moveCommand == null)
+					return;
 				if (moveCommand.start_x != dataSet.posx || moveCommand.start_y != dataSet.posy) {
 					var v = moveCommand.checkOutline(this.motherChoiceSet, dataSet.posx, dataSet.posy);
 					dataSet.posx = v.x;
@@ -146,21 +149,26 @@ public class ChoiceSetGuiComponent {
 			CreateGuiController.instance.nowMouseInDataSet = dataSet;
 		});
 
-		pane.setStyle("-fx-background-color: #" + color.toString().substring(0, 8));
+		updateColor();
 	}
 
 	public MoveCommand moveCommand = null;
 
 	public void update() {
-		area.setText(motherChoiceSet.string_describe);
+		area.clear();
+		area.appendText(motherChoiceSet.string_describe);
 		title.setText(motherChoiceSet.string_title);
-		pane.setStyle("-fx-background-color: #" + color.toString().substring(0, 8));
+		updateColor();
 		if (motherChoiceSet.string_image_name != null && !motherChoiceSet.string_image_name.isEmpty())
 			image.setImage(new Image(motherChoiceSet.string_image_name));
 	}
 
 	public void updatePos(double moveX, double moveY) {
 		pane.relocate(moveX, moveY);
+	}
+
+	public void updateColor() {
+		pane.setStyle("-fx-background-color: #" + color.toString().replace("0x", "") + ";");
 	}
 
 	public void combineSubChoiceSetComponenet(ChoiceSet sub) {

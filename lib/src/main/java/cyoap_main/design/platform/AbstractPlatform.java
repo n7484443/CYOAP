@@ -112,8 +112,8 @@ public class AbstractPlatform {
 
 	public void clearNodeOnPanePosition() {
 		choiceSetList.clear();
-		guiController.getPane().getChildren().clear();
-		guiController.getPane().getChildren().add(guiController.getBackgroundImageView());
+		guiController.getChoicePane().getChildren().clear();
+		guiController.getChoicePane().getChildren().add(guiController.getBackgroundImageView());
 	}
 	
 	public void setNodeDepth() {

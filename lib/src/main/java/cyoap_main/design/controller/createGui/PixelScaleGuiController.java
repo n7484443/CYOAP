@@ -2,8 +2,6 @@ package cyoap_main.design.controller.createGui;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -48,11 +46,8 @@ public class PixelScaleGuiController implements Initializable {
 		slider_pixelScale.setValue(4.0f);
 
 		textField_pixelScale.setText(Float.toString(4.0f));
-
-		slider_pixelScale.valueProperty()
-				.addListener((ObservableValue<? extends Number> observ, Number oldVal, Number newVal) -> {
-					textField_pixelScale.setText(newVal.toString());
-				});
+		
+		textField_pixelScale.textProperty().bind(slider_pixelScale.valueProperty().asString());
 
 		button_pixelScale.setOnMouseClicked(e -> {
 			CreateGuiController.instance.capture((float) slider_pixelScale.getValue());

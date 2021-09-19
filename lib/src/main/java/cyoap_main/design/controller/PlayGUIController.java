@@ -67,7 +67,7 @@ public class PlayGUIController implements Initializable, PlatformGuiController {
 	}
 
 	@Override
-	public Pane getPane() {
+	public Pane getChoicePane() {
 		return pane_play;
 	}
 

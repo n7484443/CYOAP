@@ -6,6 +6,6 @@ import javafx.scene.layout.Pane;
 
 public interface PlatformGuiController {
 	public ImageView getBackgroundImageView();
-	public Pane getPane();
+	public Pane getChoicePane();
 	public AbstractPlatform getPlatform();
 }

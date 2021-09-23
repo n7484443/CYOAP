@@ -20,11 +20,11 @@
 			<items>
 				<AnchorPane maxHeight="794.0" maxWidth="169.0" minHeight="538.0" minWidth="169.0" prefHeight="794.0" prefWidth="169.0" SplitPane.resizableWithParent="false">
 					<children>
-						<TextField layoutX="4.0" layoutY="3.0" />
-						<ListView fx:id="view_var_field" layoutX="4.0" layoutY="32.0" prefHeight="369.0" prefWidth="161.0" />
+						<TextField layoutX="4.0" layoutY="3.0" prefHeight="29.0" prefWidth="161.0" />
+						<ListView fx:id="view_var_field" layoutX="4.0" layoutY="37.0" prefHeight="364.0" prefWidth="161.0" />
 						<ListView fx:id="view_var_type" layoutX="4.0" layoutY="407.0" prefHeight="126.0" prefWidth="161.0" />
 						<ListView fx:id="view_command_timeline" layoutX="4.0" layoutY="540.0" prefHeight="105.0" prefWidth="161.0" />
-						<RadioButton fx:id="button_darkmode" layoutX="4.0" layoutY="651.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="95.0" text="DarkMode" />
+						<RadioButton fx:id="button_darkmode" layoutX="4.0" layoutY="650.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="95.0" text="DarkMode" />
 					</children>
 				</AnchorPane>
 				<TabPane fx:id="tabpane_make" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
@@ -58,7 +58,7 @@
 										<TextField fx:id="text_title" alignment="CENTER" layoutX="6.0" layoutY="3.0" prefHeight="22.0" prefWidth="1012.0" text="Title" />
 												<ImageView fx:id="imageview_describe" fitHeight="576.0" fitWidth="400.0" layoutX="6.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true" />
 										<RadioButton fx:id="button_outline" layoutX="893.0" layoutY="34.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="125.0" text="외곽선 제거" />
-                              			<ColorPicker fx:id="colorpicker" layoutX="6.0" layoutY="614.0" prefHeight="25.0" prefWidth="102.0" />
+                              			<ColorPicker fx:id="colorpicker" layoutX="6.0" layoutY="614.0" prefHeight="25.0" prefWidth="95.0" />
                               			<RadioButton fx:id="button_horizon" layoutX="893.0" layoutY="58.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="125.0" text="가로로 설정" />
 									</children>
 								</AnchorPane>

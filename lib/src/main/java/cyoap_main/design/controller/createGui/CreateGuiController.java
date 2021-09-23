@@ -147,11 +147,9 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 		pane_text_editor.setCenter(text_editor);
 
 		try {
-			// text_editor.setWrapText(true);
 			text_editor.getStylesheets().add(LoadUtil.instance.loadCss("/lib/css/texteditor.css"));
 			text_editor.getStyleClass().add("text-editor");
 			text_editor.setStyle("-color-text: white ;");
-
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -351,6 +349,7 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 
 	public void save_describe_pane() {
 		VarData.isUpdated = true;
+		
 		var text = Analyser.parser(text_editor.getText());
 		StringBuilder builder = new StringBuilder();
 		if (text != null)
@@ -373,6 +372,18 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 						this.button_outline.isSelected());
 				nowEditDataSet.updateFlag();
 			}
+			
+			nowEditDataSet.segmentList.clear();
+			for(int i = 0; i < text_editor.getDocument().getParagraphs().size(); i++) {
+				var v = text_editor.getDocument().getParagraphs().get(i);
+				for(var s : v.getStyledSegments()) {
+					nowEditDataSet.segmentList.add(s);
+				}
+				if(i < text_editor.getDocument().getParagraphs().size() - 1) {
+					nowEditDataSet.segmentList.add(null);
+				}
+			}
+			LoadUtil.loadParagraph(nowEditDataSet.guiComponent.area, text_editor.getDocument().getParagraphs());
 		}
 	}
 
@@ -417,6 +428,7 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 				data.update();
 				platform.choiceSetList.add(data);
 				data.updateFlag();
+				LoadUtil.loadSegment(data.guiComponent.area, data.segmentList);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -486,6 +498,7 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 		text_title.setText(dataSet.string_title);
 		text_editor.clear();
 		text_editor.appendText(dataSet.string_describe);
+		LoadUtil.loadSegment(text_editor, dataSet.segmentList);
 		colorpicker.setValue(dataSet.color);
 		if (dataSet.string_image_name != null && !dataSet.string_image_name.isEmpty()) {
 			this.image = new Image(dataSet.string_image_name);

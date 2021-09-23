@@ -3,10 +3,16 @@ package cyoap_main.design;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.fxmisc.richtext.model.StyledSegment;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
+
 import cyoap_main.design.controller.createGui.CreateGuiController;
 import cyoap_main.unit.Bound2f;
 import cyoap_main.unit.Vector2f;
@@ -19,7 +25,11 @@ import javafx.scene.paint.Color;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.PUBLIC_ONLY, setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class ChoiceSet {
 	public String string_title;
+	
 	public String string_describe;
+	
+	public List<StyledSegment<String, String>> segmentList = new ArrayList<StyledSegment<String, String>>();
+	
 	public String string_image_name;
 
 	@JsonIgnore
@@ -191,5 +201,35 @@ public class ChoiceSet {
 
 	public void setColor(String s) {
 		updateColor(Color.web(s));
+	}
+	
+	@JsonGetter("segmentList")
+	@JsonProperty("segmentList")
+	public List<String> getSegmentList() {
+		List<String> strList = new ArrayList<String>();
+		if(segmentList.isEmpty())return strList;
+		for(var v : segmentList) {
+			if(v == null) {
+				strList.add("");
+			}else {
+				strList.add("{" + v.getSegment() + "}:{" + v.getStyle() + "}");
+			}
+		}
+		return strList;
+	}
+
+	@JsonSetter("segmentList")
+	public void setSegmentList(List<String> s) {
+		for(var v : s) {
+			if(v.isBlank()) {
+				segmentList.add(null);
+			}else {
+				var splitedStr = v.split("\\}:\\{");
+				splitedStr[0] = splitedStr[0].substring(1);
+				splitedStr[1] = splitedStr[1].substring(0, splitedStr[1].length() - 1);
+				var segment = new StyledSegment<String, String>(splitedStr[0], splitedStr[1]);
+				segmentList.add(segment);
+			}
+		}
 	}
 }

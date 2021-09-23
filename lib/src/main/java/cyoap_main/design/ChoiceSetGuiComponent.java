@@ -1,12 +1,15 @@
 package cyoap_main.design;
 
-import org.fxmisc.richtext.StyleClassedTextArea;
+import java.io.IOException;
+
+import org.fxmisc.richtext.InlineCssTextArea;
 
 import cyoap_main.command.CombineCommand;
 import cyoap_main.command.MoveCommand;
 import cyoap_main.design.controller.createGui.CreateGuiController;
 import cyoap_main.unit.Bound2f;
 import cyoap_main.unit.Vector2f;
+import cyoap_main.util.LoadUtil;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
@@ -30,7 +33,7 @@ public class ChoiceSetGuiComponent {
 	public Pane pane_middle = new Pane();
 	public HBox hbox = new HBox();
 	public ImageView image = new ImageView();
-	public StyleClassedTextArea area = new StyleClassedTextArea();
+	public InlineCssTextArea area = new InlineCssTextArea();
 	public Text title = new Text();
 
 	public ChoiceSet motherChoiceSet;
@@ -51,6 +54,15 @@ public class ChoiceSetGuiComponent {
 
 	public void setUp(ChoiceSet dataSet) {
 		motherChoiceSet = dataSet;
+		
+		try {
+			area.getStylesheets().add(LoadUtil.instance.loadCss("/lib/css/texteditor.css"));
+			area.getStyleClass().add("text-editor");
+			area.setStyle("-color-text: white ;");
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
 		pane.setLayoutX(dataSet.posx);
 		pane.setLayoutY(dataSet.posy);
 		pane.setBorder(border_default);

@@ -16,6 +16,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.fxmisc.richtext.InlineCssTextArea;
+import org.fxmisc.richtext.model.Paragraph;
+import org.fxmisc.richtext.model.StyledSegment;
+
 import cyoap_main.core.JavaFxMain;
 import cyoap_main.design.ChoiceSet;
 import javafx.fxml.FXMLLoader;
@@ -87,6 +91,27 @@ public class LoadUtil {
 			} else {
 				c.choiceSet_parent = choiceSet;
 				choiceSet.guiComponent.hbox.getChildren().add(c.getAnchorPane());
+			}
+		}
+	}
+	
+	public static void loadParagraph(InlineCssTextArea area, List<Paragraph<String, String, String>> p) {
+		area.clear();
+		for(var paragraph : p) {
+			for(var d : paragraph.getStyledSegments()) {
+				area.append(d.getSegment(), d.getStyle());
+			}
+			area.appendText(System.lineSeparator());
+		}
+	}
+	
+	public static void loadSegment(InlineCssTextArea area, List<StyledSegment<String, String>> styleSeg) {
+		area.clear();
+		for(var seg : styleSeg) {
+			if(seg == null) {
+				area.appendText(System.lineSeparator());
+			}else {
+				area.append(seg.getSegment(), seg.getStyle());
 			}
 		}
 	}

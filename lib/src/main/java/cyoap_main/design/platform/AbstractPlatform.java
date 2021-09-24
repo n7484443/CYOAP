@@ -1,6 +1,7 @@
 package cyoap_main.design.platform;
 
 import java.io.File;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import cyoap_main.design.ChoiceSet;
 import cyoap_main.design.controller.PlatformGuiController;
 import cyoap_main.unit.Vector2f;
+import cyoap_main.util.LoadUtil;
 import javafx.scene.image.Image;
 
 @JsonAutoDetect(getterVisibility = Visibility.PUBLIC_ONLY)
@@ -33,7 +35,7 @@ public class AbstractPlatform {
 	@JsonIgnore
 	public double start_y = 0;
 
-	public Image image = null;
+	public SimpleEntry<Image, String> image = null;
 	public File image_file = null;
 
 	@JsonIgnore
@@ -126,10 +128,10 @@ public class AbstractPlatform {
 
 	public void update() {
 		if (image_file != null && image == null) {
-			image = new Image(image_file.toURI().toString());
-			guiController.getBackgroundImageView().setImage(image);
+			image = LoadUtil.loadImage(image_file);
+			guiController.getBackgroundImageView().setImage(image.getKey());
 
-			var f_image = image.getWidth() / image.getHeight();
+			var f_image = image.getKey().getWidth() / image.getKey().getHeight();
 			var f_frame = (max_y - min_y) / (max_x - min_x);
 
 			guiController.getBackgroundImageView().setSmooth(true);

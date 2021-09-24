@@ -31,7 +31,7 @@ public class JavaFxMain extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		try {
-		    System.out.println("javafx.runtime.version: " + System.getProperties().get("javafx.runtime.version"));
+			System.out.println("javafx.runtime.version: " + System.getProperties().get("javafx.runtime.version"));
 			instance = this;
 			new LoadUtil();
 			new FontLoader();
@@ -64,7 +64,8 @@ public class JavaFxMain extends Application {
 					window_height);
 			scene_create.getStylesheets().add(LoadUtil.instance.loadCss("/lib/css/style.css"));
 
-			LoadUtil.instance.loadFXML("/lib/design/Design_Create_Slider.fxml");
+			var v = LoadUtil.instance.loadFXML("/lib/design/Design_Create_Slider.fxml");
+			v.getStylesheets().add(LoadUtil.instance.loadCss("/lib/css/style.css"));
 			stage.setTitle("CYOAP " + version);
 			stage.setScene(scene_start);
 

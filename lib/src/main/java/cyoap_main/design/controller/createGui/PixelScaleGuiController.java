@@ -16,6 +16,7 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
+import javafx.util.converter.NumberStringConverter;
 
 public class PixelScaleGuiController implements Initializable {
 	public static PixelScaleGuiController instance;
@@ -34,20 +35,19 @@ public class PixelScaleGuiController implements Initializable {
 	}
 
 	public float range_start = 1.0f;
-	public float range_end = 5.0f;
+	public float range_end = 4.0f;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		anchorPane_slider.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(2), null)));
-		anchorPane_slider.setBorder(new Border(
-				new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(2), BorderWidths.DEFAULT)));
+		anchorPane_slider.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(2), BorderWidths.DEFAULT)));
 		slider_pixelScale.setMin(range_start);
 		slider_pixelScale.setMax(range_end);
-		slider_pixelScale.setValue(4.0f);
+		slider_pixelScale.setValue(2.5f);
 
 		textField_pixelScale.setText(Float.toString(4.0f));
 		
-		textField_pixelScale.textProperty().bind(slider_pixelScale.valueProperty().asString());
+		textField_pixelScale.textProperty().bindBidirectional(slider_pixelScale.valueProperty(), new NumberStringConverter());
 
 		button_pixelScale.setOnMouseClicked(e -> {
 			CreateGuiController.instance.capture((float) slider_pixelScale.getValue());

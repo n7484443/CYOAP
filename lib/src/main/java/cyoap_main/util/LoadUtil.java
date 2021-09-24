@@ -1,5 +1,6 @@
 package cyoap_main.util;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -10,11 +11,14 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
+
+import javax.imageio.ImageIO;
 
 import org.fxmisc.richtext.InlineCssTextArea;
 import org.fxmisc.richtext.model.Paragraph;
@@ -23,6 +27,9 @@ import org.fxmisc.richtext.model.StyledSegment;
 import cyoap_main.core.JavaFxMain;
 import cyoap_main.design.ChoiceSet;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.image.Image;
+import javafx.scene.image.PixelFormat;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
 
@@ -72,6 +79,42 @@ public class LoadUtil {
 	public static File loadFolder() {
 		DirectoryChooser chooser = new DirectoryChooser();
 		return chooser.showDialog(JavaFxMain.instance.stage);
+	}
+	
+	public static SimpleEntry<Image, String> loadImage(File f) {
+		Image image = null;
+		if (!f.toString().contains(".webp")) {
+			image = new Image(f.toURI().toString());
+		} else {
+			int[] pixels = null;
+			try {
+				BufferedImage image_base = ImageIO.read(f);
+				int width = image_base.getWidth();
+				int height = image_base.getHeight();
+				
+				pixels = image_base.getRaster().getPixels(0, 0, width, height, (int[])null);
+				
+				for (int i = 0; i < width; i ++) {
+					for (int j = 0; j < height; j ++) {
+						pixels[i + j*width] = image_base.getRGB(i, j);
+					}
+				}
+				
+				WritableImage img = new WritableImage(width, height);
+				img.getPixelWriter().setPixels(0, 0, width, height, PixelFormat.getIntArgbInstance(), pixels, 0,
+						width);
+				image = img;
+				System.out.println("loaded webp" + image + ":" + image.getUrl());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return new SimpleEntry<Image, String>(image, f.getAbsolutePath());
+	}
+	
+	public static SimpleEntry<Image, String> loadImage(String s) {
+		System.out.println(s);
+		return loadImage(new File(s));
 	}
 
 	public static void setupChoiceSet(ChoiceSet choiceSet) {

@@ -17,7 +17,6 @@ import cyoap_main.design.controller.createGui.CreateGuiController;
 import cyoap_main.unit.Bound2f;
 import cyoap_main.unit.Vector2f;
 import cyoap_main.util.FlagUtil;
-import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -61,8 +60,8 @@ public class ChoiceSet {
 		this("title", null, 0, 0, 0, 0);
 	}
 
-	public ChoiceSet(String title, Image image) {
-		this(title, image != null ? image.getUrl() : null, 0, 0, 0, 0);
+	public ChoiceSet(String title, String image) {
+		this(title, image, 0, 0, 0, 0);
 	}
 
 	public ChoiceSet(float posx, float posy) {

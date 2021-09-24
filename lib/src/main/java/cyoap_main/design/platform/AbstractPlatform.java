@@ -141,6 +141,8 @@ public class AbstractPlatform {
 				guiController.getBackgroundImageView().setFitHeight(max_y - min_y);
 			}
 		}
+		guiController.getChoicePane().setScaleX(scale);
+		guiController.getChoicePane().setScaleY(scale);
 		updateMouseCoordinate();
 		setNodeDepth();
 	}

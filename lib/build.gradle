@@ -25,6 +25,7 @@ targetCompatibility = 16
 dependencies {    
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.4'
 	implementation 'org.fxmisc.richtext:richtextfx:0.10.6'
+	implementation 'com.twelvemonkeys.imageio:imageio-webp:3.7.0'
 }
 
 javafx{

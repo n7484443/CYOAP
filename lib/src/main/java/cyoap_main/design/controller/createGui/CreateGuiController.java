@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -122,7 +123,7 @@ public class CreateGuiController implements PlatformGuiController {
 	public ColorPicker colorpicker_text_editor = new ColorPicker();
 
 	public List<File> dropped;
-	
+
 	public CommandTimeline commandTimeline = new CommandTimeline();
 	public static AbstractPlatform platform;
 
@@ -229,8 +230,14 @@ public class CreateGuiController implements PlatformGuiController {
 			}
 		});
 
+		float maximize = 2f;
+		float minimize = 0.9f;
 		pane_position.setOnScroll(e -> {
-			platform.scale += (e.getDeltaY() / 40.0) / 2;
+			platform.scale += (e.getDeltaY() / 40.0) / 8;
+			if (platform.scale <= minimize)
+				platform.scale = minimize;
+			if (platform.scale >= maximize)
+				platform.scale = maximize;
 		});
 
 		menu_mouse.addEventFilter(MouseEvent.MOUSE_RELEASED, e -> {
@@ -247,7 +254,8 @@ public class CreateGuiController implements PlatformGuiController {
 				commandTimeline.excuteCommand(new CreateCommand(posx, posy));
 			} else if (menu == menu_delete) {
 				if (nowMouseInDataSet != null && nowMouseInDataSet.check_intersect(nowMouseInDataSet, posx, posy)) {
-					commandTimeline.excuteCommand(new DeleteCommand(nowMouseInDataSet, platform.local_x, platform.local_x));
+					commandTimeline
+							.excuteCommand(new DeleteCommand(nowMouseInDataSet, platform.local_x, platform.local_x));
 				}
 			} else if (menu == menu_saveAsImage) {
 				var v = PixelScaleGuiController.instance.anchorPane_slider;
@@ -346,7 +354,7 @@ public class CreateGuiController implements PlatformGuiController {
 
 	public void save_describe_pane() {
 		VarData.isUpdated = true;
-		
+
 		var text = Analyser.parser(text_editor.getText());
 		StringBuilder builder = new StringBuilder();
 		if (text != null)
@@ -354,7 +362,7 @@ public class CreateGuiController implements PlatformGuiController {
 		if (nowEditDataSet != null) {
 			nowEditDataSet.string_title = text_title.getText();
 			if (image != null)
-				nowEditDataSet.string_image_name = image.getUrl();
+				nowEditDataSet.string_image_name = image.getValue();
 			nowEditDataSet.update();
 			Color t = ChoiceSet.baseColor;
 			try {
@@ -368,14 +376,14 @@ public class CreateGuiController implements PlatformGuiController {
 						this.button_outline.isSelected());
 				nowEditDataSet.updateFlag();
 			}
-			
+
 			nowEditDataSet.segmentList.clear();
-			for(int i = 0; i < text_editor.getDocument().getParagraphs().size(); i++) {
+			for (int i = 0; i < text_editor.getDocument().getParagraphs().size(); i++) {
 				var v = text_editor.getDocument().getParagraphs().get(i);
-				for(var s : v.getStyledSegments()) {
+				for (var s : v.getStyledSegments()) {
 					nowEditDataSet.segmentList.add(s);
 				}
-				if(i < text_editor.getDocument().getParagraphs().size() - 1) {
+				if (i < text_editor.getDocument().getParagraphs().size() - 1) {
 					nowEditDataSet.segmentList.add(null);
 				}
 			}
@@ -454,12 +462,12 @@ public class CreateGuiController implements PlatformGuiController {
 		platform = new MakePlatform(instance);
 	}
 
-	public Image image = null;
-	
+	public SimpleEntry<Image, String> image = null;
+
 	public void update() {
 		if (dropped != null && image == null) {
-			image = new Image(dropped.get(0).toURI().toString());
-			imageview_describe.setImage(image);
+			image = LoadUtil.loadImage(dropped.get(0));
+			imageview_describe.setImage(image.getKey());
 		}
 
 		if (VarData.isUpdated) {
@@ -486,8 +494,8 @@ public class CreateGuiController implements PlatformGuiController {
 		LoadUtil.loadSegment(text_editor, dataSet.segmentList);
 		colorpicker.setValue(dataSet.color);
 		if (dataSet.string_image_name != null && !dataSet.string_image_name.isEmpty()) {
-			this.image = new Image(dataSet.string_image_name);
-			imageview_describe.setImage(image);
+			image = LoadUtil.loadImage(dataSet.string_image_name);
+			imageview_describe.setImage(image.getKey());
 		}
 		button_outline.setSelected(FlagUtil.getFlag(dataSet.flag, ChoiceSet.flagPosition_selectable));
 		dataSet.updateFlag();
@@ -499,7 +507,6 @@ public class CreateGuiController implements PlatformGuiController {
 	public void changeTab(Tab tab) {
 		tabpane_make.getSelectionModel().select(tab);
 	}
-
 
 	public void save_shortcut() {
 		save_describe_pane();

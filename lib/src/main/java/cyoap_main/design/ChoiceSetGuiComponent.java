@@ -10,7 +10,6 @@ import cyoap_main.design.controller.createGui.CreateGuiController;
 import cyoap_main.unit.Bound2f;
 import cyoap_main.unit.Vector2f;
 import cyoap_main.util.LoadUtil;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Border;
@@ -171,8 +170,10 @@ public class ChoiceSetGuiComponent {
 		area.clear();
 		title.setText(motherChoiceSet.string_title);
 		updateColor();
-		if (motherChoiceSet.string_image_name != null && !motherChoiceSet.string_image_name.isEmpty())
-			image.setImage(new Image(motherChoiceSet.string_image_name));
+		if (motherChoiceSet.string_image_name != null && !motherChoiceSet.string_image_name.isEmpty()) {
+			var simpleEntry = LoadUtil.loadImage(motherChoiceSet.string_image_name);
+			image.setImage(simpleEntry.getKey());
+		}
 	}
 
 	public void updatePos(double moveX, double moveY) {

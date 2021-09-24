@@ -56,6 +56,7 @@ public class ChoiceSetGuiComponent {
 		motherChoiceSet = dataSet;
 		
 		try {
+			area.setWrapText(true);
 			area.getStylesheets().add(LoadUtil.instance.loadCss("/lib/css/texteditor.css"));
 			area.getStyleClass().add("text-editor");
 			area.setStyle("-color-text: white ;");
@@ -127,7 +128,7 @@ public class ChoiceSetGuiComponent {
 					dataSet.posy = v.y;
 
 					moveCommand.setEnd(v.x, v.y);
-					CreateGuiController.instance.addCommand(moveCommand);
+					CreateGuiController.instance.commandTimeline.addCommand(moveCommand);
 				}
 				moveCommand = null;
 
@@ -152,7 +153,7 @@ public class ChoiceSetGuiComponent {
 					dataSet.posy = v.y == 0 ? dataSet.posy : v.y;
 				}
 				if (final_choice != null) {
-					CreateGuiController.instance.excuteCommand(new CombineCommand(final_choice, dataSet));
+					CreateGuiController.instance.commandTimeline.excuteCommand(new CombineCommand(final_choice, dataSet));
 				}
 			}
 			this.pane.setViewOrder(0.0d);
@@ -168,7 +169,6 @@ public class ChoiceSetGuiComponent {
 
 	public void update() {
 		area.clear();
-		area.appendText(motherChoiceSet.string_describe);
 		title.setText(motherChoiceSet.string_title);
 		updateColor();
 		if (motherChoiceSet.string_image_name != null && !motherChoiceSet.string_image_name.isEmpty())

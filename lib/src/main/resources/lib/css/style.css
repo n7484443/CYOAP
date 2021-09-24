@@ -1,32 +1,41 @@
 .root{
-	-fx-font-size: 10pt;
+	-fx-font-size: 10.0pt;
 	-fx-font-family: NanumGothic;
 }
+
 .button{
 	-fx-background-color: LIGHTGRAY;
 }
+
 .button:hover {
-    -fx-background-color: derive(LIGHTGRAY, -20%);
+    -fx-background-color: derive(LIGHTGRAY, -20.0%);
 }
+
 .radio-button .radio{
 	-fx-background-color: LIGHTGRAY;
 }
+
 .radio-button .radio:hover {
-    -fx-background-color: derive(LIGHTGRAY, -20%);
+    -fx-background-color: derive(LIGHTGRAY, -20.0%);
 }
+
 .tab {
     -fx-background-color: LIGHTGRAY;
 }
+
 .tab:selected {
     -fx-background-color: WHITESMOKE;
 }
+
 .tab-header-background {
-    -fx-background-color: derive(WHITESMOKE, -10%);
+    -fx-background-color: derive(WHITESMOKE, -10.0%);
 }
+
 #pane_make,#pane_create{
-	-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 3, 3);
-	-fx-background-color: derive(#525252,20%);
+	-fx-effect: dropshadow(gaussian, rgba(0.0,0.0,0.0,0.3), 10.0, 0.0, 3.0, 3.0);
+	-fx-background-color: derive(#525252,20.0%);
 }
+
 #anchorPane_slider,#menu_mouse,#pane_choiceset{
-	-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 3, 3);
+	-fx-effect: dropshadow(gaussian, rgba(0.0,0.0,0.0,0.3), 10.0, 0.0, 3.0, 3.0);
 }

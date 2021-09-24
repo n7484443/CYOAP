@@ -9,6 +9,8 @@ public class MoveCommand extends AbstractCommand{
 	public float end_y;
 	public ChoiceSet choiceset;
 	
+	public MoveCommand() {}
+	
 	public MoveCommand(float start_x, float start_y, ChoiceSet choiceset) {
 		this.start_x = start_x;
 		this.start_y = start_y;
@@ -27,6 +29,11 @@ public class MoveCommand extends AbstractCommand{
 	@Override
 	public void undo() {
 		choiceset.setPosition(start_x, start_y);		
+	}
+
+	@Override
+	public void check() {
+		this.choiceset = getChoiceSetFromTitle(this.choiceset);
 	}
 
 	@Override

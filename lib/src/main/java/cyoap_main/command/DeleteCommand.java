@@ -7,6 +7,8 @@ public class DeleteCommand extends AbstractCommand {
 	public double localy;
 	public ChoiceSet choiceSet;
 
+	public DeleteCommand() {}
+
 	public DeleteCommand(ChoiceSet choiceSet, double local_x, double local_y) {
 		this.choiceSet = choiceSet;
 		this.localx = local_x;
@@ -28,6 +30,11 @@ public class DeleteCommand extends AbstractCommand {
 		choiceSet.updateFlag();
 	}
 
+	@Override
+	public void check() {
+		this.choiceSet = getChoiceSetFromTitle(this.choiceSet);
+	}
+	
 	@Override
 	public String getName() {
 		return "Delete Node";

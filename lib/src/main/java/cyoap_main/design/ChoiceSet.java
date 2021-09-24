@@ -26,14 +26,12 @@ import javafx.scene.paint.Color;
 public class ChoiceSet {
 	public String string_title;
 	
-	public String string_describe;
-	
 	public List<StyledSegment<String, String>> segmentList = new ArrayList<StyledSegment<String, String>>();
 	
 	public String string_image_name;
 
 	@JsonIgnore
-	public static final Color baseColor = Color.web("#96d9ff");
+	public static final Color baseColor = Color.web("#E1E3ED");
 
 	public Color color = baseColor;// blue
 
@@ -60,25 +58,24 @@ public class ChoiceSet {
 	public Bound2f bound;
 
 	public ChoiceSet() {
-		this("title", "describe", null, 0, 0, 0, 0);
+		this("title", null, 0, 0, 0, 0);
 	}
 
-	public ChoiceSet(String title, String describe, Image image) {
-		this(title, describe, image != null ? image.getUrl() : null, 0, 0, 0, 0);
+	public ChoiceSet(String title, Image image) {
+		this(title, image != null ? image.getUrl() : null, 0, 0, 0, 0);
 	}
 
 	public ChoiceSet(float posx, float posy) {
-		this("title", "describe", null, posx, posy, 0, 0);
+		this("title", null, posx, posy, 0, 0);
 	}
 
-	public ChoiceSet(String title, String describe) {
-		this(title, describe, null, 0, 0, 0, 0);
+	public ChoiceSet(String title) {
+		this(title, null, 0, 0, 0, 0);
 	}
 
-	public ChoiceSet(String title, String describe, String image_name, float posx, float posy, float width,
+	public ChoiceSet(String title, String image_name, float posx, float posy, float width,
 			float height) {
 		this.string_title = title;
-		this.string_describe = describe;
 		this.string_image_name = image_name;
 		this.posx = posx;
 		this.posy = posy;

@@ -14,12 +14,11 @@ import cyoap_main.design.ChoiceSet;
 import cyoap_main.design.platform.AbstractPlatform;
 import cyoap_main.design.platform.PlayPlatform;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
-public class PlayGUIController implements Initializable, PlatformGuiController {
+public class PlayGUIController implements PlatformGuiController {
 	public static PlayGUIController instance;
 
 	public AbstractPlatform platform;

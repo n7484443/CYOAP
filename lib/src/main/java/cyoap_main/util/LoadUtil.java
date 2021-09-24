@@ -101,18 +101,21 @@ public class LoadUtil {
 			for(var d : paragraph.getStyledSegments()) {
 				area.append(d.getSegment(), d.getStyle());
 			}
-			area.appendText(System.lineSeparator());
+			area.append(System.lineSeparator(), "");
 		}
+		area.recreateParagraphGraphic(0);
 	}
 	
 	public static void loadSegment(InlineCssTextArea area, List<StyledSegment<String, String>> styleSeg) {
 		area.clear();
-		for(var seg : styleSeg) {
-			if(seg == null) {
-				area.appendText(System.lineSeparator());
+		for(int i = 0; i < styleSeg.size(); i++) {
+			var seg = styleSeg.get(i);
+			if(seg == null && i != styleSeg.size() - 1) {
+				area.append(System.lineSeparator(), "");
 			}else {
 				area.append(seg.getSegment(), seg.getStyle());
 			}
 		}
+		area.recreateParagraphGraphic(0);
 	}
 }

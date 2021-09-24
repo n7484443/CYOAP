@@ -2,18 +2,27 @@ package cyoap_main.command;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import cyoap_main.design.ChoiceSet;
 import cyoap_main.design.controller.createGui.CreateGuiController;
 import cyoap_main.unit.Vector2f;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.PUBLIC_ONLY, setterVisibility = JsonAutoDetect.Visibility.NONE)
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
 public abstract class AbstractCommand {
 	public abstract void excute();
 
 	public abstract void undo();
 
+	public void check() {
+	}
+
+	@JsonIgnore
 	public abstract String getName();
+
+	public AbstractCommand() {
+	}
 
 	@JsonIgnore
 	public CreateGuiController control = CreateGuiController.instance;
@@ -46,5 +55,15 @@ public abstract class AbstractCommand {
 			y = CreateGuiController.platform.max_y - choiceSet.getHeight();
 		}
 		return new Vector2f(x, y);
+	}
+
+	@JsonIgnore
+	public ChoiceSet getChoiceSetFromTitle(ChoiceSet choice) {
+		for (var v : control.getPlatform().choiceSetList) {
+			if (v.string_title.equals(choice.string_title)) {
+				return v;
+			}
+		}
+		return choice;
 	}
 }

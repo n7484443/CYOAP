@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 import javax.imageio.ImageIO;
 import org.fxmisc.richtext.InlineCssTextArea;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import cyoap_main.command.AbstractCommand;
+import cyoap_main.command.CommandTimeline;
 import cyoap_main.command.CreateCommand;
 import cyoap_main.command.DeleteCommand;
 import cyoap_main.core.JavaFxMain;
@@ -30,7 +30,6 @@ import cyoap_main.util.FlagUtil;
 import cyoap_main.util.LoadUtil;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
@@ -64,7 +63,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Transform;
 
-public class CreateGuiController implements Initializable, PlatformGuiController {
+public class CreateGuiController implements PlatformGuiController {
 	public static CreateGuiController instance;
 	@FXML
 	public AnchorPane pane_position;
@@ -123,9 +122,8 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 	public ColorPicker colorpicker_text_editor = new ColorPicker();
 
 	public List<File> dropped;
-
-	public boolean isCommandListUpdated = false;
-	public List<AbstractCommand> commandList = new ArrayList<AbstractCommand>();
+	
+	public CommandTimeline commandTimeline = new CommandTimeline();
 	public static AbstractPlatform platform;
 
 	@Override
@@ -147,6 +145,7 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 		pane_text_editor.setCenter(text_editor);
 
 		try {
+			text_editor.setWrapText(true);
 			text_editor.getStylesheets().add(LoadUtil.instance.loadCss("/lib/css/texteditor.css"));
 			text_editor.getStyleClass().add("text-editor");
 			text_editor.setStyle("-color-text: white ;");
@@ -245,10 +244,10 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 			var posx = (float) (platform.local_x + platform.start_x - boundsInScene.getMinX());
 			var posy = (float) (platform.local_y + platform.start_y - boundsInScene.getMinY());
 			if (menu == menu_create) {
-				excuteCommand(new CreateCommand(posx, posy));
+				commandTimeline.excuteCommand(new CreateCommand(posx, posy));
 			} else if (menu == menu_delete) {
 				if (nowMouseInDataSet != null && nowMouseInDataSet.check_intersect(nowMouseInDataSet, posx, posy)) {
-					excuteCommand(new DeleteCommand(nowMouseInDataSet, platform.local_x, platform.local_x));
+					commandTimeline.excuteCommand(new DeleteCommand(nowMouseInDataSet, platform.local_x, platform.local_x));
 				}
 			} else if (menu == menu_saveAsImage) {
 				var v = PixelScaleGuiController.instance.anchorPane_slider;
@@ -345,8 +344,6 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 
 	public double sensitivity = 1f;
 
-	public int command_now = 0;
-
 	public void save_describe_pane() {
 		VarData.isUpdated = true;
 		
@@ -356,7 +353,6 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 			text.stream().forEach(t -> builder.append(t));
 		if (nowEditDataSet != null) {
 			nowEditDataSet.string_title = text_title.getText();
-			nowEditDataSet.string_describe = text_editor.getText();
 			if (image != null)
 				nowEditDataSet.string_image_name = image.getUrl();
 			nowEditDataSet.update();
@@ -459,7 +455,7 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 	}
 
 	public Image image = null;
-
+	
 	public void update() {
 		if (dropped != null && image == null) {
 			image = new Image(dropped.get(0).toURI().toString());
@@ -476,16 +472,7 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 			view_var_field.getItems().clear();
 			view_var_field.getItems().setAll(name_list);
 		}
-		if (isCommandListUpdated) {
-			isCommandListUpdated = false;
-			List<String> name_list = new ArrayList<String>();
-			for (var command : commandList) {
-				name_list.add(command.getName());
-			}
-			view_command_timeline.getItems().clear();
-			view_command_timeline.getItems().setAll(name_list);
-			view_command_timeline.getSelectionModel().select(command_now);
-		}
+		commandTimeline.update();
 		platform.update();
 	}
 
@@ -496,8 +483,6 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 
 	public void loadFromDataSet(ChoiceSet dataSet) {
 		text_title.setText(dataSet.string_title);
-		text_editor.clear();
-		text_editor.appendText(dataSet.string_describe);
 		LoadUtil.loadSegment(text_editor, dataSet.segmentList);
 		colorpicker.setValue(dataSet.color);
 		if (dataSet.string_image_name != null && !dataSet.string_image_name.isEmpty()) {
@@ -515,53 +500,24 @@ public class CreateGuiController implements Initializable, PlatformGuiController
 		tabpane_make.getSelectionModel().select(tab);
 	}
 
-	public void excuteCommand(AbstractCommand command) {
-		command.excute();
-		addCommand(command);
-	}
-
-	public void addCommand(AbstractCommand command) {
-		for (int i = command_now + 1; i < commandList.size(); i++) {
-			commandList.remove(i);
-		}
-		commandList.add(command);
-		command_now = commandList.size() - 1;
-		isCommandListUpdated = true;
-	}
-
-	public void undoCommand() {
-		if (command_now >= 0) {
-			var command = commandList.get(command_now);
-			command.undo();
-			command_now -= 1;
-			isCommandListUpdated = true;
-		}
-	}
-
-	public void redoCommand() {
-		if (command_now < commandList.size() - 1) {
-			command_now += 1;
-			var command = commandList.get(command_now);
-			command.excute();
-			isCommandListUpdated = true;
-		}
-	}
 
 	public void save_shortcut() {
 		save_describe_pane();
 		save_position_pane();
+		commandTimeline.save();
 	}
 
 	public void load_shortcut() {
 		loadToDataSet();
+		commandTimeline.load();
 	}
 
 	public void undo_shortcut() {
-		undoCommand();
+		commandTimeline.undoCommand();
 	}
 
 	public void redo_shortcut() {
-		redoCommand();
+		commandTimeline.redoCommand();
 	}
 
 	@Override

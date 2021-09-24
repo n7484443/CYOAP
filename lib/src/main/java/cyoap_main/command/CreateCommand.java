@@ -5,6 +5,8 @@ import cyoap_main.design.ChoiceSet;
 public class CreateCommand extends AbstractCommand{
 	public ChoiceSet choiceSet;
 	
+	public CreateCommand() {}
+	
 	public CreateCommand(float x, float y) {
 		choiceSet = new ChoiceSet(x, y);
 		var v = checkOutline(choiceSet, x, y);
@@ -24,6 +26,12 @@ public class CreateCommand extends AbstractCommand{
 		control.getPlatform().choiceSetList.remove(choiceSet);
 		control.nowMouseInDataSet = null;
 	}
+
+	@Override
+	public void check() {
+		this.choiceSet = getChoiceSetFromTitle(this.choiceSet);
+	}
+	
 	@Override
 	public String getName() {
 		return "Create Node";

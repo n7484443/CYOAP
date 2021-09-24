@@ -11,7 +11,7 @@ plugins {
 	id 'eclipse'
 	id 'application'
 	id 'org.openjfx.javafxplugin' version '0.0.10'
-	id 'org.beryx.jlink' version '2.24.0'
+	id 'org.beryx.jlink' version '2.24.2'
 }
 
 repositories {
@@ -23,7 +23,7 @@ sourceCompatibility = 16
 targetCompatibility = 16
 
 dependencies {    
-	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.2'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.4'
 	implementation 'org.fxmisc.richtext:richtextfx:0.10.6'
 }
 

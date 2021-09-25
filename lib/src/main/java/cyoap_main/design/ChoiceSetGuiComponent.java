@@ -78,7 +78,7 @@ public class ChoiceSetGuiComponent {
 		pane_border.setBottom(area);
 		pane_border.setBorder(new Border(new BorderStroke(null, null, Color.BLACK, null, null, null,
 				BorderStrokeStyle.DASHED, null, new CornerRadii(2), new BorderWidths(2), null)));
-
+		
 		area.setEditable(false);
 
 		pane_border.setPrefWidth(200);

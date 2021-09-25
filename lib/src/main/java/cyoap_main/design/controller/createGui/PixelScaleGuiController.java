@@ -39,8 +39,10 @@ public class PixelScaleGuiController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		anchorPane_slider.setOpacity(1);
 		anchorPane_slider.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(2), null)));
 		anchorPane_slider.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(2), BorderWidths.DEFAULT)));
+		anchorPane_slider.toFront();
 		slider_pixelScale.setMin(range_start);
 		slider_pixelScale.setMax(range_end);
 		slider_pixelScale.setValue(2.5f);

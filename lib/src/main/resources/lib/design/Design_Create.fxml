@@ -23,8 +23,7 @@
 						<TextField layoutX="4.0" layoutY="3.0" prefHeight="29.0" prefWidth="161.0" />
 						<ListView fx:id="view_var_field" layoutX="4.0" layoutY="37.0" prefHeight="364.0" prefWidth="161.0" />
 						<ListView fx:id="view_var_type" layoutX="4.0" layoutY="407.0" prefHeight="126.0" prefWidth="161.0" />
-						<ListView fx:id="view_command_timeline" layoutX="4.0" layoutY="540.0" prefHeight="105.0" prefWidth="161.0" />
-						<RadioButton fx:id="button_darkmode" layoutX="4.0" layoutY="650.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="95.0" text="DarkMode" />
+						<ListView fx:id="view_command_timeline" layoutX="4.0" layoutY="541.0" prefHeight="126.0" prefWidth="161.0" />
 					</children>
 				</AnchorPane>
 				<TabPane fx:id="tabpane_make" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
@@ -53,12 +52,12 @@
 							<content>
 								<AnchorPane fx:id="pane_describe" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
 									<children>
-										<Button fx:id="button_next" layoutX="971.0" layoutY="614.0" mnemonicParsing="false" text="Next" />
-										<Button fx:id="button_save" layoutX="917.0" layoutY="614.0" mnemonicParsing="false" text="Save" />
+										<Button fx:id="button_next" layoutX="972.0" layoutY="609.0" mnemonicParsing="false" text="Next" />
+										<Button fx:id="button_save" layoutX="921.0" layoutY="609.0" mnemonicParsing="false" text="Save" />
 										<TextField fx:id="text_title" alignment="CENTER" layoutX="6.0" layoutY="3.0" prefHeight="22.0" prefWidth="1012.0" text="Title" />
 												<ImageView fx:id="imageview_describe" fitHeight="576.0" fitWidth="400.0" layoutX="6.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true" />
 										<RadioButton fx:id="button_outline" layoutX="893.0" layoutY="34.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="125.0" text="외곽선 제거" />
-                              			<ColorPicker fx:id="colorpicker" layoutX="6.0" layoutY="614.0" prefHeight="25.0" prefWidth="95.0" />
+                              			<ColorPicker fx:id="colorpicker" layoutX="6.0" layoutY="609.0" prefHeight="25.0" prefWidth="95.0" />
                               			<RadioButton fx:id="button_horizon" layoutX="893.0" layoutY="58.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="125.0" text="가로로 설정" />
 									</children>
 								</AnchorPane>
@@ -68,7 +67,8 @@
 						<content>
 								<AnchorPane fx:id="pane_general" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                            <children>
-                              <SplitMenuButton layoutX="251.0" layoutY="70.0" mnemonicParsing="false" text="SplitMenuButton">
+            						<RadioButton fx:id="button_darkmode" layoutX="8.0" layoutY="5.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="95.0" text="DarkMode" />
+                              <SplitMenuButton layoutX="103.0" layoutY="2.0" mnemonicParsing="false" text="SplitMenuButton">
                                 <items>
                                   <MenuItem mnemonicParsing="false" text="Action 1" />
                                   <MenuItem mnemonicParsing="false" text="Action 2" />

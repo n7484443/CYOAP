@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import cyoap_main.design.ChoiceSet;
-import cyoap_main.design.controller.PlatformGuiController;
+import cyoap_main.design.controller.IPlatformGuiController;
 import cyoap_main.unit.Vector2f;
 import cyoap_main.util.LoadUtil;
 import javafx.scene.image.Image;
@@ -25,21 +25,25 @@ public class AbstractPlatform {
 	public int max_x = 800;
 	public int max_y = 1600;
 	public float scale = 1.0f;
+	public float maximize = 2f;
+	public float minimize = 0.9f;
+
+	public double sensitivity = 1f;
 
 	@JsonIgnore
 	public double move_x = 0;
 	@JsonIgnore
 	public double move_y = 0;
 	@JsonIgnore
-	public double start_x = 0;
+	public double start_mouse_x = 0;
 	@JsonIgnore
-	public double start_y = 0;
+	public double start_mouse_y = 0;
 
 	public SimpleEntry<Image, String> image = null;
 	public File image_file = null;
 
 	@JsonIgnore
-	public PlatformGuiController guiController;
+	public IPlatformGuiController guiController;
 	public int flag = 0;
 
 	@JsonIgnore
@@ -108,7 +112,7 @@ public class AbstractPlatform {
 	public AbstractPlatform() {
 	}
 
-	public AbstractPlatform(PlatformGuiController guiController) {
+	public AbstractPlatform(IPlatformGuiController guiController) {
 		this.guiController = guiController;
 	}
 

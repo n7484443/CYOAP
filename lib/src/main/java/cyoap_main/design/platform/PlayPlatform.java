@@ -1,10 +1,10 @@
 package cyoap_main.design.platform;
 
-import cyoap_main.design.controller.PlatformGuiController;
+import cyoap_main.design.controller.IPlatformGuiController;
 
 public class PlayPlatform extends AbstractPlatform{
 
-	public PlayPlatform(PlatformGuiController guiController) {
+	public PlayPlatform(IPlatformGuiController guiController) {
 		super(guiController);
 	}
 

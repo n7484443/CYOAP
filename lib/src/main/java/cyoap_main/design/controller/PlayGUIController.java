@@ -1,60 +1,61 @@
 package cyoap_main.design.controller;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.ResourceBundle;
-import java.util.stream.Stream;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import cyoap_main.core.JavaFxMain;
-import cyoap_main.design.ChoiceSet;
+
 import cyoap_main.design.platform.AbstractPlatform;
 import cyoap_main.design.platform.PlayPlatform;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
-public class PlayGUIController implements PlatformGuiController {
+public class PlayGUIController implements IPlatformGuiController {
 	public static PlayGUIController instance;
 
 	public AbstractPlatform platform;
-	
+
 	@FXML
 	public AnchorPane pane_play;
 	@FXML
 	public ImageView imageview_background;
-	
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
+		pane_play.setOnMousePressed(e -> {
+			platform.start_mouse_x = e.getSceneX();
+			platform.start_mouse_y = e.getSceneY();
+		});
+
+		pane_play.setOnScroll(e -> {
+			platform.scale += (e.getDeltaY() / 40.0) / 8;
+			if (platform.scale <= platform.minimize)
+				platform.scale = platform.minimize;
+			if (platform.scale >= platform.maximize)
+				platform.scale = platform.maximize;
+		});
+		pane_play.setOnMouseDragged(e -> {
+			if (e.getButton().equals(MouseButton.PRIMARY)) {
+				double movex = platform.sensitivity * (e.getSceneX() - platform.start_mouse_x);
+				double movey = platform.sensitivity * (e.getSceneY() - platform.start_mouse_y);
+				platform.local_x -= movex;
+				platform.local_y -= movey;
+				platform.start_mouse_x = e.getSceneX();
+				platform.start_mouse_y = e.getSceneY();
+				if (platform.local_x + this.getChoicePane().getWidth() >= platform.max_x)
+					platform.local_x = platform.max_x - this.getChoicePane().getWidth();
+				if (platform.local_y + this.getChoicePane().getHeight() >= platform.max_y)
+					platform.local_y = platform.max_y - this.getChoicePane().getHeight();
+				if (platform.local_x <= platform.min_x)
+					platform.local_x = platform.min_x;
+				if (platform.local_y <= platform.min_y)
+					platform.local_y = platform.min_y;
+				platform.updateMouseCoordinate();
+			}
+		});
 	}
 
-	public void load() {
-		platform.clearNodeOnPanePosition();
-		var path = new File(JavaFxMain.instance.directory.getAbsolutePath() + "/choiceSet");
-		var file_list = Stream.of(path.list()).filter(name -> name.endsWith(".json")).toList();
-		ObjectMapper objectMapper = new ObjectMapper();
-		try {
-			for (var file : file_list) {
-				System.out.println(file.toString());
-
-				InputStreamReader writer = new InputStreamReader(
-						new FileInputStream(path.getAbsolutePath() + "/" + file), StandardCharsets.UTF_8);
-
-				var data = objectMapper.readValue(writer, ChoiceSet.class);
-				data.setUp(this.pane_play);
-				data.update();
-				this.platform.choiceSetList.add(data);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	}	
 	public PlayGUIController() {
 		instance = this;
 		platform = new PlayPlatform(instance);

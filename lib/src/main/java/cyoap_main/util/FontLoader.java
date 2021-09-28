@@ -1,42 +1,82 @@
 package cyoap_main.util;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.stream.Collectors;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Enumeration;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.stream.IntStream;
 
 import javafx.scene.text.Font;
 
 public class FontLoader {
 	public int[] size;
-	public String fontFolder = "/lib/font";
+	public String fontFolder = "lib/font";
 
 	public FontLoader() {
 		System.setProperty("prism.lcdtext", "false");
-		size = IntStream.range(1, 20).toArray();
+		
+		size = IntStream.range(1, 25).toArray();
 
-		loadFont("/NanumGothic/NanumGothic");
-		loadFont("/NanumBarunGothic/NanumBarunGothic");
-	}
-
-	public void loadFont(String str) {
-		System.out.println("load font : " + fontFolder + str + ".tff");
-		for (var s : size) {
-			Font.loadFont(LoadUtil.class.getResourceAsStream(fontFolder + str + ".ttf"), s);
+		try {
+			loadAllFont(fontFolder);
+		} catch (URISyntaxException | IOException e) {
+			e.printStackTrace();
 		}
 	}
 
-	public void loadAllFont(String str) {
-		System.out.println("load font : " + fontFolder + str);
-		var stream = LoadUtil.class.getResourceAsStream(fontFolder + str);
-		var isreader = new InputStreamReader(stream);
-		var bfreader = new BufferedReader(isreader);
-		var list = bfreader.lines().map(l -> fontFolder + str + "/" + l + ".tff")
-				.map(r -> LoadUtil.class.getResourceAsStream(r)).collect(Collectors.toList());
-		for (var l : list) {
-			for (var s : size) {
-				Font.loadFont(l, s);
+	public void loadFont(String str) {
+		for (var s : size) {
+			var font = Font.loadFont(LoadUtil.class.getResourceAsStream("/" + str), s);
+			if (font == null) {
+				System.out.println("error with " + str);
 			}
+		}
+	}
+
+	public void loadFonts(String str) {
+		for (var s : size) {
+			var font = Font.loadFont(LoadUtil.class.getResourceAsStream(str), s);
+			if (font == null) {
+				System.out.println("error with " + str);
+			}
+		}
+	}
+
+	public void loadAllFont(String str) throws URISyntaxException, IOException {
+		final File jarFile = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
+
+		if (jarFile.isFile()) { // Run with IDE
+			final JarFile jar = new JarFile(jarFile);
+			final Enumeration<JarEntry> entries = jar.entries(); // gives ALL entries in jar
+			while (entries.hasMoreElements()) {
+				final String name = entries.nextElement().getName();
+				if (name.startsWith(str + "/")) { // filter according to the path
+					if (name.endsWith(".ttf")) { // filter according to the ttf file
+						loadFont(name);
+					}
+				}
+			}
+			jar.close();
+		} else { // Run with excuter
+			Path p = Paths.get(URI.create("jrt:/")).resolve("/modules/cyoap_module/lib/font");
+			Files.list(p).forEach(m -> {
+				var p2 = p.resolve(m);
+				try {
+					Files.list(p2).forEach(m2 -> {
+						loadFonts(m2.toString().replace("/modules/cyoap_module", ""));
+					});
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			});
+			System.out.println();
 		}
 	}
 }

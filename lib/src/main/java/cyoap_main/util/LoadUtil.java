@@ -104,7 +104,6 @@ public class LoadUtil {
 				img.getPixelWriter().setPixels(0, 0, width, height, PixelFormat.getIntArgbInstance(), pixels, 0,
 						width);
 				image = img;
-				System.out.println("loaded webp" + image + ":" + image.getUrl());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

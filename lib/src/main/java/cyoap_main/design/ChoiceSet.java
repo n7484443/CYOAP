@@ -17,16 +17,17 @@ import cyoap_main.design.controller.createGui.CreateGuiController;
 import cyoap_main.unit.Bound2f;
 import cyoap_main.unit.Vector2f;
 import cyoap_main.util.FlagUtil;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.PUBLIC_ONLY, setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class ChoiceSet {
 	public String string_title;
-	
+
 	public List<StyledSegment<String, String>> segmentList = new ArrayList<StyledSegment<String, String>>();
 	
+
 	public String string_image_name;
 
 	@JsonIgnore
@@ -54,6 +55,11 @@ public class ChoiceSet {
 	public float height;
 
 	@JsonIgnore
+	public float minWidth = 200;
+	@JsonIgnore
+	public float minHeight = 250;
+
+	@JsonIgnore
 	public Bound2f bound;
 
 	public ChoiceSet() {
@@ -72,8 +78,7 @@ public class ChoiceSet {
 		this(title, null, 0, 0, 0, 0);
 	}
 
-	public ChoiceSet(String title, String image_name, float posx, float posy, float width,
-			float height) {
+	public ChoiceSet(String title, String image_name, float posx, float posy, float width, float height) {
 		this.string_title = title;
 		this.string_image_name = image_name;
 		this.posx = posx;
@@ -96,21 +101,39 @@ public class ChoiceSet {
 	public boolean check_intersect(ChoiceSet a, float x, float y) {
 		return a.bound.intersect(new Vector2f(x, y));
 	}
-
-	@JsonIgnore
+	
 	public float getWidth() {
-		return width == 0 ? (float) getAnchorPane().getLayoutBounds().getWidth() : width;
+		if (width < minWidth) {
+			width = minWidth;
+		} else {
+			guiComponent.pane.setPrefWidth(width);
+		}
+		return width;
 	}
-
-	@JsonIgnore
+	
 	public float getHeight() {
-		return height == 0 ? (float) getAnchorPane().getLayoutBounds().getHeight() : height;
+		if (height < minHeight) {
+			height = minHeight;
+		} else {
+			guiComponent.pane.setPrefHeight(height);
+		}
+		return height;
 	}
 
 	public void update() {
-		guiComponent.update();
+		updateSize();
 		updateBounds();
 		updateColor();
+		guiComponent.update();
+	}
+
+	public void updateSize() {
+		guiComponent.pane.setPrefWidth(width);
+		guiComponent.pane.setPrefHeight(height);
+	}
+	public void updateSizeFrom() {
+		width = (float) getAnchorPane().getLayoutBounds().getWidth();
+		height = (float) getAnchorPane().getLayoutBounds().getHeight();
 	}
 
 	public void updateBounds() {
@@ -187,7 +210,7 @@ public class ChoiceSet {
 	}
 
 	@JsonIgnore
-	public BorderPane getAnchorPane() {
+	public GridPane getAnchorPane() {
 		return guiComponent.pane;
 	}
 
@@ -198,16 +221,17 @@ public class ChoiceSet {
 	public void setColor(String s) {
 		updateColor(Color.web(s));
 	}
-	
+
 	@JsonGetter("segmentList")
 	@JsonProperty("segmentList")
 	public List<String> getSegmentList() {
 		List<String> strList = new ArrayList<String>();
-		if(segmentList.isEmpty())return strList;
-		for(var v : segmentList) {
-			if(v == null) {
+		if (segmentList.isEmpty())
+			return strList;
+		for (var v : segmentList) {
+			if (v == null) {
 				strList.add("");
-			}else {
+			} else {
 				strList.add("{" + v.getSegment() + "}:{" + v.getStyle() + "}");
 			}
 		}
@@ -216,10 +240,10 @@ public class ChoiceSet {
 
 	@JsonSetter("segmentList")
 	public void setSegmentList(List<String> s) {
-		for(var v : s) {
-			if(v.isBlank()) {
+		for (var v : s) {
+			if (v.isBlank()) {
 				segmentList.add(null);
-			}else {
+			} else {
 				var splitedStr = v.split("\\}:\\{");
 				splitedStr[0] = splitedStr[0].substring(1);
 				splitedStr[1] = splitedStr[1].substring(0, splitedStr[1].length() - 1);
@@ -227,5 +251,12 @@ public class ChoiceSet {
 				segmentList.add(segment);
 			}
 		}
+	}
+
+	public void changeSize(float w, float h) {
+		this.width = w;
+		this.height = h;
+		getWidth();
+		getHeight();
 	}
 }

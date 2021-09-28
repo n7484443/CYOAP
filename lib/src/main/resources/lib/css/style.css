@@ -87,3 +87,7 @@
 #anchorPane_slider,#menu_mouse,#pane_choiceset{
 	-fx-effect: dropshadow(gaussian, rgba(0.0,0.0,0.0,0.3), 10.0, 0.0, 3.0, 3.0);
 }
+#title_choiceset, #text_title{
+	-fx-font-size: 12.0pt;
+	-fx-font-family: NanumGothicBold;
+}

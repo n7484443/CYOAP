@@ -3,26 +3,27 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 
 <AnchorPane stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cyoap_main.design.controller.PlayGUIController">
-   <children>
-      <Pane prefHeight="675.0" prefWidth="1200.0">
-         <children>
-            <HBox prefHeight="675.0" prefWidth="1200.0">
-               <children>
-                  <Pane prefHeight="675.0" prefWidth="109.0">
-                     <children>
-                        <ListView fx:id="var_field" layoutX="5.0" layoutY="5.0" prefHeight="664.0" prefWidth="104.0" />
-                     </children>
-                  </Pane>
-                  <AnchorPane fx:id="pane_play" prefHeight="675.0" prefWidth="1092.0">
-                     <children>
-                        <ImageView fx:id="imageview_background" fitHeight="675.0" fitWidth="1092.0" pickOnBounds="true" preserveRatio="true" />
-                     </children></AnchorPane>
-               </children>
-            </HBox>
-         </children></Pane>
-   </children>
+	<children>
+		<AnchorPane prefHeight="675.0" prefWidth="1200.0">
+			<children>
+				<AnchorPane layoutX="115.0" prefHeight="675.0" prefWidth="1022.0">
+					<children>
+						<AnchorPane fx:id="pane_play" prefHeight="675.0" prefWidth="1092.0">
+							<children>
+								<ImageView fx:id="imageview_background" fitHeight="675.0" fitWidth="1092.0" pickOnBounds="true" preserveRatio="true" />
+							</children>
+						</AnchorPane>
+					</children>
+				</AnchorPane>
+				<Pane prefHeight="675.0" prefWidth="115.0">
+					<children>
+						<ListView fx:id="var_field" prefHeight="675.0" prefWidth="115.0" />
+					</children>
+				</Pane>
+			</children>
+		</AnchorPane>
+	</children>
 </AnchorPane>

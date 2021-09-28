@@ -33,19 +33,13 @@ javafx{
 	modules = ['javafx.controls', 'javafx.fxml', 'javafx.swing']
 }
 
-ext.moduleName = 'cyoap_module'
 application.mainModule = 'cyoap_module'
 mainClassName = 'cyoap_main.core.JavaFxMain'
 compileJava.options.encoding = 'UTF-8'
 
-sourceSets {
-    main {
-        output.setResourcesDir(java.outputDir)
-    }
-}
-
 jlink {
+	addExtraDependencies("javafx")
     launcher {
-        name = 'hellofx'
+        name = 'cyoap'
     }
 }

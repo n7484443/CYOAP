@@ -13,6 +13,7 @@ import cyoap_main.design.ChoiceSet;
 import cyoap_main.design.controller.IPlatformGuiController;
 import cyoap_main.unit.Vector2f;
 import cyoap_main.util.LoadUtil;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 @JsonAutoDetect(getterVisibility = Visibility.PUBLIC_ONLY)
@@ -153,6 +154,10 @@ public class AbstractPlatform {
 		setNodeDepth();
 	}
 
+	public void render(GraphicsContext gc, double time) {
+		choiceSetList.forEach(d -> d.render(gc, time));
+	}
+	
 	public void updateMouseCoordinate() {
 		choiceSetList.forEach(d -> d.updateCoordinate(-local_x, -local_y));
 		guiController.getBackgroundImageView().relocate(min_x - local_x, min_y - local_y);

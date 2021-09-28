@@ -6,13 +6,14 @@ import java.util.ResourceBundle;
 import cyoap_main.design.platform.AbstractPlatform;
 import cyoap_main.design.platform.PlayPlatform;
 import javafx.fxml.FXML;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
-public class PlayGUIController implements IPlatformGuiController {
-	public static PlayGUIController instance;
+public class PlayGuiController implements IPlatformGuiController {
+	public static PlayGuiController instance;
 
 	public AbstractPlatform platform;
 
@@ -56,7 +57,7 @@ public class PlayGUIController implements IPlatformGuiController {
 		});
 	}
 
-	public PlayGUIController() {
+	public PlayGuiController() {
 		instance = this;
 		platform = new PlayPlatform(instance);
 	}
@@ -74,5 +75,20 @@ public class PlayGUIController implements IPlatformGuiController {
 	@Override
 	public AbstractPlatform getPlatform() {
 		return platform;
+	}
+
+	@Override
+	public void update() {
+		
+	}
+
+	@Override
+	public boolean isEditable() {
+		return false;
+	}
+
+	@Override
+	public Canvas getCanvas() {
+		return null;
 	}
 }

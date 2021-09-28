@@ -19,13 +19,15 @@ public class StartGUIController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		pane_play.setOnMouseClicked(e->{
 			var directory = LoadUtil.loadFolder();
+			JavaFxMain.controller = PlayGuiController.instance;
 			JavaFxMain.instance.loadFiles(directory);
 			JavaFxMain.instance.stage.setScene(JavaFxMain.instance.scene_play);
-			PlayGUIController.instance.load();
+			PlayGuiController.instance.load();
 		});
 		
 		pane_create.setOnMouseClicked(e->{
 			var directory = LoadUtil.loadFolder();
+			JavaFxMain.controller = CreateGuiController.instance;
 			JavaFxMain.instance.loadFiles(directory);
 			JavaFxMain.instance.stage.setScene(JavaFxMain.instance.scene_create);
 			CreateGuiController.instance.load_shortcut();

@@ -36,6 +36,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ContextMenu;
@@ -118,6 +119,8 @@ public class CreateGuiController implements IPlatformGuiController {
 	public RadioButton button_outline;
 	@FXML
 	public RadioButton button_horizon;
+	@FXML
+	public Canvas canvas;
 
 	public BorderPane pane_text_editor = new BorderPane();
 	public VBox pane_setting = new VBox();
@@ -130,6 +133,8 @@ public class CreateGuiController implements IPlatformGuiController {
 	public static AbstractPlatform platform;
 	
 	public ChoiceSet nowControl;
+	public ChoiceSet nowEditDataSet;
+	public ChoiceSet nowMouseInDataSet;
 	
 
 	@Override
@@ -149,6 +154,8 @@ public class CreateGuiController implements IPlatformGuiController {
 
 		pane_text_editor.setTop(pane_setting);
 		pane_text_editor.setCenter(text_editor);
+		
+		canvas.setMouseTransparent(true);
 
 		try {
 			text_editor.setWrapText(true);
@@ -234,7 +241,7 @@ public class CreateGuiController implements IPlatformGuiController {
 				}
 				if(nowControl != null) {
 					nowControl.updateSizeFrom();
-					nowControl.guiComponent.clicked = false;
+					nowControl.isClicked = false;
 					nowControl = null;
 				}
 			}else if (e.getButton().equals(MouseButton.SECONDARY)) {
@@ -312,7 +319,7 @@ public class CreateGuiController implements IPlatformGuiController {
 						nowControl.changeSize((float)(movex + nowControl.guiComponent.width_before), (float)(movey + nowControl.guiComponent.height_before));
 						nowControl.setPosition(nowControl.guiComponent.x_before, nowControl.guiComponent.y_before);
 					}
-					nowControl.guiComponent.clicked = true;
+					nowControl.isClicked = true;
 				}
 			}
 		});
@@ -483,14 +490,6 @@ public class CreateGuiController implements IPlatformGuiController {
 		platform.update();
 	}
 
-	public void render() {
-		if (image != null) {
-		}
-	}
-
-	public ChoiceSet nowEditDataSet;
-	public ChoiceSet nowMouseInDataSet;
-
 	public void changeTab(Tab tab) {
 		tabpane_make.getSelectionModel().select(tab);
 	}
@@ -527,5 +526,14 @@ public class CreateGuiController implements IPlatformGuiController {
 	@Override
 	public AbstractPlatform getPlatform() {
 		return platform;
+	}
+
+	@Override
+	public Canvas getCanvas() {
+		return canvas;
+	}
+	@Override
+	public boolean isEditable() {
+		return true;
 	}
 }

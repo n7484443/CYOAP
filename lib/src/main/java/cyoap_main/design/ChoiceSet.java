@@ -17,6 +17,7 @@ import cyoap_main.design.controller.createGui.CreateGuiController;
 import cyoap_main.unit.Bound2f;
 import cyoap_main.unit.Vector2f;
 import cyoap_main.util.FlagUtil;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -57,6 +58,8 @@ public class ChoiceSet {
 	public float minWidth = 200;
 	@JsonIgnore
 	public float minHeight = 250;
+
+	public boolean isClicked = false;
 
 	@JsonIgnore
 	public Bound2f bound;
@@ -179,7 +182,7 @@ public class ChoiceSet {
 			guiComponent.pane.setBorder(ChoiceSetGuiComponent.border_default);
 		}
 	}
-
+	
 	// 화면상의 위치
 	public void updateCoordinate(double moveX, double moveY) {
 		guiComponent.updatePos(posx + moveX, posy + moveY);
@@ -221,6 +224,10 @@ public class ChoiceSet {
 		updateColor(Color.web(s));
 	}
 
+	public void render(GraphicsContext gc, double time) {
+		this.guiComponent.render(gc, time);
+	}
+	
 	@JsonGetter("segmentList")
 	@JsonProperty("segmentList")
 	public List<String> getSegmentList() {

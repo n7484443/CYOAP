@@ -14,6 +14,7 @@ import cyoap_main.design.ChoiceSet;
 import cyoap_main.design.platform.AbstractPlatform;
 import cyoap_main.util.LoadUtil;
 import javafx.fxml.Initializable;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
@@ -21,6 +22,9 @@ public interface IPlatformGuiController extends Initializable{
 	public ImageView getBackgroundImageView();
 	public Pane getChoicePane();
 	public AbstractPlatform getPlatform();
+	public Canvas getCanvas();
+	public void update();
+	public boolean isEditable();
 	public default void load() {
 		getPlatform().clearNodeOnPanePosition();
 		var path = new File(JavaFxMain.instance.directory.getAbsolutePath() + "/choiceSet");

@@ -2,6 +2,8 @@ package cyoap_main.core;
 
 import java.io.File;
 
+import cyoap_main.design.controller.IPlatformGuiController;
+import cyoap_main.design.controller.PlayGuiController;
 import cyoap_main.design.controller.createGui.CreateGuiController;
 import cyoap_main.grammer.VarData;
 import cyoap_main.grammer.VarData.ValueType;
@@ -17,13 +19,14 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class JavaFxMain extends Application {
-	public static String version = "0.4.2";
+	public static String version = "0.4.3";
 
 	public static JavaFxMain instance;
 	public Stage stage;
 	public Scene scene_create;
 	public Scene scene_start;
 	public Scene scene_play;
+	public static IPlatformGuiController controller = null;
 
 	public int window_width = (int) (1920 / 2 * 1.25f);// 1200
 	public int window_height = (int) (1080 / 2 * 1.25f);// 675
@@ -76,7 +79,7 @@ public class JavaFxMain extends Application {
 				public void handle(long now_NanoTime) {
 					double time = (now_NanoTime - startNanoTime) / 1000000000.0;
 					update(time);
-					render();
+					render(time);
 				}
 			}.start();
 			stage.setResizable(false);
@@ -88,10 +91,15 @@ public class JavaFxMain extends Application {
 
 	public void update(double time) {
 		CreateGuiController.instance.update();
+		PlayGuiController.instance.update();
 	}
 
-	public void render() {
-		CreateGuiController.instance.render();
+	public void render(double time) {
+		if (controller != null && controller.getCanvas() != null) {
+			var gc = controller.getCanvas().getGraphicsContext2D();
+			gc.clearRect(0, 0, controller.getCanvas().getWidth(), controller.getCanvas().getHeight());
+			controller.getPlatform().render(gc, time);
+		}
 	}
 
 	public File directory;

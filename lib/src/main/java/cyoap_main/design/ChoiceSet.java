@@ -26,7 +26,6 @@ public class ChoiceSet {
 	public String string_title;
 
 	public List<StyledSegment<String, String>> segmentList = new ArrayList<StyledSegment<String, String>>();
-	
 
 	public String string_image_name;
 

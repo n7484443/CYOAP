@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import cyoap_main.design.ChoiceSet;
 import cyoap_main.design.controller.IPlatformGuiController;
 import cyoap_main.unit.Vector2f;
+import cyoap_main.util.FlagUtil;
 import cyoap_main.util.LoadUtil;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -52,7 +53,9 @@ public class AbstractPlatform {
 	@JsonIgnore
 	public final int flag_center = 1 << 1;
 
-	public Vector2f checkLine(ChoiceSet choiceSet, float bias) {
+	public boolean needUpdate = true;
+
+	public SimpleEntry<Vector2f, Integer> checkLine(ChoiceSet choiceSet, float bias) {
 		var x_min = choiceSet.posx;
 		var y_min = choiceSet.posy;
 		var x_max = x_min + choiceSet.getWidth();
@@ -60,7 +63,8 @@ public class AbstractPlatform {
 
 		float x_new = Float.MAX_VALUE;
 		float y_new = Float.MAX_VALUE;
-
+		
+		int i = 0;
 		for (var choice : choiceSetList) {
 			if (choice == choiceSet)
 				continue;
@@ -75,38 +79,50 @@ public class AbstractPlatform {
 				x_new = x_min2;
 			if (Math.abs(x_min - x_max2) < bias)
 				x_new = x_max2;
-			if (Math.abs(x_max - x_min2) < bias)
+			if (Math.abs(x_max - x_min2) < bias) {
 				x_new = x_min2 - choiceSet.getWidth();
-			if (Math.abs(x_max - x_max2) < bias)
+				i = FlagUtil.setFlag(i, 0);
+			}
+			if (Math.abs(x_max - x_max2) < bias) {
 				x_new = x_max2 - choiceSet.getWidth();
+				i = FlagUtil.setFlag(i, 0);
+			}
 
 			if (Math.abs(x_min - x_half2) < bias)
 				x_new = x_half2;
-			if (Math.abs(x_max - x_half2) < bias)
+			if (Math.abs(x_max - x_half2) < bias) {
 				x_new = x_half2 - choiceSet.getWidth();
+				i = FlagUtil.setFlag(i, 1);
+			}
 
 			if (Math.abs(y_min - y_min2) < bias)
 				y_new = y_min2;
 			if (Math.abs(y_min - y_max2) < bias)
 				y_new = y_max2;
-			if (Math.abs(y_max - y_min2) < bias)
+			if (Math.abs(y_max - y_min2) < bias) {
 				y_new = y_min2 - choiceSet.getHeight();
-			if (Math.abs(y_max - y_max2) < bias)
+				i = FlagUtil.setFlag(i, 2);
+			}
+			if (Math.abs(y_max - y_max2) < bias) {
 				y_new = y_max2 - choiceSet.getHeight();
+				i = FlagUtil.setFlag(i, 2);
+			}
 
 			if (Math.abs(y_min - y_half2) < bias)
 				y_new = y_half2;
-			if (Math.abs(y_max - y_half2) < bias)
+			if (Math.abs(y_max - y_half2) < bias) {
 				y_new = y_half2 - choiceSet.getHeight();
+				i = FlagUtil.setFlag(i, 3);
+			}
 		}
 		if (x_new == Float.MAX_VALUE && y_new == Float.MAX_VALUE) {
 			return null;
 		} else if (x_new == Float.MAX_VALUE && y_new != Float.MAX_VALUE) {
-			return new Vector2f(0, y_new);
+			return new SimpleEntry<Vector2f, Integer>(new Vector2f(0, y_new), i);
 		} else if (x_new != Float.MAX_VALUE && y_new == Float.MAX_VALUE) {
-			return new Vector2f(x_new, 0);
+			return new SimpleEntry<Vector2f, Integer>(new Vector2f(x_new, 0), i);
 		} else {
-			return new Vector2f(x_new, y_new);
+			return new SimpleEntry<Vector2f, Integer>(new Vector2f(x_new, y_new), i);
 		}
 	}
 
@@ -122,9 +138,9 @@ public class AbstractPlatform {
 		guiController.getChoicePane().getChildren().clear();
 		guiController.getChoicePane().getChildren().add(guiController.getBackgroundImageView());
 	}
-	
+
 	public void setNodeDepth() {
-		for(var c : choiceSetList) {
+		for (var c : choiceSetList) {
 			var gui = c.guiComponent.pane;
 			gui.setViewOrder(0.0d);
 		}
@@ -152,12 +168,19 @@ public class AbstractPlatform {
 		guiController.getChoicePane().setScaleY(scale);
 		updateMouseCoordinate();
 		setNodeDepth();
+		if (needUpdate) {
+			needUpdate = false;
+			choiceSetList.forEach(d -> {
+				d.updateSizeFrom();
+				d.updateSize();
+			});
+		}
 	}
 
 	public void render(GraphicsContext gc, double time) {
 		choiceSetList.forEach(d -> d.render(gc, time));
 	}
-	
+
 	public void updateMouseCoordinate() {
 		choiceSetList.forEach(d -> d.updateCoordinate(-local_x, -local_y));
 		guiController.getBackgroundImageView().relocate(min_x - local_x, min_y - local_y);

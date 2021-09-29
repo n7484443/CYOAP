@@ -3,7 +3,6 @@ package cyoap_main.core;
 import java.io.File;
 
 import cyoap_main.design.controller.IPlatformGuiController;
-import cyoap_main.design.controller.PlayGuiController;
 import cyoap_main.design.controller.createGui.CreateGuiController;
 import cyoap_main.grammer.VarData;
 import cyoap_main.grammer.VarData.ValueType;
@@ -19,7 +18,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class JavaFxMain extends Application {
-	public static String version = "0.4.3";
+	public static String version = "0.4.4";
 
 	public static JavaFxMain instance;
 	public Stage stage;
@@ -90,8 +89,7 @@ public class JavaFxMain extends Application {
 	}
 
 	public void update(double time) {
-		CreateGuiController.instance.update();
-		PlayGuiController.instance.update();
+		if(controller != null)controller.update();
 	}
 
 	public void render(double time) {

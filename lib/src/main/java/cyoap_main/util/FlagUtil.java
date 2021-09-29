@@ -10,6 +10,9 @@ public class FlagUtil {
 		}
 		return flag;
 	}
+	public static int setFlag(int flag, int position) {
+		return setFlag(flag, position, true);
+	}
 	
 	public static boolean getFlag(int flag, int position) {
 		int t = 1 << position;

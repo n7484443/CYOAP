@@ -8,25 +8,29 @@ import cyoap_main.command.CombineCommand;
 import cyoap_main.command.MoveCommand;
 import cyoap_main.core.JavaFxMain;
 import cyoap_main.design.controller.createGui.CreateGuiController;
+import cyoap_main.design.node_extension.ImageCell;
 import cyoap_main.unit.Bound2f;
 import cyoap_main.unit.Vector2f;
+import cyoap_main.util.FlagUtil;
 import cyoap_main.util.LoadUtil;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Cursor;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
@@ -36,10 +40,8 @@ import javafx.scene.text.TextAlignment;
 public class ChoiceSetGuiComponent {
 	public GridPane pane = new GridPane();
 	public GridPane pane_border = new GridPane();
-	public Pane pane_middle = new Pane();
 	public HBox hbox = new HBox();
-	public HBox hbox_image = new HBox();
-	public ImageView image = new ImageView();
+	public ImageCell image = new ImageCell();
 	public InlineCssTextArea area = new InlineCssTextArea();
 	public Label title = new Label();
 
@@ -89,17 +91,12 @@ public class ChoiceSetGuiComponent {
 		GridPane.setVgrow(pane_border, Priority.ALWAYS);
 		pane.setId("pane_choiceset");
 
-		pane_middle.setPrefHeight(20);
-
 		pane_border.add(title, 0, 0);
-		pane_border.add(hbox_image, 0, 1);
+		pane_border.add(image, 0, 1);
 
-		hbox_image.setAlignment(Pos.CENTER);
-		hbox_image.getChildren().add(image);
+		// image.setAlignment(Pos.CENTER);
 
-		pane_border.add(area, 0, 3);
-		pane_border.setVgap(5);
-		pane_border.setHgap(0);
+		pane_border.add(area, 0, 2);
 		pane_border.setAlignment(Pos.CENTER);
 		pane_border.setPadding(Insets.EMPTY);
 
@@ -109,17 +106,7 @@ public class ChoiceSetGuiComponent {
 
 		area.setEditable(false);
 
-		image.setPreserveRatio(true);
 		image.setId("image_choiceset");
-
-		int size = 20;
-		title.setPrefHeight(size);
-		title.prefWidthProperty().bind(pane.widthProperty());
-
-		image.fitHeightProperty().bind(pane.heightProperty().subtract(size).multiply(3 / 5f));
-
-		area.prefHeightProperty().bind(pane.heightProperty().subtract(size).subtract(image.fitHeightProperty()));
-		area.prefWidthProperty().bind(pane.widthProperty());
 
 		pane_border.setMouseTransparent(true);
 		float border = 9f;
@@ -212,7 +199,7 @@ public class ChoiceSetGuiComponent {
 							break;
 						}
 					}
-					Vector2f v = CreateGuiController.platform.checkLine(dataSet, 10f);
+					Vector2f v = CreateGuiController.platform.checkLine(dataSet, 10f).getKey();
 					if (v != null) {
 						dataSet.posx = v.x == 0 ? dataSet.posx : v.x;
 						dataSet.posy = v.y == 0 ? dataSet.posy : v.y;
@@ -227,7 +214,7 @@ public class ChoiceSetGuiComponent {
 			pane.setOnMouseEntered(e -> {
 				CreateGuiController.instance.nowMouseInDataSet = dataSet;
 			});
-			
+
 			pane.setOnMouseExited(e -> {
 				if (!motherChoiceSet.isClicked)
 					JavaFxMain.instance.scene_create.setCursor(Cursor.DEFAULT);
@@ -249,17 +236,45 @@ public class ChoiceSetGuiComponent {
 	}
 
 	public void render(GraphicsContext gc, double time) {
+		var lx = JavaFxMain.controller.getPlatform().local_x;
+		var ly = JavaFxMain.controller.getPlatform().local_y;
+		if (moveCommand != null && motherChoiceSet.equals(moveCommand.choiceset)) {
+			var entry = CreateGuiController.platform.checkLine(motherChoiceSet, 10f);
+			if (entry != null) {
+				var v = entry.getKey();
+				var flag = entry.getValue();
+				var show_x = (v.x == 0 ? motherChoiceSet.posx : v.x) - lx;
+				var show_y = (v.y == 0 ? motherChoiceSet.posy : v.y) - ly;
+				gc.setStroke(Color.CORNFLOWERBLUE);
+				gc.setLineWidth(1);
+				gc.setLineDashes(5);
+				gc.setLineDashOffset((time * 20) % 1000);
+				if (FlagUtil.getFlag(flag, 0)) {
+					show_x += motherChoiceSet.getWidth();
+				} else if (FlagUtil.getFlag(flag, 1)) {
+					show_x += motherChoiceSet.getWidth() / 2;
+				}
+				gc.strokeLine(show_x, 0, show_x, gc.getCanvas().getHeight());
+
+				if (FlagUtil.getFlag(flag, 2)) {
+					show_y += motherChoiceSet.getHeight();
+				} else if (FlagUtil.getFlag(flag, 3)) {
+					show_y += motherChoiceSet.getHeight() / 2;
+				}
+				gc.strokeLine(0, show_y, gc.getCanvas().getWidth(), show_y);
+			}
+		}
 		if (motherChoiceSet.equals(CreateGuiController.instance.nowMouseInDataSet)) {
 			gc.setStroke(Color.BLUE);
 			gc.setLineWidth(1);
 			gc.setLineDashes(5);
 			gc.setLineDashOffset((time * 20) % 1000);
 			var gap = 4;
-			var x1 = motherChoiceSet.posx - gap - JavaFxMain.controller.getPlatform().local_x;
-			var x2 = motherChoiceSet.posx + motherChoiceSet.getWidth() + gap
+			var x1 = motherChoiceSet.posx - gap - lx;
+			var x2 = motherChoiceSet.posx + motherChoiceSet.getAnchorPane().getLayoutBounds().getWidth() + gap
 					- JavaFxMain.controller.getPlatform().local_x;
-			var y1 = motherChoiceSet.posy - gap - JavaFxMain.controller.getPlatform().local_y;
-			var y2 = motherChoiceSet.posy + motherChoiceSet.getHeight() + gap
+			var y1 = motherChoiceSet.posy - gap - ly;
+			var y2 = motherChoiceSet.posy + motherChoiceSet.getAnchorPane().getLayoutBounds().getHeight() + gap
 					- JavaFxMain.controller.getPlatform().local_y;
 			gc.strokeLine(x1, y1, x1, y2);
 			gc.strokeLine(x2, y2, x2, y1);
@@ -288,6 +303,69 @@ public class ChoiceSetGuiComponent {
 		hbox.getChildren().remove(sub.getAnchorPane());
 		CreateGuiController.instance.pane_position.getChildren().add(sub.getAnchorPane());
 		area.setPrefWidth(pane.getWidth());
+	}
 
+	public void setHorizontal(boolean b) {
+		int size = 20;
+		title.setPrefHeight(size);
+		GridPane.setHalignment(title, HPos.CENTER);
+		GridPane.setValignment(title, VPos.CENTER);
+
+		pane_border.getChildren().remove(title);
+		pane_border.getChildren().remove(image);
+		pane_border.getChildren().remove(area);
+		pane_border.getColumnConstraints().clear();
+		pane_border.getRowConstraints().clear();
+		if (b) {
+			pane_border.setVgap(0);
+			pane_border.setHgap(5);
+
+			pane_border.add(title, 0, 0);
+			GridPane.setColumnSpan(title, 2);
+			pane_border.add(image, 0, 1);
+			pane_border.add(area, 1, 1);
+
+			ColumnConstraints col1 = new ColumnConstraints();
+			ColumnConstraints col2 = new ColumnConstraints();
+			RowConstraints row1 = new RowConstraints();
+			RowConstraints row2 = new RowConstraints();
+			col1.setPercentWidth(40);
+			col1.setHgrow(Priority.ALWAYS);
+			col2.setPercentWidth(60);
+			col2.setHgrow(Priority.ALWAYS);
+
+			row1.setPercentHeight(10);
+			row1.setVgrow(Priority.ALWAYS);
+			row2.setPercentHeight(90);
+			row2.setVgrow(Priority.ALWAYS);
+
+			pane_border.getColumnConstraints().addAll(col1, col2);
+			pane_border.getRowConstraints().addAll(row1, row2);
+		} else {
+			pane_border.setVgap(5);
+			pane_border.setHgap(0);
+
+			pane_border.add(title, 0, 0);
+			GridPane.setColumnSpan(title, 1);
+			pane_border.add(image, 0, 1);
+			pane_border.add(area, 0, 2);
+
+			ColumnConstraints col1 = new ColumnConstraints();
+			RowConstraints row1 = new RowConstraints();
+			RowConstraints row2 = new RowConstraints();
+			RowConstraints row3 = new RowConstraints();
+			col1.setPercentWidth(100);
+			col1.setHgrow(Priority.ALWAYS);
+
+			row1.setPercentHeight(10);
+			row1.setVgrow(Priority.ALWAYS);
+			row2.setPercentHeight(90 * 0.6);
+			row2.setVgrow(Priority.ALWAYS);
+			row3.setPercentHeight(90 * 0.4);
+			row3.setVgrow(Priority.ALWAYS);
+
+			pane_border.getColumnConstraints().addAll(col1);
+			pane_border.getRowConstraints().addAll(row1, row2, row3);
+		}
 	}
 }

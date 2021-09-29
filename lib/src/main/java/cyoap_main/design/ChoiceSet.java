@@ -40,6 +40,8 @@ public class ChoiceSet {
 
 	@JsonIgnore
 	public static final int flagPosition_selectable = 0;
+	@JsonIgnore
+	public static final int flagPosition_horizontal = 1;
 
 	public int flag = flagPosition_selectable;
 
@@ -107,18 +109,16 @@ public class ChoiceSet {
 	public float getWidth() {
 		if (width < minWidth) {
 			width = minWidth;
-		} else {
-			guiComponent.pane.setPrefWidth(width);
 		}
+		guiComponent.pane.setPrefWidth(width);
 		return width;
 	}
 	
 	public float getHeight() {
 		if (height < minHeight) {
 			height = minHeight;
-		} else {
-			guiComponent.pane.setPrefHeight(height);
 		}
+		guiComponent.pane.setPrefHeight(height);
 		return height;
 	}
 
@@ -130,8 +130,8 @@ public class ChoiceSet {
 	}
 
 	public void updateSize() {
-		guiComponent.pane.setPrefWidth(width);
-		guiComponent.pane.setPrefHeight(height);
+		getWidth();
+		getHeight();
 	}
 	public void updateSizeFrom() {
 		width = (float) getAnchorPane().getLayoutBounds().getWidth();
@@ -181,6 +181,7 @@ public class ChoiceSet {
 		} else {
 			guiComponent.pane.setBorder(ChoiceSetGuiComponent.border_default);
 		}
+		guiComponent.setHorizontal(FlagUtil.getFlag(flag, flagPosition_horizontal));
 	}
 	
 	// 화면상의 위치

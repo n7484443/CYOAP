@@ -25,7 +25,7 @@ import cyoap_main.core.JavaFxMain;
 import cyoap_main.design.ChoiceSet;
 import cyoap_main.design.controller.IPlatformGuiController;
 import cyoap_main.design.platform.AbstractPlatform;
-import cyoap_main.design.platform.MakePlatform;
+import cyoap_main.design.platform.CreatePlatform;
 import cyoap_main.grammer.Analyser;
 import cyoap_main.grammer.VarData;
 import cyoap_main.util.FlagUtil;
@@ -410,6 +410,13 @@ public class CreateGuiController implements IPlatformGuiController {
 					.isSelected()) {
 				nowEditDataSet.flag = FlagUtil.setFlag(nowEditDataSet.flag, ChoiceSet.flagPosition_selectable,
 						this.button_outline.isSelected());
+				
+				nowEditDataSet.updateFlag();
+			}else if (FlagUtil.getFlag(nowEditDataSet.flag, ChoiceSet.flagPosition_horizontal) != this.button_horizon
+					.isSelected()) {
+				nowEditDataSet.flag = FlagUtil.setFlag(nowEditDataSet.flag, ChoiceSet.flagPosition_horizontal,
+						this.button_horizon.isSelected());
+
 				nowEditDataSet.updateFlag();
 			}
 			
@@ -448,6 +455,7 @@ public class CreateGuiController implements IPlatformGuiController {
 			imageview_describe.setImage(image.getKey());
 		}
 		button_outline.setSelected(FlagUtil.getFlag(dataSet.flag, ChoiceSet.flagPosition_selectable));
+		button_horizon.setSelected(FlagUtil.getFlag(dataSet.flag, ChoiceSet.flagPosition_horizontal));
 		dataSet.updateFlag();
 	}
 
@@ -465,7 +473,7 @@ public class CreateGuiController implements IPlatformGuiController {
 
 	public CreateGuiController() {
 		CreateGuiController.instance = this;
-		platform = new MakePlatform(instance);
+		platform = new CreatePlatform(instance);
 	}
 
 	public SimpleEntry<Image, String> image = null;

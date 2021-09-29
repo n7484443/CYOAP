@@ -76,7 +76,6 @@ public class FontLoader {
 					e.printStackTrace();
 				}
 			});
-			System.out.println();
 		}
 	}
 }

@@ -181,7 +181,15 @@ public class ChoiceSet {
 		} else {
 			guiComponent.pane.setBorder(ChoiceSetGuiComponent.border_default);
 		}
-		guiComponent.setHorizontal(FlagUtil.getFlag(flag, flagPosition_horizontal));
+		if(FlagUtil.getFlag(flag, flagPosition_horizontal)) {
+			minWidth = 250;
+			minHeight = 200;
+			guiComponent.setHorizontal(true);
+		}else {
+			minWidth = 200;
+			minHeight = 250;
+			guiComponent.setHorizontal(false);
+		}
 	}
 	
 	// 화면상의 위치

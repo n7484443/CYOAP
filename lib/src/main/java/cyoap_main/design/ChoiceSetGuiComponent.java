@@ -10,7 +10,6 @@ import cyoap_main.core.JavaFxMain;
 import cyoap_main.design.controller.createGui.CreateGuiController;
 import cyoap_main.design.node_extension.ImageCell;
 import cyoap_main.unit.Bound2f;
-import cyoap_main.unit.Vector2f;
 import cyoap_main.util.FlagUtil;
 import cyoap_main.util.LoadUtil;
 import javafx.geometry.HPos;
@@ -199,8 +198,9 @@ public class ChoiceSetGuiComponent {
 							break;
 						}
 					}
-					Vector2f v = CreateGuiController.platform.checkLine(dataSet, 10f).getKey();
-					if (v != null) {
+					var t = CreateGuiController.platform.checkLine(dataSet, 10f);
+					if (t != null) {
+						var v = t.getKey();
 						dataSet.posx = v.x == 0 ? dataSet.posx : v.x;
 						dataSet.posy = v.y == 0 ? dataSet.posy : v.y;
 					}

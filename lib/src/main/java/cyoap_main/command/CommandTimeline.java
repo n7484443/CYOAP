@@ -105,7 +105,6 @@ public class CommandTimeline {
 				e.printStackTrace();
 			}
 		}
-		System.out.println(this.commandList.size());
 		isCommandListUpdated = true;
 		update();
 	}

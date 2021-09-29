@@ -112,7 +112,6 @@ public class LoadUtil {
 	}
 	
 	public static SimpleEntry<Image, String> loadImage(String s) {
-		System.out.println(s);
 		return loadImage(new File(s));
 	}
 

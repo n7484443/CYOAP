@@ -63,9 +63,12 @@ public class AbstractPlatform {
 
 		float x_new = Float.MAX_VALUE;
 		float y_new = Float.MAX_VALUE;
-		
+
 		int i = 0;
 		for (var choice : choiceSetList) {
+			float sizex = Float.POSITIVE_INFINITY;
+			float sizey = Float.POSITIVE_INFINITY;
+			float l = 0;
 			if (choice == choiceSet)
 				continue;
 			var x_min2 = choice.posx;
@@ -75,44 +78,74 @@ public class AbstractPlatform {
 			var x_half2 = x_min2 + choice.getWidth() / 2;
 			var y_half2 = y_min2 + choice.getHeight() / 2;
 
-			if (Math.abs(x_min - x_min2) < bias)
+			l = Math.abs(x_min - x_min2);
+			if (l < bias && l < sizex) {
 				x_new = x_min2;
-			if (Math.abs(x_min - x_max2) < bias)
+				sizex = l;
+			}
+			l = Math.abs(x_min - x_max2);
+			if (l < bias && l < sizex) {
 				x_new = x_max2;
-			if (Math.abs(x_max - x_min2) < bias) {
+				sizex = l;
+			}
+			l = Math.abs(x_max - x_min2);
+			if (l < bias && l < sizex) {
 				x_new = x_min2 - choiceSet.getWidth();
 				i = FlagUtil.setFlag(i, 0);
+				sizex = l;
 			}
-			if (Math.abs(x_max - x_max2) < bias) {
+			l = Math.abs(x_max - x_max2);
+			if (l < bias && l < sizex) {
 				x_new = x_max2 - choiceSet.getWidth();
 				i = FlagUtil.setFlag(i, 0);
+				sizex = l;
 			}
-
-			if (Math.abs(x_min - x_half2) < bias)
+			
+			l = Math.abs(x_min - x_half2);
+			if (l < bias && l < sizex) {
 				x_new = x_half2;
-			if (Math.abs(x_max - x_half2) < bias) {
+				sizex = l;
+			}
+			l = Math.abs(x_max - x_half2);
+			if (l < bias && l < sizex) {
 				x_new = x_half2 - choiceSet.getWidth();
 				i = FlagUtil.setFlag(i, 1);
+				sizex = l;
 			}
-
-			if (Math.abs(y_min - y_min2) < bias)
+			
+			l = Math.abs(y_min - y_min2);
+			if (l < bias && l < sizey) {
 				y_new = y_min2;
-			if (Math.abs(y_min - y_max2) < bias)
+				sizey = l;
+			}
+			l = Math.abs(y_min - y_max2);
+			if (l < bias && l < sizey) {
 				y_new = y_max2;
-			if (Math.abs(y_max - y_min2) < bias) {
+				sizey = l;
+			}
+			l = Math.abs(y_max - y_min2);
+			if (l < bias && l < sizey) {
 				y_new = y_min2 - choiceSet.getHeight();
 				i = FlagUtil.setFlag(i, 2);
+				sizey = l;
 			}
-			if (Math.abs(y_max - y_max2) < bias) {
+			l = Math.abs(y_max - y_max2);
+			if (l < bias && l < sizey) {
 				y_new = y_max2 - choiceSet.getHeight();
 				i = FlagUtil.setFlag(i, 2);
+				sizey = l;
 			}
-
-			if (Math.abs(y_min - y_half2) < bias)
+			
+			l = Math.abs(y_min - y_half2);
+			if (l < bias && l < sizey) {
 				y_new = y_half2;
-			if (Math.abs(y_max - y_half2) < bias) {
+				sizey = l;
+			}
+			l = Math.abs(y_max - y_half2);
+			if (l < bias && l < sizey) {
 				y_new = y_half2 - choiceSet.getHeight();
 				i = FlagUtil.setFlag(i, 3);
+				sizey = l;
 			}
 		}
 		if (x_new == Float.MAX_VALUE && y_new == Float.MAX_VALUE) {

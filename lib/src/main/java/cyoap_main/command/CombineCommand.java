@@ -1,6 +1,6 @@
 package cyoap_main.command;
 
-import cyoap_main.design.ChoiceSet;
+import cyoap_main.design.choice.ChoiceSet;
 import cyoap_main.design.controller.createGui.CreateGuiController;
 
 public class CombineCommand extends AbstractCommand {
@@ -33,7 +33,7 @@ public class CombineCommand extends AbstractCommand {
 
 	@Override
 	public String getName() {
-		return "Combine Node";
+		return choiceSet_parent.string_title + " combines " + choiceSet_children.string_title;
 	}
 
 }

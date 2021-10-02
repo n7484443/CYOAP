@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cyoap_main.core.JavaFxMain;
-import cyoap_main.design.ChoiceSet;
+import cyoap_main.design.choice.ChoiceSet;
 import cyoap_main.design.platform.AbstractPlatform;
 import cyoap_main.util.LoadUtil;
 import javafx.fxml.Initializable;

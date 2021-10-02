@@ -1,4 +1,4 @@
-package cyoap_main.design;
+package cyoap_main.design.choice;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +17,7 @@ import cyoap_main.design.controller.createGui.CreateGuiController;
 import cyoap_main.unit.Bound2f;
 import cyoap_main.unit.Vector2f;
 import cyoap_main.util.FlagUtil;
+import cyoap_main.util.LoadUtil;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -126,9 +127,14 @@ public class ChoiceSet {
 		updateSize();
 		updateBounds();
 		updateColor();
+		updateSegment();
 		guiComponent.update();
 	}
 
+	public void updateSegment() {
+		LoadUtil.loadSegment(guiComponent.area, this.segmentList);
+	}
+	
 	public void updateSize() {
 		getWidth();
 		getHeight();
@@ -255,6 +261,7 @@ public class ChoiceSet {
 
 	@JsonSetter("segmentList")
 	public void setSegmentList(List<String> s) {
+		segmentList.clear();
 		for (var v : s) {
 			if (v.isBlank()) {
 				segmentList.add(null);

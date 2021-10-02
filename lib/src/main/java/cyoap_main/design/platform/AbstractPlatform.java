@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import cyoap_main.design.ChoiceSet;
+import cyoap_main.design.choice.ChoiceSet;
 import cyoap_main.design.controller.IPlatformGuiController;
 import cyoap_main.unit.Vector2f;
 import cyoap_main.util.FlagUtil;

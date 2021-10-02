@@ -1,6 +1,6 @@
 package cyoap_main.command;
 
-import cyoap_main.design.ChoiceSet;
+import cyoap_main.design.choice.ChoiceSet;
 
 public class CreateCommand extends AbstractCommand{
 	public ChoiceSet choiceSet;
@@ -34,6 +34,6 @@ public class CreateCommand extends AbstractCommand{
 	
 	@Override
 	public String getName() {
-		return "Create Node";
+		return "Created " + choiceSet.string_title;
 	}
 }

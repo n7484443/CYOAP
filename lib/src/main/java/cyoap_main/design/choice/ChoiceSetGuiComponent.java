@@ -1,4 +1,4 @@
-package cyoap_main.design;
+package cyoap_main.design.choice;
 
 import java.io.IOException;
 
@@ -222,6 +222,7 @@ public class ChoiceSetGuiComponent {
 		}
 
 		updateColor();
+		setHorizontal(false);
 	}
 
 	public MoveCommand moveCommand = null;
@@ -329,9 +330,9 @@ public class ChoiceSetGuiComponent {
 			ColumnConstraints col2 = new ColumnConstraints();
 			RowConstraints row1 = new RowConstraints();
 			RowConstraints row2 = new RowConstraints();
-			col1.setPercentWidth(40);
+			col1.setPercentWidth(32);
 			col1.setHgrow(Priority.ALWAYS);
-			col2.setPercentWidth(60);
+			col2.setPercentWidth(68);
 			col2.setHgrow(Priority.ALWAYS);
 
 			row1.setPercentHeight(10);
@@ -359,9 +360,9 @@ public class ChoiceSetGuiComponent {
 
 			row1.setPercentHeight(10);
 			row1.setVgrow(Priority.ALWAYS);
-			row2.setPercentHeight(90 * 0.6);
+			row2.setPercentHeight(90 * 0.68);
 			row2.setVgrow(Priority.ALWAYS);
-			row3.setPercentHeight(90 * 0.4);
+			row3.setPercentHeight(90 * 0.32);
 			row3.setVgrow(Priority.ALWAYS);
 
 			pane_border.getColumnConstraints().addAll(col1);

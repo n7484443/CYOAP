@@ -11,6 +11,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,7 +26,7 @@ import org.fxmisc.richtext.model.Paragraph;
 import org.fxmisc.richtext.model.StyledSegment;
 
 import cyoap_main.core.JavaFxMain;
-import cyoap_main.design.ChoiceSet;
+import cyoap_main.design.choice.ChoiceSet;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelFormat;
@@ -81,6 +82,7 @@ public class LoadUtil {
 		return chooser.showDialog(JavaFxMain.instance.stage);
 	}
 	
+	//dropped out 로드
 	public static SimpleEntry<Image, String> loadImage(File f) {
 		Image image = null;
 		if (!f.toString().contains(".webp")) {
@@ -108,11 +110,35 @@ public class LoadUtil {
 				e.printStackTrace();
 			}
 		}
-		return new SimpleEntry<Image, String>(image, f.getAbsolutePath());
+		f = CreateSubImage(f);
+		
+		return new SimpleEntry<Image, String>(image, f.getName());
 	}
 	
+	//일반적인 로드
 	public static SimpleEntry<Image, String> loadImage(String s) {
-		return loadImage(new File(s));
+		File f = null;
+		if(s.contains(File.separator)) {
+			f = new File(s);
+			f = CreateSubImage(f);
+		}else {
+			f = new File(JavaFxMain.instance.directory.getAbsolutePath() + "/images/" + s);
+		}
+		return loadImage(f);
+	}
+
+	private static File CreateSubImage(File f) {
+		File folder = new File(JavaFxMain.instance.directory.getAbsolutePath() + "/images");
+		if(!folder.exists()){
+			folder.mkdir();
+		}
+		File newf = new File(JavaFxMain.instance.directory.getAbsolutePath() + "/images/" + f.getName());
+		try {
+			Files.copy(f.toPath(), newf.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return newf;
 	}
 
 	public static void setupChoiceSet(ChoiceSet choiceSet) {
@@ -145,6 +171,19 @@ public class LoadUtil {
 			area.append(System.lineSeparator(), "");
 		}
 		area.recreateParagraphGraphic(0);
+	}
+	
+	public static List<StyledSegment<String, String>> paragraphToSegment(List<Paragraph<String, String, String>> p, List<StyledSegment<String, String>> styleSeg) {
+		styleSeg.clear();
+		for(var a : p) {
+			var b = a.getStyledSegments();		
+			for(var c : b) {
+				styleSeg.add(c);
+			}
+			styleSeg.add(new StyledSegment<String, String>(System.lineSeparator(), ""));
+		}
+		
+		return styleSeg;
 	}
 	
 	public static void loadSegment(InlineCssTextArea area, List<StyledSegment<String, String>> styleSeg) {

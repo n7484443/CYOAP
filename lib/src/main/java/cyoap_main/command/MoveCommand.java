@@ -1,6 +1,6 @@
 package cyoap_main.command;
 
-import cyoap_main.design.ChoiceSet;
+import cyoap_main.design.choice.ChoiceSet;
 
 public class MoveCommand extends AbstractCommand{
 	public float start_x;
@@ -38,7 +38,7 @@ public class MoveCommand extends AbstractCommand{
 
 	@Override
 	public String getName() {
-		return "Move Node";
+		return "Moved " + choiceset.string_title;
 	}
 
 }

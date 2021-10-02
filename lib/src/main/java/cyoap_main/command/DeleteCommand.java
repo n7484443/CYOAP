@@ -1,6 +1,6 @@
 package cyoap_main.command;
 
-import cyoap_main.design.ChoiceSet;
+import cyoap_main.design.choice.ChoiceSet;
 
 public class DeleteCommand extends AbstractCommand {
 	public double localx;
@@ -37,7 +37,7 @@ public class DeleteCommand extends AbstractCommand {
 	
 	@Override
 	public String getName() {
-		return "Delete Node";
+		return "Deleted " + choiceSet.string_title;
 	}
 
 }

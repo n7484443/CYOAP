@@ -57,7 +57,7 @@
 										<Button fx:id="button_next" layoutX="972.0" layoutY="609.0" mnemonicParsing="false" text="Next" />
 										<Button fx:id="button_save" layoutX="921.0" layoutY="609.0" mnemonicParsing="false" text="Save" />
 										<TextField fx:id="text_title" alignment="CENTER" layoutX="6.0" layoutY="3.0" prefHeight="22.0" prefWidth="1012.0" text="Title" />
-												<ImageView fx:id="imageview_describe" fitHeight="576.0" fitWidth="400.0" layoutX="6.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true" />
+										<ImageView fx:id="imageview_describe" fitHeight="576.0" fitWidth="400.0" layoutX="6.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true" />
 										<RadioButton fx:id="button_outline" layoutX="893.0" layoutY="34.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="125.0" text="외곽선 제거" />
                               			<ColorPicker fx:id="colorpicker" layoutX="6.0" layoutY="609.0" prefHeight="25.0" prefWidth="95.0" />
                               			<RadioButton fx:id="button_horizon" layoutX="893.0" layoutY="58.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="125.0" text="가로로 설정" />
@@ -76,6 +76,8 @@
                                   <MenuItem mnemonicParsing="false" text="Action 2" />
                                 </items>
                               </SplitMenuButton>
+                              <Button fx:id="button_borderless" layoutX="8.0" layoutY="604.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="128.0" text="Set All BorderLess" />
+                              <Button fx:id="button_border" layoutX="881.0" layoutY="604.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="128.0" text="Set All Border" />
                            </children></AnchorPane>
 							</content>
 						</Tab>

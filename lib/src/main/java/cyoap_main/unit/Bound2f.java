@@ -34,13 +34,13 @@ public class Bound2f {
 	}
 	
 	public boolean intersect(Vector2f other) {
-		if (x + width < other.x)
+		if (x + width < other.x())
 			return false;
-		if (x > other.x)
+		if (x > other.x())
 			return false;
-		if (y + height < other.y)
+		if (y + height < other.y())
 			return false;
-		if (y > other.y)
+		if (y > other.y())
 			return false;
 		return true;
 	}

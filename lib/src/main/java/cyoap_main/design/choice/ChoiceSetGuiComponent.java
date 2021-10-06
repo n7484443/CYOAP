@@ -175,10 +175,10 @@ public class ChoiceSetGuiComponent {
 						return;
 					if (moveCommand.start_x != dataSet.posx || moveCommand.start_y != dataSet.posy) {
 						var v = moveCommand.checkOutline(this.motherChoiceSet, dataSet.posx, dataSet.posy);
-						dataSet.posx = v.x;
-						dataSet.posy = v.y;
+						dataSet.posx = v.x();
+						dataSet.posy = v.y();
 
-						moveCommand.setEnd(v.x, v.y);
+						moveCommand.setEnd(v.x(), v.y());
 						CreateGuiController.instance.commandTimeline.addCommand(moveCommand);
 					}
 					moveCommand = null;
@@ -201,8 +201,8 @@ public class ChoiceSetGuiComponent {
 					var t = CreateGuiController.platform.checkLine(dataSet, 10f);
 					if (t != null) {
 						var v = t.getKey();
-						dataSet.posx = v.x == 0 ? dataSet.posx : v.x;
-						dataSet.posy = v.y == 0 ? dataSet.posy : v.y;
+						dataSet.posx = v.x() == 0 ? dataSet.posx : v.x();
+						dataSet.posy = v.y() == 0 ? dataSet.posy : v.y();
 					}
 					if (final_choice != null) {
 						CreateGuiController.instance.commandTimeline
@@ -244,8 +244,8 @@ public class ChoiceSetGuiComponent {
 			if (entry != null) {
 				var v = entry.getKey();
 				var flag = entry.getValue();
-				var show_x = (v.x == 0 ? motherChoiceSet.posx : v.x) - lx;
-				var show_y = (v.y == 0 ? motherChoiceSet.posy : v.y) - ly;
+				var show_x = (v.x() == 0 ? motherChoiceSet.posx : v.x()) - lx;
+				var show_y = (v.y() == 0 ? motherChoiceSet.posy : v.y()) - ly;
 				gc.setStroke(Color.CORNFLOWERBLUE);
 				gc.setLineWidth(1);
 				gc.setLineDashes(5);

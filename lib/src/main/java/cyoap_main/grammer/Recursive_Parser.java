@@ -38,14 +38,10 @@ public class Recursive_Parser {
 	}
 
 	public ValueType unzip() {
-		if (value.getData() instanceof Function_for_d) {
-			Function_for_d func = value.getData();
-
-			if (func instanceof Func_one) {
-				Func_one func_one = (Func_one) func;
+		if (value.getData() instanceof Function_for_d func) {
+			if (func instanceof Func_one func_one) {
 				return func_one.func(child_node[0].unzip());
-			} else if (func instanceof Func_two) {
-				Func_two func_two = (Func_two) func;
+			} else if (func instanceof Func_two func_two) {
 				return func_two.func(child_node[0].unzip(), child_node[1].unzip());
 			} else {
 				Func_three func_three = (Func_three) func;

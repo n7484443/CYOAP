@@ -25,8 +25,8 @@ public class CreateCommand extends AbstractCommand{
 	    
 		choiceSet.string_title = generatedString;
 		var v = checkOutline(choiceSet, x, y);
-		choiceSet.posx = v.x;
-		choiceSet.posy = v.y;
+		choiceSet.posx = v.x();
+		choiceSet.posy = v.y();
 	}
 	@Override
 	public void excute() {

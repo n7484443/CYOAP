@@ -118,7 +118,7 @@ public class VarData {
 		@SuppressWarnings("unchecked")
 		public <T> T getData() {
 			if (type.equals(types.booleans))
-				return (T) (data.toLowerCase().equals("true") ? Boolean.TRUE : Boolean.FALSE);
+				return (T) (data.equalsIgnoreCase("true") ? Boolean.TRUE : Boolean.FALSE);
 			if (type.equals(types.strings))
 				return (T) (data);
 			if (type.equals(types.floats))

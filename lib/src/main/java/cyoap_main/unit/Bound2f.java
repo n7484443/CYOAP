@@ -28,10 +28,8 @@ public class Bound2f {
 			return false;
 		if (y + height < other.y)
 			return false;
-		if (y > other.y + other.height)
-			return false;
-		return true;
-	}
+        return !(y > other.y + other.height);
+    }
 	
 	public boolean intersect(Vector2f other) {
 		if (x + width < other.x())
@@ -40,8 +38,6 @@ public class Bound2f {
 			return false;
 		if (y + height < other.y())
 			return false;
-		if (y > other.y())
-			return false;
-		return true;
-	}
+        return !(y > other.y());
+    }
 }

@@ -19,13 +19,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 public interface IPlatformGuiController extends Initializable{
-	public ImageView getBackgroundImageView();
-	public Pane getChoicePane();
-	public AbstractPlatform getPlatform();
-	public Canvas getCanvas();
-	public void update();
-	public boolean isEditable();
-	public default void load() {
+	ImageView getBackgroundImageView();
+	Pane getChoicePane();
+	AbstractPlatform getPlatform();
+	Canvas getCanvas();
+	void update();
+	boolean isEditable();
+	default void load() {
 		getPlatform().clearNodeOnPanePosition();
 		var path = new File(JavaFxMain.instance.directory.getAbsolutePath() + "/choiceSet");
 		if (!path.exists())

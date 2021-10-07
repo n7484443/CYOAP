@@ -43,7 +43,7 @@ public class LoadUtil {
 
 	public Pane loadFXML(String path) throws IOException {
 		URL url = LoadUtil.class.getResource(path);
-		Pane root = (Pane) FXMLLoader.load(url);
+		Pane root = FXMLLoader.load(url);
 		return root;
 	}
 	
@@ -56,7 +56,7 @@ public class LoadUtil {
 		URI uri = LoadUtil.class.getResource(url).toURI();
 		Path myPath;
 		if (uri.getScheme().equals("jar")) {
-            FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.<String, Object>emptyMap());
+            FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.emptyMap());
             myPath = fileSystem.getPath(url);
         } else {
             myPath = Paths.get(uri);

@@ -36,15 +36,15 @@ public class Analyser {
 	public static List<String> parser(String str) {
 		if (str == null)
 			return null;
-		if (str.chars().filter(e -> e == ((char) '{')).count() != str.chars().filter(e -> e == ((char) '}')).count()) {
+		if (str.chars().filter(e -> e == '{').count() != str.chars().filter(e -> e == '}').count()) {
 			System.err.println("{와 }의 개수가 다릅니다!");
 			return null;
 		}
-		if (str.chars().filter(e -> e == ((char) '(')).count() != str.chars().filter(e -> e == ((char) ')')).count()) {
+		if (str.chars().filter(e -> e == '(').count() != str.chars().filter(e -> e == ')').count()) {
 			System.err.println("(와 )의 개수가 다릅니다!");
 			return null;
 		}
-		if (str.chars().filter(e -> e == ((char) '[')).count() != str.chars().filter(e -> e == ((char) ']')).count()) {
+		if (str.chars().filter(e -> e == '[').count() != str.chars().filter(e -> e == ']').count()) {
 			System.err.println("[와 ]의 개수가 다릅니다!");
 			return null;
 		}
@@ -167,17 +167,17 @@ public class Analyser {
 							}
 						}else if (func_int_List.get(size) == others_string) {
 							func_string_List.set(size, func_string_List.get(size) + c);
-							if (func_string_List.get(size).toLowerCase().equals("true")) {
+							if (func_string_List.get(size).equalsIgnoreCase("true")) {
 								func_int_List.set(size, trues);
-							} else if (func_string_List.get(size).toLowerCase().equals("false")) {
+							} else if (func_string_List.get(size).equalsIgnoreCase("false")) {
 								func_int_List.set(size, falses);
 							}
 						} else {
 							func_string_List.add(String.valueOf(c));
 							func_int_List.add(others_string);
-							if (func_string_List.get(size).toLowerCase().equals("true")) {
+							if (func_string_List.get(size).equalsIgnoreCase("true")) {
 								func_int_List.set(size, trues);
-							} else if (func_string_List.get(size).toLowerCase().equals("false")) {
+							} else if (func_string_List.get(size).equalsIgnoreCase("false")) {
 								func_int_List.set(size, falses);
 							}
 						}

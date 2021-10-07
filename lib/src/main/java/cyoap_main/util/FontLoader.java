@@ -72,7 +72,6 @@ public class FontLoader {
 						loadFonts(m2.toString().replace("/modules/cyoap_module", ""));
 					});
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			});

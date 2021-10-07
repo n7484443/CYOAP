@@ -31,7 +31,7 @@ public class FunctionList {
 		} else {
 			f = input.getData();
 		}
-		input.setData(String.valueOf((int) Math.round(f)));
+		input.setData(String.valueOf(Math.round(f)));
 		return input;
 	};
 	
@@ -211,15 +211,15 @@ public class FunctionList {
 	public interface Function_for_d{}
 	@FunctionalInterface
 	public interface Func_three extends Function_for_d{
-		public ValueType func(ValueType b, ValueType x, ValueType nor);
+		ValueType func(ValueType b, ValueType x, ValueType nor);
 	}
 	@FunctionalInterface
 	public interface Func_two extends Function_for_d{
-		public ValueType func(ValueType b, ValueType x);
+		ValueType func(ValueType b, ValueType x);
 	}
 	
 	@FunctionalInterface
 	public interface Func_one extends Function_for_d{
-		public ValueType func(ValueType b);
+		ValueType func(ValueType b);
 	}
 }

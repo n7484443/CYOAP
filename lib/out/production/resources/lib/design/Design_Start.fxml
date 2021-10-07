@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="675.0" prefWidth="1200.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cyoap_main.design.controller.StartGUIController">
+   <children>
+      <Pane fx:id="pane_play" prefHeight="338.0" prefWidth="1200.0">
+         <children>
+            <Text layoutX="455.0" layoutY="180.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Play">
+               <font>
+                  <Font size="80.0" />
+               </font>
+            </Text>
+         </children>
+      </Pane>
+      <Pane fx:id="pane_create" layoutY="338.0" prefHeight="337.5" prefWidth="1200.0">
+         <children>
+            <Text layoutX="600.0" layoutY="189.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Make">
+               <font>
+                  <Font size="80.0" />
+               </font>
+            </Text>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

@@ -324,23 +324,23 @@ public class CreateGuiController implements IPlatformGuiController {
 					float movex = (float) (e.getSceneX() - platform.start_mouse_x);
 					float movey = (float) (e.getSceneY() - platform.start_mouse_y);
 					if (Cursur.equals(Cursor.NW_RESIZE)) {
-						nowControl.changeSize((float) (-movex + nowControl.guiComponent.width_before),
-								(float) (-movey + nowControl.guiComponent.height_before));
+						nowControl.changeSize(-movex + nowControl.guiComponent.width_before,
+								-movey + nowControl.guiComponent.height_before);
 						nowControl.setPosition(movex + nowControl.guiComponent.x_before,
 								movey + nowControl.guiComponent.y_before);
 					} else if (Cursur.equals(Cursor.SW_RESIZE)) {
-						nowControl.changeSize((float) (-movex + nowControl.guiComponent.width_before),
-								(float) (movey + nowControl.guiComponent.height_before));
+						nowControl.changeSize(-movex + nowControl.guiComponent.width_before,
+								movey + nowControl.guiComponent.height_before);
 						nowControl.setPosition(movex + nowControl.guiComponent.x_before,
 								nowControl.guiComponent.y_before);
 					} else if (Cursur.equals(Cursor.NE_RESIZE)) {
-						nowControl.changeSize((float) (movex + nowControl.guiComponent.width_before),
-								(float) (-movey + nowControl.guiComponent.height_before));
+						nowControl.changeSize(movex + nowControl.guiComponent.width_before,
+								-movey + nowControl.guiComponent.height_before);
 						nowControl.setPosition(nowControl.guiComponent.x_before,
 								movey + nowControl.guiComponent.y_before);
 					} else if (Cursur.equals(Cursor.SE_RESIZE)) {
-						nowControl.changeSize((float) (movex + nowControl.guiComponent.width_before),
-								(float) (movey + nowControl.guiComponent.height_before));
+						nowControl.changeSize(movex + nowControl.guiComponent.width_before,
+								movey + nowControl.guiComponent.height_before);
 						nowControl.setPosition(nowControl.guiComponent.x_before, nowControl.guiComponent.y_before);
 					}
 					nowControl.isClicked = true;
@@ -405,7 +405,7 @@ public class CreateGuiController implements IPlatformGuiController {
 
 	public String addTextIntoString(String str, int anchor, int caret, String add) {
 		if (str == null) {
-			str = new String();
+			str = "";
 		}
 		var before = str.substring(0, Math.min(anchor, caret));
 		var after = str.substring(Math.max(anchor, caret));
@@ -421,7 +421,14 @@ public class CreateGuiController implements IPlatformGuiController {
 			text.stream().forEach(t -> builder.append(t));
 		if (nowEditDataSet != null) {
 			var command = new TextChangeCommand(nowEditDataSet);
-			nowEditDataSet.string_title = text_title.getText();
+			if(!text_title.equals(nowEditDataSet.string_title)){
+				var number_of = (int)this.getPlatform().choiceSetList.stream().filter(t -> t != nowEditDataSet && t.string_title.equals(text_title.getText())).count();
+				if(number_of == 0){
+					nowEditDataSet.string_title = text_title.getText();
+				}else{
+					System.err.println("duplicated title! " + nowEditDataSet.string_title);
+				}
+			}
 			if (image != null)
 				nowEditDataSet.string_image_name = image.getValue();
 			nowEditDataSet.color = colorpicker.getValue();

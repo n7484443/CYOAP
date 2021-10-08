@@ -35,7 +35,6 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Cursor;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
@@ -179,12 +178,12 @@ public class CreateGuiController implements IPlatformGuiController {
 
 		colorpicker.getStyleClass().add("button");
 
-		button_borderless.setOnMouseClicked(e -> {
+		button_borderless.setOnMouseClicked(e ->
 			getPlatform().choiceSetList.forEach(t -> {
 				t.flag = FlagUtil.setFlag(t.flag, ChoiceSet.flagPosition_selectable, true);
 				t.updateFlag();
-			});
-		});
+			})
+		);
 		button_border.setOnMouseClicked(e -> {
 			getPlatform().choiceSetList.forEach(t -> {
 				t.flag = FlagUtil.setFlag(t.flag, ChoiceSet.flagPosition_selectable, false);
@@ -305,10 +304,12 @@ public class CreateGuiController implements IPlatformGuiController {
 
 		pane_position.setOnMouseDragged(e -> {
 			if (e.getButton().equals(MouseButton.PRIMARY)) {
-				var Cursur = JavaFxMain.instance.scene_create.getCursor();
-				if ((Cursur == null || Cursur.equals(Cursor.DEFAULT))) {
-					double movex = platform.sensitivity * (e.getSceneX() - platform.start_mouse_x);
-					double movey = platform.sensitivity * (e.getSceneY() - platform.start_mouse_y);
+				var cursor = JavaFxMain.instance.scene_create.getCursor();
+				float movex = (float) (e.getSceneX() - platform.start_mouse_x);
+				float movey = (float) (e.getSceneY() - platform.start_mouse_y);
+				if ((cursor == null || cursor.equals(cursor.DEFAULT))) {
+					movex *= platform.sensitivity;
+					movey *= platform.sensitivity;
 					platform.local_x -= movex;
 					platform.local_y -= movey;
 					platform.start_mouse_x = e.getSceneX();
@@ -323,24 +324,22 @@ public class CreateGuiController implements IPlatformGuiController {
 						platform.local_y = platform.min_y;
 					platform.updateMouseCoordinate();
 				} else if (nowControl != null) {
-					float movex = (float) (e.getSceneX() - platform.start_mouse_x);
-					float movey = (float) (e.getSceneY() - platform.start_mouse_y);
-					if (Cursur.equals(Cursor.NW_RESIZE)) {
+					if (cursor.equals(cursor.NW_RESIZE)) {
 						nowControl.changeSize(-movex + nowControl.guiComponent.width_before,
 								-movey + nowControl.guiComponent.height_before);
 						nowControl.setPosition(movex + nowControl.guiComponent.x_before,
 								movey + nowControl.guiComponent.y_before);
-					} else if (Cursur.equals(Cursor.SW_RESIZE)) {
+					} else if (cursor.equals(cursor.SW_RESIZE)) {
 						nowControl.changeSize(-movex + nowControl.guiComponent.width_before,
 								movey + nowControl.guiComponent.height_before);
 						nowControl.setPosition(movex + nowControl.guiComponent.x_before,
 								nowControl.guiComponent.y_before);
-					} else if (Cursur.equals(Cursor.NE_RESIZE)) {
+					} else if (cursor.equals(cursor.NE_RESIZE)) {
 						nowControl.changeSize(movex + nowControl.guiComponent.width_before,
 								-movey + nowControl.guiComponent.height_before);
 						nowControl.setPosition(nowControl.guiComponent.x_before,
 								movey + nowControl.guiComponent.y_before);
-					} else if (Cursur.equals(Cursor.SE_RESIZE)) {
+					} else if (cursor.equals(cursor.SE_RESIZE)) {
 						nowControl.changeSize(movex + nowControl.guiComponent.width_before,
 								movey + nowControl.guiComponent.height_before);
 						nowControl.setPosition(nowControl.guiComponent.x_before, nowControl.guiComponent.y_before);
@@ -420,10 +419,10 @@ public class CreateGuiController implements IPlatformGuiController {
 		var text = Analyser.parser(text_editor.getText());
 		StringBuilder builder = new StringBuilder();
 		if (text != null)
-			text.stream().forEach(t -> builder.append(t));
+			text.forEach(builder::append);
 		if (nowEditDataSet != null) {
 			var command = new TextChangeCommand(nowEditDataSet);
-			if(!text_title.equals(nowEditDataSet.string_title)){
+			if(!text_title.getText().equals(nowEditDataSet.string_title)){
 				var number_of = (int)this.getPlatform().choiceSetList.stream().filter(t -> t != nowEditDataSet && t.string_title.equals(text_title.getText())).count();
 				if(number_of == 0){
 					nowEditDataSet.string_title = text_title.getText();
@@ -515,7 +514,7 @@ public class CreateGuiController implements IPlatformGuiController {
 
 		if (VarData.isUpdated) {
 			VarData.isUpdated = false;
-			List<String> name_list = new ArrayList<String>();
+			List<String> name_list = new ArrayList<>();
 			for (var key : VarData.var_map.keySet()) {
 				var value = VarData.var_map.get(key);
 				name_list.add(key + "  |  " + value.data + "  |  " + value.type.toString());

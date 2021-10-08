@@ -3,16 +3,16 @@ package cyoap_main.command;
 import cyoap_main.design.choice.ChoiceSet;
 
 public class DeleteCommand extends AbstractCommand {
-	public double localx;
-	public double localy;
+	public double local_x;
+	public double local_y;
 	public ChoiceSet choiceSet;
 
 	public DeleteCommand() {}
 
 	public DeleteCommand(ChoiceSet choiceSet, double local_x, double local_y) {
 		this.choiceSet = choiceSet;
-		this.localx = local_x;
-		this.localy = local_y;
+		this.local_x = local_x;
+		this.local_y = local_y;
 	}
 
 	@Override
@@ -26,7 +26,7 @@ public class DeleteCommand extends AbstractCommand {
 	public void undo() {
 		choiceSet.setUp(control.getChoicePane());
 		control.getPlatform().choiceSetList.add(choiceSet);
-		choiceSet.updateCoordinate(-localx, -localy);
+		choiceSet.updateCoordinate(-local_x, -local_y);
 		choiceSet.updateFlag();
 	}
 

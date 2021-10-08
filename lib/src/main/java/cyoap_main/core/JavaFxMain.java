@@ -31,7 +31,7 @@ public class JavaFxMain extends Application {
 	public int window_height = (int) (1080 / 2 * 1.25f);// 675
 
 	@Override
-	public void start(Stage primaryStage) throws Exception {
+	public void start(Stage primaryStage){
 		try {
 			System.out.println("javafx.runtime.version: " + System.getProperties().get("javafx.runtime.version"));
 			instance = this;

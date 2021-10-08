@@ -27,7 +27,7 @@ import javafx.scene.paint.Color;
 public class ChoiceSet {
 	public String string_title;
 
-	public List<StyledSegment<String, String>> segmentList = new ArrayList<StyledSegment<String, String>>();
+	public List<StyledSegment<String, String>> segmentList = new ArrayList<>();
 
 	public String string_image_name;
 
@@ -43,17 +43,20 @@ public class ChoiceSet {
 	public static final int flagPosition_selectable = 0;
 	@JsonIgnore
 	public static final int flagPosition_horizontal = 1;
+	@JsonIgnore
+	public static final int flagPosition_emptyimage = 2;
 
 	public int flag = flagPosition_selectable;
 
 	@JsonManagedReference
-	public List<ChoiceSet> choiceSet_child = new ArrayList<ChoiceSet>();
+	public List<ChoiceSet> choiceSet_child = new ArrayList<>();
 
 	@JsonBackReference
 	public ChoiceSet choiceSet_parent = null;
 
-	public float posx;
-	public float posy;
+	public float pos_x;
+	public float pos_y;
+	
 	public float width;
 	public float height;
 
@@ -75,23 +78,23 @@ public class ChoiceSet {
 		this(title, image, 0, 0, 0, 0);
 	}
 
-	public ChoiceSet(float posx, float posy) {
-		this("title", null, posx, posy, 0, 0);
+	public ChoiceSet(float pos_x, float pos_y) {
+		this("title", null, pos_x, pos_y, 0, 0);
 	}
 
 	public ChoiceSet(String title) {
 		this(title, null, 0, 0, 0, 0);
 	}
 
-	public ChoiceSet(String title, String image_name, float posx, float posy, float width, float height) {
+	public ChoiceSet(String title, String image_name, float pos_x, float posy, float width, float height) {
 		this.string_title = title;
 		this.string_image_name = image_name;
-		this.posx = posx;
-		this.posy = posy;
+		this.pos_x = pos_x;
+		this.pos_y = posy;
 		this.width = width;
 		this.height = height;
 
-		bound = new Bound2f(posx, posy, getWidth(), getHeight());
+		bound = new Bound2f(pos_x, posy, getWidth(), getHeight());
 	}
 
 	public void setUp(Pane pane_mother) {
@@ -145,8 +148,8 @@ public class ChoiceSet {
 	}
 
 	public void updateBounds() {
-		bound.x = posx;
-		bound.y = posy;
+		bound.x = pos_x;
+		bound.y = pos_y;
 		bound.width = getWidth();
 		bound.height = getHeight();
 	}
@@ -200,29 +203,29 @@ public class ChoiceSet {
 	
 	// 화면상의 위치
 	public void updateCoordinate(double moveX, double moveY) {
-		guiComponent.updatePos(posx + moveX, posy + moveY);
+		guiComponent.updatePos(pos_x + moveX, pos_y + moveY);
 		updateBounds();
 	}
 
 	// 실제 위치
 	public void updatePosition(double moveX, double moveY) {
-		posx += moveX;
-		posy += moveY;
-		guiComponent.updatePos(posx - CreateGuiController.platform.local_x,
-				posy - CreateGuiController.platform.local_y);
+		pos_x += moveX;
+		pos_y += moveY;
+		guiComponent.updatePos(pos_x - CreateGuiController.platform.local_x,
+				pos_y - CreateGuiController.platform.local_y);
 		updateBounds();
 	}
 
-	public void setCoordinate(double coordX, double coordY) {
-		guiComponent.updatePos(coordX, coordY);
+	public void setCoordinate(double coord_X, double coord_Y) {
+		guiComponent.updatePos(coord_X, coord_Y);
 		updateBounds();
 	}
 
 	public void setPosition(float posX, float posY) {
-		posx = posX;
-		posy = posY;
-		guiComponent.updatePos(posx - CreateGuiController.platform.local_x,
-				posy - CreateGuiController.platform.local_y);
+		pos_x = posX;
+		pos_y = posY;
+		guiComponent.updatePos(pos_x - CreateGuiController.platform.local_x,
+				pos_y - CreateGuiController.platform.local_y);
 		updateBounds();
 	}
 
@@ -246,7 +249,7 @@ public class ChoiceSet {
 	@JsonGetter("segmentList")
 	@JsonProperty("segmentList")
 	public List<String> getSegmentList() {
-		List<String> strList = new ArrayList<String>();
+		List<String> strList = new ArrayList<>();
 		if (segmentList.isEmpty())
 			return strList;
 		for (var v : segmentList) {
@@ -269,7 +272,7 @@ public class ChoiceSet {
 				var splitedStr = v.split("\\}:\\{");
 				splitedStr[0] = splitedStr[0].substring(1);
 				splitedStr[1] = splitedStr[1].substring(0, splitedStr[1].length() - 1);
-				var segment = new StyledSegment<String, String>(splitedStr[0], splitedStr[1]);
+				var segment = new StyledSegment<>(splitedStr[0], splitedStr[1]);
 				segmentList.add(segment);
 			}
 		}

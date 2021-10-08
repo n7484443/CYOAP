@@ -25,15 +25,15 @@ public class CreateCommand extends AbstractCommand{
 	    
 		choiceSet.string_title = generatedString;
 		var v = checkOutline(choiceSet, x, y);
-		choiceSet.posx = v.x();
-		choiceSet.posy = v.y();
+		choiceSet.pos_x = v.x();
+		choiceSet.pos_y = v.y();
 	}
 	@Override
 	public void excute() {
 		choiceSet.setUp(control.getChoicePane());
 		choiceSet.update();
 		control.getPlatform().choiceSetList.add(choiceSet);
-		choiceSet.setPosition(choiceSet.posx, choiceSet.posy);
+		choiceSet.setPosition(choiceSet.pos_x, choiceSet.pos_y);
 	}
 
 	@Override

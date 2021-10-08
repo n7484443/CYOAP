@@ -56,8 +56,8 @@ public class AbstractPlatform {
 	public boolean needUpdate = true;
 
 	public SimpleEntry<Vector2f, Integer> checkLine(ChoiceSet choiceSet, float bias) {
-		var x_min = choiceSet.posx;
-		var y_min = choiceSet.posy;
+		var x_min = choiceSet.pos_x;
+		var y_min = choiceSet.pos_y;
 		var x_max = x_min + choiceSet.getWidth();
 		var y_max = y_min + choiceSet.getHeight();
 
@@ -71,8 +71,8 @@ public class AbstractPlatform {
 			float l = 0;
 			if (choice == choiceSet)
 				continue;
-			var x_min2 = choice.posx;
-			var y_min2 = choice.posy;
+			var x_min2 = choice.pos_x;
+			var y_min2 = choice.pos_y;
 			var x_max2 = x_min2 + choice.getWidth();
 			var y_max2 = y_min2 + choice.getHeight();
 			var x_half2 = x_min2 + choice.getWidth() / 2;

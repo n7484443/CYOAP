@@ -121,6 +121,8 @@ public class CreateGuiController implements IPlatformGuiController {
 	@FXML
 	public RadioButton button_horizon;
 	@FXML
+	public RadioButton button_emptyimage;
+	@FXML
 	public Canvas canvas;
 	@FXML
 	public Button button_border;
@@ -178,21 +180,21 @@ public class CreateGuiController implements IPlatformGuiController {
 		colorpicker.getStyleClass().add("button");
 
 		button_borderless.setOnMouseClicked(e -> {
-			getPlatform().choiceSetList.stream().forEach(t -> {
+			getPlatform().choiceSetList.forEach(t -> {
 				t.flag = FlagUtil.setFlag(t.flag, ChoiceSet.flagPosition_selectable, true);
 				t.updateFlag();
 			});
 		});
 		button_border.setOnMouseClicked(e -> {
-			getPlatform().choiceSetList.stream().forEach(t -> {
+			getPlatform().choiceSetList.forEach(t -> {
 				t.flag = FlagUtil.setFlag(t.flag, ChoiceSet.flagPosition_selectable, false);
 				t.updateFlag();
 			});
 		});
 
-		button_save.setOnMouseClicked(e -> {
-			save_describe_pane();
-		});
+		button_save.setOnMouseClicked(e ->
+			save_describe_pane()
+		);
 		button_next.setOnMouseClicked(e -> {
 			save_describe_pane();
 			next();

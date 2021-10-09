@@ -127,6 +127,7 @@ public class ChoiceSet {
 	}
 
 	public void update() {
+		updateFlag();
 		updateSize();
 		updateBounds();
 		updateColor();
@@ -160,7 +161,7 @@ public class ChoiceSet {
 		this.choiceSet_child.add(sub);
 		sub.choiceSet_parent = this;
 
-		guiComponent.combineSubChoiceSetComponenet(sub);
+		guiComponent.combineSubChoiceSetComponent(sub);
 	}
 
 	public void seperateSubChoiceSet(ChoiceSet sub) {
@@ -168,7 +169,7 @@ public class ChoiceSet {
 		CreateGuiController.platform.choiceSetList.add(sub);
 		sub.choiceSet_parent = null;
 
-		guiComponent.seperateSubChoiceSetComponenet(sub);
+		guiComponent.seperateSubChoiceSetComponent(sub);
 	}
 
 	public void updateColor(Color t) {

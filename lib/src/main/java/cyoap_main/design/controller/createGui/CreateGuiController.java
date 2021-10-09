@@ -11,9 +11,11 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 
+import javafx.scene.Cursor;
 import org.fxmisc.richtext.InlineCssTextArea;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -121,6 +123,8 @@ public class CreateGuiController implements IPlatformGuiController {
 	public RadioButton button_horizon;
 	@FXML
 	public RadioButton button_emptyimage;
+
+	public List<RadioButton> button_list = new ArrayList<>();
 	@FXML
 	public Canvas canvas;
 	@FXML
@@ -162,6 +166,10 @@ public class CreateGuiController implements IPlatformGuiController {
 
 		canvas.setMouseTransparent(true);
 
+		button_list.add(button_outline);
+		button_list.add(button_horizon);
+		button_list.add(button_darkmode);
+
 		try {
 			text_editor.setWrapText(true);
 			text_editor.getStylesheets().add(LoadUtil.instance.loadCss("/lib/css/texteditor.css"));
@@ -184,12 +192,10 @@ public class CreateGuiController implements IPlatformGuiController {
 				t.updateFlag();
 			})
 		);
-		button_border.setOnMouseClicked(e -> {
-			getPlatform().choiceSetList.forEach(t -> {
+		button_border.setOnMouseClicked(e -> getPlatform().choiceSetList.forEach(t -> {
 				t.flag = FlagUtil.setFlag(t.flag, ChoiceSet.flagPosition_selectable, false);
 				t.updateFlag();
-			});
-		});
+			}));
 
 		button_save.setOnMouseClicked(e ->
 			save_describe_pane()
@@ -307,7 +313,7 @@ public class CreateGuiController implements IPlatformGuiController {
 				var cursor = JavaFxMain.instance.scene_create.getCursor();
 				float movex = (float) (e.getSceneX() - platform.start_mouse_x);
 				float movey = (float) (e.getSceneY() - platform.start_mouse_y);
-				if ((cursor == null || cursor.equals(cursor.DEFAULT))) {
+				if ((cursor == null || cursor.equals(Cursor.DEFAULT))) {
 					movex *= platform.sensitivity;
 					movey *= platform.sensitivity;
 					platform.local_x -= movex;
@@ -324,22 +330,22 @@ public class CreateGuiController implements IPlatformGuiController {
 						platform.local_y = platform.min_y;
 					platform.updateMouseCoordinate();
 				} else if (nowControl != null) {
-					if (cursor.equals(cursor.NW_RESIZE)) {
+					if (cursor.equals(Cursor.NW_RESIZE)) {
 						nowControl.changeSize(-movex + nowControl.guiComponent.width_before,
 								-movey + nowControl.guiComponent.height_before);
 						nowControl.setPosition(movex + nowControl.guiComponent.x_before,
 								movey + nowControl.guiComponent.y_before);
-					} else if (cursor.equals(cursor.SW_RESIZE)) {
+					} else if (cursor.equals(Cursor.SW_RESIZE)) {
 						nowControl.changeSize(-movex + nowControl.guiComponent.width_before,
 								movey + nowControl.guiComponent.height_before);
 						nowControl.setPosition(movex + nowControl.guiComponent.x_before,
 								nowControl.guiComponent.y_before);
-					} else if (cursor.equals(cursor.NE_RESIZE)) {
+					} else if (cursor.equals(Cursor.NE_RESIZE)) {
 						nowControl.changeSize(movex + nowControl.guiComponent.width_before,
 								-movey + nowControl.guiComponent.height_before);
 						nowControl.setPosition(nowControl.guiComponent.x_before,
 								movey + nowControl.guiComponent.y_before);
-					} else if (cursor.equals(cursor.SE_RESIZE)) {
+					} else if (cursor.equals(Cursor.SE_RESIZE)) {
 						nowControl.changeSize(movex + nowControl.guiComponent.width_before,
 								movey + nowControl.guiComponent.height_before);
 						nowControl.setPosition(nowControl.guiComponent.x_before, nowControl.guiComponent.y_before);
@@ -433,19 +439,12 @@ public class CreateGuiController implements IPlatformGuiController {
 			if (image != null)
 				nowEditDataSet.string_image_name = image.getValue();
 			nowEditDataSet.color = colorpicker.getValue();
-			
-			if (FlagUtil.getFlag(nowEditDataSet.flag, ChoiceSet.flagPosition_selectable) != this.button_outline
-					.isSelected()) {
-				nowEditDataSet.flag = FlagUtil.setFlag(nowEditDataSet.flag, ChoiceSet.flagPosition_selectable,
-						this.button_outline.isSelected());
-			} else if (FlagUtil.getFlag(nowEditDataSet.flag, ChoiceSet.flagPosition_horizontal) != this.button_horizon
-					.isSelected()) {
-				nowEditDataSet.flag = FlagUtil.setFlag(nowEditDataSet.flag, ChoiceSet.flagPosition_horizontal,
-						this.button_horizon.isSelected());
-			}
+
+			var v = button_list.stream().map(t -> t.isSelected()).collect(Collectors.toList());
+			nowEditDataSet.flag = FlagUtil.createFlag(v);
 			
 			LoadUtil.paragraphToSegment(text_editor.getDocument().getParagraphs(), nowEditDataSet.segmentList);
-			
+
 			nowEditDataSet.update();
 			command.setText(nowEditDataSet);
 			commandTimeline.addCommand(command);

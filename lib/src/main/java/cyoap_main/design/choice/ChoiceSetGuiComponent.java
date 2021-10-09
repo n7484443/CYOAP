@@ -283,7 +283,7 @@ public class ChoiceSetGuiComponent {
 		pane.setStyle("-fx-background-color: #" + color.toString().replace("0x", "") + ";");
 	}
 
-	public void combineSubChoiceSetComponenet(ChoiceSet sub) {
+	public void combineSubChoiceSetComponent(ChoiceSet sub) {
 		if (sub.choiceSet_parent != null) {
 			sub.choiceSet_parent.getAnchorPane().getChildren().remove(sub.getAnchorPane());
 		}
@@ -295,7 +295,7 @@ public class ChoiceSetGuiComponent {
 		}
 	}
 
-	public void seperateSubChoiceSetComponenet(ChoiceSet sub) {
+	public void seperateSubChoiceSetComponent(ChoiceSet sub) {
 		pane.getChildren().remove(hbox);
 		hbox.getChildren().remove(sub.getAnchorPane());
 		CreateGuiController.instance.pane_position.getChildren().add(sub.getAnchorPane());

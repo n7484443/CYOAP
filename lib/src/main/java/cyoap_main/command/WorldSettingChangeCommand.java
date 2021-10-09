@@ -13,7 +13,7 @@ public class WorldSettingChangeCommand extends AbstractCommand{
 
 	@Override
 	public String getName() {
-		return null;
+		return "World Setting Changed";
 	}
 
 }

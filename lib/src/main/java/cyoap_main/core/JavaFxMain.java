@@ -46,6 +46,7 @@ public class JavaFxMain extends Application {
 				KeyCombination comb_undo = new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN);
 				KeyCombination comb_redo = new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN,
 						KeyCombination.SHIFT_DOWN);
+				KeyCombination comb_reset = new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN);
 				if (comb_save.match(e)) {
 					System.out.println("Save ShortCut");
 					CreateGuiController.instance.save_shortcut();
@@ -58,6 +59,9 @@ public class JavaFxMain extends Application {
 				} else if (comb_redo.match(e)) {
 					System.out.println("Redo ShortCut");
 					CreateGuiController.instance.redo_shortcut();
+				} else if(comb_reset.match(e)){
+					System.out.println("Reset ShortCut");
+					CreateGuiController.instance.getPlatform().scale = 1.f;
 				}
 			});
 			scene_start = new Scene(LoadUtil.instance.loadFXML("/lib/design/Design_Start.fxml"), window_width,

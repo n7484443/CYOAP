@@ -18,7 +18,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class JavaFxMain extends Application {
-	public static String version = "1.0.0";
+	public static String version = "1.1.0-alpha";
 
 	public static JavaFxMain instance;
 	public Stage stage;
@@ -87,6 +87,7 @@ public class JavaFxMain extends Application {
 			}.start();
 			stage.setResizable(false);
 			stage.show();
+			LoadUtil.loadLastestVersion();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

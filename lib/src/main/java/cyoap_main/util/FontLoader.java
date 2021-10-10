@@ -64,6 +64,7 @@ public class FontLoader {
 			}
 			jar.close();
 		} else { // Run with excuter
+			LoadUtil.isIDE = false;
 			Path p = Paths.get(URI.create("jrt:/")).resolve("/modules/cyoap_module/lib/font");
 			Files.list(p).forEach(m -> {
 				var p2 = p.resolve(m);

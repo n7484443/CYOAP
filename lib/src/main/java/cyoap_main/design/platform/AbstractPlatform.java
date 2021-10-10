@@ -48,11 +48,6 @@ public class AbstractPlatform {
 	public IPlatformGuiController guiController;
 	public int flag = 0;
 
-	@JsonIgnore
-	public final int flag_maximize = 1 << 0;
-	@JsonIgnore
-	public final int flag_center = 1 << 1;
-
 	public boolean needUpdate = true;
 
 	public SimpleEntry<Vector2f, Integer> checkLine(ChoiceSet choiceSet, float bias) {

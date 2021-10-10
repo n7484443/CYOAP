@@ -25,6 +25,9 @@ dependencies {
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.4'
 	implementation 'org.fxmisc.richtext:richtextfx:0.10.6'
 	implementation 'com.twelvemonkeys.imageio:imageio-webp:3.7.0'
+	implementation 'org.apache.maven:maven-artifact:3.8.3'
+	implementation 'org.kohsuke:github-api:1.133'
+	implementation 'net.lingala.zip4j:zip4j:2.9.0'
 }
 
 javafx{

@@ -87,7 +87,7 @@ public class JavaFxMain extends Application {
 			}.start();
 			stage.setResizable(false);
 			stage.show();
-			LoadUtil.loadLastestVersion();
+			LoadUtil.loadLatestVersion();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

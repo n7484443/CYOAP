@@ -206,11 +206,11 @@ public class LoadUtil {
         area.recreateParagraphGraphic(0);
     }
 
-    public static <Github, Repo> void loadLastestVersion() {
+    public static <Github, Repo> void loadLatestVersion() {
         if (!isIDE) {
             String url = "https://api.github.com/repos/n7484443/CYOAP/releases/latest";
             String repoURL = "n7484443/CYOAP";
-            String token = "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";
+            String token = "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";
             try {
                 System.setProperty("https.protocols", "TLSv1.2");
                 GitHub github = GitHub.connectUsingOAuth(token);
@@ -227,6 +227,7 @@ public class LoadUtil {
                     File f = download(asset);
                     unzip(f);
                     f.delete();
+                    System.out.println("download end");
                 }
             } catch (IOException ex) {
                 System.err.println(ex);

@@ -1,10 +1,7 @@
 package cyoap_main.design.controller.createGui;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap.SimpleEntry;
@@ -138,6 +135,7 @@ public class CreateGuiController implements IPlatformGuiController {
 	public ColorPicker colorpicker_text_editor = new ColorPicker();
 
 	public List<File> dropped;
+	public boolean isImageChanged = false;
 
 	public CommandTimeline commandTimeline = new CommandTimeline();
 	public static AbstractPlatform platform;
@@ -216,6 +214,7 @@ public class CreateGuiController implements IPlatformGuiController {
 			var success = false;
 			if (db.hasFiles()) {
 				dropped = db.getFiles();
+				isImageChanged = true;
 				success = true;
 			}
 			e.setDropCompleted(success);
@@ -248,7 +247,10 @@ public class CreateGuiController implements IPlatformGuiController {
 			Dragboard db = e.getDragboard();
 			var success = false;
 			if (db.hasFiles()) {
-				platform.image_file = db.getFiles().get(0);
+				var v = LoadUtil.loadImage(db.getFiles().get(0));
+				platform.background_image = v.getKey();
+				platform.string_image_name = v.getValue();
+				platform.isImageChanged = true;
 				success = true;
 			}
 			e.setDropCompleted(success);
@@ -506,7 +508,8 @@ public class CreateGuiController implements IPlatformGuiController {
 	public SimpleEntry<Image, String> image = null;
 
 	public void update() {
-		if (dropped != null && image == null) {
+		if(isImageChanged){
+			isImageChanged = false;
 			image = LoadUtil.loadImage(dropped.get(0));
 			imageview_describe.setImage(image.getKey());
 		}
@@ -530,14 +533,29 @@ public class CreateGuiController implements IPlatformGuiController {
 	}
 
 	public void save_shortcut() {
+		getPlatform().save();
 		save_describe_pane();
 		save_position_pane();
 		commandTimeline.save();
 	}
 
 	public void load_shortcut() {
+		loadPlatform();
 		load();
 		commandTimeline.load();
+	}
+
+	public void loadPlatform(){
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			InputStreamReader writer = new InputStreamReader(new FileInputStream(JavaFxMain.instance.directory.getAbsolutePath() + "/platform.json"), StandardCharsets.UTF_8);
+
+			platform = objectMapper.readValue(writer, AbstractPlatform.class);
+			platform.setUp(this);
+			platform.isImageChanged = true;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void undo_shortcut() {

@@ -53,5 +53,6 @@ public interface IPlatformGuiController extends Initializable{
 		for (var v : getPlatform().choiceSetList) {
 			LoadUtil.loadChoiceSetParents(v);
 		}
+		getPlatform().update();
 	}
 }

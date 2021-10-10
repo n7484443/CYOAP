@@ -27,6 +27,8 @@ public class JavaFxMain extends Application {
 	public Scene scene_play;
 	public static IPlatformGuiController controller = null;
 
+	//public int window_width = (int) (1920 / 2 * 1.5f);// 1440
+	//public int window_height = (int) (1080 / 2 * 1.5f);// 810
 	public int window_width = (int) (1920 / 2 * 1.25f);// 1200
 	public int window_height = (int) (1080 / 2 * 1.25f);// 675
 

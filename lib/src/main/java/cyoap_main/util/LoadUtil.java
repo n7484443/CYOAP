@@ -208,18 +208,17 @@ public class LoadUtil {
 
     public static <Github, Repo> void loadLatestVersion() {
         if (!isIDE) {
-            String url = "https://api.github.com/repos/n7484443/CYOAP/releases/latest";
             String repoURL = "n7484443/CYOAP";
-            String token = "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";
             try {
                 System.setProperty("https.protocols", "TLSv1.2");
-                GitHub github = GitHub.connectUsingOAuth(token);
+                GitHub github = GitHub.connectAnonymously();
 
                 GHRepository repo = github.getRepository(repoURL);
                 var latestRelease = repo.getLatestRelease();
                 var listAssets = latestRelease.listAssets();
                 var asset = listAssets.toList().get(0).getBrowserDownloadUrl();
 
+                System.out.println("latest version is : " + latestRelease.getName());
                 ComparableVersion version_github = new ComparableVersion(latestRelease.getName());
                 ComparableVersion version_this = new ComparableVersion(JavaFxMain.version);
                 if (version_this.compareTo(version_github) < 0) {

@@ -4,11 +4,16 @@
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 
-<AnchorPane fx:id="anchorPane_slider" prefHeight="77.0" prefWidth="181.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cyoap_main.design.controller.createGui.PixelScaleGuiController">
+<AnchorPane fx:id="anchorPane_slider" prefHeight="77.0" prefWidth="181.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cyoap_main.design.controller.createGui.PixelScaleGuiController">
    <children>
-      <Slider fx:id="slider_pixelScale" layoutX="7.0" layoutY="14.0" prefHeight="16.0" prefWidth="123.0" />
-      <Button fx:id="button_pixelScale" layoutX="61.0" layoutY="42.0" mnemonicParsing="false" text="Capture" />
-      <TextField fx:id="textField_pixelScale" layoutX="130.0" layoutY="10.0" prefHeight="25.0" prefWidth="45.0" />
+      <HBox alignment="CENTER" layoutX="1.0" layoutY="2.0" prefHeight="25.0" prefWidth="200.0" AnchorPane.topAnchor="10.0">
+         <children>
+            <Slider fx:id="slider_pixelScale" prefHeight="16.0" prefWidth="123.0" />
+            <TextField fx:id="textField_pixelScale" prefHeight="25.0" prefWidth="45.0" />
+         </children>
+      </HBox>
+      <Button fx:id="button_pixelScale" layoutX="68.0" layoutY="51.0" mnemonicParsing="false" text="Capture" AnchorPane.bottomAnchor="5.0" />
    </children>
 </AnchorPane>

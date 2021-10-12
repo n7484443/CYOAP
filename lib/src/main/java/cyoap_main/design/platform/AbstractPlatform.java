@@ -54,6 +54,9 @@ public class AbstractPlatform {
     public boolean isImageChanged = false;
 
     @JsonIgnore
+    public static final int flagPosition_background_preserve_ratio = 0;
+
+    @JsonIgnore
     public IPlatformGuiController guiController;
     public int flag = 0;
 
@@ -195,18 +198,8 @@ public class AbstractPlatform {
             background_image = image.getKey();
             string_image_name = image.getValue();
             guiController.getBackgroundImageView().setImage(background_image);
-
-            var f_image = image.getKey().getWidth() / image.getKey().getHeight();
-            var f_frame = (max_y - min_y) / (max_x - min_x);
-
-            guiController.getBackgroundImageView().setSmooth(true);
-            if (f_image < f_frame) {
-                guiController.getBackgroundImageView().setFitWidth(max_x - min_x);
-                guiController.getBackgroundImageView().setFitHeight(max_y - min_y);
-            } else {
-                guiController.getBackgroundImageView().setFitWidth(max_x - min_x);
-                guiController.getBackgroundImageView().setFitHeight(max_y - min_y);
-            }
+            guiController.getBackgroundImageView().setPrefWidth(max_x - min_x);
+            guiController.getBackgroundImageView().setPrefHeight(max_y - min_y);
         }
         guiController.getChoicePane().setScaleX(scale);
         guiController.getChoicePane().setScaleY(scale);
@@ -253,5 +246,10 @@ public class AbstractPlatform {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void updateFlag(){
+        guiController.getBackgroundImageView().isPreserveRatio = FlagUtil.getFlag(flag, flagPosition_background_preserve_ratio);
+        guiController.getBackgroundImageView().requestLayout();
     }
 }

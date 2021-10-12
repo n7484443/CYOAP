@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cyoap_main.core.JavaFxMain;
 import cyoap_main.design.choice.ChoiceSet;
+import cyoap_main.design.node_extension.ImageCell;
 import cyoap_main.design.platform.AbstractPlatform;
 import cyoap_main.util.LoadUtil;
 import javafx.fxml.Initializable;
@@ -19,7 +20,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 public interface IPlatformGuiController extends Initializable{
-	ImageView getBackgroundImageView();
+	ImageCell getBackgroundImageView();
 	Pane getChoicePane();
 	AbstractPlatform getPlatform();
 	Canvas getCanvas();
@@ -71,14 +72,16 @@ public interface IPlatformGuiController extends Initializable{
 		getPlatform().local_y -= move_y;
 		getPlatform().start_mouse_x = start_move_x;
 		getPlatform().start_mouse_y = start_move_y;
-		if (getPlatform().local_x + this.getChoicePane().getWidth() >= getPlatform().max_x)
-			getPlatform().local_x = getPlatform().max_x - this.getChoicePane().getWidth();
-		if (getPlatform().local_y + this.getChoicePane().getHeight() >= getPlatform().max_y)
-			getPlatform().local_y = getPlatform().max_y - this.getChoicePane().getHeight();
+
+		if (getPlatform().local_x + getChoicePane().getScene().getWidth() >= getPlatform().max_x)
+			getPlatform().local_x = getPlatform().max_x - getChoicePane().getScene().getWidth();
+		if (getPlatform().local_y + getChoicePane().getScene().getHeight() >= getPlatform().max_y)
+			getPlatform().local_y = getPlatform().max_y - getChoicePane().getScene().getHeight();
 		if (getPlatform().local_x <= getPlatform().min_x)
 			getPlatform().local_x = getPlatform().min_x;
 		if (getPlatform().local_y <= getPlatform().min_y)
 			getPlatform().local_y = getPlatform().min_y;
+
 		getPlatform().updateMouseCoordinate();
 	}
 }

@@ -51,8 +51,9 @@ public class PixelScaleGuiController implements Initializable {
 		
 		textField_pixelScale.textProperty().bindBidirectional(slider_pixelScale.valueProperty(), new NumberStringConverter());
 
-		button_pixelScale.setOnMouseClicked(e ->
-			CreateGuiController.instance.capture((float) slider_pixelScale.getValue()));
+		button_pixelScale.setOnMouseClicked(e ->{
+			CreateGuiController.instance.capture((float) slider_pixelScale.getValue());
+			CreateGuiController.instance.anchorpane_create.getChildren().remove(PixelScaleGuiController.instance.anchorPane_slider);
+		});
 	}
-
 }

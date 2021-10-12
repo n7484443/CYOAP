@@ -10,9 +10,11 @@ import javafx.scene.layout.Region;
 
 public class ImageCell extends Region {
 	private final ImageView imageView;
+	public boolean isPreserveRatio = true;
 
 	public ImageCell(Image image) {
 		imageView = new ImageView(image);
+		imageView.setSmooth(true);
 		getChildren().add(imageView);
 	}
 
@@ -48,15 +50,20 @@ public class ImageCell extends Region {
 			imageWidth = image.getWidth();
 			imageHeight = image.getHeight();
 		}
-
-		// scale ImageView to available size
-		double factor = Math.min(width / imageWidth, height / imageHeight);
-		if (Double.isFinite(factor) && factor > 0) {
-			imageView.setFitHeight(factor * imageHeight);
-			imageView.setFitWidth(factor * imageWidth);
+		if(isPreserveRatio){
+			// scale ImageView to available size
+			double factor = Math.min(width / imageWidth, height / imageHeight);
+			if (Double.isFinite(factor) && factor > 0) {
+				imageView.setFitHeight(factor * imageHeight);
+				imageView.setFitWidth(factor * imageWidth);
+				imageView.setVisible(true);
+			} else {
+				imageView.setVisible(false);
+			}
+		}else{
+			imageView.setFitHeight(height);
+			imageView.setFitWidth(width);
 			imageView.setVisible(true);
-		} else {
-			imageView.setVisible(false);
 		}
 
 		// center ImageView in available area

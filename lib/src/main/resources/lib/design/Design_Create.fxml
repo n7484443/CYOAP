@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cyoap_main.design.controller.createGui.CreateGuiController">
+<AnchorPane fx:id="anchorpane_create" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cyoap_main.design.controller.createGui.CreateGuiController">
     <children>
         <GridPane fx:id="gridpane_mainGui" prefHeight="675.0" prefWidth="1200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <columnConstraints>
@@ -83,11 +83,7 @@
                                 </ContextMenu>
                             </contextMenu>
                             <AnchorPane fx:id="pane_position_parent">
-                                <AnchorPane fx:id="pane_position" stylesheets="@../css/style.css">
-                                    <children>
-                                        <ImageView fx:id="imageview_background" fitHeight="645.0" fitWidth="1023.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true" />
-                                    </children>
-                                </AnchorPane>
+                                <AnchorPane fx:id="pane_position" stylesheets="@../css/style.css" />
                             </AnchorPane>
                         </Tab>
                         <Tab fx:id="tab_describe" text="Describe">
@@ -172,8 +168,8 @@
                                     <children>
                                         <GridPane fx:id="gridpane_general" prefHeight="642.0" prefWidth="1031.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <columnConstraints>
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="14.0" prefWidth="100.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="72.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="20.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="66.0" prefWidth="100.0" />
                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="14.0" prefWidth="100.0" />
                                             </columnConstraints>
                                             <rowConstraints>
@@ -194,7 +190,12 @@
                                                 </Button>
                                                 <VBox prefHeight="200.0" prefWidth="100.0">
                                                     <children>
-                                                        <RadioButton fx:id="button_darkmode" mnemonicParsing="false" prefHeight="18.0" prefWidth="95.0" text="DarkMode" />
+                                                        <RadioButton fx:id="button_darkmode" mnemonicParsing="false" prefHeight="18.0" prefWidth="247.0" text="DarkMode" />
+                                          <RadioButton fx:id="button_background_preserve_ratio" mnemonicParsing="false" prefHeight="18.0" prefWidth="452.0" text="Background Preserve Ratio ">
+                                             <VBox.margin>
+                                                <Insets top="5.0" />
+                                             </VBox.margin>
+                                          </RadioButton>
                                                     </children>
                                                     <padding>
                                                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

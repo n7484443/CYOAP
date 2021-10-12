@@ -53,6 +53,8 @@ import javafx.scene.transform.Transform;
 public class CreateGuiController implements IPlatformGuiController {
     public static CreateGuiController instance;
     @FXML
+    public AnchorPane anchorpane_create;
+    @FXML
     public AnchorPane pane_position;
     @FXML
     public AnchorPane pane_position_parent;
@@ -76,7 +78,7 @@ public class CreateGuiController implements IPlatformGuiController {
     public ListView<String> view_var_type;
     @FXML
     public ListView<String> view_command_timeline;
-    public ImageCell imagecell_describe =  new ImageCell();
+    public ImageCell imagecell_describe = new ImageCell();
     @FXML
     public MenuItem menu_create;
     @FXML
@@ -95,10 +97,14 @@ public class CreateGuiController implements IPlatformGuiController {
     public Tab tab_position;
     @FXML
     public Tab tab_generalSetting;
-    @FXML
-    public ImageView imageview_background;
+
+    public ImageCell imagecell_background = new ImageCell();
     @FXML
     public RadioButton button_darkmode;
+    @FXML
+    public RadioButton button_background_preserve_ratio;
+
+
     @FXML
     public RadioButton button_outline;
     @FXML
@@ -133,6 +139,7 @@ public class CreateGuiController implements IPlatformGuiController {
     public void initialize(URL location, ResourceBundle resources) {
         setUp();
         pane_position_parent.getChildren().add(canvas);
+        pane_position.getChildren().add(imagecell_background);
         AnchorPane.setBottomAnchor(canvas, 0d);
         AnchorPane.setLeftAnchor(canvas, 0d);
         AnchorPane.setRightAnchor(canvas, 0d);
@@ -159,7 +166,7 @@ public class CreateGuiController implements IPlatformGuiController {
 
         button_list.add(button_outline);
         button_list.add(button_horizon);
-        button_list.add(button_darkmode);
+        button_list.add(button_emptyimage);
 
         try {
             text_editor.setWrapText(true);
@@ -187,6 +194,12 @@ public class CreateGuiController implements IPlatformGuiController {
             t.flag = FlagUtil.setFlag(t.flag, ChoiceSet.flagPosition_selectable, false);
             t.updateFlag();
         }));
+
+        button_background_preserve_ratio.setOnMouseClicked(e -> {
+            this.getPlatform().flag = FlagUtil.setFlag(getPlatform().flag, AbstractPlatform.flagPosition_background_preserve_ratio, button_background_preserve_ratio.isSelected());
+            this.getPlatform().updateFlag();
+        });
+
 
         button_save.setOnMouseClicked(e ->
                 save_describe_pane()
@@ -288,10 +301,11 @@ public class CreateGuiController implements IPlatformGuiController {
                             .excuteCommand(new DeleteCommand(nowMouseInDataSet, platform.local_x, platform.local_y));
                 }
             } else if (menu == menu_saveAsImage) {
-                var v = PixelScaleGuiController.instance.anchorPane_slider;
-                this.getChoicePane().getChildren().add(v);
-                v.setLayoutX(this.getChoicePane().getWidth() / 2f - boundsInScene.getMinX() + v.getWidth() / 2f);
-                v.setLayoutY(this.getChoicePane().getHeight() / 2f - boundsInScene.getMinY() + v.getHeight() / 2f);
+                var anchorpane_slider = PixelScaleGuiController.instance.anchorPane_slider;
+
+                anchorpane_create.getChildren().add(anchorpane_slider);
+                anchorpane_slider.setLayoutX(anchorpane_create.getWidth() / 2f - anchorpane_slider.getLayoutBounds().getWidth() / 2f);
+                anchorpane_slider.setLayoutY(anchorpane_create.getHeight() / 2f - anchorpane_slider.getLayoutBounds().getHeight() / 2f);
             }
         });
 
@@ -353,7 +367,6 @@ public class CreateGuiController implements IPlatformGuiController {
     }
 
     public void capture(float pixelScale) {
-        this.getChoicePane().getChildren().remove(PixelScaleGuiController.instance.anchorPane_slider);
 
         var width_before = this.getChoicePane().getWidth();
         var height_before = this.getChoicePane().getHeight();
@@ -526,6 +539,9 @@ public class CreateGuiController implements IPlatformGuiController {
             platform = objectMapper.readValue(writer, AbstractPlatform.class);
             platform.setUp(this);
             platform.isImageChanged = true;
+            platform.updateFlag();
+
+            this.button_background_preserve_ratio.setSelected(FlagUtil.getFlag(platform.flag, AbstractPlatform.flagPosition_background_preserve_ratio));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -540,8 +556,8 @@ public class CreateGuiController implements IPlatformGuiController {
     }
 
     @Override
-    public ImageView getBackgroundImageView() {
-        return imageview_background;
+    public ImageCell getBackgroundImageView() {
+        return imagecell_background;
     }
 
     @Override

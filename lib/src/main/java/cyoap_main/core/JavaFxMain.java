@@ -107,6 +107,10 @@ public class JavaFxMain extends Application {
 
 	public File directory;
 
+	public void loadFiles(File directory) {
+		this.directory = directory;
+	}
+
 	public static void main(String[] args) {
 		System.out.println("Version|" + version);
 		launch(args);

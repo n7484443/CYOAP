@@ -15,6 +15,7 @@ import javax.imageio.ImageIO;
 import cyoap_main.design.node_extension.ImageCell;
 import cyoap_main.design.node_extension.ResizableCanvas;
 import javafx.scene.Cursor;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import org.fxmisc.richtext.InlineCssTextArea;
 
@@ -39,16 +40,6 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.ListView;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -140,6 +131,7 @@ public class CreateGuiController implements IPlatformGuiController {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        setUp();
         pane_position_parent.getChildren().add(canvas);
         AnchorPane.setBottomAnchor(canvas, 0d);
         AnchorPane.setLeftAnchor(canvas, 0d);
@@ -171,7 +163,7 @@ public class CreateGuiController implements IPlatformGuiController {
 
         try {
             text_editor.setWrapText(true);
-            text_editor.getStylesheets().add(LoadUtil.instance.loadCss("/lib/css/texteditor.css"));
+            text_editor.getStylesheets().add(LoadUtil.instance.loadCss("/lib/css/text_editor.css"));
             text_editor.getStyleClass().add("text-editor");
             text_editor.setStyle("-color-text: white ;");
         } catch (IOException e1) {
@@ -224,11 +216,11 @@ public class CreateGuiController implements IPlatformGuiController {
         view_var_field.setOnMouseClicked(e -> {
             if (e.getButton().equals(MouseButton.PRIMARY)) {
                 if (e.getClickCount() == 2) {
-                    var varable = view_var_field.getSelectionModel().getSelectedIndex();
-                    if (varable >= 0) {
+                    var variable = view_var_field.getSelectionModel().getSelectedIndex();
+                    if (variable >= 0) {
                         var text = addTextIntoString(text_editor.getText(), text_editor.getAnchor(),
                                 text_editor.getCaretPosition(),
-                                "{" + VarData.var_map.keySet().toArray()[varable] + "}");
+                                "{" + VarData.var_map.keySet().toArray()[variable] + "}");
                         text_editor.clear();
                         text_editor.appendText(text);
                     }
@@ -278,14 +270,6 @@ public class CreateGuiController implements IPlatformGuiController {
             }
         });
 
-        pane_position.setOnScroll(e -> {
-            platform.scale += (e.getDeltaY() / 40.0) / 8;
-            if (platform.scale <= platform.minimize)
-                platform.scale = platform.minimize;
-            if (platform.scale >= platform.maximize)
-                platform.scale = platform.maximize;
-        });
-
         menu_mouse.addEventFilter(MouseEvent.MOUSE_RELEASED, e -> {
             if (e.getButton() != MouseButton.PRIMARY) {
                 e.consume();
@@ -294,14 +278,14 @@ public class CreateGuiController implements IPlatformGuiController {
         menu_mouse.setOnAction(e -> {
             var menu = (MenuItem) e.getTarget();
             Bounds boundsInScene = gridpane_describe.localToScene(gridpane_describe.getBoundsInLocal());
-            var posx = (float) (platform.local_x + platform.start_mouse_x - boundsInScene.getMinX());
-            var posy = (float) (platform.local_y + platform.start_mouse_y - boundsInScene.getMinY());
+            var pos_x = (float) (platform.local_x + platform.start_mouse_x - boundsInScene.getMinX());
+            var pos_y = (float) (platform.local_y + platform.start_mouse_y - boundsInScene.getMinY());
             if (menu == menu_create) {
-                commandTimeline.excuteCommand(new CreateCommand(posx, posy));
+                commandTimeline.excuteCommand(new CreateCommand(pos_x, pos_y));
             } else if (menu == menu_delete) {
-                if (nowMouseInDataSet != null && nowMouseInDataSet.check_intersect(nowMouseInDataSet, posx, posy)) {
+                if (nowMouseInDataSet != null && nowMouseInDataSet.check_intersect(nowMouseInDataSet, pos_x, pos_y)) {
                     commandTimeline
-                            .excuteCommand(new DeleteCommand(nowMouseInDataSet, platform.local_x, platform.local_x));
+                            .excuteCommand(new DeleteCommand(nowMouseInDataSet, platform.local_x, platform.local_y));
                 }
             } else if (menu == menu_saveAsImage) {
                 var v = PixelScaleGuiController.instance.anchorPane_slider;
@@ -314,43 +298,31 @@ public class CreateGuiController implements IPlatformGuiController {
         pane_position.setOnMouseDragged(e -> {
             if (e.getButton().equals(MouseButton.PRIMARY)) {
                 var cursor = JavaFxMain.instance.scene_create.getCursor();
-                float movex = (float) (e.getSceneX() - platform.start_mouse_x);
-                float movey = (float) (e.getSceneY() - platform.start_mouse_y);
+                float move_x = (float) (e.getSceneX() - platform.start_mouse_x);
+                float move_y = (float) (e.getSceneY() - platform.start_mouse_y);
                 if ((cursor == null || cursor.equals(Cursor.DEFAULT))) {
-                    movex *= platform.sensitivity;
-                    movey *= platform.sensitivity;
-                    platform.local_x -= movex;
-                    platform.local_y -= movey;
-                    platform.start_mouse_x = e.getSceneX();
-                    platform.start_mouse_y = e.getSceneY();
-                    if (platform.local_x + this.getChoicePane().getWidth() >= platform.max_x)
-                        platform.local_x = platform.max_x - this.getChoicePane().getWidth();
-                    if (platform.local_y + this.getChoicePane().getHeight() >= platform.max_y)
-                        platform.local_y = platform.max_y - this.getChoicePane().getHeight();
-                    if (platform.local_x <= platform.min_x)
-                        platform.local_x = platform.min_x;
-                    if (platform.local_y <= platform.min_y)
-                        platform.local_y = platform.min_y;
-                    platform.updateMouseCoordinate();
+                    move_x *= platform.sensitivity;
+                    move_y *= platform.sensitivity;
+                    updateMouseCoord(move_x, move_y, e.getSceneX(), e.getSceneY());
                 } else if (nowControl != null) {
                     if (cursor.equals(Cursor.NW_RESIZE)) {
-                        nowControl.changeSize(-movex + nowControl.guiComponent.width_before,
-                                -movey + nowControl.guiComponent.height_before);
-                        nowControl.setPosition(movex + nowControl.guiComponent.x_before,
-                                movey + nowControl.guiComponent.y_before);
+                        nowControl.changeSize(-move_x + nowControl.guiComponent.width_before,
+                                -move_y + nowControl.guiComponent.height_before);
+                        nowControl.setPosition(move_x + nowControl.guiComponent.x_before,
+                                move_y + nowControl.guiComponent.y_before);
                     } else if (cursor.equals(Cursor.SW_RESIZE)) {
-                        nowControl.changeSize(-movex + nowControl.guiComponent.width_before,
-                                movey + nowControl.guiComponent.height_before);
-                        nowControl.setPosition(movex + nowControl.guiComponent.x_before,
+                        nowControl.changeSize(-move_x + nowControl.guiComponent.width_before,
+                                move_y + nowControl.guiComponent.height_before);
+                        nowControl.setPosition(move_x + nowControl.guiComponent.x_before,
                                 nowControl.guiComponent.y_before);
                     } else if (cursor.equals(Cursor.NE_RESIZE)) {
-                        nowControl.changeSize(movex + nowControl.guiComponent.width_before,
-                                -movey + nowControl.guiComponent.height_before);
+                        nowControl.changeSize(move_x + nowControl.guiComponent.width_before,
+                                -move_y + nowControl.guiComponent.height_before);
                         nowControl.setPosition(nowControl.guiComponent.x_before,
-                                movey + nowControl.guiComponent.y_before);
+                                move_y + nowControl.guiComponent.y_before);
                     } else if (cursor.equals(Cursor.SE_RESIZE)) {
-                        nowControl.changeSize(movex + nowControl.guiComponent.width_before,
-                                movey + nowControl.guiComponent.height_before);
+                        nowControl.changeSize(move_x + nowControl.guiComponent.width_before,
+                                move_y + nowControl.guiComponent.height_before);
                         nowControl.setPosition(nowControl.guiComponent.x_before, nowControl.guiComponent.y_before);
                     }
                     nowControl.isClicked = true;
@@ -443,7 +415,7 @@ public class CreateGuiController implements IPlatformGuiController {
                 nowEditDataSet.string_image_name = image.getValue();
             nowEditDataSet.color = colorpicker.getValue();
 
-            var v = button_list.stream().map(t -> t.isSelected()).collect(Collectors.toList());
+            var v = button_list.stream().map(ToggleButton::isSelected).collect(Collectors.toList());
             nowEditDataSet.flag = FlagUtil.createFlag(v);
 
             LoadUtil.paragraphToSegment(text_editor.getDocument().getParagraphs(), nowEditDataSet.segmentList);

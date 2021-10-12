@@ -55,4 +55,30 @@ public interface IPlatformGuiController extends Initializable{
 		}
 		getPlatform().update();
 	}
+
+	default void setUp(){
+		this.getChoicePane().setOnScroll(e -> {
+			getPlatform().scale += (e.getDeltaY() / 40.0) / 8;
+			if (getPlatform().scale <= getPlatform().minimize)
+				getPlatform().scale = getPlatform().minimize;
+			if (getPlatform().scale >= getPlatform().maximize)
+				getPlatform().scale = getPlatform().maximize;
+		});
+	}
+
+	default void updateMouseCoord(double move_x, double move_y, double start_move_x, double start_move_y){
+		getPlatform().local_x -= move_x;
+		getPlatform().local_y -= move_y;
+		getPlatform().start_mouse_x = start_move_x;
+		getPlatform().start_mouse_y = start_move_y;
+		if (getPlatform().local_x + this.getChoicePane().getWidth() >= getPlatform().max_x)
+			getPlatform().local_x = getPlatform().max_x - this.getChoicePane().getWidth();
+		if (getPlatform().local_y + this.getChoicePane().getHeight() >= getPlatform().max_y)
+			getPlatform().local_y = getPlatform().max_y - this.getChoicePane().getHeight();
+		if (getPlatform().local_x <= getPlatform().min_x)
+			getPlatform().local_x = getPlatform().min_x;
+		if (getPlatform().local_y <= getPlatform().min_y)
+			getPlatform().local_y = getPlatform().min_y;
+		getPlatform().updateMouseCoordinate();
+	}
 }

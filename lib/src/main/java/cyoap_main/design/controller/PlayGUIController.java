@@ -3,6 +3,7 @@ package cyoap_main.design.controller;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import cyoap_main.design.node_extension.ImageCell;
 import cyoap_main.design.platform.AbstractPlatform;
 import cyoap_main.design.platform.PlayPlatform;
 import javafx.fxml.FXML;
@@ -19,8 +20,8 @@ public class PlayGuiController implements IPlatformGuiController {
 
 	@FXML
 	public AnchorPane pane_play;
-	@FXML
-	public ImageView imageview_background;
+
+	public ImageCell imagecell_background = new ImageCell();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -45,8 +46,8 @@ public class PlayGuiController implements IPlatformGuiController {
 	}
 
 	@Override
-	public ImageView getBackgroundImageView() {
-		return imageview_background;
+	public ImageCell getBackgroundImageView() {
+		return imagecell_background;
 	}
 
 	@Override

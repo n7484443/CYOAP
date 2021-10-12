@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 
 import cyoap_main.design.node_extension.ImageCell;
+import cyoap_main.design.node_extension.ResizableCanvas;
 import javafx.scene.Cursor;
 import javafx.scene.layout.*;
 import org.fxmisc.richtext.InlineCssTextArea;
@@ -62,6 +63,8 @@ public class CreateGuiController implements IPlatformGuiController {
     public static CreateGuiController instance;
     @FXML
     public AnchorPane pane_position;
+    @FXML
+    public AnchorPane pane_position_parent;
     @FXML
     public GridPane gridpane_mainGui;
     @FXML
@@ -114,8 +117,6 @@ public class CreateGuiController implements IPlatformGuiController {
 
     public List<RadioButton> button_list = new ArrayList<>();
     @FXML
-    public Canvas canvas;
-    @FXML
     public Button button_border;
     @FXML
     public Button button_borderless;
@@ -124,6 +125,8 @@ public class CreateGuiController implements IPlatformGuiController {
     public VBox pane_setting = new VBox();
     public InlineCssTextArea text_editor = new InlineCssTextArea();
     public ColorPicker colorpicker_text_editor = new ColorPicker();
+
+    public ResizableCanvas canvas = new ResizableCanvas();
 
     public List<File> dropped;
     public boolean isImageChanged = false;
@@ -137,6 +140,12 @@ public class CreateGuiController implements IPlatformGuiController {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        pane_position_parent.getChildren().add(canvas);
+        AnchorPane.setBottomAnchor(canvas, 0d);
+        AnchorPane.setLeftAnchor(canvas, 0d);
+        AnchorPane.setRightAnchor(canvas, 0d);
+        AnchorPane.setTopAnchor(canvas, 0d);
+
         gridpane_describe.add(pane_text_editor, 2, 1);
         gridpane_describe.add(imagecell_describe, 0, 1, 2, 1);
 

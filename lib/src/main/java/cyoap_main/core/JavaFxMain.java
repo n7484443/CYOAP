@@ -107,21 +107,6 @@ public class JavaFxMain extends Application {
 
 	public File directory;
 
-	public void loadFiles(File directory) {
-		if (directory == null)
-			return;
-		this.directory = directory;
-		var hasConfig = false;
-		for (var file : directory.listFiles()) {
-			if (file.getName().equals("setting.json")) {
-				hasConfig = true;
-			}
-		}
-		if (!hasConfig) {
-
-		}
-	}
-
 	public static void main(String[] args) {
 		System.out.println("Version|" + version);
 		launch(args);

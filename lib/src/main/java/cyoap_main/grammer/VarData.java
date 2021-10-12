@@ -27,11 +27,11 @@ public class VarData {
 			return;
 		}
 		if(v.type.equals(types.ints) && value.type.equals(types.ints)) {
-			v.data = String.valueOf(Integer.valueOf(v.data) + Integer.valueOf(value.data));
+			v.data = String.valueOf(Integer.parseInt(v.data) + Integer.parseInt(value.data));
 		}else if(v.type.equals(types.floats) && value.type.equals(types.floats)){
-			v.data = String.valueOf(Float.valueOf(v.data) + Float.valueOf(value.data));
+			v.data = String.valueOf(Float.parseFloat(v.data) + Float.parseFloat(value.data));
 		}else if(v.type.equals(types.floats) && value.type.equals(types.ints)){
-			v.data = String.valueOf(Float.valueOf(v.data) + Float.valueOf(value.data));
+			v.data = String.valueOf(Float.parseFloat(v.data) + Float.parseFloat(value.data));
 		}else{
 			var_map.get(name).data += value.data;
 		}
@@ -138,16 +138,16 @@ public class VarData {
 			if(this.type.equals(types.strings)) {
 				data += a.data;
 			}else if(this.type.equals(a.type) && !this.type.equals(types.booleans)) {
-				float d1 = Float.valueOf(this.data);
-				float d2 = Float.valueOf(a.data);
+				float d1 = Float.parseFloat(this.data);
+				float d2 = Float.parseFloat(a.data);
 				if(this.type.equals(types.floats)) {
 					this.data = String.valueOf(d1 + d2);
 				}else {
 					this.data = String.valueOf((int)(d1 + d2));
 				}
 			}else if(this.type.equals(types.floats) && a.type.equals(types.ints)) {
-				float d1 = Float.valueOf(this.data);
-				float d2 = Float.valueOf(a.data);
+				float d1 = Float.parseFloat(this.data);
+				float d2 = Float.parseFloat(a.data);
 				this.data = String.valueOf(d1 + d2);
 			}else{
 				System.err.println("type error!");
@@ -155,21 +155,20 @@ public class VarData {
 		}
 		
 		public void sub(ValueType a) {
+			float d1 = Float.parseFloat(this.data);
 			if(a == null) {
 				System.err.println("null error!");
 				return;
 			}
 			if(this.type.equals(a.type) && !this.type.equals(types.booleans) && !this.type.equals(types.strings)) {
-				float d1 = Float.valueOf(this.data);
-				float d2 = Float.valueOf(a.data);
+				float d2 = Float.parseFloat(a.data);
 				if(this.type.equals(types.floats)) {
 					this.data = String.valueOf(d1 + d2);
 				}else {
 					this.data = String.valueOf((int)(d1 + d2));
 				}
 			}else if(this.type.equals(types.floats) && a.type.equals(types.ints)) {
-				float d1 = Float.valueOf(this.data);
-				float d2 = Float.valueOf(a.data);
+				float d2 = Float.parseFloat(a.data);
 				this.data = String.valueOf(d1 + d2);
 			}else{
 				System.err.println("type error!");
@@ -182,16 +181,16 @@ public class VarData {
 				return;
 			}
 			if(this.type.equals(a.type) && !this.type.equals(types.booleans) && !this.type.equals(types.strings)) {
-				float d1 = Float.valueOf(this.data);
-				float d2 = Float.valueOf(a.data);
+				float d1 = Float.parseFloat(this.data);
+				float d2 = Float.parseFloat(a.data);
 				if(this.type.equals(types.floats)) {
 					this.data = String.valueOf(d1 * d2);
 				}else {
 					this.data = String.valueOf((int)(d1 * d2));
 				}
 			}else if(this.type.equals(types.floats) && a.type.equals(types.ints)) {
-				float d1 = Float.valueOf(this.data);
-				float d2 = Float.valueOf(a.data);
+				float d1 = Float.parseFloat(this.data);
+				float d2 = Float.parseFloat(a.data);
 				this.data = String.valueOf(d1 * d2);
 			}else{
 				System.err.println("type error!");
@@ -205,17 +204,17 @@ public class VarData {
 			}
 			if(this.type.equals(a.type) && !this.type.equals(types.booleans) && !this.type.equals(types.strings)) {
 				if(this.type.equals(types.floats)) {
-					float d1 = Float.valueOf(this.data);
-					float d2 = Float.valueOf(a.data);
+					float d1 = Float.parseFloat(this.data);
+					float d2 = Float.parseFloat(a.data);
 					this.data = String.valueOf(d1 / d2);
 				}else {
-					int d1 = Integer.valueOf(this.data);
-					int d2 = Integer.valueOf(a.data);
+					int d1 = Integer.parseInt(this.data);
+					int d2 = Integer.parseInt(a.data);
 					this.data = String.valueOf(d1 / d2);
 				}
 			}else if(this.type.equals(types.floats) && a.type.equals(types.ints)) {
-				float d1 = Float.valueOf(this.data);
-				float d2 = Float.valueOf(a.data);
+				float d1 = Float.parseFloat(this.data);
+				float d2 = Float.parseFloat(a.data);
 				this.data = String.valueOf(d1 / d2);
 			}else{
 				System.err.println("type error!");

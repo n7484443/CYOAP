@@ -2,7 +2,6 @@ package cyoap_main.util;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -18,9 +17,6 @@ import java.util.stream.Stream;
 
 import javax.imageio.ImageIO;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import net.lingala.zip4j.ZipFile;
 import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.fxmisc.richtext.InlineCssTextArea;
@@ -35,7 +31,6 @@ import javafx.scene.image.PixelFormat;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
-import org.kohsuke.github.GHEventPayload;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
 
@@ -53,7 +48,6 @@ public class LoadUtil {
         Pane root = FXMLLoader.load(url);
         return root;
     }
-
 
     public String loadCss(String path) throws IOException {
         return LoadUtil.class.getResource(path).toString();
@@ -124,7 +118,7 @@ public class LoadUtil {
 
     //일반적인 로드
     public static SimpleEntry<Image, String> loadImage(String s) {
-        File f = null;
+        File f;
         if (s.contains(File.separator)) {
             f = new File(s);
             f = CreateSubImage(f);
@@ -206,7 +200,7 @@ public class LoadUtil {
         area.recreateParagraphGraphic(0);
     }
 
-    public static <Github, Repo> void loadLatestVersion() {
+    public static void loadLatestVersion() {
         if (!isIDE) {
             String repoURL = "n7484443/CYOAP";
             try {
@@ -229,7 +223,7 @@ public class LoadUtil {
                     System.out.println("download end");
                 }
             } catch (IOException ex) {
-                System.err.println(ex);
+                ex.printStackTrace();
             }
         }
     }

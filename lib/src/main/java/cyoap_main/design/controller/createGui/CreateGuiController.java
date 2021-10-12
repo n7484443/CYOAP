@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 
+import cyoap_main.design.node_extension.ImageCell;
 import javafx.scene.Cursor;
 import javafx.scene.layout.*;
 import org.fxmisc.richtext.InlineCssTextArea;
@@ -44,7 +45,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
@@ -65,9 +65,9 @@ public class CreateGuiController implements IPlatformGuiController {
     @FXML
     public GridPane gridpane_mainGui;
     @FXML
-    public AnchorPane pane_describe;
+    public GridPane gridpane_describe;
     @FXML
-    public AnchorPane pane_general;
+    public GridPane gridpane_general;
     @FXML
     public Button button_save;
     @FXML
@@ -82,8 +82,7 @@ public class CreateGuiController implements IPlatformGuiController {
     public ListView<String> view_var_type;
     @FXML
     public ListView<String> view_command_timeline;
-    @FXML
-    public ImageView imageview_describe;
+    public ImageCell imagecell_describe =  new ImageCell();
     @FXML
     public MenuItem menu_create;
     @FXML
@@ -138,7 +137,8 @@ public class CreateGuiController implements IPlatformGuiController {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        pane_describe.getChildren().add(1, pane_text_editor);
+        gridpane_describe.add(pane_text_editor, 2, 1);
+        gridpane_describe.add(imagecell_describe, 0, 1, 2, 1);
 
         pane_text_editor.setPrefWidth(893 - 412 - 6);
         pane_text_editor.setPrefHeight(574);
@@ -194,14 +194,14 @@ public class CreateGuiController implements IPlatformGuiController {
             save_describe_pane();
             next();
         });
-        pane_describe.setOnDragOver(e -> {
+        gridpane_describe.setOnDragOver(e -> {
             if (e.getGestureSource() == null && e.getDragboard().hasFiles()) {
                 /* allow for both copying and moving, whatever user chooses */
                 e.acceptTransferModes(TransferMode.COPY_OR_MOVE);
             }
             e.consume();
         });
-        pane_describe.setOnDragDropped(e -> {
+        gridpane_describe.setOnDragDropped(e -> {
             Dragboard db = e.getDragboard();
             var success = false;
             if (db.hasFiles()) {
@@ -284,7 +284,7 @@ public class CreateGuiController implements IPlatformGuiController {
         });
         menu_mouse.setOnAction(e -> {
             var menu = (MenuItem) e.getTarget();
-            Bounds boundsInScene = pane_describe.localToScene(pane_describe.getBoundsInLocal());
+            Bounds boundsInScene = gridpane_describe.localToScene(gridpane_describe.getBoundsInLocal());
             var posx = (float) (platform.local_x + platform.start_mouse_x - boundsInScene.getMinX());
             var posy = (float) (platform.local_y + platform.start_mouse_y - boundsInScene.getMinY());
             if (menu == menu_create) {
@@ -473,7 +473,7 @@ public class CreateGuiController implements IPlatformGuiController {
         colorpicker.setValue(dataSet.color);
         if (dataSet.string_image_name != null && !dataSet.string_image_name.isEmpty()) {
             image = LoadUtil.loadImage(dataSet.string_image_name);
-            imageview_describe.setImage(image.getKey());
+            imagecell_describe.setImage(image.getKey());
         }
         button_outline.setSelected(FlagUtil.getFlag(dataSet.flag, ChoiceSet.flagPosition_selectable));
         button_horizon.setSelected(FlagUtil.getFlag(dataSet.flag, ChoiceSet.flagPosition_horizontal));
@@ -486,7 +486,7 @@ public class CreateGuiController implements IPlatformGuiController {
         this.text_title.setText("Title");
         this.colorpicker.setValue(ChoiceSet.baseColor);
         this.button_outline.setSelected(false);
-        this.imageview_describe.setImage(null);
+        this.imagecell_describe.setImage(null);
         this.image = null;
         this.dropped = null;
         this.nowEditDataSet = null;
@@ -503,7 +503,7 @@ public class CreateGuiController implements IPlatformGuiController {
         if (isImageChanged) {
             isImageChanged = false;
             image = LoadUtil.loadImage(dropped.get(0));
-            imageview_describe.setImage(image.getKey());
+            imagecell_describe.setImage(image.getKey());
         }
 
         if (VarData.isUpdated) {

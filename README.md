@@ -9,3 +9,9 @@ CYOA Player입니다. CYOA 스토리를 읽거나 만들 수 있습니다.
 [FasterXML/jackson](https://github.com/FasterXML/jackson)
 
 [haraldk/TwelveMonkeys](https://github.com/haraldk/TwelveMonkeys)
+
+[hub4j/github-api](https://github.com/hub4j/github-api)
+
+[srikanth-lingala/zip4j](https://github.com/srikanth-lingala/zip4j)
+
+[MavenAritfact](https://maven.apache.org/ref/3.8.2/maven-artifact/)

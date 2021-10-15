@@ -169,7 +169,9 @@ public class LoadUtil {
             for (var d : paragraph.getStyledSegments()) {
                 area.append(d.getSegment(), d.getStyle());
             }
-            area.append(System.lineSeparator(), "");
+            if(p.size() - 1 != p.indexOf(paragraph)){
+                area.append(System.lineSeparator(), "");
+            }
         }
         area.recreateParagraphGraphic(0);
     }
@@ -181,7 +183,9 @@ public class LoadUtil {
             for (var c : b) {
                 styleSeg.add(c);
             }
-            styleSeg.add(new StyledSegment<String, String>(System.lineSeparator(), ""));
+            if(p.size() - 1 != p.indexOf(a)){
+                styleSeg.add(new StyledSegment<String, String>(System.lineSeparator(), ""));
+            }
         }
 
         return styleSeg;
@@ -230,7 +234,9 @@ public class LoadUtil {
 
     private static void unzip(File f) throws IOException {
         var dir = f.getPath().replace("cyoap_update.zip", "newImage");
-        new ZipFile(f).extractFile("image/", dir);
+        new ZipFile(f).extractAll(dir);
+        File f_bat = new File(dir + "/start.bat");
+        f_bat.delete();
     }
 
     public static File download(String data) throws IOException {

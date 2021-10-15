@@ -61,9 +61,9 @@ public class ChoiceSet {
 	public float height;
 
 	@JsonIgnore
-	public float minWidth = 200;
+	public float minWidth = 150;
 	@JsonIgnore
-	public float minHeight = 250;
+	public float minHeight = 150;
 
 	public boolean isClicked = false;
 
@@ -192,14 +192,15 @@ public class ChoiceSet {
 			guiComponent.pane.setBorder(ChoiceSetGuiComponent.border_default);
 		}
 		if(FlagUtil.getFlag(flag, flagPosition_horizontal)) {
-			minWidth = 250;
-			minHeight = 200;
+			minWidth = 150;
+			minHeight = 150;
 			guiComponent.setHorizontal(true);
 		}else {
-			minWidth = 200;
-			minHeight = 250;
+			minWidth = 150;
+			minHeight = 150;
 			guiComponent.setHorizontal(false);
 		}
+		guiComponent.setEmptyImage(FlagUtil.getFlag(flag, flagPosition_emptyimage));
 	}
 	
 	// 화면상의 위치

@@ -76,7 +76,7 @@
                                     <items>
                                         <MenuItem fx:id="menu_create" mnemonicParsing="false" text="Create" />
                                         <MenuItem fx:id="menu_delete" mnemonicParsing="false" text="Delete" />
-                                        <MenuItem fx:id="menu_connect" mnemonicParsing="false" text="Connect" />
+                                        <MenuItem fx:id="menu_copySize" mnemonicParsing="false" text="Copy Size" />
                                         <MenuItem fx:id="menu_saveAsImage" mnemonicParsing="false" text="Save as Image">
                                         </MenuItem>
                                     </items>

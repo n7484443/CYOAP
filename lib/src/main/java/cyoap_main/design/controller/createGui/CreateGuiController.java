@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
 
 import cyoap_main.design.node_extension.ImageCell;
 import cyoap_main.design.node_extension.ResizableCanvas;
+import cyoap_main.unit.Bound2f;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -84,7 +85,7 @@ public class CreateGuiController implements IPlatformGuiController {
     @FXML
     public MenuItem menu_delete;
     @FXML
-    public MenuItem menu_connect;
+    public MenuItem menu_copySize;
     @FXML
     public MenuItem menu_saveAsImage;
     @FXML
@@ -134,6 +135,8 @@ public class CreateGuiController implements IPlatformGuiController {
     public ChoiceSet nowControl;
     public ChoiceSet nowEditDataSet;
     public ChoiceSet nowMouseInDataSet;
+
+    public Bound2f copyBound;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -299,6 +302,15 @@ public class CreateGuiController implements IPlatformGuiController {
                 if (nowMouseInDataSet != null && nowMouseInDataSet.check_intersect(nowMouseInDataSet, pos_x, pos_y)) {
                     commandTimeline
                             .excuteCommand(new DeleteCommand(nowMouseInDataSet, platform.local_x, platform.local_y));
+                }
+            } else if(menu == menu_copySize){
+                if(copyBound == null){
+                    copyBound = nowMouseInDataSet.bound;
+                    menu_copySize.setText("Paste Size");
+                }else{
+                    nowMouseInDataSet.changeSize(copyBound.width, copyBound.height);
+                    copyBound = null;
+                    menu_copySize.setText("Copy Size");
                 }
             } else if (menu == menu_saveAsImage) {
                 var anchorpane_slider = PixelScaleGuiController.instance.anchorPane_slider;
@@ -469,8 +481,9 @@ public class CreateGuiController implements IPlatformGuiController {
             image = LoadUtil.loadImage(dataSet.string_image_name);
             imagecell_describe.setImage(image.getKey());
         }
-        button_outline.setSelected(FlagUtil.getFlag(dataSet.flag, ChoiceSet.flagPosition_selectable));
-        button_horizon.setSelected(FlagUtil.getFlag(dataSet.flag, ChoiceSet.flagPosition_horizontal));
+        for(int i = 0; i < button_list.size(); i++){
+            button_list.get(i).setSelected(FlagUtil.getFlag(dataSet.flag, i));
+        }
         dataSet.updateFlag();
     }
 

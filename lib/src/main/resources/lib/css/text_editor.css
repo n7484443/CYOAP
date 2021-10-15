@@ -17,3 +17,6 @@
 .caret {
     -fx-stroke:white;              
 }
+#area_choiceSet{
+    -fx-background-radius: 0;
+}

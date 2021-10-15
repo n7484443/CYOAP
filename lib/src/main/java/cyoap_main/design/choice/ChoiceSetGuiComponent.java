@@ -287,7 +287,13 @@ public class ChoiceSetGuiComponent {
 
     public void updateColor() {
         pane.setStyle("-fx-background-color: #" + color.toString().replace("0x", "") + ";");
-        hbox_title.setStyle("-fx-background-color: #" + color.deriveColor(30, 1.0, 1 / 0.7f, 1.0).toString().replace("0x", "") + ";");
+        Color c = color.deriveColor(30, 1.0, 1 / 0.7f, 1.0);
+        hbox_title.setStyle("-fx-background-color: #" + c.toString().replace("0x", "") + ";");
+        if(c.getBrightness() < 0.5){
+            title.setStyle("-fx-text-fill: #" + Color.WHITE.toString().replace("0x", "") + ";");
+        }else{
+            title.setStyle("-fx-text-fill: #" + Color.BLACK.toString().replace("0x", "") + ";");
+        }
     }
 
     public void combineSubChoiceSetComponent(ChoiceSet sub) {

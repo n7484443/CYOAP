@@ -18,7 +18,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class JavaFxMain extends Application {
-	public static String version = "1.1.2-alpha";
+	public static String version = "1.1.3-alpha";
 
 	public static JavaFxMain instance;
 	public Stage stage;

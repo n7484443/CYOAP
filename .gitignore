@@ -2,7 +2,8 @@
 .gradle
 
 .idea/
-
+debug/
+target/
 # Ignore Gradle build output directory
 build
 

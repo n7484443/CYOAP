@@ -61,9 +61,9 @@ public class ChoiceSet {
 	public float height;
 
 	@JsonIgnore
-	public float minWidth = 150;
+	public final float minWidth = 150;
 	@JsonIgnore
-	public float minHeight = 150;
+	public final float minHeight = 150;
 
 	public boolean isClicked = false;
 
@@ -86,15 +86,23 @@ public class ChoiceSet {
 		this(title, null, 0, 0, 0, 0);
 	}
 
-	public ChoiceSet(String title, String image_name, float pos_x, float posy, float width, float height) {
+	public ChoiceSet(String title, String image_name, float pos_x, float pos_y, float width, float height) {
 		this.string_title = title;
 		this.string_image_name = image_name;
 		this.pos_x = pos_x;
-		this.pos_y = posy;
-		this.width = width;
-		this.height = height;
+		this.pos_y = pos_y;
+		if (width < minWidth) {
+			this.width = minWidth;
+		} else {
+			this.width = width;
+		}
+		if (width < minWidth) {
+			this.height = minHeight;
+		} else {
+			this.height = height;
+		}
 
-		bound = new Bound2f(pos_x, posy, getWidth(), getHeight());
+		bound = new Bound2f(pos_x, pos_y, getWidth(), getHeight());
 	}
 
 	public void setUp(Pane pane_mother) {
@@ -109,21 +117,35 @@ public class ChoiceSet {
 	public boolean check_intersect(ChoiceSet a, float x, float y) {
 		return a.bound.intersect(new Vector2f(x, y));
 	}
-	
+
 	public float getWidth() {
-		if (width < minWidth) {
-			width = minWidth;
-		}
-		guiComponent.pane.setPrefWidth(width);
+		width = (float) getAnchorPane().getLayoutBounds().getWidth();
 		return width;
 	}
-	
-	public float getHeight() {
-		if (height < minHeight) {
-			height = minHeight;
+
+	public void setWidth(float width) {
+		if (width < minWidth) {
+			this.width = minWidth;
+		} else {
+			this.width = width;
 		}
-		guiComponent.pane.setPrefHeight(height);
+		getAnchorPane().setPrefWidth(this.width);
+		getAnchorPane().requestLayout();
+	}
+
+	public float getHeight() {
+		height = (float) getAnchorPane().getLayoutBounds().getHeight();
 		return height;
+	}
+
+	public void setHeight(float height) {
+		if (height < minHeight) {
+			this.height = minHeight;
+		} else {
+			this.height = height;
+		}
+		getAnchorPane().setPrefHeight(this.height);
+		getAnchorPane().requestLayout();
 	}
 
 	public void update() {
@@ -140,8 +162,9 @@ public class ChoiceSet {
 	}
 	
 	public void updateSize() {
-		getWidth();
-		getHeight();
+		setWidth(width);
+		setHeight(height);
+		updateSizeFrom();
 	}
 	public void updateSizeFrom() {
 		width = (float) getAnchorPane().getLayoutBounds().getWidth();
@@ -277,9 +300,7 @@ public class ChoiceSet {
 	}
 
 	public void changeSize(float w, float h) {
-		this.width = w;
-		this.height = h;
-		getWidth();
-		getHeight();
+		setWidth(w);
+		setHeight(h);
 	}
 }

@@ -53,6 +53,10 @@ public class LoadUtil {
         return LoadUtil.class.getResource(path).toString();
     }
 
+    public InputStream loadInternalImage(String path) throws IOException {
+        return LoadUtil.class.getResourceAsStream(path);
+    }
+
     public static List<Path> getSubPath(String url) throws URISyntaxException, IOException {
         URI uri = LoadUtil.class.getResource(url).toURI();
         Path myPath;

@@ -12,6 +12,8 @@ public class SizeChangeCommand extends AbstractCommand {
     public float after_height;
     public float after_pos_x;
     public float after_pos_y;
+    public SizeChangeCommand() {
+    }
 
     public SizeChangeCommand(ChoiceSet choiceSet) {
         this.choiceset = choiceSet;

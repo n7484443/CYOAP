@@ -33,7 +33,9 @@ public class AbstractPlatform {
     public int max_x = 800;
     public int max_y = 1600;
     public float scale = 1.0f;
+    @JsonIgnore
     public float maximize = 2f;
+    @JsonIgnore
     public float minimize = 0.9f;
 
     public double sensitivity = 1f;
@@ -195,10 +197,13 @@ public class AbstractPlatform {
     public void update() {
         if (isImageChanged) {
             isImageChanged = false;
-            var image = LoadUtil.loadImage(string_image_name);
-            background_image = image.getKey();
-            string_image_name = image.getValue();
-            guiController.getBackgroundImageView().setImage(background_image);
+            if (string_image_name != null) {
+                var image = LoadUtil.loadImage(string_image_name);
+                background_image = image.getKey();
+                string_image_name = image.getValue();
+
+                guiController.getBackgroundImageView().setImage(background_image);
+            }
             guiController.getBackgroundImageView().setPrefWidth(max_x - min_x);
             guiController.getBackgroundImageView().setPrefHeight(max_y - min_y);
         }

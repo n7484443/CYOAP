@@ -140,9 +140,149 @@ public class CreateGuiController implements IPlatformGuiController {
 
     public Bound2f copyBound;
 
+
+    public CreateGuiController() {
+        CreateGuiController.instance = this;
+        platform = new CreatePlatform(instance);
+        platform.setUp(this);
+    }
+
+    public void capture(float pixelScale) {
+
+        var width_before = this.getChoicePane().getWidth();
+        var before_height = this.getChoicePane().getHeight();
+        var width_after = (platform.max_x - platform.min_x);
+        var height_after = (platform.max_y - platform.min_y);
+
+        this.getChoicePane().resize(width_after, height_after);
+
+        platform.updatePositionAll(platform.local_x, platform.local_y);
+
+        var spa = new SnapshotParameters();
+        spa.setTransform(Transform.scale(pixelScale, pixelScale));
+        spa.setViewport(new Rectangle2D(platform.min_x * pixelScale, platform.min_y * pixelScale,
+                platform.max_x - platform.min_x, platform.max_y - platform.min_y));
+        var writeableImage = this.getChoicePane().snapshot(spa,
+                new WritableImage((int) (this.getChoicePane().getWidth() * pixelScale),
+                        (int) (this.getChoicePane().getHeight() * pixelScale)));
+
+        BufferedImage tempImg = SwingFXUtils.fromFXImage(writeableImage, null);
+        String imageType = "png";
+        File f = new File(JavaFxMain.instance.directory.getAbsolutePath() + File.separator + "file." + imageType);
+        try {
+            ImageIO.write(tempImg, imageType, f);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        platform.updatePositionAll(-platform.local_x, -platform.local_y);
+        this.getChoicePane().resize(width_before, before_height);
+    }
+
+    public String addTextIntoString(String str, int anchor, int caret, String add) {
+        if (str == null) {
+            str = "";
+        }
+        var before = str.substring(0, Math.min(anchor, caret));
+        var after = str.substring(Math.max(anchor, caret));
+        return before + add + after;
+    }
+
+    public void save_describe_pane() {
+        VarData.isUpdated = true;
+
+        var text = Analyser.parser(text_editor.getText());
+        StringBuilder builder = new StringBuilder();
+        if (text != null)
+            text.forEach(builder::append);
+        if (nowEditDataSet != null) {
+            var command = new TextChangeCommand(nowEditDataSet);
+            if (!text_title.getText().equals(nowEditDataSet.string_title)) {
+                var number_of = (int) this.getPlatform().choiceSetList.stream().filter(t -> t != nowEditDataSet && t.string_title.equals(text_title.getText())).count();
+                if (number_of == 0) {
+                    nowEditDataSet.string_title = text_title.getText();
+                } else {
+                    System.err.println("duplicated title! " + nowEditDataSet.string_title);
+                }
+            }
+            if (image != null)
+                nowEditDataSet.string_image_name = image.getValue();
+            nowEditDataSet.color = colorpicker.getValue();
+
+            var v = button_list.stream().map(ToggleButton::isSelected).collect(Collectors.toList());
+            nowEditDataSet.flag = FlagUtil.createFlag(v);
+
+            LoadUtil.paragraphToSegment(text_editor.getDocument().getParagraphs(), nowEditDataSet.segmentList);
+
+            nowEditDataSet.update();
+            command.setText(nowEditDataSet);
+            commandTimeline.addCommand(command);
+        }
+    }
+
+    public void save_position_pane() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        File dir = new File(JavaFxMain.instance.directory.getAbsolutePath() + "/choiceSet");
+        if (dir.exists()) {
+            for (var f : dir.listFiles()) {
+                f.delete();
+            }
+        } else {
+            dir.mkdir();
+        }
+        try {
+            for (var choiceSet : platform.choiceSetList) {
+                OutputStreamWriter writer = new OutputStreamWriter(
+                        new FileOutputStream(dir.getAbsolutePath() + "/" + choiceSet.string_title + ".json"),
+                        StandardCharsets.UTF_8);
+                objectMapper.writeValue(writer, choiceSet);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadFromDataSet(ChoiceSet dataSet) {
+        text_title.setText(dataSet.string_title);
+        LoadUtil.loadSegment(text_editor, dataSet.segmentList);
+        colorpicker.setValue(dataSet.color);
+        if (dataSet.string_image_name != null && !dataSet.string_image_name.isEmpty()) {
+            image = LoadUtil.loadImage(dataSet.string_image_name);
+            imagecell_describe.setImage(image.getKey());
+        }
+        for (int i = 0; i < button_list.size(); i++) {
+            button_list.get(i).setSelected(FlagUtil.getFlag(dataSet.flag, i));
+        }
+        dataSet.updateFlag();
+    }
+
+    public void next() {
+        CreateGuiController.instance.changeTab(CreateGuiController.instance.tab_position);
+        this.text_editor.clear();
+        this.text_title.setText("Title");
+        this.colorpicker.setValue(ChoiceSet.baseColor);
+        this.button_outline.setSelected(false);
+        this.imagecell_describe.setImage(null);
+        this.image = null;
+        this.dropped = null;
+        this.nowEditDataSet = null;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setUp();
+        ImageCell imagecell_tutorialImage = new ImageCell();
+        anchorpane_create.getChildren().add(imagecell_tutorialImage);
+        try {
+            Image image = new Image(LoadUtil.instance.loadInternalImage("/lib/image/tutorial_image.png"));
+            imagecell_tutorialImage.setImage(image);
+            imagecell_tutorialImage.setOnMouseClicked(t -> {
+                anchorpane_create.getChildren().remove(imagecell_tutorialImage);
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         pane_position_parent.getChildren().add(canvas);
         pane_position.getChildren().add(imagecell_background);
         AnchorPane.setBottomAnchor(canvas, 0d);
@@ -386,132 +526,6 @@ public class CreateGuiController implements IPlatformGuiController {
         });
     }
 
-    public void capture(float pixelScale) {
-
-        var width_before = this.getChoicePane().getWidth();
-        var before_height = this.getChoicePane().getHeight();
-        var width_after = (platform.max_x - platform.min_x);
-        var height_after = (platform.max_y - platform.min_y);
-
-        this.getChoicePane().resize(width_after, height_after);
-
-        platform.updatePositionAll(platform.local_x, platform.local_y);
-
-        var spa = new SnapshotParameters();
-        spa.setTransform(Transform.scale(pixelScale, pixelScale));
-        spa.setViewport(new Rectangle2D(platform.min_x * pixelScale, platform.min_y * pixelScale,
-                platform.max_x - platform.min_x, platform.max_y - platform.min_y));
-        var writeableImage = this.getChoicePane().snapshot(spa,
-                new WritableImage((int) (this.getChoicePane().getWidth() * pixelScale),
-                        (int) (this.getChoicePane().getHeight() * pixelScale)));
-
-        BufferedImage tempImg = SwingFXUtils.fromFXImage(writeableImage, null);
-        String imageType = "png";
-        File f = new File(JavaFxMain.instance.directory.getAbsolutePath() + File.separator + "file." + imageType);
-        try {
-            ImageIO.write(tempImg, imageType, f);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        platform.updatePositionAll(-platform.local_x, -platform.local_y);
-        this.getChoicePane().resize(width_before, before_height);
-    }
-
-    public String addTextIntoString(String str, int anchor, int caret, String add) {
-        if (str == null) {
-            str = "";
-        }
-        var before = str.substring(0, Math.min(anchor, caret));
-        var after = str.substring(Math.max(anchor, caret));
-        return before + add + after;
-    }
-
-    public void save_describe_pane() {
-        VarData.isUpdated = true;
-
-        var text = Analyser.parser(text_editor.getText());
-        StringBuilder builder = new StringBuilder();
-        if (text != null)
-            text.forEach(builder::append);
-        if (nowEditDataSet != null) {
-            var command = new TextChangeCommand(nowEditDataSet);
-            if (!text_title.getText().equals(nowEditDataSet.string_title)) {
-                var number_of = (int) this.getPlatform().choiceSetList.stream().filter(t -> t != nowEditDataSet && t.string_title.equals(text_title.getText())).count();
-                if (number_of == 0) {
-                    nowEditDataSet.string_title = text_title.getText();
-                } else {
-                    System.err.println("duplicated title! " + nowEditDataSet.string_title);
-                }
-            }
-            if (image != null)
-                nowEditDataSet.string_image_name = image.getValue();
-            nowEditDataSet.color = colorpicker.getValue();
-
-            var v = button_list.stream().map(ToggleButton::isSelected).collect(Collectors.toList());
-            nowEditDataSet.flag = FlagUtil.createFlag(v);
-
-            LoadUtil.paragraphToSegment(text_editor.getDocument().getParagraphs(), nowEditDataSet.segmentList);
-
-            nowEditDataSet.update();
-            command.setText(nowEditDataSet);
-            commandTimeline.addCommand(command);
-        }
-    }
-
-    public void save_position_pane() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        File dir = new File(JavaFxMain.instance.directory.getAbsolutePath() + "/choiceSet");
-        if (dir.exists()) {
-            for (var f : dir.listFiles()) {
-                f.delete();
-            }
-        } else {
-            dir.mkdir();
-        }
-        try {
-            for (var choiceSet : platform.choiceSetList) {
-                OutputStreamWriter writer = new OutputStreamWriter(
-                        new FileOutputStream(dir.getAbsolutePath() + "/" + choiceSet.string_title + ".json"),
-                        StandardCharsets.UTF_8);
-                objectMapper.writeValue(writer, choiceSet);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void loadFromDataSet(ChoiceSet dataSet) {
-        text_title.setText(dataSet.string_title);
-        LoadUtil.loadSegment(text_editor, dataSet.segmentList);
-        colorpicker.setValue(dataSet.color);
-        if (dataSet.string_image_name != null && !dataSet.string_image_name.isEmpty()) {
-            image = LoadUtil.loadImage(dataSet.string_image_name);
-            imagecell_describe.setImage(image.getKey());
-        }
-        for(int i = 0; i < button_list.size(); i++){
-            button_list.get(i).setSelected(FlagUtil.getFlag(dataSet.flag, i));
-        }
-        dataSet.updateFlag();
-    }
-
-    public void next() {
-        CreateGuiController.instance.changeTab(CreateGuiController.instance.tab_position);
-        this.text_editor.clear();
-        this.text_title.setText("Title");
-        this.colorpicker.setValue(ChoiceSet.baseColor);
-        this.button_outline.setSelected(false);
-        this.imagecell_describe.setImage(null);
-        this.image = null;
-        this.dropped = null;
-        this.nowEditDataSet = null;
-    }
-
-    public CreateGuiController() {
-        CreateGuiController.instance = this;
-        platform = new CreatePlatform(instance);
-    }
-
     public SimpleEntry<Image, String> image = null;
 
     public void update() {
@@ -555,14 +569,19 @@ public class CreateGuiController implements IPlatformGuiController {
     public void loadPlatform() {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            InputStreamReader writer = new InputStreamReader(new FileInputStream(JavaFxMain.instance.directory.getAbsolutePath() + "/platform.json"), StandardCharsets.UTF_8);
-
-            platform = objectMapper.readValue(writer, AbstractPlatform.class);
-            platform.setUp(this);
-            platform.isImageChanged = true;
-            platform.updateFlag();
-
-            this.button_background_preserve_ratio.setSelected(FlagUtil.getFlag(platform.flag, AbstractPlatform.flagPosition_background_preserve_ratio));
+            File file_platform_json = new File(JavaFxMain.instance.directory.getAbsolutePath() + "/platform.json");
+            if (file_platform_json.exists()) {
+                InputStreamReader writer = new InputStreamReader(new FileInputStream(JavaFxMain.instance.directory.getAbsolutePath() + "/platform.json"), StandardCharsets.UTF_8);
+                platform = objectMapper.readValue(writer, AbstractPlatform.class);
+                platform.setUp(this);
+                platform.isImageChanged = true;
+                platform.updateFlag();
+                this.button_background_preserve_ratio.setSelected(FlagUtil.getFlag(platform.flag, AbstractPlatform.flagPosition_background_preserve_ratio));
+            } else {
+                platform.local_x = -getChoicePaneRealWidth() / 2;
+                platform.local_y = -getChoicePaneRealHeight() / 2;
+                getChoicePane().setPrefSize(platform.max_x - platform.min_x, platform.max_y - platform.min_y);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -3,11 +3,11 @@
 }
 
 .text-editor {
-    -fx-font-size: 16;              
-    -fx-font-family: NanumGothic;
-    -fx-background-color: #272822; 
+    -fx-font-size: 16;
+    -fx-font-family: NanumGothicOTF;
+    -fx-background-color: #272822;
     -fx-background-radius: 2.5;
-    -fx-line-spacing: 100;      
+    -fx-line-spacing: 100;
 }
 
 .text-editor .text {

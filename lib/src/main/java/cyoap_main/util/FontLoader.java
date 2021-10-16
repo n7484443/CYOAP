@@ -31,20 +31,18 @@ public class FontLoader {
 	}
 
 	public void loadFont(String str) {
+		boolean isLoaded = true;
+		Font font = null;
 		for (var s : size) {
-			var font = Font.loadFont(LoadUtil.class.getResourceAsStream("/" + str), s);
+			font = Font.loadFont(LoadUtil.class.getResourceAsStream(str), s);
 			if (font == null) {
-				System.out.println("error with " + str);
+				isLoaded = false;
 			}
 		}
-	}
-
-	public void loadFonts(String str) {
-		for (var s : size) {
-			var font = Font.loadFont(LoadUtil.class.getResourceAsStream(str), s);
-			if (font == null) {
-				System.out.println("error with " + str);
-			}
+		if (isLoaded) {
+			System.out.println("loaded with " + font.getName());
+		} else {
+			System.out.println("error with " + str);
 		}
 	}
 
@@ -57,8 +55,8 @@ public class FontLoader {
 			while (entries.hasMoreElements()) {
 				final String name = entries.nextElement().getName();
 				if (name.startsWith(str + "/")) { // filter according to the path
-					if (name.endsWith(".ttf")) { // filter according to the ttf file
-						loadFont(name);
+					if (name.endsWith(".ttf") || name.endsWith(".otf")) { // filter according to the ttf file
+						loadFont("/" + name);
 					}
 				}
 			}
@@ -70,7 +68,10 @@ public class FontLoader {
 				var p2 = p.resolve(m);
 				try {
 					Files.list(p2).forEach(m2 -> {
-						loadFonts(m2.toString().replace("/modules/cyoap_module", ""));
+						var name_of_font = m2.toString().replace("/modules/cyoap_module", "");
+						if (name_of_font.endsWith(".ttf") || name_of_font.endsWith(".otf")) {
+							loadFont(name_of_font);
+						}
 					});
 				} catch (IOException e) {
 					e.printStackTrace();

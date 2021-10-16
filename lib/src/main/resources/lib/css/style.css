@@ -1,6 +1,6 @@
 .root{
-	-fx-font-size: 10.0pt;
-	-fx-font-family: NanumGothic;
+    -fx-font-size: 10.0pt;
+    -fx-font-family: NanumGothicOTF;
 }
 
 .color-picker {
@@ -91,12 +91,12 @@
 #pane_choiceset{
     -fx-effect: dropshadow(gaussian, rgba(0.0,0.0,0.0,0.3), 10.0, 0.0, 3.0, 3.0);
  }
-#title_choiceset{
+#title_choiceset {
     -fx-font-size: 12.0pt;
-    -fx-font-family: NanumGothicBold;
-    -fx-background-radius: 5pt;
+    -fx-font-family: NanumGothicOTFBold;
+    -fx-background-radius: 5pt, 5pt, 0, 0;
 }
-#text_title{
-	-fx-font-size: 12.0pt;
-	-fx-font-family: NanumGothicBold;
+#text_title {
+    -fx-font-size: 12.0pt;
+    -fx-font-family: NanumGothicOTFBold;
 }

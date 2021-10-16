@@ -1,7 +1,9 @@
 package cyoap_main.design.choice;
 
 import java.io.IOException;
+import java.util.AbstractMap;
 
+import cyoap_main.command.SizeChangeCommand;
 import javafx.scene.shape.Rectangle;
 import org.fxmisc.richtext.InlineCssTextArea;
 
@@ -50,11 +52,6 @@ public class ChoiceSetGuiComponent {
 
     public Color color;
 
-    public float width_before = 0;
-    public float height_before = 0;
-    public float x_before = 0;
-    public float y_before = 0;
-
     public static Border border_default = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(5), new BorderWidths(1)));
 
     public ChoiceSetGuiComponent(Color color) {
@@ -99,6 +96,7 @@ public class ChoiceSetGuiComponent {
 
         title.setTextAlignment(TextAlignment.CENTER);
         title.setAlignment(Pos.CENTER);
+        HBox.setHgrow(hbox_title, Priority.ALWAYS);
         hbox_title.setAlignment(Pos.CENTER);
         hbox_title.setId("title_choiceset");
 
@@ -133,11 +131,7 @@ public class ChoiceSetGuiComponent {
                     JavaFxMain.instance.scene_create.setCursor(Cursor.DEFAULT);
                 }
                 if (b) {
-                    CreateGuiController.instance.nowControl = this.motherChoiceSet;
-                    width_before = this.motherChoiceSet.getWidth();
-                    height_before = this.motherChoiceSet.getHeight();
-                    x_before = this.motherChoiceSet.pos_x;
-                    y_before = this.motherChoiceSet.pos_y;
+                    CreateGuiController.instance.nowSizeChange = new AbstractMap.SimpleEntry<>(motherChoiceSet, new SizeChangeCommand(motherChoiceSet));
                 }
             });
             pane.setOnMouseClicked(e -> {

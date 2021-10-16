@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 
+import cyoap_main.command.*;
 import cyoap_main.design.node_extension.ImageCell;
 import cyoap_main.design.node_extension.ResizableCanvas;
 import cyoap_main.unit.Bound2f;
@@ -25,10 +26,6 @@ import org.fxmisc.richtext.InlineCssTextArea;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import cyoap_main.command.CommandTimeline;
-import cyoap_main.command.CreateCommand;
-import cyoap_main.command.DeleteCommand;
-import cyoap_main.command.TextChangeCommand;
 import cyoap_main.core.JavaFxMain;
 import cyoap_main.design.choice.ChoiceSet;
 import cyoap_main.design.controller.IPlatformGuiController;
@@ -136,7 +133,8 @@ public class CreateGuiController implements IPlatformGuiController {
     public CommandTimeline commandTimeline = new CommandTimeline();
     public static AbstractPlatform platform;
 
-    public ChoiceSet nowControl;
+    public SimpleEntry<ChoiceSet, SizeChangeCommand> nowSizeChange;
+
     public ChoiceSet nowEditDataSet;
     public ChoiceSet nowMouseInDataSet;
 
@@ -279,10 +277,13 @@ public class CreateGuiController implements IPlatformGuiController {
                 if (!e.getTarget().equals(menu_mouse)) {
                     menu_mouse.hide();
                 }
-                if (nowControl != null) {
-                    nowControl.updateSizeFrom();
-                    nowControl.isClicked = false;
-                    nowControl = null;
+                if (nowSizeChange != null) {
+                    nowSizeChange.getKey().updateSizeFrom();
+
+                    nowSizeChange.getKey().isClicked = false;
+                    nowSizeChange.getValue().set(nowSizeChange.getKey());
+                    commandTimeline.addCommand(nowSizeChange.getValue());
+                    nowSizeChange = null;
                 }
             } else if (e.getButton().equals(MouseButton.SECONDARY)) {
                 menu_mouse.show(pane_position, e.getScreenX(), e.getScreenY());
@@ -335,26 +336,28 @@ public class CreateGuiController implements IPlatformGuiController {
                     move_x *= platform.sensitivity;
                     move_y *= platform.sensitivity;
                     updateMouseCoord(move_x, move_y, e.getSceneX(), e.getSceneY());
-                } else if (nowControl != null) {
+                } else if (nowSizeChange != null) {
+                    var nowControl = nowSizeChange.getKey();
+                    var nowControlSize = nowSizeChange.getValue();
                     if (cursor.equals(Cursor.NW_RESIZE)) {
-                        nowControl.changeSize(-move_x + nowControl.guiComponent.width_before,
-                                -move_y + nowControl.guiComponent.height_before);
-                        nowControl.setPosition(move_x + nowControl.guiComponent.x_before,
-                                move_y + nowControl.guiComponent.y_before);
+                        nowControl.changeSize(-move_x + nowControlSize.before_width,
+                                -move_y + nowControlSize.before_height);
+                        nowControl.setPosition(move_x + nowControlSize.before_pos_x,
+                                move_y + nowControlSize.before_pos_y);
                     } else if (cursor.equals(Cursor.SW_RESIZE)) {
-                        nowControl.changeSize(-move_x + nowControl.guiComponent.width_before,
-                                move_y + nowControl.guiComponent.height_before);
-                        nowControl.setPosition(move_x + nowControl.guiComponent.x_before,
-                                nowControl.guiComponent.y_before);
+                        nowControl.changeSize(-move_x + nowControlSize.before_width,
+                                move_y + nowControlSize.before_height);
+                        nowControl.setPosition(move_x + nowControlSize.before_pos_x,
+                                nowControlSize.before_pos_y);
                     } else if (cursor.equals(Cursor.NE_RESIZE)) {
-                        nowControl.changeSize(move_x + nowControl.guiComponent.width_before,
-                                -move_y + nowControl.guiComponent.height_before);
-                        nowControl.setPosition(nowControl.guiComponent.x_before,
-                                move_y + nowControl.guiComponent.y_before);
+                        nowControl.changeSize(move_x + nowControlSize.before_width,
+                                -move_y + nowControlSize.before_height);
+                        nowControl.setPosition(nowControlSize.before_pos_x,
+                                move_y + nowControlSize.before_pos_y);
                     } else if (cursor.equals(Cursor.SE_RESIZE)) {
-                        nowControl.changeSize(move_x + nowControl.guiComponent.width_before,
-                                move_y + nowControl.guiComponent.height_before);
-                        nowControl.setPosition(nowControl.guiComponent.x_before, nowControl.guiComponent.y_before);
+                        nowControl.changeSize(move_x + nowControlSize.before_width,
+                                move_y + nowControlSize.before_height);
+                        nowControl.setPosition(nowControlSize.before_pos_x, nowControlSize.before_pos_y);
                     }
                     nowControl.isClicked = true;
                 }
@@ -386,7 +389,7 @@ public class CreateGuiController implements IPlatformGuiController {
     public void capture(float pixelScale) {
 
         var width_before = this.getChoicePane().getWidth();
-        var height_before = this.getChoicePane().getHeight();
+        var before_height = this.getChoicePane().getHeight();
         var width_after = (platform.max_x - platform.min_x);
         var height_after = (platform.max_y - platform.min_y);
 
@@ -412,7 +415,7 @@ public class CreateGuiController implements IPlatformGuiController {
         }
 
         platform.updatePositionAll(-platform.local_x, -platform.local_y);
-        this.getChoicePane().resize(width_before, height_before);
+        this.getChoicePane().resize(width_before, before_height);
     }
 
     public String addTextIntoString(String str, int anchor, int caret, String add) {

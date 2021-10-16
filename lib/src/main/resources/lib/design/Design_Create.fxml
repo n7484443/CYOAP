@@ -1,32 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ColorPicker?>
-<?import javafx.scene.control.ContextMenu?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="anchorpane_create" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cyoap_main.design.controller.createGui.CreateGuiController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="anchorpane_create" stylesheets="@../css/style.css"
+            xmlns="http://javafx.com/javafx/11.0.2"
+            fx:controller="cyoap_main.design.controller.createGui.CreateGuiController">
     <children>
-        <GridPane fx:id="gridpane_mainGui" prefHeight="675.0" prefWidth="1200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <GridPane fx:id="gridpane_mainGui" prefHeight="675.0" prefWidth="1200.0" AnchorPane.bottomAnchor="0.0"
+                  AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" percentWidth="14.2" />
-                <ColumnConstraints hgrow="SOMETIMES" percentWidth="86.8" />
+                <ColumnConstraints hgrow="SOMETIMES" percentWidth="14.2"/>
+                <ColumnConstraints hgrow="SOMETIMES" percentWidth="86.8"/>
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints percentHeight="100" vgrow="SOMETIMES" />
+                <RowConstraints percentHeight="100" vgrow="SOMETIMES"/>
             </rowConstraints>
             <children>
                 <GridPane>
@@ -108,7 +98,6 @@
                                                         <Insets />
                                                     </GridPane.margin>
                                                 </TextField>
-                                                <ImageView fx:id="imageview_describe" fitHeight="561.0" fitWidth="523.0" pickOnBounds="true" preserveRatio="true" GridPane.columnSpan="2" GridPane.rowIndex="1" />
                                                 <ColorPicker fx:id="colorpicker" prefHeight="25.0" prefWidth="95.0" GridPane.rowIndex="2">
                                                     <GridPane.margin>
                                                         <Insets left="4.0" right="4.0" />
@@ -116,43 +105,52 @@
                                                 </ColorPicker>
                                                 <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
                                                     <children>
-                                                        <RadioButton fx:id="button_horizon" mnemonicParsing="false" prefHeight="18.0" prefWidth="125.0" text="가로로 설정">
+                                                        <MFXRadioButton fx:id="button_horizon" mnemonicParsing="false"
+                                                                        prefHeight="18.0" prefWidth="125.0"
+                                                                        text="가로로 설정">
                                                             <VBox.margin>
-                                                                <Insets top="3.0" />
+                                                                <Insets top="3.0"/>
                                                             </VBox.margin>
-                                                        </RadioButton>
-                                                        <RadioButton fx:id="button_outline" mnemonicParsing="false" prefHeight="18.0" prefWidth="125.0" text="외곽선 제거">
+                                                        </MFXRadioButton>
+                                                        <MFXRadioButton fx:id="button_outline" mnemonicParsing="false"
+                                                                        prefHeight="18.0" prefWidth="125.0"
+                                                                        text="외곽선 제거">
                                                             <VBox.margin>
-                                                                <Insets top="3.0" />
+                                                                <Insets top="3.0"/>
                                                             </VBox.margin>
-                                                        </RadioButton>
-                                                        <RadioButton fx:id="button_emptyimage" mnemonicParsing="false" prefHeight="18.0" prefWidth="125.0" text="빈칸 줄이기">
+                                                        </MFXRadioButton>
+                                                        <MFXRadioButton fx:id="button_emptyimage"
+                                                                        mnemonicParsing="false" prefHeight="18.0"
+                                                                        prefWidth="125.0" text="빈칸 줄이기">
                                                             <VBox.margin>
-                                                                <Insets top="3.0" />
+                                                                <Insets top="3.0"/>
                                                             </VBox.margin>
-                                                        </RadioButton>
+                                                        </MFXRadioButton>
                                                     </children>
                                                     <GridPane.margin>
-                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
                                                     </GridPane.margin>
                                                 </VBox>
-                                    <HBox alignment="BOTTOM_RIGHT" GridPane.columnIndex="3" GridPane.rowIndex="2">
-                                       <children>
-                                                      <Button fx:id="button_save" mnemonicParsing="false" text="Save">
-                                             <HBox.margin>
-                                                <Insets right="4.0" />
-                                             </HBox.margin>
-                                                      </Button>
-                                                      <Button fx:id="button_next" mnemonicParsing="false" text="Next">
-                                             <HBox.margin>
-                                                <Insets />
-                                             </HBox.margin>
-                                                      </Button>
-                                       </children>
-                                       <GridPane.margin>
-                                          <Insets bottom="4.0" />
-                                       </GridPane.margin>
-                                    </HBox>
+                                                <HBox alignment="BOTTOM_RIGHT" GridPane.columnIndex="3"
+                                                      GridPane.rowIndex="2">
+                                                    <children>
+                                                        <MFXButton fx:id="button_save" mnemonicParsing="false"
+                                                                   text="Save">
+                                                            <HBox.margin>
+                                                                <Insets right="4.0"/>
+                                                            </HBox.margin>
+                                                        </MFXButton>
+                                                        <MFXButton fx:id="button_next" mnemonicParsing="false"
+                                                                   text="Next">
+                                                            <HBox.margin>
+                                                                <Insets/>
+                                                            </HBox.margin>
+                                                        </MFXButton>
+                                                    </children>
+                                                    <GridPane.margin>
+                                                        <Insets bottom="4.0"/>
+                                                    </GridPane.margin>
+                                                </HBox>
                                             </children>
                                             <padding>
                                                 <Insets left="5.0" right="5.0" />
@@ -178,24 +176,35 @@
                                                 <RowConstraints minHeight="10.0" percentHeight="8.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                             </rowConstraints>
                                             <children>
-                                                <Button fx:id="button_borderless" mnemonicParsing="false" prefHeight="29.0" prefWidth="128.0" text="Set All BorderLess" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
+                                                <MFXButton fx:id="button_borderless" mnemonicParsing="false"
+                                                           prefHeight="29.0" prefWidth="128.0" text="Set All BorderLess"
+                                                           GridPane.halignment="LEFT" GridPane.rowIndex="2"
+                                                           GridPane.valignment="BOTTOM">
                                                     <GridPane.margin>
-                                                        <Insets />
+                                                        <Insets/>
                                                     </GridPane.margin>
-                                                </Button>
-                                                <Button fx:id="button_border" mnemonicParsing="false" prefHeight="29.0" prefWidth="128.0" text="Set All Border" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
+                                                </MFXButton>
+                                                <MFXButton fx:id="button_border" mnemonicParsing="false"
+                                                           prefHeight="29.0" prefWidth="128.0" text="Set All Border"
+                                                           GridPane.columnIndex="2" GridPane.halignment="RIGHT"
+                                                           GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
                                                     <GridPane.margin>
-                                                        <Insets />
+                                                        <Insets/>
                                                     </GridPane.margin>
-                                                </Button>
+                                                </MFXButton>
                                                 <VBox prefHeight="200.0" prefWidth="100.0">
                                                     <children>
-                                                        <RadioButton fx:id="button_darkmode" mnemonicParsing="false" prefHeight="18.0" prefWidth="247.0" text="DarkMode" />
-                                          <RadioButton fx:id="button_background_preserve_ratio" mnemonicParsing="false" prefHeight="18.0" prefWidth="452.0" text="Background Preserve Ratio ">
-                                             <VBox.margin>
-                                                <Insets top="5.0" />
-                                             </VBox.margin>
-                                          </RadioButton>
+                                                        <MFXRadioButton fx:id="button_darkmode" mnemonicParsing="false"
+                                                                        prefHeight="18.0" prefWidth="247.0"
+                                                                        text="DarkMode"/>
+                                                        <MFXRadioButton fx:id="button_background_preserve_ratio"
+                                                                        mnemonicParsing="false" prefHeight="18.0"
+                                                                        prefWidth="452.0"
+                                                                        text="Background Preserve Ratio ">
+                                                            <VBox.margin>
+                                                                <Insets top="5.0"/>
+                                                            </VBox.margin>
+                                                        </MFXRadioButton>
                                                     </children>
                                                     <padding>
                                                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

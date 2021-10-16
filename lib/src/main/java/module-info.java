@@ -13,5 +13,5 @@ open module cyoap_module{
     requires zip4j;
 	requires maven.artifact;
 	requires github.api;
-
+    requires MaterialFX;
 }

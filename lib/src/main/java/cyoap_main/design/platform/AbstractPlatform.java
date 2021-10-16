@@ -19,6 +19,7 @@ import cyoap_main.util.FlagUtil;
 import cyoap_main.util.LoadUtil;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 
 @JsonAutoDetect(getterVisibility = Visibility.PUBLIC_ONLY)
 public class AbstractPlatform {
@@ -216,7 +217,11 @@ public class AbstractPlatform {
 
     public void render(GraphicsContext gc, double time) {
         choiceSetList.forEach(d -> d.render(gc, time));
-        gc.strokeRect(min_x-local_x, min_y-local_y, max_x-min_x, max_y-min_y);
+        gc.setStroke(Color.INDIANRED);
+        gc.setLineWidth(1);
+        gc.setLineDashes(5);
+        gc.setLineDashOffset((time * 20) % 1000);
+        gc.strokeRect(min_x - local_x, min_y - local_y, max_x - min_x, max_y - min_y);
     }
 
     public void updateMouseCoordinate() {

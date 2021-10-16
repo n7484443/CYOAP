@@ -2,6 +2,10 @@ package cyoap_main.design.controller.createGui;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXSlider;
+import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -19,41 +23,35 @@ import javafx.scene.paint.Color;
 import javafx.util.converter.NumberStringConverter;
 
 public class PixelScaleGuiController implements Initializable {
-	public static PixelScaleGuiController instance;
+    public static PixelScaleGuiController instance;
 
-	@FXML
-	public Slider slider_pixelScale;
-	@FXML
-	public Button button_pixelScale;
-	@FXML
-	public TextField textField_pixelScale;
-	@FXML
-	public AnchorPane anchorPane_slider;
+    @FXML
+    public MFXSlider slider_pixelScale;
+    @FXML
+    public MFXButton button_pixelScale;
+    @FXML
+    public AnchorPane anchorPane_slider;
+    public float range_start = 1.0f;
+    public float range_end = 4.0f;
 
-	public PixelScaleGuiController() {
-		instance = this;
-	}
+    public PixelScaleGuiController() {
+        instance = this;
+    }
 
-	public float range_start = 1.0f;
-	public float range_end = 4.0f;
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        anchorPane_slider.setOpacity(1);
+        anchorPane_slider.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(2), null)));
+        anchorPane_slider.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(2), BorderWidths.DEFAULT)));
+        anchorPane_slider.toFront();
+        slider_pixelScale.setMin(range_start);
+        slider_pixelScale.setMax(range_end);
+        slider_pixelScale.setDecimalPrecision(1);
+        slider_pixelScale.setValue(2.5f);
 
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		anchorPane_slider.setOpacity(1);
-		anchorPane_slider.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(2), null)));
-		anchorPane_slider.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(2), BorderWidths.DEFAULT)));
-		anchorPane_slider.toFront();
-		slider_pixelScale.setMin(range_start);
-		slider_pixelScale.setMax(range_end);
-		slider_pixelScale.setValue(2.5f);
-
-		textField_pixelScale.setText(Float.toString(4.0f));
-		
-		textField_pixelScale.textProperty().bindBidirectional(slider_pixelScale.valueProperty(), new NumberStringConverter());
-
-		button_pixelScale.setOnMouseClicked(e ->{
-			CreateGuiController.instance.capture((float) slider_pixelScale.getValue());
-			CreateGuiController.instance.anchorpane_create.getChildren().remove(PixelScaleGuiController.instance.anchorPane_slider);
-		});
-	}
+        button_pixelScale.setOnMouseClicked(e -> {
+            CreateGuiController.instance.capture((float) slider_pixelScale.getValue());
+            CreateGuiController.instance.anchorpane_create.getChildren().remove(PixelScaleGuiController.instance.anchorPane_slider);
+        });
+    }
 }

@@ -71,7 +71,7 @@ public class JavaFxMain extends Application {
 			scene_create.getStylesheets().add(LoadUtil.instance.loadCss("/lib/css/style.css"));
 
 			var v = LoadUtil.instance.loadFXML("/lib/design/Design_Create_Slider.fxml");
-			v.getStylesheets().add(LoadUtil.instance.loadCss("/lib/css/style.css"));
+			v.getStylesheets().add(LoadUtil.instance.loadCss("/lib/css/text.css"));
 			stage.setTitle("CYOAP " + version);
 			stage.setScene(scene_start);
 

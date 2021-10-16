@@ -15,6 +15,9 @@ import javax.imageio.ImageIO;
 import cyoap_main.design.node_extension.ImageCell;
 import cyoap_main.design.node_extension.ResizableCanvas;
 import cyoap_main.unit.Bound2f;
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXRadioButton;
+import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -79,6 +82,7 @@ public class CreateGuiController implements IPlatformGuiController {
     public ListView<String> view_var_type;
     @FXML
     public ListView<String> view_command_timeline;
+
     public ImageCell imagecell_describe = new ImageCell();
     @FXML
     public MenuItem menu_create;
@@ -101,23 +105,23 @@ public class CreateGuiController implements IPlatformGuiController {
 
     public ImageCell imagecell_background = new ImageCell();
     @FXML
-    public RadioButton button_darkmode;
+    public MFXRadioButton button_darkmode;
     @FXML
-    public RadioButton button_background_preserve_ratio;
+    public MFXRadioButton button_background_preserve_ratio;
 
 
     @FXML
-    public RadioButton button_outline;
+    public MFXRadioButton button_outline;
     @FXML
-    public RadioButton button_horizon;
+    public MFXRadioButton button_horizon;
     @FXML
-    public RadioButton button_emptyimage;
+    public MFXRadioButton button_emptyimage;
 
-    public List<RadioButton> button_list = new ArrayList<>();
+    public List<MFXRadioButton> button_list = new ArrayList<>();
     @FXML
-    public Button button_border;
+    public MFXButton button_border;
     @FXML
-    public Button button_borderless;
+    public MFXButton button_borderless;
 
     public BorderPane pane_text_editor = new BorderPane();
     public VBox pane_setting = new VBox();
@@ -150,6 +154,7 @@ public class CreateGuiController implements IPlatformGuiController {
 
         gridpane_describe.add(pane_text_editor, 2, 1);
         gridpane_describe.add(imagecell_describe, 0, 1, 2, 1);
+        GridPane.setMargin(imagecell_describe, new Insets(5));
 
         pane_text_editor.setPrefWidth(893 - 412 - 6);
         pane_text_editor.setPrefHeight(574);

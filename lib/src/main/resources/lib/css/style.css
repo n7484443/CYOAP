@@ -3,11 +3,11 @@
 	-fx-font-family: NanumGothic;
 }
 
-.button{
-	-fx-background-color: LIGHTGRAY;
+.color-picker {
+    -fx-background-color: LIGHTGRAY;
 }
 
-.button:hover {
+.color-picker:hover {
     -fx-background-color: derive(LIGHTGRAY, -20.0%);
 }
 
@@ -75,6 +75,7 @@
     -fx-background-insets : 2.0, 0.0, 0.0;
     -fx-background-radius : 2.0em;
 }
+
 #pane_play{
 	-fx-effect: dropshadow(gaussian, rgba(0.0,0.0,0.0,0.3), 10.0, 0.0, 3.0, 3.0);
 	-fx-background-color: white;

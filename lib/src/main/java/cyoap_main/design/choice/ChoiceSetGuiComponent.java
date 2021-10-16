@@ -64,7 +64,7 @@ public class ChoiceSetGuiComponent {
     public void setUp(ChoiceSet dataSet) {
         motherChoiceSet = dataSet;
         try {
-            //area.setWrapText(true);
+            area.setWrapText(true);
             area.getStylesheets().add(LoadUtil.instance.loadCss("/lib/css/text_editor.css"));
             area.getStyleClass().add("text-editor");
             area.setStyle("-color-text: white ;");

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.AbstractMap;
 
 import cyoap_main.command.SizeChangeCommand;
+import cyoap_main.util.SizeUtil;
 import javafx.scene.shape.Rectangle;
 import org.fxmisc.richtext.InlineCssTextArea;
 
@@ -105,31 +106,11 @@ public class ChoiceSetGuiComponent {
         image.setId("image_choiceset");
 
         pane_border.setMouseTransparent(true);
-        float border = 9f;
+        float border = 9.5f;
 
         if (JavaFxMain.controller.isEditable()) {
             pane.setOnMouseMoved(e -> {
-                var x = e.getX();
-                var y = e.getY();
-                var width = this.motherChoiceSet.getWidth() - x;
-                var height = this.motherChoiceSet.getHeight() - y;
-                boolean b = false;
-                var b_square = border * border;
-                if (x * x < b_square && y * y < b_square) {
-                    JavaFxMain.instance.scene_create.setCursor(Cursor.NW_RESIZE);
-                    b = true;
-                } else if (width * width < b_square && y * y < b_square) {
-                    JavaFxMain.instance.scene_create.setCursor(Cursor.NE_RESIZE);
-                    b = true;
-                } else if (x * x < b_square && height * height < b_square) {
-                    JavaFxMain.instance.scene_create.setCursor(Cursor.SW_RESIZE);
-                    b = true;
-                } else if (width * width < b_square && height * height < b_square) {
-                    JavaFxMain.instance.scene_create.setCursor(Cursor.SE_RESIZE);
-                    b = true;
-                } else {
-                    JavaFxMain.instance.scene_create.setCursor(Cursor.DEFAULT);
-                }
+                boolean b = SizeUtil.setCursor(e.getX(), e.getY(), this.motherChoiceSet.getWidth(), this.motherChoiceSet.getHeight(), border);
                 if (b) {
                     CreateGuiController.instance.nowSizeChange = new AbstractMap.SimpleEntry<>(motherChoiceSet, new SizeChangeCommand(motherChoiceSet));
                 }
@@ -283,9 +264,9 @@ public class ChoiceSetGuiComponent {
         pane.setStyle("-fx-background-color: #" + color.toString().replace("0x", "") + ";");
         Color c = color.deriveColor(30, 1.0, 1 / 0.7f, 1.0);
         hbox_title.setStyle("-fx-background-color: #" + c.toString().replace("0x", "") + ";");
-        if(c.getBrightness() < 0.5){
+        if (c.getBrightness() < 0.5) {
             title.setStyle("-fx-text-fill: #" + Color.WHITE.toString().replace("0x", "") + ";");
-        }else{
+        } else {
             title.setStyle("-fx-text-fill: #" + Color.BLACK.toString().replace("0x", "") + ";");
         }
     }

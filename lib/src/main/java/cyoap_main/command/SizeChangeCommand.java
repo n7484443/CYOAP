@@ -17,17 +17,17 @@ public class SizeChangeCommand extends AbstractCommand {
 
     public SizeChangeCommand(ChoiceSet choiceSet) {
         this.choiceset = choiceSet;
-        this.before_width = this.choiceset.width;
-        this.before_height = this.choiceset.height;
-        this.before_pos_x = this.choiceset.pos_x;
-        this.before_pos_y = this.choiceset.pos_y;
+        this.before_width = choiceset.width;
+        this.before_height = choiceset.height;
+        this.before_pos_x = choiceset.pos_x;
+        this.before_pos_y = choiceset.pos_y;
     }
 
     public void set(ChoiceSet choiceSet) {
-        this.after_pos_x = choiceSet.pos_x;
-        this.after_pos_y = choiceSet.pos_y;
         this.after_width = choiceSet.width;
         this.after_height = choiceSet.height;
+        this.after_pos_x = choiceSet.pos_x;
+        this.after_pos_y = choiceSet.pos_y;
     }
 
     @Override
@@ -36,6 +36,7 @@ public class SizeChangeCommand extends AbstractCommand {
         choiceset.pos_y = after_pos_y;
         choiceset.width = after_width;
         choiceset.height = after_height;
+        choiceset.update();
     }
 
     @Override
@@ -44,6 +45,7 @@ public class SizeChangeCommand extends AbstractCommand {
         choiceset.pos_y = before_pos_y;
         choiceset.width = before_width;
         choiceset.height = before_height;
+        choiceset.update();
     }
 
     @Override

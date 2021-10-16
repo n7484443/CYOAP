@@ -16,6 +16,7 @@ import cyoap_main.command.*;
 import cyoap_main.design.node_extension.ImageCell;
 import cyoap_main.design.node_extension.ResizableCanvas;
 import cyoap_main.unit.Bound2f;
+import cyoap_main.util.SizeUtil;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXRadioButton;
 import javafx.geometry.Insets;
@@ -449,11 +450,11 @@ public class CreateGuiController implements IPlatformGuiController {
                     commandTimeline
                             .excuteCommand(new DeleteCommand(nowMouseInDataSet, platform.local_x, platform.local_y));
                 }
-            } else if(menu == menu_copySize){
-                if(copyBound == null){
+            } else if (menu == menu_copySize) {
+                if (copyBound == null) {
                     copyBound = nowMouseInDataSet.bound;
                     menu_copySize.setText("Paste Size");
-                }else{
+                } else {
                     nowMouseInDataSet.changeSize(copyBound.width, copyBound.height);
                     copyBound = null;
                     menu_copySize.setText("Copy Size");
@@ -477,29 +478,7 @@ public class CreateGuiController implements IPlatformGuiController {
                     move_y *= platform.sensitivity;
                     updateMouseCoord(move_x, move_y, e.getSceneX(), e.getSceneY());
                 } else if (nowSizeChange != null) {
-                    var nowControl = nowSizeChange.getKey();
-                    var nowControlSize = nowSizeChange.getValue();
-                    if (cursor.equals(Cursor.NW_RESIZE)) {
-                        nowControl.changeSize(-move_x + nowControlSize.before_width,
-                                -move_y + nowControlSize.before_height);
-                        nowControl.setPosition(move_x + nowControlSize.before_pos_x,
-                                move_y + nowControlSize.before_pos_y);
-                    } else if (cursor.equals(Cursor.SW_RESIZE)) {
-                        nowControl.changeSize(-move_x + nowControlSize.before_width,
-                                move_y + nowControlSize.before_height);
-                        nowControl.setPosition(move_x + nowControlSize.before_pos_x,
-                                nowControlSize.before_pos_y);
-                    } else if (cursor.equals(Cursor.NE_RESIZE)) {
-                        nowControl.changeSize(move_x + nowControlSize.before_width,
-                                -move_y + nowControlSize.before_height);
-                        nowControl.setPosition(nowControlSize.before_pos_x,
-                                move_y + nowControlSize.before_pos_y);
-                    } else if (cursor.equals(Cursor.SE_RESIZE)) {
-                        nowControl.changeSize(move_x + nowControlSize.before_width,
-                                move_y + nowControlSize.before_height);
-                        nowControl.setPosition(nowControlSize.before_pos_x, nowControlSize.before_pos_y);
-                    }
-                    nowControl.isClicked = true;
+                    SizeUtil.changeSize(nowSizeChange, move_x, move_y);
                 }
             }
         });

@@ -192,12 +192,8 @@ public class ChoiceSet {
 			guiComponent.pane.setBorder(ChoiceSetGuiComponent.border_default);
 		}
 		if(FlagUtil.getFlag(flag, flagPosition_horizontal)) {
-			minWidth = 150;
-			minHeight = 150;
 			guiComponent.setHorizontal(true);
 		}else {
-			minWidth = 150;
-			minHeight = 150;
 			guiComponent.setHorizontal(false);
 		}
 		guiComponent.setEmptyImage(FlagUtil.getFlag(flag, flagPosition_emptyimage));

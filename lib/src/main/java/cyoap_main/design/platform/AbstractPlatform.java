@@ -216,6 +216,7 @@ public class AbstractPlatform {
 
     public void render(GraphicsContext gc, double time) {
         choiceSetList.forEach(d -> d.render(gc, time));
+        gc.strokeRect(min_x-local_x, min_y-local_y, max_x-min_x, max_y-min_y);
     }
 
     public void updateMouseCoordinate() {

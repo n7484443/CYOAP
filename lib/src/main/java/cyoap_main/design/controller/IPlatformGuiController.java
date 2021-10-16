@@ -73,25 +73,33 @@ public interface IPlatformGuiController extends Initializable {
         });
     }
 
-    default void updateMouseCoord(double move_x, double move_y, double start_move_x, double start_move_y) {
+    public int allow_margin = 50;
+
+    public default void updateMouseCoord(double move_x, double move_y, double start_move_x, double start_move_y) {
         getPlatform().local_x -= move_x;
         getPlatform().local_y -= move_y;
         getPlatform().start_mouse_x = start_move_x;
         getPlatform().start_mouse_y = start_move_y;
 
-        var bound = getChoicePane().getParent().getParent().getBoundsInLocal();
-        var real_width = bound.getWidth();
-        var real_height = bound.getHeight();
+        var real_width = getChoicePaneRealWidth();
+        var real_height = getChoicePaneRealHeight();
 
-        if (getPlatform().local_x + real_width >= getPlatform().max_x)
-            getPlatform().local_x = getPlatform().max_x - real_width;
-        if (getPlatform().local_y + real_height >= getPlatform().max_y)
-            getPlatform().local_y = getPlatform().max_y - real_height;
-        if (getPlatform().local_x <= getPlatform().min_x)
-            getPlatform().local_x = getPlatform().min_x;
-        if (getPlatform().local_y <= getPlatform().min_y)
-            getPlatform().local_y = getPlatform().min_y;
+        if (getPlatform().local_x + real_width >= getPlatform().max_x + allow_margin)
+            getPlatform().local_x = getPlatform().max_x + allow_margin - real_width;
+        if (getPlatform().local_y + real_height >= getPlatform().max_y + allow_margin)
+            getPlatform().local_y = getPlatform().max_y + allow_margin - real_height;
+        if (getPlatform().local_x <= getPlatform().min_x - allow_margin)
+            getPlatform().local_x = getPlatform().min_x - allow_margin;
+        if (getPlatform().local_y <= getPlatform().min_y - allow_margin)
+            getPlatform().local_y = getPlatform().min_y - allow_margin;
 
         getPlatform().updateMouseCoordinate();
+    }
+
+    public default double getChoicePaneRealWidth(){
+        return getChoicePane().getParent().getParent().getBoundsInLocal().getWidth();
+    }
+    public default double getChoicePaneRealHeight(){
+        return getChoicePane().getParent().getParent().getBoundsInLocal().getHeight();
     }
 }

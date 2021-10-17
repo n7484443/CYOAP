@@ -1,6 +1,7 @@
 package cyoap_main.core;
 
 import java.io.File;
+import java.util.concurrent.CompletableFuture;
 
 import cyoap_main.design.controller.IPlatformGuiController;
 import cyoap_main.design.controller.createGui.CreateGuiController;
@@ -18,7 +19,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class JavaFxMain extends Application {
-	public static String version = "1.1.4-alpha";
+    public static String version = "1.1.5-alpha";
 
 	public static JavaFxMain instance;
 	public Stage stage;
@@ -86,8 +87,8 @@ public class JavaFxMain extends Application {
 				}
 			}.start();
 			stage.setResizable(true);
-			stage.show();
-			LoadUtil.loadLatestVersion();
+            stage.show();
+            CompletableFuture.runAsync(LoadUtil::loadLatestVersion);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

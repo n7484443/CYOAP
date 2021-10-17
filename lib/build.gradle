@@ -18,11 +18,11 @@ repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
 }
-sourceCompatibility = 16
-targetCompatibility = 16
+sourceCompatibility = 17
+targetCompatibility = 17
 
 dependencies {    
-	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.4'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
 	implementation 'org.fxmisc.richtext:richtextfx:0.10.6'
 	implementation 'com.twelvemonkeys.imageio:imageio-webp:3.7.0'
 	implementation 'org.apache.maven:maven-artifact:3.8.3'
@@ -32,7 +32,7 @@ dependencies {
 }
 
 javafx{
-	version="16"
+	version="17.0.0.1"
 	modules = ['javafx.controls', 'javafx.fxml', 'javafx.swing']
 }
 

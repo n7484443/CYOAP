@@ -4,6 +4,6 @@
     <excludeFromCompile>
       <directory url="file://$PROJECT_DIR$/lib/src/test" includeSubdirectories="true" />
     </excludeFromCompile>
-    <bytecodeTargetLevel target="16" />
+    <bytecodeTargetLevel target="17" />
   </component>
 </project>

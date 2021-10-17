@@ -208,7 +208,7 @@ public class LoadUtil {
         area.recreateParagraphGraphic(0);
     }
 
-    public static void loadLatestVersion() {
+    public static int loadLatestVersion() {
         if (!isIDE) {
             String repoURL = "n7484443/CYOAP";
             try {
@@ -226,14 +226,18 @@ public class LoadUtil {
                 if (version_this.compareTo(version_github) < 0) {
                     System.out.println("download start with : " + asset);
                     File f = download(asset);
+                    if (f == null) return -1;//no file
                     unzip(f);
                     f.delete();
                     System.out.println("download end");
+                    return 1;//complete
                 }
+                return 0;//no latest version
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
+        return -2;//ide
     }
 
     private static void unzip(File f) throws IOException {

@@ -192,7 +192,7 @@ public class ChoiceSet {
 		CreateGuiController.platform.choiceSetList.add(sub);
 		sub.choiceSet_parent = null;
 
-		guiComponent.seperateSubChoiceSetComponent(sub);
+		guiComponent.separateSubChoiceSetComponent(sub);
 	}
 
 	public void updateColor(Color t) {

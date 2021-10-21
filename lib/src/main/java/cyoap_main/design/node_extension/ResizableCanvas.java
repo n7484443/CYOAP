@@ -13,7 +13,7 @@ public class ResizableCanvas extends Canvas {
     @Override
     public double maxHeight(double width)
     {
-        return 1000;
+        return 10000;
     }
 
     @Override

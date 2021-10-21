@@ -286,10 +286,6 @@ public class CreateGuiController implements IPlatformGuiController {
 
         pane_position_parent.getChildren().add(canvas);
         pane_position.getChildren().add(imagecell_background);
-        AnchorPane.setBottomAnchor(canvas, 0d);
-        AnchorPane.setLeftAnchor(canvas, 0d);
-        AnchorPane.setRightAnchor(canvas, 0d);
-        AnchorPane.setTopAnchor(canvas, 0d);
 
         gridpane_describe.add(pane_text_editor, 2, 1);
         gridpane_describe.add(imagecell_describe, 0, 1, 2, 1);
@@ -310,6 +306,13 @@ public class CreateGuiController implements IPlatformGuiController {
         pane_text_editor.setCenter(text_editor);
 
         canvas.setMouseTransparent(true);
+        AnchorPane.setBottomAnchor(canvas, 0d);
+        AnchorPane.setLeftAnchor(canvas, 0d);
+        AnchorPane.setRightAnchor(canvas, 0d);
+        AnchorPane.setTopAnchor(canvas, 0d);
+        canvas.scaleXProperty().bind(getChoicePane().scaleXProperty());
+        canvas.scaleYProperty().bind(getChoicePane().scaleYProperty());
+
 
         button_list.add(button_outline);
         button_list.add(button_horizon);
@@ -590,7 +593,7 @@ public class CreateGuiController implements IPlatformGuiController {
     }
 
     @Override
-    public Canvas getCanvas() {
+    public ResizableCanvas getCanvas() {
         return canvas;
     }
 

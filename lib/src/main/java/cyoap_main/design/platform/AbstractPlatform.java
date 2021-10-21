@@ -20,6 +20,7 @@ import cyoap_main.util.LoadUtil;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.transform.Affine;
 
 @JsonAutoDetect(getterVisibility = Visibility.PUBLIC_ONLY)
 public class AbstractPlatform {
@@ -34,16 +35,11 @@ public class AbstractPlatform {
     public float max_y = 1600;
     public float scale = 1.0f;
     @JsonIgnore
-    public float maximize = 2f;
+    public float maximize = 3f;
     @JsonIgnore
-    public float minimize = 0.9f;
-
+    public float minimize = 0.5f;
+    @JsonIgnore
     public double sensitivity = 1f;
-
-    @JsonIgnore
-    public double move_x = 0;
-    @JsonIgnore
-    public double move_y = 0;
     @JsonIgnore
     public double start_mouse_x = 0;
     @JsonIgnore

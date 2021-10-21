@@ -35,9 +35,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.StrokeLineCap;
-import javafx.scene.shape.StrokeLineJoin;
-import javafx.scene.shape.StrokeType;
 import javafx.scene.text.TextAlignment;
 
 public class ChoiceSetGuiComponent {
@@ -132,13 +129,13 @@ public class ChoiceSetGuiComponent {
                     if (moveCommand == null) {
                         moveCommand = new MoveCommand(dataSet.pos_x, dataSet.pos_y, dataSet);
                     }
-                    double movex = CreateGuiController.platform.sensitivity
+                    double move_x = CreateGuiController.platform.sensitivity
                             * (e.getSceneX() - CreateGuiController.platform.start_mouse_x);
-                    double movey = CreateGuiController.platform.sensitivity
+                    double move_y = CreateGuiController.platform.sensitivity
                             * (e.getSceneY() - CreateGuiController.platform.start_mouse_y);
                     CreateGuiController.platform.start_mouse_x = e.getSceneX();
                     CreateGuiController.platform.start_mouse_y = e.getSceneY();
-                    dataSet.updatePosition(movex, movey);
+                    dataSet.updatePosition(move_x, move_y);
                 }
                 this.pane.toFront();
                 this.pane.setViewOrder(-2.0d);
@@ -209,10 +206,12 @@ public class ChoiceSetGuiComponent {
     }
 
     public void render(GraphicsContext gc, double time) {
-        var lx = JavaFxMain.controller.getPlatform().local_x;
-        var ly = JavaFxMain.controller.getPlatform().local_y;
+        var platform = JavaFxMain.controller.getPlatform();
+        var lx = platform.local_x;
+        var ly = platform.local_y;
+
         if (moveCommand != null && motherChoiceSet.equals(moveCommand.choiceset)) {
-            var entry = CreateGuiController.platform.checkLine(motherChoiceSet, 10f);
+            var entry = platform.checkLine(motherChoiceSet, 10f);
             if (entry != null) {
                 var v = entry.getKey();
                 var flag = entry.getValue();
@@ -244,11 +243,10 @@ public class ChoiceSetGuiComponent {
             gc.setLineDashOffset((time * 20) % 1000);
             var gap = 4;
             var x1 = motherChoiceSet.pos_x - gap - lx;
-            var x2 = motherChoiceSet.pos_x + motherChoiceSet.getAnchorPane().getLayoutBounds().getWidth() + gap
-                    - JavaFxMain.controller.getPlatform().local_x;
+            var x2 = motherChoiceSet.pos_x + motherChoiceSet.getAnchorPane().getLayoutBounds().getWidth() + gap - lx;
             var y1 = motherChoiceSet.pos_y - gap - ly;
-            var y2 = motherChoiceSet.pos_y + motherChoiceSet.getAnchorPane().getLayoutBounds().getHeight() + gap
-                    - JavaFxMain.controller.getPlatform().local_y;
+            var y2 = motherChoiceSet.pos_y + motherChoiceSet.getAnchorPane().getLayoutBounds().getHeight() + gap - ly;
+
             gc.strokeLine(x1, y1, x1, y2);
             gc.strokeLine(x2, y2, x2, y1);
             gc.strokeLine(x2, y1, x1, y1);
@@ -283,7 +281,7 @@ public class ChoiceSetGuiComponent {
         }
     }
 
-    public void seperateSubChoiceSetComponent(ChoiceSet sub) {
+    public void separateSubChoiceSetComponent(ChoiceSet sub) {
         pane.getChildren().remove(hbox);
         hbox.getChildren().remove(sub.getAnchorPane());
         CreateGuiController.instance.pane_position.getChildren().add(sub.getAnchorPane());

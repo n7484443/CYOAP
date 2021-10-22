@@ -1,12 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXListView?>
+<?import io.github.palexdev.materialfx.controls.MFXRadioButton?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="anchorpane_create" stylesheets="@../css/style.css"
-            xmlns="http://javafx.com/javafx/11.0.2"
+            xmlns="http://javafx.com/javafx/17"
             fx:controller="cyoap_main.design.controller.createGui.CreateGuiController">
     <children>
         <GridPane fx:id="gridpane_mainGui" prefHeight="675.0" prefWidth="1200.0" AnchorPane.bottomAnchor="0.0"
@@ -30,29 +44,30 @@
                         <RowConstraints percentHeight="25" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <TextField>
+                        <MFXTextField GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
                             <opaqueInsets>
-                                <Insets />
+                                <Insets/>
                             </opaqueInsets>
                             <GridPane.margin>
-                                <Insets />
+                                <Insets/>
                             </GridPane.margin>
-                        </TextField>
-                        <ListView fx:id="view_var_field" GridPane.rowIndex="1">
+                        </MFXTextField>
+                        <MFXListView fx:id="view_var_field" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1"
+                                     GridPane.vgrow="ALWAYS">
                             <GridPane.margin>
-                                <Insets />
+                                <Insets top="5.0"/>
                             </GridPane.margin>
-                        </ListView>
-                        <ListView fx:id="view_var_type" GridPane.rowIndex="2">
+                        </MFXListView>
+                        <MFXListView fx:id="view_var_type" GridPane.rowIndex="2">
                             <GridPane.margin>
-                                <Insets top="5.0" />
+                                <Insets top="5.0"/>
                             </GridPane.margin>
-                        </ListView>
-                        <ListView fx:id="view_command_timeline" GridPane.rowIndex="3">
+                        </MFXListView>
+                        <MFXListView fx:id="view_command_timeline" GridPane.rowIndex="3">
                             <GridPane.margin>
-                                <Insets bottom="5.0" top="5.0" />
+                                <Insets bottom="5.0" top="5.0"/>
                             </GridPane.margin>
-                        </ListView>
+                        </MFXListView>
                     </children>
                     <GridPane.margin>
                         <Insets left="5.0" right="5.0" />
@@ -93,17 +108,49 @@
                                                 <RowConstraints minHeight="10.0" percentHeight="6.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                             </rowConstraints>
                                             <children>
-                                                <TextField fx:id="text_title" alignment="CENTER" prefHeight="22.0" prefWidth="1012.0" text="Title" GridPane.columnSpan="4">
+                                                <BorderPane fx:id="pane_text_editor" prefHeight="200.0"
+                                                            prefWidth="200.0" GridPane.columnIndex="2"
+                                                            GridPane.hgrow="ALWAYS" GridPane.rowIndex="1"
+                                                            GridPane.vgrow="ALWAYS">
+                                                    <top>
+                                                        <HBox fx:id="hbox_setting" prefHeight="30.0" prefWidth="200.0"
+                                                              BorderPane.alignment="CENTER">
+                                                            <children>
+                                                                <ColorPicker fx:id="colorpicker_text_editor"
+                                                                             prefWidth="80.0">
+                                                                    <HBox.margin>
+                                                                        <Insets bottom="5.0" left="5.0" top="5.0"/>
+                                                                    </HBox.margin>
+                                                                </ColorPicker>
+                                                                <MFXComboBox fx:id="combo_text_font" prefHeight="27.0"
+                                                                             prefWidth="196.0">
+                                                                    <HBox.margin>
+                                                                        <Insets bottom="5.0" left="5.0" top="5.0"/>
+                                                                    </HBox.margin>
+                                                                </MFXComboBox>
+                                                            </children>
+                                                            <BorderPane.margin>
+                                                                <Insets/>
+                                                            </BorderPane.margin>
+                                                        </HBox>
+                                                    </top>
+                                                </BorderPane>
+                                                <MFXTextField fx:id="text_title" alignment="CENTER" prefHeight="22.0"
+                                                              prefWidth="1012.0" text="Title" GridPane.columnSpan="4"
+                                                              GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS"
+                                                              GridPane.vgrow="ALWAYS">
                                                     <GridPane.margin>
-                                                        <Insets />
+                                                        <Insets/>
                                                     </GridPane.margin>
-                                                </TextField>
-                                                <ColorPicker fx:id="colorpicker" prefHeight="25.0" prefWidth="95.0" GridPane.rowIndex="2">
+                                                </MFXTextField>
+                                                <ColorPicker fx:id="colorpicker" prefHeight="25.0" prefWidth="95.0"
+                                                             GridPane.rowIndex="2">
                                                     <GridPane.margin>
-                                                        <Insets left="4.0" right="4.0" />
+                                                        <Insets left="4.0" right="4.0"/>
                                                     </GridPane.margin>
                                                 </ColorPicker>
-                                                <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                                                <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3"
+                                                      GridPane.rowIndex="1">
                                                     <children>
                                                         <MFXRadioButton fx:id="button_horizon" mnemonicParsing="false"
                                                                         prefHeight="18.0" prefWidth="125.0"

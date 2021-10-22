@@ -16,13 +16,15 @@ import cyoap_main.command.*;
 import cyoap_main.design.node_extension.ImageCell;
 import cyoap_main.design.node_extension.ResizableCanvas;
 import cyoap_main.unit.Bound2f;
+import cyoap_main.util.FontLoader;
 import cyoap_main.util.SizeUtil;
-import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.MFXRadioButton;
+import io.github.palexdev.materialfx.controls.*;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
 import org.fxmisc.richtext.InlineCssTextArea;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,9 +43,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseButton;
@@ -71,15 +71,15 @@ public class CreateGuiController implements IPlatformGuiController {
     @FXML
     public Button button_next;
     @FXML
-    public TextField text_title;
+    public MFXTextField text_title;
     @FXML
     public ColorPicker colorpicker;
     @FXML
-    public ListView<String> view_var_field;
+    public MFXListView<String> view_var_field;
     @FXML
-    public ListView<String> view_var_type;
+    public MFXListView<String> view_var_type;
     @FXML
-    public ListView<String> view_command_timeline;
+    public MFXListView<String> view_command_timeline;
 
     public ImageCell imagecell_describe = new ImageCell();
     @FXML
@@ -121,10 +121,17 @@ public class CreateGuiController implements IPlatformGuiController {
     @FXML
     public MFXButton button_borderless;
 
-    public BorderPane pane_text_editor = new BorderPane();
-    public VBox pane_setting = new VBox();
+    @FXML
+    public BorderPane pane_text_editor;
+    @FXML
+    public HBox hbox_setting;
+
     public InlineCssTextArea text_editor = new InlineCssTextArea();
-    public ColorPicker colorpicker_text_editor = new ColorPicker();
+
+    @FXML
+    public ColorPicker colorpicker_text_editor;
+    @FXML
+    public MFXComboBox<Label> combo_text_font;
 
     public ResizableCanvas canvas = new ResizableCanvas();
 
@@ -287,23 +294,14 @@ public class CreateGuiController implements IPlatformGuiController {
         pane_position_parent.getChildren().add(canvas);
         pane_position.getChildren().add(imagecell_background);
 
-        gridpane_describe.add(pane_text_editor, 2, 1);
         gridpane_describe.add(imagecell_describe, 0, 1, 2, 1);
         GridPane.setMargin(imagecell_describe, new Insets(5));
 
-        pane_text_editor.setPrefWidth(893 - 412 - 6);
-        pane_text_editor.setPrefHeight(574);
-        pane_text_editor.setLayoutX(412);
-        pane_text_editor.setLayoutY(32);
-
-        pane_setting.setPrefHeight(30);
-        pane_setting.setBorder(new Border(new BorderStroke(null, null, Color.BLACK, null, null, null,
-                BorderStrokeStyle.DASHED, null, new CornerRadii(2), new BorderWidths(2), null)));
-        pane_setting.getChildren().add(colorpicker_text_editor);
+        hbox_setting.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, new CornerRadii(2), new BorderWidths(2), null)));
         colorpicker_text_editor.getStyleClass().add("button");
 
-        pane_text_editor.setTop(pane_setting);
         pane_text_editor.setCenter(text_editor);
+        BorderPane.setMargin(text_editor, new Insets(2.5f, 0, 0, 0));
 
         canvas.setMouseTransparent(true);
         AnchorPane.setBottomAnchor(canvas, 0d);
@@ -330,6 +328,14 @@ public class CreateGuiController implements IPlatformGuiController {
             var range = text_editor.getSelection();
             text_editor.setStyle(range.getStart(), range.getEnd(),
                     "-color-text: #" + colorpicker_text_editor.getValue().toString().replace("0x", "") + ";");
+        });
+        combo_text_font.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends Label> observ,
+                                                                                Label oldVal, Label newVal) -> {
+            if (newVal != null) {
+                var range = text_editor.getSelection();
+                text_editor.setStyle(range.getStart(), range.getEnd(),
+                        "-fx-font-family: " + newVal.getText() + ";");
+            }
         });
 
         colorpicker.getStyleClass().add("button");
@@ -526,6 +532,11 @@ public class CreateGuiController implements IPlatformGuiController {
             }
             view_var_field.getItems().clear();
             view_var_field.getItems().setAll(name_list);
+            if (view_var_field.getItems().size() < 10) {
+                for (int i = view_var_field.getItems().size(); i < 10; i++) {
+                    view_var_field.getItems().add("");
+                }
+            }
         }
         commandTimeline.update();
         platform.update();
@@ -546,6 +557,19 @@ public class CreateGuiController implements IPlatformGuiController {
         loadPlatform();
         load();
         commandTimeline.load();
+        afterInit();
+    }
+
+    public void afterInit() {
+        for (int i = 0; i < Font.getFamilies().size(); i++) {
+            var name = Font.getFamilies().get(i);
+            var label = new Label(Font.getFamilies().get(i));
+            label.setStyle("-fx-font-family: " + Font.getFamilies().get(i) + ";");
+            combo_text_font.getItems().add(label);
+            if (Font.getFamilies().get(i).equals("NanumGothicOTF")) {
+                combo_text_font.setSelectedValue(label);
+            }
+        }
     }
 
     public void loadPlatform() {

@@ -521,32 +521,14 @@ public class CreateGuiController implements IPlatformGuiController {
     }
 
     public void editTextCss(IndexRange range, String css, String value) {
-        String t = null;
-        List<IndexRange> range_list = new ArrayList<>();
-        int start = range.getStart();
-        for (int i = range.getStart(); i <= range.getEnd(); i++) {
-            var v = text_editor.getStyleAtPosition(i);
-            if (i == range.getEnd()) {
-                range_list.add(new IndexRange(start, i));
-                break;
-            }
-            if (t == null) {
-                t = v;
-                start = i;
-            } else if (t.equals(v)) {
-                continue;
-            } else {
-                range_list.add(new IndexRange(start, i));
-                t = v;
-                start = i;
-            }
-        }
-        for (var v : range_list) {
+        if (range.getStart() == range.getEnd()) return;
+
+        for (int i = range.getStart(); i < range.getEnd(); i++) {
             StringBuilder builder = new StringBuilder();
-            var cssCombined = text_editor.getStyleAtPosition(v.getStart());
+            var cssCombined = text_editor.getStyleOfChar(i);
             if (cssCombined.contains(css)) {
                 var pos = cssCombined.indexOf(css);
-                var after_pos = cssCombined.indexOf(";", pos);
+                var after_pos = cssCombined.indexOf(";", pos + 1);
                 var beforeCssAttribute = cssCombined.substring(0, pos);
                 var afterSemicolon = cssCombined.substring(after_pos + 1);
                 builder.append(beforeCssAttribute);
@@ -563,7 +545,7 @@ public class CreateGuiController implements IPlatformGuiController {
                 builder.append(value);
                 builder.append(";");
             }
-            text_editor.setStyle(v.getStart(), v.getEnd(), builder.toString());
+            text_editor.setStyle(i, i + 1, builder.toString());
         }
 
     }
@@ -621,11 +603,11 @@ public class CreateGuiController implements IPlatformGuiController {
             var label = new Label(name);
             label.setStyle("-fx-font-family: " + name + ";");
             combo_text_font.getItems().add(label);
-            if (Font.getFamilies().get(i).equals("NanumGothicOTF")) {
-                combo_text_font.setSelectedValue(label);
-                combo_text_font.setStyle("-fx-font-family: " + name + ";");
-            }
         }
+        var label = new Label("NanumGothicOTF");
+        label.setStyle("-fx-font-family: NanumGothicOTF;");
+        combo_text_font.setSelectedValue(label);
+
         for (var i : FontLoader.size) {
             combo_text_size.getItems().add(String.valueOf(i));
         }

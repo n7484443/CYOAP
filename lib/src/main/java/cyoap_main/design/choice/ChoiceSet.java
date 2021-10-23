@@ -305,6 +305,7 @@ public class ChoiceSet {
 		setHeight(h);
 	}
 
+	@JsonIgnore
 	public List<Float> get_snapList_x() {
 		List<Float> arrayList = new ArrayList<>();
 		arrayList.add(pos_x);
@@ -313,6 +314,7 @@ public class ChoiceSet {
 		return arrayList;
 	}
 
+	@JsonIgnore
 	public List<Float> get_snapList_y() {
 		List<Float> arrayList = new ArrayList<>();
 		arrayList.add(pos_y);

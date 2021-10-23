@@ -327,26 +327,20 @@ public class CreateGuiController implements IPlatformGuiController {
         }
         colorpicker_text_editor.valueProperty().addListener(e -> {
             var range = text_editor.getSelection();
-            text_editor.setStyle(range.getStart(), range.getEnd(),
-                    "-color-text: #" + colorpicker_text_editor.getValue().toString().replace("0x", "") + ";");
+            editTextCss(range, "-color-text", colorpicker_text_editor.getValue().toString().replace("0x", "#"));
         });
         combo_text_font.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends Label> observ,
                                                                                 Label oldVal, Label newVal) -> {
             if (newVal != null) {
                 var range = text_editor.getSelection();
-                text_editor.setStyle(range.getStart(), range.getEnd(),
-                        "-fx-font-family: " + newVal.getText() + ";");
-                combo_text_font.selectedValueProperty().getValue().setStyle("-fx-font-family: " + newVal.getText() + ";");
-                combo_text_font.getSelectedValue().setStyle("-fx-font-family: " + newVal.getText() + ";");
-                combo_text_font.setStyle("-fx-font-family: " + newVal.getText() + ";");
-                combo_text_font.getStyleClass().add("-fx-font-family: " + newVal.getText() + ";");
+                editTextCss(range, "-fx-font-family", newVal.getText());
             }
         });
         combo_text_size.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observ,
                                                                                 String oldVal, String newVal) -> {
             if (!newVal.isEmpty()) {
                 var range = text_editor.getSelection();
-                text_editor.setStyle(range.getStart(), range.getEnd(), "-fx-font-size: " + newVal + "pt;");
+                editTextCss(range, "-fx-font-size", newVal + "pt");
             }
         });
 
@@ -525,6 +519,55 @@ public class CreateGuiController implements IPlatformGuiController {
             }
         });
     }
+
+    public void editTextCss(IndexRange range, String css, String value) {
+        String t = null;
+        List<IndexRange> range_list = new ArrayList<>();
+        int start = range.getStart();
+        for (int i = range.getStart(); i <= range.getEnd(); i++) {
+            var v = text_editor.getStyleAtPosition(i);
+            if (i == range.getEnd()) {
+                range_list.add(new IndexRange(start, i));
+                break;
+            }
+            if (t == null) {
+                t = v;
+                start = i;
+            } else if (t.equals(v)) {
+                continue;
+            } else {
+                range_list.add(new IndexRange(start, i));
+                t = v;
+                start = i;
+            }
+        }
+        for (var v : range_list) {
+            StringBuilder builder = new StringBuilder();
+            var cssCombined = text_editor.getStyleAtPosition(v.getStart());
+            if (cssCombined.contains(css)) {
+                var pos = cssCombined.indexOf(css);
+                var after_pos = cssCombined.indexOf(";", pos);
+                var beforeCssAttribute = cssCombined.substring(0, pos);
+                var afterSemicolon = cssCombined.substring(after_pos + 1);
+                builder.append(beforeCssAttribute);
+                builder.append(css);
+                builder.append(":");
+                builder.append(value);
+                builder.append(";");
+                builder.append(afterSemicolon);
+            } else {
+                builder.append(cssCombined);
+                builder.append("\n");
+                builder.append(css);
+                builder.append(":");
+                builder.append(value);
+                builder.append(";");
+            }
+            text_editor.setStyle(v.getStart(), v.getEnd(), builder.toString());
+        }
+
+    }
+
 
     public SimpleEntry<Image, String> image = null;
 

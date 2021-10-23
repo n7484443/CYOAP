@@ -1,5 +1,6 @@
 package cyoap_main.design.choice;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -302,5 +303,21 @@ public class ChoiceSet {
 	public void changeSize(float w, float h) {
 		setWidth(w);
 		setHeight(h);
+	}
+
+	public List<Float> get_snapList_x() {
+		List<Float> arrayList = new ArrayList<>();
+		arrayList.add(pos_x);
+		arrayList.add(pos_x + getWidth());
+		arrayList.add(pos_x + getWidth() / 2f);
+		return arrayList;
+	}
+
+	public List<Float> get_snapList_y() {
+		List<Float> arrayList = new ArrayList<>();
+		arrayList.add(pos_y);
+		arrayList.add(pos_y + getHeight());
+		arrayList.add(pos_y + getHeight() / 2f);
+		return arrayList;
 	}
 }

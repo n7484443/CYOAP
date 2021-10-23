@@ -213,27 +213,18 @@ public class ChoiceSetGuiComponent {
         if (moveCommand != null && motherChoiceSet.equals(moveCommand.choiceset)) {
             var entry = platform.checkLine(motherChoiceSet, 10f);
             if (entry != null) {
-                var v = entry.getKey();
-                var flag = entry.getValue();
-                var show_x = (v.x() == 0 ? motherChoiceSet.pos_x : v.x()) - lx;
-                var show_y = (v.y() == 0 ? motherChoiceSet.pos_y : v.y()) - ly;
+                var show_x = entry.getValue().x();
+                var show_y = entry.getValue().y();
                 gc.setStroke(Color.CORNFLOWERBLUE);
                 gc.setLineWidth(1);
                 gc.setLineDashes(5);
                 gc.setLineDashOffset((time * 20) % 1000);
-                if (FlagUtil.getFlag(flag, 0)) {
-                    show_x += motherChoiceSet.getWidth();
-                } else if (FlagUtil.getFlag(flag, 1)) {
-                    show_x += motherChoiceSet.getWidth() / 2;
+                if (show_x != Float.MAX_VALUE) {
+                    gc.strokeLine(show_x - lx, CreateGuiController.instance.getPlatform().min_y - ly, show_x - lx, CreateGuiController.instance.getPlatform().max_y - ly);
                 }
-                gc.strokeLine(show_x, 0, show_x, gc.getCanvas().getHeight());
-
-                if (FlagUtil.getFlag(flag, 2)) {
-                    show_y += motherChoiceSet.getHeight();
-                } else if (FlagUtil.getFlag(flag, 3)) {
-                    show_y += motherChoiceSet.getHeight() / 2;
+                if (show_y != Float.MAX_VALUE) {
+                    gc.strokeLine(CreateGuiController.instance.getPlatform().min_x - lx, show_y - ly, CreateGuiController.instance.getPlatform().max_x - lx, show_y - ly);
                 }
-                gc.strokeLine(0, show_y, gc.getCanvas().getWidth(), show_y);
             }
         }
         if (motherChoiceSet.equals(CreateGuiController.instance.nowMouseInDataSet)) {

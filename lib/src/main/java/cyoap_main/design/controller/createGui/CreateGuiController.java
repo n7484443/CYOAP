@@ -132,6 +132,8 @@ public class CreateGuiController implements IPlatformGuiController {
     public ColorPicker colorpicker_text_editor;
     @FXML
     public MFXComboBox<Label> combo_text_font;
+    @FXML
+    public MFXComboBox<String> combo_text_size;
 
     public ResizableCanvas canvas = new ResizableCanvas();
 
@@ -147,7 +149,6 @@ public class CreateGuiController implements IPlatformGuiController {
     public ChoiceSet nowMouseInDataSet;
 
     public Bound2f copyBound;
-
 
     public CreateGuiController() {
         CreateGuiController.instance = this;
@@ -304,13 +305,13 @@ public class CreateGuiController implements IPlatformGuiController {
         BorderPane.setMargin(text_editor, new Insets(2.5f, 0, 0, 0));
 
         canvas.setMouseTransparent(true);
+        canvas.toFront();
         AnchorPane.setBottomAnchor(canvas, 0d);
         AnchorPane.setLeftAnchor(canvas, 0d);
         AnchorPane.setRightAnchor(canvas, 0d);
         AnchorPane.setTopAnchor(canvas, 0d);
         canvas.scaleXProperty().bind(getChoicePane().scaleXProperty());
         canvas.scaleYProperty().bind(getChoicePane().scaleYProperty());
-
 
         button_list.add(button_outline);
         button_list.add(button_horizon);
@@ -335,6 +336,17 @@ public class CreateGuiController implements IPlatformGuiController {
                 var range = text_editor.getSelection();
                 text_editor.setStyle(range.getStart(), range.getEnd(),
                         "-fx-font-family: " + newVal.getText() + ";");
+                combo_text_font.selectedValueProperty().getValue().setStyle("-fx-font-family: " + newVal.getText() + ";");
+                combo_text_font.getSelectedValue().setStyle("-fx-font-family: " + newVal.getText() + ";");
+                combo_text_font.setStyle("-fx-font-family: " + newVal.getText() + ";");
+                combo_text_font.getStyleClass().add("-fx-font-family: " + newVal.getText() + ";");
+            }
+        });
+        combo_text_size.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observ,
+                                                                                String oldVal, String newVal) -> {
+            if (!newVal.isEmpty()) {
+                var range = text_editor.getSelection();
+                text_editor.setStyle(range.getStart(), range.getEnd(), "-fx-font-size: " + newVal + "pt;");
             }
         });
 
@@ -563,13 +575,18 @@ public class CreateGuiController implements IPlatformGuiController {
     public void afterInit() {
         for (int i = 0; i < Font.getFamilies().size(); i++) {
             var name = Font.getFamilies().get(i);
-            var label = new Label(Font.getFamilies().get(i));
-            label.setStyle("-fx-font-family: " + Font.getFamilies().get(i) + ";");
+            var label = new Label(name);
+            label.setStyle("-fx-font-family: " + name + ";");
             combo_text_font.getItems().add(label);
             if (Font.getFamilies().get(i).equals("NanumGothicOTF")) {
                 combo_text_font.setSelectedValue(label);
+                combo_text_font.setStyle("-fx-font-family: " + name + ";");
             }
         }
+        for (var i : FontLoader.size) {
+            combo_text_size.getItems().add(String.valueOf(i));
+        }
+        combo_text_size.setSelectedValue("12");
     }
 
     public void loadPlatform() {

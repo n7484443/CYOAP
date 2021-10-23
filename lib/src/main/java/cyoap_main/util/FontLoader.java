@@ -15,7 +15,7 @@ import java.util.stream.IntStream;
 import javafx.scene.text.Font;
 
 public class FontLoader {
-	public int[] size;
+	public static int[] size;
 	public String fontFolder = "lib/font";
 
 	public FontLoader() {

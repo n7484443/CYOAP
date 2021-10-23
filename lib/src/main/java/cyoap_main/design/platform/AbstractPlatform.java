@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import cyoap_main.core.JavaFxMain;
 import cyoap_main.design.choice.ChoiceSet;
 import cyoap_main.design.controller.IPlatformGuiController;
+import cyoap_main.design.controller.createGui.CreateGuiController;
 import cyoap_main.unit.Vector2f;
 import cyoap_main.util.FlagUtil;
 import cyoap_main.util.LoadUtil;
@@ -35,7 +36,7 @@ public class AbstractPlatform {
     public float max_y = 1600;
     public float scale = 1.0f;
     @JsonIgnore
-    public float maximize = 3f;
+    public float maximize = 2.5f;
     @JsonIgnore
     public float minimize = 0.5f;
     @JsonIgnore
@@ -61,111 +62,61 @@ public class AbstractPlatform {
 
     public boolean needUpdate = true;
 
-    public void setUp(IPlatformGuiController guiController){
+    public void setUp(IPlatformGuiController guiController) {
         this.guiController = guiController;
     }
 
-    public SimpleEntry<Vector2f, Integer> checkLine(ChoiceSet choiceSet, float bias) {
-        var x_min = choiceSet.pos_x;
-        var y_min = choiceSet.pos_y;
-        var x_max = x_min + choiceSet.getWidth();
-        var y_max = y_min + choiceSet.getHeight();
-
+    /**
+     * @return setting position, line position
+     **/
+    public SimpleEntry<Vector2f, Vector2f> checkLine(ChoiceSet choiceSet, float bias) {
         float x_new = Float.MAX_VALUE;
         float y_new = Float.MAX_VALUE;
+        float x_line = Float.MAX_VALUE;
+        float y_line = Float.MAX_VALUE;
+        var vec_original_x = choiceSet.get_snapList_x();
+        var vec_original_y = choiceSet.get_snapList_y();
 
         int i = 0;
         for (var choice : choiceSetList) {
-            float sizex = Float.POSITIVE_INFINITY;
-            float sizey = Float.POSITIVE_INFINITY;
+            float size_x = Float.POSITIVE_INFINITY;
+            float size_y = Float.POSITIVE_INFINITY;
             float l = 0;
             if (choice == choiceSet)
                 continue;
-            var x_min2 = choice.pos_x;
-            var y_min2 = choice.pos_y;
-            var x_max2 = x_min2 + choice.getWidth();
-            var y_max2 = y_min2 + choice.getHeight();
-            var x_half2 = x_min2 + choice.getWidth() / 2;
-            var y_half2 = y_min2 + choice.getHeight() / 2;
 
-            l = Math.abs(x_min - x_min2);
-            if (l < bias && l < sizex) {
-                x_new = x_min2;
-                sizex = l;
-            }
-            l = Math.abs(x_min - x_max2);
-            if (l < bias && l < sizex) {
-                x_new = x_max2;
-                sizex = l;
-            }
-            l = Math.abs(x_max - x_min2);
-            if (l < bias && l < sizex) {
-                x_new = x_min2 - choiceSet.getWidth();
-                i = FlagUtil.setFlag(i, 0);
-                sizex = l;
-            }
-            l = Math.abs(x_max - x_max2);
-            if (l < bias && l < sizex) {
-                x_new = x_max2 - choiceSet.getWidth();
-                i = FlagUtil.setFlag(i, 0);
-                sizex = l;
-            }
+            var vec_sub_x = choice.get_snapList_x();
+            var vec_sub_y = choice.get_snapList_y();
 
-            l = Math.abs(x_min - x_half2);
-            if (l < bias && l < sizex) {
-                x_new = x_half2;
-                sizex = l;
+            for (var v_ori_x : vec_original_x) {
+                for (var v_sub_x : vec_sub_x) {
+                    l = Math.abs(v_ori_x - v_sub_x);
+                    if (l < bias && l < size_x) {
+                        size_x = l;
+                        x_new = v_sub_x - (v_ori_x - choiceSet.pos_x);
+                        x_line = v_sub_x;
+                    }
+                }
             }
-            l = Math.abs(x_max - x_half2);
-            if (l < bias && l < sizex) {
-                x_new = x_half2 - choiceSet.getWidth();
-                i = FlagUtil.setFlag(i, 1);
-                sizex = l;
-            }
-
-            l = Math.abs(y_min - y_min2);
-            if (l < bias && l < sizey) {
-                y_new = y_min2;
-                sizey = l;
-            }
-            l = Math.abs(y_min - y_max2);
-            if (l < bias && l < sizey) {
-                y_new = y_max2;
-                sizey = l;
-            }
-            l = Math.abs(y_max - y_min2);
-            if (l < bias && l < sizey) {
-                y_new = y_min2 - choiceSet.getHeight();
-                i = FlagUtil.setFlag(i, 2);
-                sizey = l;
-            }
-            l = Math.abs(y_max - y_max2);
-            if (l < bias && l < sizey) {
-                y_new = y_max2 - choiceSet.getHeight();
-                i = FlagUtil.setFlag(i, 2);
-                sizey = l;
-            }
-
-            l = Math.abs(y_min - y_half2);
-            if (l < bias && l < sizey) {
-                y_new = y_half2;
-                sizey = l;
-            }
-            l = Math.abs(y_max - y_half2);
-            if (l < bias && l < sizey) {
-                y_new = y_half2 - choiceSet.getHeight();
-                i = FlagUtil.setFlag(i, 3);
-                sizey = l;
+            for (var v_ori_y : vec_original_y) {
+                for (var v_sub_y : vec_sub_y) {
+                    l = Math.abs(v_ori_y - v_sub_y);
+                    if (l < bias && l < size_y) {
+                        size_y = l;
+                        y_new = v_sub_y - (v_ori_y - choiceSet.pos_y);
+                        y_line = v_sub_y;
+                    }
+                }
             }
         }
         if (x_new == Float.MAX_VALUE && y_new == Float.MAX_VALUE) {
             return null;
         } else if (x_new == Float.MAX_VALUE && y_new != Float.MAX_VALUE) {
-            return new SimpleEntry<Vector2f, Integer>(new Vector2f(0, y_new), i);
+            return new SimpleEntry<Vector2f, Vector2f>(new Vector2f(0, y_new), new Vector2f(x_line, y_line));
         } else if (x_new != Float.MAX_VALUE && y_new == Float.MAX_VALUE) {
-            return new SimpleEntry<Vector2f, Integer>(new Vector2f(x_new, 0), i);
+            return new SimpleEntry<Vector2f, Vector2f>(new Vector2f(x_new, 0), new Vector2f(x_line, y_line));
         } else {
-            return new SimpleEntry<Vector2f, Integer>(new Vector2f(x_new, y_new), i);
+            return new SimpleEntry<Vector2f, Vector2f>(new Vector2f(x_new, y_new), new Vector2f(x_line, y_line));
         }
     }
 
@@ -219,7 +170,7 @@ public class AbstractPlatform {
     public void render(GraphicsContext gc, double time) {
         choiceSetList.forEach(d -> d.render(gc, time));
         gc.setStroke(Color.INDIANRED);
-        gc.setLineWidth(1);
+        gc.setLineWidth(3);
         gc.setLineDashes(5);
         gc.setLineDashOffset((time * 20) % 1000);
         gc.strokeRect(min_x - local_x, min_y - local_y, max_x - min_x, max_y - min_y);

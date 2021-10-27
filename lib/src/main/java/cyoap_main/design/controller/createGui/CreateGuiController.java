@@ -135,6 +135,11 @@ public class CreateGuiController implements IPlatformGuiController {
     @FXML
     public MFXComboBox<String> combo_text_size;
 
+    @FXML
+    public VBox vbox_background_order;
+    @FXML
+    public MFXScrollPane scrollpane_background_order;
+
     public ResizableCanvas canvas = new ResizableCanvas();
 
     public List<File> dropped;
@@ -285,12 +290,14 @@ public class CreateGuiController implements IPlatformGuiController {
         try {
             Image image = new Image(LoadUtil.instance.loadInternalImage("/lib/image/tutorial_image.png"));
             imagecell_tutorialImage.setImage(image);
-            imagecell_tutorialImage.setOnMouseClicked(t -> {
-                anchorpane_create.getChildren().remove(imagecell_tutorialImage);
-            });
+            imagecell_tutorialImage.setOnMouseClicked(t ->
+                    anchorpane_create.getChildren().remove(imagecell_tutorialImage)
+            );
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        scrollpane_background_order.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         pane_position_parent.getChildren().add(canvas);
         pane_position.getChildren().add(imagecell_background);
@@ -316,6 +323,7 @@ public class CreateGuiController implements IPlatformGuiController {
         button_list.add(button_outline);
         button_list.add(button_horizon);
         button_list.add(button_emptyimage);
+
 
         try {
             text_editor.setWrapText(true);
@@ -644,8 +652,10 @@ public class CreateGuiController implements IPlatformGuiController {
     }
 
     @Override
-    public ImageCell getBackgroundImageView() {
-        return imagecell_background;
+    public List<ImageCell> getBackgroundImageCellList() {
+        var list = new ArrayList<ImageCell>();
+        list.add(imagecell_background);
+        return list;
     }
 
     @Override

@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.stream.Stream;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,7 +21,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 public interface IPlatformGuiController extends Initializable {
-    ImageCell getBackgroundImageView();
+    List<ImageCell> getBackgroundImageCellList();
 
     Pane getChoicePane();
 

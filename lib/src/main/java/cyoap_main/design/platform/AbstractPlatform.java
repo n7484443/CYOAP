@@ -15,11 +15,14 @@ import cyoap_main.core.JavaFxMain;
 import cyoap_main.design.choice.ChoiceSet;
 import cyoap_main.design.controller.IPlatformGuiController;
 import cyoap_main.design.controller.createGui.CreateGuiController;
+import cyoap_main.design.node_extension.ImageCell;
 import cyoap_main.unit.Vector2f;
 import cyoap_main.util.FlagUtil;
 import cyoap_main.util.LoadUtil;
+import javafx.geometry.Insets;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 
@@ -130,7 +133,7 @@ public class AbstractPlatform {
     public void clearNodeOnPanePosition() {
         choiceSetList.clear();
         guiController.getChoicePane().getChildren().clear();
-        guiController.getChoicePane().getChildren().add(guiController.getBackgroundImageView());
+        guiController.getChoicePane().getChildren().add(guiController.getBackgroundImageCellList().get(0));
     }
 
     public void setNodeDepth() {
@@ -138,7 +141,7 @@ public class AbstractPlatform {
             var gui = c.guiComponent.pane;
             gui.setViewOrder(0.0d);
         }
-        guiController.getBackgroundImageView().setViewOrder(10.0d);
+        guiController.getBackgroundImageCellList().get(0).setViewOrder(10.0d);
     }
 
     public void update() {
@@ -149,10 +152,20 @@ public class AbstractPlatform {
                 background_image = image.getKey();
                 string_image_name = image.getValue();
 
-                guiController.getBackgroundImageView().setImage(background_image);
+                guiController.getBackgroundImageCellList().get(0).setImage(background_image);
             }
-            guiController.getBackgroundImageView().setPrefWidth(max_x - min_x);
-            guiController.getBackgroundImageView().setPrefHeight(max_y - min_y);
+            if (guiController instanceof CreateGuiController create_gui) {
+                for (var controller_imageCell : guiController.getBackgroundImageCellList()) {
+                    create_gui.vbox_background_order.getChildren().clear();
+                    var imageCell = new ImageCell(controller_imageCell.getImage());
+                    imageCell.x = controller_imageCell.x;
+                    imageCell.y = controller_imageCell.y;
+                    imageCell.maxWidthProperty().bind(create_gui.scrollpane_background_order.widthProperty());
+                    create_gui.vbox_background_order.getChildren().add(imageCell);
+                }
+            }
+            guiController.getBackgroundImageCellList().get(0).setPrefWidth(max_x - min_x);
+            guiController.getBackgroundImageCellList().get(0).setPrefHeight(max_y - min_y);
         }
         guiController.getChoicePane().setScaleX(scale);
         guiController.getChoicePane().setScaleY(scale);
@@ -178,21 +191,29 @@ public class AbstractPlatform {
 
     public void updateMouseCoordinate() {
         choiceSetList.forEach(d -> d.updateCoordinate(-local_x, -local_y));
-        guiController.getBackgroundImageView().relocate(min_x - local_x, min_y - local_y);
+
+        for (var node_background : guiController.getBackgroundImageCellList()) {
+            node_background.relocate(min_x - local_x + node_background.x, min_y - local_y + node_background.y);
+        }
     }
 
     public void updateCoordinateAll(double x, double y) {
         for (var node : choiceSetList) {
             node.updateCoordinate(x, y);
         }
-        guiController.getBackgroundImageView().relocate(min_x - local_x + x, min_y - local_y + y);
+        for (var node_background : guiController.getBackgroundImageCellList()) {
+            node_background.relocate(min_x - local_x + x + node_background.x, min_y - local_y + y + node_background.y);
+        }
     }
 
     public void updatePositionAll(double x, double y) {
         for (var node : choiceSetList) {
             node.updatePosition(x, y);
         }
-        guiController.getBackgroundImageView().relocate(min_x - local_x + x, min_y - local_y + y);
+
+        for (var node_background : guiController.getBackgroundImageCellList()) {
+            node_background.relocate(min_x - local_x + x + node_background.x, min_y - local_y + y + node_background.y);
+        }
     }
 
     public void save() {
@@ -206,8 +227,11 @@ public class AbstractPlatform {
         }
     }
 
-    public void updateFlag(){
-        guiController.getBackgroundImageView().isPreserveRatio = FlagUtil.getFlag(flag, flagPosition_background_preserve_ratio);
-        guiController.getBackgroundImageView().requestLayout();
+    public void updateFlag() {
+        boolean b = FlagUtil.getFlag(flag, flagPosition_background_preserve_ratio);
+        for (var l : guiController.getBackgroundImageCellList()) {
+            l.isPreserveRatio = b;
+            l.requestLayout();
+        }
     }
 }

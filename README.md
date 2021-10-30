@@ -1,7 +1,12 @@
-# CYOAP
-This is CYOA Player. You can make CYOA story, also can read CYOA story.
+# What is CYOA
+CYOA is 'Choose Your Own Adventure' acronym.
 
-CYOA Player입니다. CYOA 스토리를 읽거나 만들 수 있습니다.
+CYOA는 'Choose Your Own Adventure'의 두문자어 입니다.
+
+# CYOAP
+This program is CYOA Player. You can make CYOA story, also can play CYOA.
+
+이 프로그램은 CYOA Player입니다. CYOA를 플레이하거나 만들 수 있습니다.
 
 # Dependency
 [FXMisc/RichTextFX](https://github.com/FXMisc/RichTextFX)

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import cyoap_main.design.node_extension.ImageCell;
+import cyoap_main.design.node_extension.ResizableCanvas;
 import cyoap_main.design.platform.AbstractPlatform;
 import cyoap_main.design.platform.PlayPlatform;
 import javafx.fxml.FXML;
@@ -20,8 +21,11 @@ public class PlayGuiController implements IPlatformGuiController {
 
 	public AbstractPlatform platform;
 
+	public ResizableCanvas canvas = new ResizableCanvas();
 	@FXML
 	public AnchorPane pane_play;
+	@FXML
+	public AnchorPane pane_play_parent;
 
 	public ImageCell imagecell_background = new ImageCell();
 
@@ -61,7 +65,7 @@ public class PlayGuiController implements IPlatformGuiController {
 
 	@Override
 	public Pane getChoicePaneParent() {
-		return pane_play;
+		return pane_play_parent;
 	}
 
 	@Override
@@ -81,6 +85,6 @@ public class PlayGuiController implements IPlatformGuiController {
 
 	@Override
 	public Canvas getCanvas() {
-		return null;
+		return canvas;
 	}
 }

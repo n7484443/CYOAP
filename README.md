@@ -14,4 +14,6 @@ CYOA Player입니다. CYOA 스토리를 읽거나 만들 수 있습니다.
 
 [srikanth-lingala/zip4j](https://github.com/srikanth-lingala/zip4j)
 
+[palexdev/MaterialFX](https://github.com/palexdev/MaterialFX)
+
 [MavenAritfact](https://maven.apache.org/ref/3.8.2/maven-artifact/)

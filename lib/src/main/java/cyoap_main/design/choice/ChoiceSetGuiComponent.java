@@ -52,12 +52,11 @@ public class ChoiceSetGuiComponent {
 
     public static Border border_default = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(5), new BorderWidths(1)));
 
-    public ChoiceSetGuiComponent(Color color) {
-        this.color = color;
+    public ChoiceSetGuiComponent(ChoiceSet choiceSet) {
+        motherChoiceSet = choiceSet;
     }
 
-    public void setUp(ChoiceSet dataSet) {
-        motherChoiceSet = dataSet;
+    public void setUp() {
         try {
             area.setWrapText(true);
             area.getStylesheets().add(LoadUtil.instance.loadCss("/lib/css/text_editor.css"));
@@ -76,8 +75,8 @@ public class ChoiceSetGuiComponent {
 
         pane.setClip(rectangle);
 
-        pane.setLayoutX(dataSet.pos_x);
-        pane.setLayoutY(dataSet.pos_y);
+        pane.setLayoutX(motherChoiceSet.pos_x);
+        pane.setLayoutY(motherChoiceSet.pos_y);
         pane.setBorder(border_default);
         pane.add(pane_border, 0, 0);
 
@@ -115,8 +114,8 @@ public class ChoiceSetGuiComponent {
             pane.setOnMouseClicked(e -> {
                 if (e.getButton().equals(MouseButton.PRIMARY)) {
                     if (e.getClickCount() == 2) {
-                        CreateGuiController.instance.nowEditDataSet = dataSet;
-                        CreateGuiController.instance.loadFromDataSet(dataSet);
+                        CreateGuiController.instance.nowEditDataSet = motherChoiceSet;
+                        CreateGuiController.instance.loadFromDataSet(motherChoiceSet);
                         CreateGuiController.instance.changeTab(CreateGuiController.instance.tab_describe);
                         e.consume();
                     }
@@ -127,7 +126,7 @@ public class ChoiceSetGuiComponent {
             pane.setOnMouseDragged(e -> {
                 if (e.getButton().equals(MouseButton.MIDDLE)) {
                     if (moveCommand == null) {
-                        moveCommand = new MoveCommand(dataSet.pos_x, dataSet.pos_y, dataSet);
+                        moveCommand = new MoveCommand(motherChoiceSet.pos_x, motherChoiceSet.pos_y, motherChoiceSet);
                     }
                     double move_x = CreateGuiController.platform.sensitivity
                             * (e.getSceneX() - CreateGuiController.platform.start_mouse_x);
@@ -135,7 +134,8 @@ public class ChoiceSetGuiComponent {
                             * (e.getSceneY() - CreateGuiController.platform.start_mouse_y);
                     CreateGuiController.platform.start_mouse_x = e.getSceneX();
                     CreateGuiController.platform.start_mouse_y = e.getSceneY();
-                    dataSet.updatePosition(move_x, move_y);
+                    motherChoiceSet.updatePosition(move_x, move_y);
+                    update();
                 }
                 this.pane.toFront();
                 this.pane.setViewOrder(-2.0d);
@@ -144,45 +144,42 @@ public class ChoiceSetGuiComponent {
                 if (e.getButton().equals(MouseButton.MIDDLE)) {
                     if (moveCommand == null)
                         return;
-                    if (moveCommand.start_x != dataSet.pos_x || moveCommand.start_y != dataSet.pos_y) {
-                        var v = moveCommand.checkOutline(this.motherChoiceSet, dataSet.pos_x, dataSet.pos_y);
-                        dataSet.pos_x = v.x();
-                        dataSet.pos_y = v.y();
-
+                    if (moveCommand.start_x != motherChoiceSet.pos_x || moveCommand.start_y != motherChoiceSet.pos_y) {
+                        var v = moveCommand.checkOutline(this.motherChoiceSet, motherChoiceSet.pos_x, motherChoiceSet.pos_y);
                         moveCommand.setEnd(v.x(), v.y());
+                        motherChoiceSet.setPosition(v.x(), v.y());
                         CreateGuiController.instance.commandTimeline.addCommand(moveCommand);
                     }
                     moveCommand = null;
 
                     ChoiceSet final_choice = null;
-                    Bound2f bound = new Bound2f(dataSet.bound);
+                    Bound2f bound = new Bound2f(motherChoiceSet.bound);
                     float mul = 0.8f;
                     bound.x += bound.width * (1f - mul) * 0.5f;
                     bound.y += bound.height * (1f - mul) * 0.5f;
                     bound.width *= mul;
                     bound.height *= mul;
                     for (var choiceSet : CreateGuiController.platform.choiceSetList) {
-                        if (choiceSet == dataSet)
+                        if (choiceSet == motherChoiceSet)
                             continue;
                         if (bound.intersect(choiceSet.bound)) {
                             final_choice = choiceSet;
                             break;
                         }
                     }
-                    var t = CreateGuiController.platform.checkLine(dataSet, 10f);
+                    var t = CreateGuiController.platform.checkLine(motherChoiceSet, 10f);
                     if (t != null) {
                         var v = t.getKey();
-                        dataSet.pos_x = v.x() == 0 ? dataSet.pos_x : v.x();
-                        dataSet.pos_y = v.y() == 0 ? dataSet.pos_y : v.y();
+                        motherChoiceSet.setPosition(v.x() == 0 ? motherChoiceSet.pos_x : v.x(), v.y() == 0 ? motherChoiceSet.pos_y : v.y());
                     }
                     if (final_choice != null) {
                         CreateGuiController.instance.commandTimeline
-                                .excuteCommand(new CombineCommand(final_choice, dataSet));
+                                .excuteCommand(new CombineCommand(final_choice, motherChoiceSet));
                     }
                 }
                 this.pane.setViewOrder(0.0d);
             });
-            pane.setOnMouseEntered(e -> CreateGuiController.instance.nowMouseInDataSet = dataSet);
+            pane.setOnMouseEntered(e -> CreateGuiController.instance.nowMouseInDataSet = motherChoiceSet);
 
             pane.setOnMouseExited(e -> {
                 if (!motherChoiceSet.isClicked)

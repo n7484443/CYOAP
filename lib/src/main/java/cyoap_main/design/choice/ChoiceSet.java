@@ -43,7 +43,7 @@ public class ChoiceSet {
     public String string_image_name;
     public Color color = baseColor;// blue
     @JsonIgnore
-    public ChoiceSetGuiComponent guiComponent = new ChoiceSetGuiComponent(color);
+    public ChoiceSetGuiComponent guiComponent = new ChoiceSetGuiComponent(this);
     public int flag = flagPosition_selectable;
     @JsonManagedReference
     public List<ChoiceSet> choiceSet_child = new ArrayList<>();
@@ -94,7 +94,8 @@ public class ChoiceSet {
     }
 
     public void setUp(Pane pane_mother) {
-        guiComponent.setUp(this);
+        guiComponent.color = baseColor;
+        guiComponent.setUp();
         pane_mother.getChildren().add(guiComponent.pane);
     }
 
@@ -212,23 +213,22 @@ public class ChoiceSet {
     }
 
     // 화면상의 위치
-    public void updateCoordinate(double moveX, double moveY) {
-        guiComponent.setTranslation(moveX, moveY);
-        updateBounds();
+    public void updateCoordinate(double move_x, double move_y) {
+        guiComponent.setTranslation(move_x, move_y);
     }
 
     // 실제 위치
-    public void updatePosition(double moveX, double moveY) {
-        pos_x += moveX;
-        pos_y += moveY;
+    public void updatePosition(double move_x, double move_y) {
+        pos_x += move_x;
+        pos_y += move_y;
         guiComponent.setPosition(pos_x, pos_y);
         updateBounds();
     }
 
-    public void setPosition(float posX, float posY) {
-        pos_x = posX;
-        pos_y = posY;
-        guiComponent.setPosition(pos_x, pos_y);
+    public void setPosition(float pos_x, float pos_y) {
+        this.pos_x = pos_x;
+        this.pos_y = pos_y;
+        guiComponent.setPosition(this.pos_x, this.pos_y);
         updateBounds();
     }
 

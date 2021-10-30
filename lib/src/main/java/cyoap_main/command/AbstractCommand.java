@@ -43,7 +43,6 @@ public abstract class AbstractCommand {
 	}
 
 	public Vector2f checkOutline(ChoiceSet choiceSet, float x, float y) {
-
 		if (x <= CreateGuiController.platform.min_x) {
 			CreateGuiController.platform.min_x = x;
 			CreateGuiController.platform.isImageChanged = true;

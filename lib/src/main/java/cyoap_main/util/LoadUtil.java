@@ -151,7 +151,7 @@ public class LoadUtil {
             if (!c.choiceSet_child.isEmpty()) {
                 setupChoiceSet(c);
             } else {
-                c.guiComponent.setUp(c);
+                c.guiComponent.setUp();
             }
         }
     }

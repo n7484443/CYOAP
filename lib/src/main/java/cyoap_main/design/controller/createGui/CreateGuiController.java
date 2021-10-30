@@ -170,7 +170,8 @@ public class CreateGuiController implements IPlatformGuiController {
 
         this.getChoicePane().resize(width_after, height_after);
 
-        platform.updatePositionAll(platform.local_x, platform.local_y);
+        platform.updateTranslationAll(0, 0);
+        //platform.updatePositionAll(platform.local_x, platform.local_y);
 
         var spa = new SnapshotParameters();
         spa.setTransform(Transform.scale(pixelScale, pixelScale));
@@ -189,7 +190,8 @@ public class CreateGuiController implements IPlatformGuiController {
             e.printStackTrace();
         }
 
-        platform.updatePositionAll(-platform.local_x, -platform.local_y);
+        //platform.updatePositionAll(-platform.local_x, -platform.local_y);
+        platform.updateTranslationAll(-platform.local_x, -platform.local_y);
         this.getChoicePane().resize(width_before, before_height);
     }
 

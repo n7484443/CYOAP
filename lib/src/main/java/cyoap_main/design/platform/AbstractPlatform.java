@@ -193,26 +193,21 @@ public class AbstractPlatform {
         choiceSetList.forEach(d -> d.updateCoordinate(-local_x, -local_y));
 
         for (var node_background : guiController.getBackgroundImageCellList()) {
-            node_background.relocate(min_x - local_x + node_background.x, min_y - local_y + node_background.y);
+            node_background.relocate(min_x + node_background.x, min_y + node_background.y);
+            node_background.setTranslateX(-local_x);
+            node_background.setTranslateY(-local_y);
         }
     }
 
-    public void updateCoordinateAll(double x, double y) {
+    public void updateTranslationAll(double x, double y) {
         for (var node : choiceSetList) {
             node.updateCoordinate(x, y);
         }
-        for (var node_background : guiController.getBackgroundImageCellList()) {
-            node_background.relocate(min_x - local_x + x + node_background.x, min_y - local_y + y + node_background.y);
-        }
-    }
-
-    public void updatePositionAll(double x, double y) {
-        for (var node : choiceSetList) {
-            node.updatePosition(x, y);
-        }
 
         for (var node_background : guiController.getBackgroundImageCellList()) {
-            node_background.relocate(min_x - local_x + x + node_background.x, min_y - local_y + y + node_background.y);
+            node_background.relocate(min_x + node_background.x, min_y + node_background.y);
+            node_background.setTranslateX(x);
+            node_background.setTranslateY(y);
         }
     }
 

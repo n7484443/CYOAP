@@ -245,11 +245,11 @@ public class ChoiceSetGuiComponent {
         }
     }
 
-    public void updatePos(double posX, double posY) {
+    public void setPosition(double posX, double posY) {
         pane.relocate(posX, posY);
     }
 
-    public void updateTranslate(double moveX, double moveY) {
+    public void setTranslation(double moveX, double moveY) {
         pane.setTranslateX(moveX);
         pane.setTranslateY(moveY);
     }

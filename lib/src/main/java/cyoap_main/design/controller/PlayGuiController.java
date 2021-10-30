@@ -1,6 +1,8 @@
 package cyoap_main.design.controller;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import cyoap_main.design.node_extension.ImageCell;
@@ -46,8 +48,10 @@ public class PlayGuiController implements IPlatformGuiController {
 	}
 
 	@Override
-	public ImageCell getBackgroundImageView() {
-		return imagecell_background;
+	public List<ImageCell> getBackgroundImageCellList() {
+		var list = new ArrayList<ImageCell>();
+		list.add(imagecell_background);
+		return list;
 	}
 
 	@Override

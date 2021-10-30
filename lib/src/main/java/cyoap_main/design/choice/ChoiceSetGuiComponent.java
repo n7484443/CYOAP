@@ -245,9 +245,15 @@ public class ChoiceSetGuiComponent {
         }
     }
 
-    public void updatePos(double moveX, double moveY) {
-        pane.relocate(moveX, moveY);
+    public void updatePos(double posX, double posY) {
+        pane.relocate(posX, posY);
     }
+
+    public void updateTranslate(double moveX, double moveY) {
+        pane.setTranslateX(moveX);
+        pane.setTranslateY(moveY);
+    }
+
 
     public void updateColor() {
         pane.setStyle("-fx-background-color: #" + color.toString().replace("0x", "") + ";");

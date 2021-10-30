@@ -315,12 +315,6 @@ public class CreateGuiController implements IPlatformGuiController {
 
         canvas.setMouseTransparent(true);
         canvas.toFront();
-        AnchorPane.setBottomAnchor(canvas, 0d);
-        AnchorPane.setLeftAnchor(canvas, 0d);
-        AnchorPane.setRightAnchor(canvas, 0d);
-        AnchorPane.setTopAnchor(canvas, 0d);
-        canvas.scaleXProperty().bind(getChoicePane().scaleXProperty());
-        canvas.scaleYProperty().bind(getChoicePane().scaleYProperty());
 
         button_list.add(button_outline);
         button_list.add(button_horizon);
@@ -663,6 +657,11 @@ public class CreateGuiController implements IPlatformGuiController {
     @Override
     public Pane getChoicePane() {
         return pane_position;
+    }
+
+    @Override
+    public Pane getChoicePaneParent() {
+        return pane_position_parent;
     }
 
     @Override

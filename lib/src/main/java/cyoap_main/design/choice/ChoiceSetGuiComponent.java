@@ -207,8 +207,8 @@ public class ChoiceSetGuiComponent {
 
     public void render(GraphicsContext gc, double time) {
         var platform = JavaFxMain.controller.getPlatform();
-        var lx = platform.local_x;
-        var ly = platform.local_y;
+        var lx = platform.min_x;
+        var ly = platform.min_y;
 
         if (moveCommand != null && motherChoiceSet.equals(moveCommand.choiceset)) {
             var entry = platform.checkLine(motherChoiceSet, 10f);

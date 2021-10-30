@@ -60,13 +60,18 @@ public class PlayGuiController implements IPlatformGuiController {
 	}
 
 	@Override
+	public Pane getChoicePaneParent() {
+		return pane_play;
+	}
+
+	@Override
 	public AbstractPlatform getPlatform() {
 		return platform;
 	}
 
 	@Override
 	public void update() {
-		
+
 	}
 
 	@Override

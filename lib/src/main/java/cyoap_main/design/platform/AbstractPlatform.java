@@ -25,6 +25,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
+import javafx.scene.transform.Scale;
 
 @JsonAutoDetect(getterVisibility = Visibility.PUBLIC_ONLY)
 public class AbstractPlatform {
@@ -48,6 +49,8 @@ public class AbstractPlatform {
     public double start_mouse_x = 0;
     @JsonIgnore
     public double start_mouse_y = 0;
+    @JsonIgnore
+    public Scale scale_common = new Scale(1, 1);
 
     @JsonIgnore
     public Image background_image;
@@ -167,8 +170,17 @@ public class AbstractPlatform {
             guiController.getBackgroundImageCellList().get(0).setPrefWidth(max_x - min_x);
             guiController.getBackgroundImageCellList().get(0).setPrefHeight(max_y - min_y);
         }
-        guiController.getChoicePane().setScaleX(scale);
-        guiController.getChoicePane().setScaleY(scale);
+
+        guiController.getChoicePaneParent().setScaleX(scale);
+        guiController.getChoicePaneParent().setScaleY(scale);
+
+        guiController.getCanvas().getTransforms().add(scale_common);
+        guiController.getChoicePane().getTransforms().add(scale_common);
+
+        guiController.getCanvas().setWidth(max_x - min_x);
+        guiController.getCanvas().setHeight(max_y - min_y);
+        guiController.getCanvas().setLayoutX(min_x);
+        guiController.getCanvas().setLayoutY(min_y);
         updateMouseCoordinate();
         setNodeDepth();
         if (needUpdate) {
@@ -186,7 +198,7 @@ public class AbstractPlatform {
         gc.setLineWidth(3);
         gc.setLineDashes(5);
         gc.setLineDashOffset((time * 20) % 1000);
-        gc.strokeRect(min_x - local_x, min_y - local_y, max_x - min_x, max_y - min_y);
+        gc.strokeRect(0, 0, max_x - min_x, max_y - min_y);
     }
 
     public void updateMouseCoordinate() {
@@ -197,6 +209,8 @@ public class AbstractPlatform {
             node_background.setTranslateX(-local_x);
             node_background.setTranslateY(-local_y);
         }
+        guiController.getCanvas().setTranslateX(-local_x);
+        guiController.getCanvas().setTranslateY(-local_y);
     }
 
     public void updateTranslationAll(double x, double y) {
@@ -209,6 +223,9 @@ public class AbstractPlatform {
             node_background.setTranslateX(x);
             node_background.setTranslateY(y);
         }
+
+        guiController.getCanvas().setTranslateX(min_x - x);
+        guiController.getCanvas().setTranslateY(min_y - y);
     }
 
     public void save() {

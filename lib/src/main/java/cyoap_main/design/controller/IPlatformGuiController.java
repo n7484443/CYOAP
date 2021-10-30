@@ -25,6 +25,8 @@ public interface IPlatformGuiController extends Initializable {
 
     Pane getChoicePane();
 
+    Pane getChoicePaneParent();
+
     AbstractPlatform getPlatform();
 
     Canvas getCanvas();

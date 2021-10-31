@@ -34,18 +34,20 @@
                 <RowConstraints percentHeight="100" vgrow="SOMETIMES"/>
             </rowConstraints>
             <children>
-                <GridPane>
+                <GridPane GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER"
+                          GridPane.vgrow="ALWAYS">
                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
                     </columnConstraints>
                     <rowConstraints>
-                        <RowConstraints percentHeight="5" vgrow="SOMETIMES" />
-                        <RowConstraints percentHeight="45" vgrow="SOMETIMES" />
-                        <RowConstraints percentHeight="25" vgrow="SOMETIMES" />
-                        <RowConstraints percentHeight="25" vgrow="SOMETIMES" />
+                        <RowConstraints percentHeight="5" vgrow="SOMETIMES"/>
+                        <RowConstraints percentHeight="45" vgrow="SOMETIMES"/>
+                        <RowConstraints percentHeight="25" vgrow="SOMETIMES"/>
+                        <RowConstraints percentHeight="25" vgrow="SOMETIMES"/>
                     </rowConstraints>
                     <children>
-                        <MFXTextField GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+                        <MFXTextField GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER"
+                                      GridPane.vgrow="ALWAYS">
                             <opaqueInsets>
                                 <Insets/>
                             </opaqueInsets>
@@ -53,18 +55,20 @@
                                 <Insets/>
                             </GridPane.margin>
                         </MFXTextField>
-                        <MFXListView fx:id="view_var_field" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1"
-                                     GridPane.vgrow="ALWAYS">
+                        <MFXListView fx:id="view_var_field" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS"
+                                     GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                             <GridPane.margin>
                                 <Insets top="5.0"/>
                             </GridPane.margin>
                         </MFXListView>
-                        <MFXListView fx:id="view_var_type" GridPane.rowIndex="2">
+                        <MFXListView fx:id="view_var_type" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS"
+                                     GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                             <GridPane.margin>
                                 <Insets top="5.0"/>
                             </GridPane.margin>
                         </MFXListView>
-                        <MFXListView fx:id="view_command_timeline" GridPane.rowIndex="3">
+                        <MFXListView fx:id="view_command_timeline" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS"
+                                     GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                             <GridPane.margin>
                                 <Insets bottom="5.0" top="5.0"/>
                             </GridPane.margin>

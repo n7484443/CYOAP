@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.AbstractMap;
 
 import cyoap_main.command.SizeChangeCommand;
+import cyoap_main.unit.Vector2f;
+import cyoap_main.util.RenderUtil;
 import cyoap_main.util.SizeUtil;
 import javafx.scene.shape.Rectangle;
 import org.fxmisc.richtext.InlineCssTextArea;
@@ -204,41 +206,63 @@ public class ChoiceSetGuiComponent {
 
     public void render(GraphicsContext gc, double time) {
         var platform = JavaFxMain.controller.getPlatform();
-        var lx = platform.min_x;
-        var ly = platform.min_y;
+        var min_x = platform.min_x;
+        var min_y = platform.min_y;
 
-        if (moveCommand != null && motherChoiceSet.equals(moveCommand.choiceset)) {
-            var entry = platform.checkLine(motherChoiceSet, 10f);
-            if (entry != null) {
-                var show_x = entry.getValue().x();
-                var show_y = entry.getValue().y();
-                gc.setStroke(Color.CORNFLOWERBLUE);
-                gc.setLineWidth(1);
-                gc.setLineDashes(5);
-                gc.setLineDashOffset((time * 20) % 1000);
-                if (show_x != Float.MAX_VALUE) {
-                    gc.strokeLine(show_x - lx, CreateGuiController.instance.getPlatform().min_y - ly, show_x - lx, CreateGuiController.instance.getPlatform().max_y - ly);
+        RenderUtil.setStroke(gc, time, Color.CORNFLOWERBLUE);
+        if (JavaFxMain.controller instanceof CreateGuiController creategui) {
+            if (moveCommand != null && motherChoiceSet.equals(moveCommand.choiceset)) {
+                var entry = platform.checkLine(motherChoiceSet, 10f);
+                if (entry != null) {
+                    var show_x = entry.getValue().x();
+                    var show_y = entry.getValue().y();
+                    if (show_x != Float.MAX_VALUE) {
+                        gc.strokeLine(show_x - min_x, CreateGuiController.instance.getPlatform().min_y - min_y, show_x - min_x, CreateGuiController.instance.getPlatform().max_y - min_y);
+                    }
+                    if (show_y != Float.MAX_VALUE) {
+                        gc.strokeLine(CreateGuiController.instance.getPlatform().min_x - min_x, show_y - min_y, CreateGuiController.instance.getPlatform().max_x - min_x, show_y - min_y);
+                    }
                 }
-                if (show_y != Float.MAX_VALUE) {
-                    gc.strokeLine(CreateGuiController.instance.getPlatform().min_x - lx, show_y - ly, CreateGuiController.instance.getPlatform().max_x - lx, show_y - ly);
+            }
+            if (creategui.nowSizeChange != null && motherChoiceSet.equals(creategui.nowSizeChange.getKey())) {
+                var list_point = new Vector2f[4];
+                var cursor = JavaFxMain.instance.scene_create.getCursor();
+
+                list_point[0] = CreateGuiController.platform.checkPoint(motherChoiceSet, new Vector2f(motherChoiceSet.pos_x, motherChoiceSet.pos_y), 10f);
+                list_point[1] = CreateGuiController.platform.checkPoint(motherChoiceSet, new Vector2f(motherChoiceSet.pos_x + motherChoiceSet.getWidth(), motherChoiceSet.pos_y), 10f);
+                list_point[2] = CreateGuiController.platform.checkPoint(motherChoiceSet, new Vector2f(motherChoiceSet.pos_x, motherChoiceSet.pos_y + motherChoiceSet.getWidth()), 10f);
+                list_point[3] = CreateGuiController.platform.checkPoint(motherChoiceSet, new Vector2f(motherChoiceSet.pos_x + motherChoiceSet.getWidth(), motherChoiceSet.pos_y + motherChoiceSet.getWidth()), 10f);
+
+                Vector2f point = null;
+                if (list_point[0] != null && (cursor.equals(Cursor.W_RESIZE) || cursor.equals(Cursor.N_RESIZE) || cursor.equals(Cursor.NW_RESIZE))) {//x and y are negative
+                    point = list_point[0];
+                } else if (list_point[3] != null && (cursor.equals(Cursor.S_RESIZE) || cursor.equals(Cursor.E_RESIZE) || cursor.equals(Cursor.SE_RESIZE))) {//x and y are positive
+                    point = list_point[3];
+                } else if (list_point[2] != null && cursor.equals(Cursor.SW_RESIZE)) {
+                    point = list_point[2];
+                } else if (list_point[1] != null && cursor.equals(Cursor.NE_RESIZE)) {
+                    point = list_point[1];
+                }
+                if (point != null) {
+                    if (point.x() == Float.MAX_VALUE && point.y() != Float.MAX_VALUE) {//only change y
+                        RenderUtil.renderStrokeHorizontal(gc, platform, point.y());
+                    } else if (point.x() != Float.MAX_VALUE && point.y() == Float.MAX_VALUE) {//only change x
+                        RenderUtil.renderStrokeVertical(gc, platform, point.x());
+                    } else {//both change
+                        RenderUtil.renderStrokeVertical(gc, platform, point.x());
+                        RenderUtil.renderStrokeHorizontal(gc, platform, point.y());
+                    }
                 }
             }
         }
-        if (motherChoiceSet.equals(CreateGuiController.instance.nowMouseInDataSet)) {
-            gc.setStroke(Color.BLUE);
-            gc.setLineWidth(1);
-            gc.setLineDashes(5);
-            gc.setLineDashOffset((time * 20) % 1000);
-            var gap = 4;
-            var x1 = motherChoiceSet.pos_x - gap - lx;
-            var x2 = motherChoiceSet.pos_x + motherChoiceSet.getAnchorPane().getLayoutBounds().getWidth() + gap - lx;
-            var y1 = motherChoiceSet.pos_y - gap - ly;
-            var y2 = motherChoiceSet.pos_y + motherChoiceSet.getAnchorPane().getLayoutBounds().getHeight() + gap - ly;
 
-            gc.strokeLine(x1, y1, x1, y2);
-            gc.strokeLine(x2, y2, x2, y1);
-            gc.strokeLine(x2, y1, x1, y1);
-            gc.strokeLine(x1, y2, x2, y2);
+        if (motherChoiceSet.equals(CreateGuiController.instance.nowMouseInDataSet)) {
+            RenderUtil.setStroke(gc, time, Color.BLUE);
+            var gap = 4;
+            var x_start = motherChoiceSet.pos_x - gap - min_x;
+            var y_start = motherChoiceSet.pos_y - gap - min_y;
+
+            gc.strokeRect(x_start, y_start, motherChoiceSet.getAnchorPane().getLayoutBounds().getWidth() + gap * 2, motherChoiceSet.getAnchorPane().getLayoutBounds().getHeight() + gap * 2);
         }
     }
 

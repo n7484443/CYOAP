@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
@@ -49,8 +50,6 @@ public class AbstractPlatform {
     public double start_mouse_x = 0;
     @JsonIgnore
     public double start_mouse_y = 0;
-    @JsonIgnore
-    public Scale scale_common = new Scale(1, 1);
 
     @JsonIgnore
     public Image background_image;
@@ -126,6 +125,44 @@ public class AbstractPlatform {
         }
     }
 
+    public Vector2f checkPoint(ChoiceSet choiceSet, Vector2f point, float bias) {
+        float x_new = Float.MAX_VALUE;
+        float y_new = Float.MAX_VALUE;
+        var vec_original_x = point.x();
+        var vec_original_y = point.y();
+
+        int i = 0;
+        for (var choice : choiceSetList) {
+            float size_x = Float.POSITIVE_INFINITY;
+            float size_y = Float.POSITIVE_INFINITY;
+            float l = 0;
+            if (choice == choiceSet)
+                continue;
+
+            var vec_sub_x = choice.get_snapList_x();
+            var vec_sub_y = choice.get_snapList_y();
+
+            for (var v_sub_x : vec_sub_x) {
+                l = Math.abs(point.x() - v_sub_x);
+                if (l < bias && l < size_x) {
+                    size_x = l;
+                    x_new = v_sub_x;
+                }
+            }
+            for (var v_sub_y : vec_sub_y) {
+                l = Math.abs(point.y() - v_sub_y);
+                if (l < bias && l < size_y) {
+                    size_y = l;
+                    y_new = v_sub_y;
+                }
+            }
+        }
+        if (x_new == Float.MAX_VALUE && y_new == Float.MAX_VALUE) {
+            return null;
+        }
+        return new Vector2f(x_new, y_new);
+    }
+
     public AbstractPlatform() {
     }
 
@@ -173,9 +210,6 @@ public class AbstractPlatform {
 
         guiController.getChoicePaneParent().setScaleX(scale);
         guiController.getChoicePaneParent().setScaleY(scale);
-
-        guiController.getCanvas().getTransforms().add(scale_common);
-        guiController.getChoicePane().getTransforms().add(scale_common);
 
         guiController.getCanvas().setWidth(max_x - min_x);
         guiController.getCanvas().setHeight(max_y - min_y);

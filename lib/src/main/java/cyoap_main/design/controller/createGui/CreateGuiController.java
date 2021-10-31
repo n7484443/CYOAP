@@ -438,6 +438,7 @@ public class CreateGuiController implements IPlatformGuiController {
                     menu_mouse.hide();
                 }
                 if (nowSizeChange != null) {
+                    SizeUtil.changeSizeComplete(nowSizeChange);
                     nowSizeChange.getKey().updateSizeFrom();
 
                     nowSizeChange.getKey().isClicked = false;

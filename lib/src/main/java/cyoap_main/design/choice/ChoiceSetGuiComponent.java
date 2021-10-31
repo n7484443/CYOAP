@@ -230,8 +230,8 @@ public class ChoiceSetGuiComponent {
 
                 list_point[0] = CreateGuiController.platform.checkPoint(motherChoiceSet, new Vector2f(motherChoiceSet.pos_x, motherChoiceSet.pos_y), 10f);
                 list_point[1] = CreateGuiController.platform.checkPoint(motherChoiceSet, new Vector2f(motherChoiceSet.pos_x + motherChoiceSet.getWidth(), motherChoiceSet.pos_y), 10f);
-                list_point[2] = CreateGuiController.platform.checkPoint(motherChoiceSet, new Vector2f(motherChoiceSet.pos_x, motherChoiceSet.pos_y + motherChoiceSet.getWidth()), 10f);
-                list_point[3] = CreateGuiController.platform.checkPoint(motherChoiceSet, new Vector2f(motherChoiceSet.pos_x + motherChoiceSet.getWidth(), motherChoiceSet.pos_y + motherChoiceSet.getWidth()), 10f);
+                list_point[2] = CreateGuiController.platform.checkPoint(motherChoiceSet, new Vector2f(motherChoiceSet.pos_x, motherChoiceSet.pos_y + motherChoiceSet.getHeight()), 10f);
+                list_point[3] = CreateGuiController.platform.checkPoint(motherChoiceSet, new Vector2f(motherChoiceSet.pos_x + motherChoiceSet.getWidth(), motherChoiceSet.pos_y + motherChoiceSet.getHeight()), 10f);
 
                 Vector2f point = null;
                 if (list_point[0] != null && (cursor.equals(Cursor.W_RESIZE) || cursor.equals(Cursor.N_RESIZE) || cursor.equals(Cursor.NW_RESIZE))) {//x and y are negative

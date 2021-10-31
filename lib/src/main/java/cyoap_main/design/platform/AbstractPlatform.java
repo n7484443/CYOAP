@@ -128,8 +128,6 @@ public class AbstractPlatform {
     public Vector2f checkPoint(ChoiceSet choiceSet, Vector2f point, float bias) {
         float x_new = Float.MAX_VALUE;
         float y_new = Float.MAX_VALUE;
-        var vec_original_x = point.x();
-        var vec_original_y = point.y();
 
         int i = 0;
         for (var choice : choiceSetList) {

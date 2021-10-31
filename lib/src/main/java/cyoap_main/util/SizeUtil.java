@@ -96,8 +96,8 @@ public class SizeUtil {
 
         list_point[0] = CreateGuiController.platform.checkPoint(nowControl, new Vector2f(nowControl.pos_x, nowControl.pos_y), 10f);
         list_point[1] = CreateGuiController.platform.checkPoint(nowControl, new Vector2f(nowControl.pos_x + nowControl.getWidth(), nowControl.pos_y), 10f);
-        list_point[2] = CreateGuiController.platform.checkPoint(nowControl, new Vector2f(nowControl.pos_x, nowControl.pos_y + nowControl.getWidth()), 10f);
-        list_point[3] = CreateGuiController.platform.checkPoint(nowControl, new Vector2f(nowControl.pos_x + nowControl.getWidth(), nowControl.pos_y + nowControl.getWidth()), 10f);
+        list_point[2] = CreateGuiController.platform.checkPoint(nowControl, new Vector2f(nowControl.pos_x, nowControl.pos_y + nowControl.getHeight()), 10f);
+        list_point[3] = CreateGuiController.platform.checkPoint(nowControl, new Vector2f(nowControl.pos_x + nowControl.getWidth(), nowControl.pos_y + nowControl.getHeight()), 10f);
 
         boolean b = true;
         for (var v : list_point) {

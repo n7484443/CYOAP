@@ -5,6 +5,9 @@ import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -51,6 +54,26 @@ public class LoadUtil {
 
     public String loadCss(String path) throws IOException {
         return LoadUtil.class.getResource(path).toString();
+    }
+
+    public static String loadFile(String str_path) throws URISyntaxException {
+        URL url = LoadUtil.class.getClassLoader().getResource(str_path);
+        Path path = Paths.get(url.toURI());
+        if (Files.exists(path)) {
+            try (FileChannel channel = FileChannel.open(path)) {
+                ByteBuffer byteBuffer = ByteBuffer.allocate((int) Files.size(path));
+                channel.read(byteBuffer);
+                byteBuffer.flip();
+
+                return Charset.defaultCharset().decode(byteBuffer).toString();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("no file with " + str_path);
+        }
+
+        return null;
     }
 
     public InputStream loadInternalImage(String path) throws IOException {

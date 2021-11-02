@@ -92,12 +92,7 @@ public class SizeUtil {
         var nowControl = nowSizeChange.getKey();
         var cursor = JavaFxMain.instance.scene_create.getCursor();
 
-        var list_point = new Vector2f[4];
-
-        list_point[0] = CreateGuiController.platform.checkPoint(nowControl, new Vector2f(nowControl.pos_x, nowControl.pos_y), 10f);
-        list_point[1] = CreateGuiController.platform.checkPoint(nowControl, new Vector2f(nowControl.pos_x + nowControl.getWidth(), nowControl.pos_y), 10f);
-        list_point[2] = CreateGuiController.platform.checkPoint(nowControl, new Vector2f(nowControl.pos_x, nowControl.pos_y + nowControl.getHeight()), 10f);
-        list_point[3] = CreateGuiController.platform.checkPoint(nowControl, new Vector2f(nowControl.pos_x + nowControl.getWidth(), nowControl.pos_y + nowControl.getHeight()), 10f);
+        var list_point = pointMagnet(nowControl);
 
         boolean b = true;
         for (var v : list_point) {
@@ -145,5 +140,16 @@ public class SizeUtil {
                 nowControl.setPosition(nowControl.pos_x, list_point[1].y());
             }
         }
+    }
+
+    public static Vector2f[] pointMagnet(ChoiceSet nowControl) {
+        var list_point = new Vector2f[4];
+
+        list_point[0] = CreateGuiController.platform.checkPoint(nowControl, new Vector2f(nowControl.pos_x, nowControl.pos_y), 10f);
+        list_point[1] = CreateGuiController.platform.checkPoint(nowControl, new Vector2f(nowControl.pos_x + nowControl.getWidth(), nowControl.pos_y), 10f);
+        list_point[2] = CreateGuiController.platform.checkPoint(nowControl, new Vector2f(nowControl.pos_x, nowControl.pos_y + nowControl.getHeight()), 10f);
+        list_point[3] = CreateGuiController.platform.checkPoint(nowControl, new Vector2f(nowControl.pos_x + nowControl.getWidth(), nowControl.pos_y + nowControl.getHeight()), 10f);
+
+        return list_point;
     }
 }

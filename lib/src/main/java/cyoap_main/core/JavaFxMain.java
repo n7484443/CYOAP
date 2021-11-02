@@ -9,6 +9,7 @@ import cyoap_main.grammer.VarData;
 import cyoap_main.grammer.VarData.ValueType;
 import cyoap_main.util.FontLoader;
 import cyoap_main.util.LoadUtil;
+import cyoap_main.util.LocalizationUtil;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -38,6 +39,9 @@ public class JavaFxMain extends Application {
 			instance = this;
 			new LoadUtil();
 			new FontLoader();
+
+			new LocalizationUtil().loadLocalization();
+
 			stage = primaryStage;
 			scene_create = new Scene(LoadUtil.instance.loadFXML("/lib/design/Design_Create.fxml"), window_width,
 					window_height);

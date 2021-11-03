@@ -23,6 +23,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import org.fxmisc.richtext.InlineCssTextArea;
@@ -129,6 +130,13 @@ public class CreateGuiController implements IPlatformGuiController {
     public InlineCssTextArea text_editor = new InlineCssTextArea();
 
     @FXML
+    public ImageView image_text_bold;
+    @FXML
+    public ImageView image_text_italic;
+    @FXML
+    public ImageView image_text_underline;
+
+    @FXML
     public ColorPicker colorpicker_text_editor;
     @FXML
     public MFXComboBox<Label> combo_text_font;
@@ -162,7 +170,6 @@ public class CreateGuiController implements IPlatformGuiController {
     }
 
     public void capture(float pixelScale) {
-
         var width_before = this.getChoicePane().getWidth();
         var before_height = this.getChoicePane().getHeight();
         var width_after = (platform.max_x - platform.min_x);
@@ -290,11 +297,49 @@ public class CreateGuiController implements IPlatformGuiController {
         ImageCell imagecell_tutorialImage = new ImageCell();
         anchorpane_create.getChildren().add(imagecell_tutorialImage);
         try {
-            Image image = new Image(LoadUtil.instance.loadInternalImage("/lib/image/tutorial_image.png"));
+            var image_source = "/lib/image/";
+            Image image = new Image(LoadUtil.instance.loadInternalImage(image_source + "tutorial_image.png"));
             imagecell_tutorialImage.setImage(image);
             imagecell_tutorialImage.setOnMouseClicked(t ->
                     anchorpane_create.getChildren().remove(imagecell_tutorialImage)
             );
+
+            var image_bold = new Image(LoadUtil.instance.loadInternalImage(image_source + "icon_text_bold.png"));
+            var image_italic = new Image(LoadUtil.instance.loadInternalImage(image_source + "icon_text_italic.png"));
+            var image_underline = new Image(LoadUtil.instance.loadInternalImage(image_source + "icon_text_underline.png"));
+            image_text_bold.setImage(image_bold);
+            image_text_bold.setSmooth(true);
+            image_text_bold.setOnMouseClicked(e -> {
+                var range = text_editor.getSelection();
+                var v = getTextCss(range, "-fx-font-weight");
+                if (v == null || v.equals("error")) {
+                    editTextCss(range, "-fx-font-weight", "bold");
+                } else {
+                    removeTextCss(range, "-fx-font-weight");
+                }
+            });
+            image_text_italic.setImage(image_italic);
+            image_text_italic.setSmooth(true);
+            image_text_italic.setOnMouseClicked(e -> {
+                var range = text_editor.getSelection();
+                var v = getTextCss(range, "-fx-font-style");
+                if (v == null || v.equals("error")) {
+                    editTextCss(range, "-fx-font-style", "italic");
+                } else {
+                    removeTextCss(range, "-fx-font-style");
+                }
+            });
+            image_text_underline.setImage(image_underline);
+            image_text_underline.setSmooth(true);
+            image_text_underline.setOnMouseClicked(e -> {
+                var range = text_editor.getSelection();
+                var v = getTextCss(range, "-fx-underline");
+                if (v == null || v.equals("error")) {
+                    editTextCss(range, "-fx-underline", "true");
+                } else {
+                    removeTextCss(range, "-fx-underline");
+                }
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -525,6 +570,27 @@ public class CreateGuiController implements IPlatformGuiController {
         });
     }
 
+    public String getTextCss(IndexRange range, String css) {
+        if (range.getStart() == range.getEnd()) return "error";
+
+        String value = null;
+        for (int i = range.getStart(); i < range.getEnd(); i++) {
+            StringBuilder builder = new StringBuilder();
+            var cssCombined = text_editor.getStyleOfChar(i);
+            if (cssCombined.contains(css)) {
+                var pos = cssCombined.indexOf(css);
+                var after_pos = cssCombined.indexOf(";", pos + 1);
+
+                var data = cssCombined.substring(pos + 1, after_pos);
+                if (value == null) value = data;
+                else if (!data.contains(value)) {
+                    return "error";
+                }
+            }
+        }
+        return value;
+    }
+
     public void editTextCss(IndexRange range, String css, String value) {
         if (range.getStart() == range.getEnd()) return;
 
@@ -552,7 +618,27 @@ public class CreateGuiController implements IPlatformGuiController {
             }
             text_editor.setStyle(i, i + 1, builder.toString());
         }
+    }
 
+    public void removeTextCss(IndexRange range, String css) {
+        if (range.getStart() == range.getEnd()) return;
+
+        for (int i = range.getStart(); i < range.getEnd(); i++) {
+            StringBuilder builder = new StringBuilder();
+            var cssCombined = text_editor.getStyleOfChar(i);
+            if (cssCombined.contains(css)) {
+                var pos = cssCombined.indexOf(css);
+                var after_pos = cssCombined.indexOf(";", pos + 1);
+                var beforeCssAttribute = cssCombined.substring(0, pos);
+                var afterSemicolon = cssCombined.substring(after_pos + 1);
+                builder.append(beforeCssAttribute);
+                builder.append(afterSemicolon);
+            } else {
+                builder.append(cssCombined);
+                builder.append("\n");
+            }
+            text_editor.setStyle(i, i + 1, builder.toString());
+        }
     }
 
 

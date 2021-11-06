@@ -26,6 +26,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -509,9 +510,12 @@ public class CreateGuiController implements IPlatformGuiController {
         });
         menu_mouse.setOnAction(e -> {
             var menu = (MenuItem) e.getTarget();
-            Bounds boundsInScene = gridpane_describe.localToScene(gridpane_describe.getBoundsInLocal());
-            var pos_x = (float) (platform.local_x + platform.start_mouse_x - boundsInScene.getMinX());
-            var pos_y = (float) (platform.local_y + platform.start_mouse_y - boundsInScene.getMinY());
+            Point2D mousePoint = new Point2D(platform.start_mouse_x, platform.start_mouse_y);
+            Point2D posInZoomTarget = pane_position.sceneToLocal(mousePoint);
+
+            var pos_x = (float) (platform.local_x + posInZoomTarget.getX());
+            var pos_y = (float) (platform.local_y + posInZoomTarget.getY());
+
             if (menu == menu_create) {
                 commandTimeline.excuteCommand(new CreateCommand(pos_x, pos_y));
             } else if (menu == menu_delete) {

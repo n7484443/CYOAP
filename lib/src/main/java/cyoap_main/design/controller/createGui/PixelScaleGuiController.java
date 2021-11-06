@@ -4,8 +4,11 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXSlider;
 import io.github.palexdev.materialfx.controls.MFXTextField;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -31,6 +34,9 @@ public class PixelScaleGuiController implements Initializable {
     public MFXButton button_pixelScale;
     @FXML
     public AnchorPane anchorPane_slider;
+    @FXML
+    public MFXComboBox<String> combo_pixelScale;
+    public ObservableList<String> observableList = FXCollections.observableArrayList("png");
     public float range_start = 1.0f;
     public float range_end = 4.0f;
 
@@ -49,8 +55,11 @@ public class PixelScaleGuiController implements Initializable {
         slider_pixelScale.setDecimalPrecision(1);
         slider_pixelScale.setValue(2.5f);
 
+        combo_pixelScale.setItems(observableList);
+        combo_pixelScale.getSelectionModel().selectItem("png");
+
         button_pixelScale.setOnMouseClicked(e -> {
-            CreateGuiController.instance.capture((float) slider_pixelScale.getValue());
+            CreateGuiController.instance.capture((float) slider_pixelScale.getValue(), combo_pixelScale.getSelectedValue());
             CreateGuiController.instance.anchorpane_create.getChildren().remove(PixelScaleGuiController.instance.anchorPane_slider);
         });
     }

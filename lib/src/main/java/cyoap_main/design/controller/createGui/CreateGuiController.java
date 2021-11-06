@@ -6,11 +6,14 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-import javax.imageio.ImageIO;
+import javax.imageio.*;
+import javax.imageio.stream.FileImageOutputStream;
+import javax.imageio.stream.ImageOutputStream;
 
 import cyoap_main.command.*;
 import cyoap_main.design.node_extension.ImageCell;
@@ -20,6 +23,8 @@ import cyoap_main.util.FontLoader;
 import cyoap_main.util.SizeUtil;
 import io.github.palexdev.materialfx.controls.*;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
@@ -169,7 +174,7 @@ public class CreateGuiController implements IPlatformGuiController {
         platform.setUp(this);
     }
 
-    public void capture(float pixelScale) {
+    public void capture(float pixelScale, String imageType) {
         var width_before = this.getChoicePane().getWidth();
         var before_height = this.getChoicePane().getHeight();
         var width_after = (platform.max_x - platform.min_x);
@@ -178,7 +183,6 @@ public class CreateGuiController implements IPlatformGuiController {
         this.getChoicePane().resize(width_after, height_after);
 
         platform.updateTranslationAll(0, 0);
-        //platform.updatePositionAll(platform.local_x, platform.local_y);
 
         var spa = new SnapshotParameters();
         spa.setTransform(Transform.scale(pixelScale, pixelScale));
@@ -189,15 +193,15 @@ public class CreateGuiController implements IPlatformGuiController {
                         (int) (this.getChoicePane().getHeight() * pixelScale)));
 
         BufferedImage tempImg = SwingFXUtils.fromFXImage(writeableImage, null);
-        String imageType = "png";
         File f = new File(JavaFxMain.instance.directory.getAbsolutePath() + File.separator + "file." + imageType);
         try {
-            ImageIO.write(tempImg, imageType, f);
+            var imageOutputStream = ImageIO.createImageOutputStream(f);
+            if (!ImageIO.write(tempImg, imageType, imageOutputStream)) {
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        //platform.updatePositionAll(-platform.local_x, -platform.local_y);
         platform.updateTranslationAll(-platform.local_x, -platform.local_y);
         this.getChoicePane().resize(width_before, before_height);
     }
@@ -528,8 +532,8 @@ public class CreateGuiController implements IPlatformGuiController {
                 var anchorpane_slider = PixelScaleGuiController.instance.anchorPane_slider;
 
                 anchorpane_create.getChildren().add(anchorpane_slider);
-                anchorpane_slider.setLayoutX(anchorpane_create.getWidth() / 2f - anchorpane_slider.getLayoutBounds().getWidth() / 2f);
-                anchorpane_slider.setLayoutY(anchorpane_create.getHeight() / 2f - anchorpane_slider.getLayoutBounds().getHeight() / 2f);
+                anchorpane_slider.setLayoutX(anchorpane_create.getWidth() / 2f - anchorpane_slider.getWidth() / 2f);
+                anchorpane_slider.setLayoutY(anchorpane_create.getHeight() / 2f - anchorpane_slider.getHeight() / 2f);
             }
         });
 
@@ -689,20 +693,24 @@ public class CreateGuiController implements IPlatformGuiController {
     }
 
     public void afterInit() {
+        List<Label> list_label = new ArrayList<>();
+        Label l = null;
         for (int i = 0; i < Font.getFamilies().size(); i++) {
             var name = Font.getFamilies().get(i);
             var label = new Label(name);
             label.setStyle("-fx-font-family: " + name + ";");
-            combo_text_font.getItems().add(label);
+            list_label.add(label);
+            if (name.equals("NanumGothicOTF")) {
+                l = label;
+            }
         }
-        var label = new Label("NanumGothicOTF");
-        label.setStyle("-fx-font-family: NanumGothicOTF;");
-        combo_text_font.setSelectedValue(label);
+        combo_text_font.setItems(FXCollections.observableList(list_label));
+        combo_text_font.getSelectionModel().selectItem(l);
 
         for (var i : FontLoader.size) {
             combo_text_size.getItems().add(String.valueOf(i));
         }
-        combo_text_size.setSelectedValue("12");
+        combo_text_size.getSelectionModel().selectItem("12");
     }
 
     public void loadPlatform() {

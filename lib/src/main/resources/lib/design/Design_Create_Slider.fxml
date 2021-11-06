@@ -1,30 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
 <?import io.github.palexdev.materialfx.controls.MFXSlider?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="anchorPane_slider" prefHeight="77.0" prefWidth="181.0"
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="anchorPane_slider" prefHeight="80.0" prefWidth="220.0"
             xmlns="http://javafx.com/javafx/17"
             fx:controller="cyoap_main.design.controller.createGui.PixelScaleGuiController">
     <children>
         <GridPane prefHeight="77.0" prefWidth="181.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0"
                   AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="70.0" prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="40.0" prefWidth="100.0"/>
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
             </rowConstraints>
             <children>
-                <MFXSlider fx:id="slider_pixelScale" prefHeight="27.0" prefWidth="167.0" GridPane.halignment="CENTER"
-                           GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS"/>
-                <MFXButton fx:id="button_pixelScale" mnemonicParsing="false" text="Capture" GridPane.halignment="CENTER"
-                           GridPane.rowIndex="1" GridPane.valignment="CENTER"/>
+                <MFXSlider fx:id="slider_pixelScale" prefHeight="27.0" prefWidth="167.0" GridPane.columnSpan="2"
+                           GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER"
+                           GridPane.vgrow="ALWAYS"/>
+                <MFXButton fx:id="button_pixelScale" mnemonicParsing="false" text="Capture" GridPane.columnIndex="1"
+                           GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                    <GridPane.margin>
+                        <Insets/>
+                    </GridPane.margin>
+                </MFXButton>
+                <MFXComboBox fx:id="combo_pixelScale" prefHeight="27.0" prefWidth="80.0" GridPane.halignment="CENTER"
+                             GridPane.rowIndex="1" GridPane.valignment="CENTER"/>
             </children>
         </GridPane>
     </children>

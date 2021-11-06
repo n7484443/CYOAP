@@ -113,7 +113,7 @@ public class LoadUtil {
     //dropped out 로드
     public static SimpleEntry<Image, String> loadImage(File f) {
         Image image = null;
-        if (!f.toString().contains(".webp")) {
+        if (!f.toString().contains(".webp") && !f.toString().contains(".jpeg")) {
             image = new Image(f.toURI().toString());
         } else {
             int[] pixels = null;

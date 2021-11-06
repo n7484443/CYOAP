@@ -33,6 +33,10 @@ public class AbstractPlatform {
     @JsonIgnore
     public List<ChoiceSet> choiceSetList = new ArrayList<>();
 
+    @JsonIgnore
+    public static final Color baseColor = Color.WHITE;
+    public Color color_background;
+
     public double local_x = 0;// local position of screen
     public double local_y = 0;
     public float min_x = -800;
@@ -277,5 +281,17 @@ public class AbstractPlatform {
             l.isPreserveRatio = b;
             l.requestLayout();
         }
+    }
+
+    public String getColor_background() {
+        return color_background.toString();
+    }
+
+    public void setColor_background(String s) {
+        updateColor(Color.web(s));
+    }
+
+    public void updateColor(Color color_new) {
+        color_background = color_new;
     }
 }

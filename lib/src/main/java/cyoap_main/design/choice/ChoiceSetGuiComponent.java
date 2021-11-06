@@ -7,6 +7,7 @@ import cyoap_main.command.SizeChangeCommand;
 import cyoap_main.unit.Vector2f;
 import cyoap_main.util.RenderUtil;
 import cyoap_main.util.SizeUtil;
+import javafx.geometry.*;
 import javafx.scene.shape.Rectangle;
 import org.fxmisc.richtext.InlineCssTextArea;
 
@@ -18,10 +19,6 @@ import cyoap_main.design.node_extension.ImageCell;
 import cyoap_main.unit.Bound2f;
 import cyoap_main.util.FlagUtil;
 import cyoap_main.util.LoadUtil;
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.Cursor;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
@@ -130,13 +127,16 @@ public class ChoiceSetGuiComponent {
                     if (moveCommand == null) {
                         moveCommand = new MoveCommand(motherChoiceSet.pos_x, motherChoiceSet.pos_y, motherChoiceSet);
                     }
-                    double move_x = CreateGuiController.platform.sensitivity
-                            * (e.getSceneX() - CreateGuiController.platform.start_mouse_x);
-                    double move_y = CreateGuiController.platform.sensitivity
-                            * (e.getSceneY() - CreateGuiController.platform.start_mouse_y);
+                    var platform = CreateGuiController.platform;
+                    var pos_before = CreateGuiController.instance.getPositionFromMouse(platform.start_mouse_x, platform.start_mouse_y);
+                    var pos_after = CreateGuiController.instance.getPositionFromMouse(e.getSceneX(), e.getSceneY());
+
+                    pos_after.sub(pos_before);
+                    var move = pos_after.sub(pos_before);
+
                     CreateGuiController.platform.start_mouse_x = e.getSceneX();
                     CreateGuiController.platform.start_mouse_y = e.getSceneY();
-                    motherChoiceSet.updatePosition(move_x, move_y);
+                    motherChoiceSet.updatePosition(move.x(), move.y());
                     update();
                 }
                 this.pane.toFront();

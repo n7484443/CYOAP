@@ -19,6 +19,7 @@ import cyoap_main.command.*;
 import cyoap_main.design.node_extension.ImageCell;
 import cyoap_main.design.node_extension.ResizableCanvas;
 import cyoap_main.unit.Bound2f;
+import cyoap_main.unit.Vector2f;
 import cyoap_main.util.FontLoader;
 import cyoap_main.util.SizeUtil;
 import io.github.palexdev.materialfx.controls.*;
@@ -144,6 +145,8 @@ public class CreateGuiController implements IPlatformGuiController {
 
     @FXML
     public ColorPicker colorpicker_text_editor;
+    @FXML
+    public ColorPicker colorpicker_background;
     @FXML
     public MFXComboBox<Label> combo_text_font;
     @FXML
@@ -359,6 +362,7 @@ public class CreateGuiController implements IPlatformGuiController {
 
         hbox_setting.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, new CornerRadii(2), new BorderWidths(2), null)));
         colorpicker_text_editor.getStyleClass().add("button");
+        colorpicker_background.getStyleClass().add("button");
 
         pane_text_editor.setCenter(text_editor);
         BorderPane.setMargin(text_editor, new Insets(2.5f, 0, 0, 0));
@@ -383,6 +387,7 @@ public class CreateGuiController implements IPlatformGuiController {
             var range = text_editor.getSelection();
             editTextCss(range, "-color-text", colorpicker_text_editor.getValue().toString().replace("0x", "#"));
         });
+        colorpicker_background.valueProperty().addListener(e -> getPlatform().updateColor(colorpicker_background.getValue()));
         combo_text_font.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends Label> observ,
                                                                                 Label oldVal, Label newVal) -> {
             if (newVal != null) {
@@ -510,16 +515,12 @@ public class CreateGuiController implements IPlatformGuiController {
         });
         menu_mouse.setOnAction(e -> {
             var menu = (MenuItem) e.getTarget();
-            Point2D mousePoint = new Point2D(platform.start_mouse_x, platform.start_mouse_y);
-            Point2D posInZoomTarget = pane_position.sceneToLocal(mousePoint);
-
-            var pos_x = (float) (platform.local_x + posInZoomTarget.getX());
-            var pos_y = (float) (platform.local_y + posInZoomTarget.getY());
+            var pos = getPositionFromMouse(platform.start_mouse_x, platform.start_mouse_y);
 
             if (menu == menu_create) {
-                commandTimeline.excuteCommand(new CreateCommand(pos_x, pos_y));
+                commandTimeline.excuteCommand(new CreateCommand(pos.x(), pos.y()));
             } else if (menu == menu_delete) {
-                if (nowMouseInDataSet != null && nowMouseInDataSet.check_intersect(nowMouseInDataSet, pos_x, pos_y)) {
+                if (nowMouseInDataSet != null && nowMouseInDataSet.check_intersect(nowMouseInDataSet, pos.x(), pos.y())) {
                     commandTimeline
                             .excuteCommand(new DeleteCommand(nowMouseInDataSet, platform.local_x, platform.local_y));
                 }
@@ -576,6 +577,14 @@ public class CreateGuiController implements IPlatformGuiController {
                 }
             }
         });
+    }
+
+    public Vector2f getPositionFromMouse(double mouse_x, double mouse_y) {
+        Point2D mousePoint = new Point2D(mouse_x, mouse_y);
+        Point2D posInZoomTarget = pane_position.sceneToLocal(mousePoint);
+
+        return new Vector2f((float) (platform.local_x + posInZoomTarget.getX()),
+                (float) (platform.local_y + posInZoomTarget.getY()));
     }
 
     public String getTextCss(IndexRange range, String css) {

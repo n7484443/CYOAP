@@ -314,6 +314,13 @@
                                                         <VBox fx:id="vbox_background_order"/>
                                                     </content>
                                                 </MFXScrollPane>
+                                                <ColorPicker fx:id="colorpicker_background" prefHeight="25.0"
+                                                             prefWidth="95.0" GridPane.columnIndex="2"
+                                                             GridPane.halignment="LEFT" GridPane.valignment="TOP">
+                                                    <GridPane.margin>
+                                                        <Insets left="5.0"/>
+                                                    </GridPane.margin>
+                                                </ColorPicker>
                                             </children>
                                             <padding>
                                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

@@ -545,14 +545,14 @@ public class CreateGuiController implements IPlatformGuiController {
         pane_position.setOnMouseDragged(e -> {
             if (e.getButton().equals(MouseButton.PRIMARY)) {
                 var cursor = JavaFxMain.instance.scene_create.getCursor();
-                float move_x = (float) (e.getSceneX() - platform.start_mouse_x);
-                float move_y = (float) (e.getSceneY() - platform.start_mouse_y);
+                var move_before = getPositionFromMouse(platform.start_mouse_x, platform.start_mouse_y);
+                var move_after = getPositionFromMouse(e.getSceneX(), e.getSceneY());
+                var move = move_after.sub(move_before);
                 if ((cursor == null || cursor.equals(Cursor.DEFAULT))) {
-                    move_x *= platform.sensitivity;
-                    move_y *= platform.sensitivity;
-                    updateMouseCoord(move_x, move_y, e.getSceneX(), e.getSceneY());
+                    move = move_after.sub(move_before).mul((float) platform.sensitivity);
+                    updateMouseCoord(move.x(), move.y(), e.getSceneX(), e.getSceneY());
                 } else if (nowSizeChange != null) {
-                    SizeUtil.changeSize(nowSizeChange, move_x, move_y);
+                    SizeUtil.changeSize(nowSizeChange, move.x(), move.y());
                 }
             }
         });

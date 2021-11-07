@@ -8,7 +8,6 @@ import cyoap_main.unit.Vector2f;
 import javafx.scene.Cursor;
 
 import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
 
 public class SizeUtil {
     public static boolean setCursor(double x, double y, double width_origin, double height_origin, float border) {

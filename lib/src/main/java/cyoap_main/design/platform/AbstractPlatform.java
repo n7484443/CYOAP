@@ -183,7 +183,9 @@ public class AbstractPlatform {
             var gui = c.guiComponent.pane;
             gui.setViewOrder(0.0d);
         }
-        guiController.getBackgroundImageCellList().get(0).setViewOrder(10.0d);
+        for (var image : guiController.getBackgroundImageCellList()) {
+            image.setViewOrder(10.d);
+        }
     }
 
     public void update() {
@@ -293,5 +295,6 @@ public class AbstractPlatform {
 
     public void updateColor(Color color_new) {
         color_background = color_new;
+        this.guiController.getChoicePaneParent().setStyle("-fx-background-color: " + color_new.toString().replace("0x", "#") + ";");
     }
 }

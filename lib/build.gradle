@@ -20,13 +20,13 @@ repositories {
 sourceCompatibility = 17
 targetCompatibility = 17
 
-dependencies {    
+dependencies {
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
 	implementation 'org.fxmisc.richtext:richtextfx:0.10.7'
 	implementation 'com.twelvemonkeys.imageio:imageio-webp:3.7.0'
 	implementation 'com.twelvemonkeys.imageio:imageio-jpeg:3.7.0'
 	implementation 'org.apache.maven:maven-artifact:3.8.3'
-	implementation 'org.kohsuke:github-api:1.133'
+	implementation 'org.kohsuke:github-api:1.135'
 	implementation 'net.lingala.zip4j:zip4j:2.9.0'
 	implementation 'io.github.palexdev:materialfx:11.12.0'
 }
@@ -41,6 +41,10 @@ mainClassName = 'cyoap_main.core.JavaFxMain'
 compileJava.options.encoding = 'UTF-8'
 
 jlink {
+	mergedModule{
+		additive = true
+		requires "com.fasterxml.jackson.databind"
+	}
 	addExtraDependencies("javafx")
     launcher {
         name = 'cyoap'

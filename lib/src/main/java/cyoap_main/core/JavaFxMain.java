@@ -92,7 +92,7 @@ public class JavaFxMain extends Application {
 			}.start();
 			stage.setResizable(true);
             stage.show();
-            CompletableFuture.runAsync(LoadUtil::loadLatestVersion);
+			LoadUtil.loadLatestVersion();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

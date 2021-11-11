@@ -91,8 +91,14 @@ public class JavaFxMain extends Application {
 				}
 			}.start();
 			stage.setResizable(true);
-            stage.show();
-			LoadUtil.loadLatestVersion();
+			stage.show();
+			var future = CompletableFuture.supplyAsync(LoadUtil::loadLatestVersion);
+			future.thenAccept(result -> {
+				if (result == 1) {
+					System.out.println("update complete! Please restart program.");
+					stage.setTitle("CYOAP " + version + " | " + LocalizationUtil.getLocalization("system.update_complete"));
+				}
+			});
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

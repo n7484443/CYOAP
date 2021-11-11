@@ -6,8 +6,10 @@ import java.util.Properties;
 
 public class LocalizationUtil {
     public static final String localizationFolder = "lib/i18n/";
-    public static String i18n_current = "en_us";
-    public static Properties localized_properties;
+    public static String i18n_current = "ko_kr";
+    public static String i18n_public = "en_us";
+    public static Properties localized_properties_current;
+    public static Properties localized_properties_public;
     public LocalizationUtil instance;
 
     public LocalizationUtil() {
@@ -15,20 +17,26 @@ public class LocalizationUtil {
     }
 
     public static String getLocalization(String unLocalizedString) {
-        if (localized_properties.containsKey(unLocalizedString)) {
-            return localized_properties.getProperty(unLocalizedString);
+        if (localized_properties_current.containsKey(unLocalizedString)) {
+            return localized_properties_current.getProperty(unLocalizedString);
         } else {
+            if (localized_properties_public.containsKey(unLocalizedString)) {
+                return localized_properties_public.getProperty(unLocalizedString);
+            }
             System.out.println("can't find Localized String");
-            return null;
+            return unLocalizedString;
         }
     }
 
     public void loadLocalization() {
-        var stream = LoadUtil.class.getClassLoader().getResourceAsStream(localizationFolder + i18n_current + ".properties");
+        var stream_current = LoadUtil.class.getClassLoader().getResourceAsStream(localizationFolder + i18n_current + ".properties");
+        var stream_public = LoadUtil.class.getClassLoader().getResourceAsStream(localizationFolder + i18n_public + ".properties");
 
-        localized_properties = new Properties();
+        localized_properties_current = new Properties();
+        localized_properties_public = new Properties();
         try {
-            localized_properties.load(stream);
+            localized_properties_current.load(stream_current);
+            localized_properties_public.load(stream_public);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -9,20 +9,20 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
 
 public class ImageCell extends Region {
-    private final ImageView imageView;
-    public boolean isPreserveRatio = true;
-    public float x = 0;
-    public float y = 0;
+	private final ImageView imageView;
+	public boolean isPreserveRatio = true;
+	public float pos_x = 0;
+	public float pos_y = 0;
 
-    public ImageCell(Image image) {
-        imageView = new ImageView(image);
-        imageView.setSmooth(true);
-        getChildren().add(imageView);
-    }
+	public ImageCell(Image image) {
+		imageView = new ImageView(image);
+		imageView.setSmooth(true);
+		getChildren().add(imageView);
+	}
 
-    public ImageCell() {
-        this(null);
-    }
+	public ImageCell() {
+		this(null);
+	}
 
 	public final void setImage(Image value) {
 		imageView.setImage(value);

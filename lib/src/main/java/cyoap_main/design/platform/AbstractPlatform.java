@@ -206,8 +206,8 @@ public class AbstractPlatform {
                 for (var controller_imageCell : guiController.getBackgroundImageCellList()) {
                     create_gui.vbox_background_order.getChildren().clear();
                     var imageCell = new ImageCell(controller_imageCell.getImage());
-                    imageCell.x = controller_imageCell.x;
-                    imageCell.y = controller_imageCell.y;
+                    imageCell.pos_x = controller_imageCell.pos_x;
+                    imageCell.pos_y = controller_imageCell.pos_y;
                     imageCell.maxWidthProperty().bind(create_gui.scrollpane_background_order.widthProperty());
                     create_gui.vbox_background_order.getChildren().add(imageCell);
                 }
@@ -223,7 +223,11 @@ public class AbstractPlatform {
             for (var background : guiController.getBackgroundImageCellList()) {
                 background.setPrefWidth(max_x - min_x);
                 background.setPrefHeight(max_y - min_y);
+                background.pos_x = min_x;
+                background.pos_y = min_y;
+                background.relocate(background.pos_x, background.pos_y);//center 기준
             }
+            isMouseMoved = true;
         }
         if (isMouseMoved) {
             isMouseMoved = false;
@@ -255,7 +259,6 @@ public class AbstractPlatform {
         choiceSetList.forEach(d -> d.updateCoordinate(-local_x, -local_y));
 
         for (var node_background : guiController.getBackgroundImageCellList()) {
-            node_background.relocate(min_x + node_background.x, min_y + node_background.y);
             node_background.setTranslateX(-local_x);
             node_background.setTranslateY(-local_y);
         }
@@ -270,7 +273,6 @@ public class AbstractPlatform {
         }
 
         for (var node_background : guiController.getBackgroundImageCellList()) {
-            node_background.relocate(min_x + node_background.x, min_y + node_background.y);
             node_background.setTranslateX(x);
             node_background.setTranslateY(y);
         }

@@ -397,7 +397,7 @@ public class CreateGuiController implements IPlatformGuiController {
         });
         combo_text_size.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observ,
                                                                                 String oldVal, String newVal) -> {
-            if (!newVal.isEmpty()) {
+            if (newVal != null) {
                 var range = text_editor.getSelection();
                 editTextCss(range, "-fx-font-size", newVal + "pt");
             }

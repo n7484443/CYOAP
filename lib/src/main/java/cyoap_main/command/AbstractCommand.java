@@ -45,18 +45,18 @@ public abstract class AbstractCommand {
 	public Vector2f checkOutline(ChoiceSet choiceSet, float x, float y) {
 		if (x <= CreateGuiController.platform.min_x) {
 			CreateGuiController.platform.min_x = x;
-			CreateGuiController.platform.isImageChanged = true;
+            CreateGuiController.platform.isSizeChanged = true;
 		} else if (x + choiceSet.getWidth() >= CreateGuiController.platform.max_x) {
-			CreateGuiController.platform.max_x = x + choiceSet.getWidth();
-			CreateGuiController.platform.isImageChanged = true;
+            CreateGuiController.platform.max_x = x + choiceSet.getWidth();
+            CreateGuiController.platform.isSizeChanged = true;
 		}
 
 		if (y <= CreateGuiController.platform.min_y) {
-			CreateGuiController.platform.min_y = y;
-			CreateGuiController.platform.isImageChanged = true;
+            CreateGuiController.platform.min_y = y;
+            CreateGuiController.platform.isSizeChanged = true;
 		} else if (y + choiceSet.getHeight() >= CreateGuiController.platform.max_y) {
-			CreateGuiController.platform.max_y = y + choiceSet.getHeight();
-			CreateGuiController.platform.isImageChanged = true;
+            CreateGuiController.platform.max_y = y + choiceSet.getHeight();
+            CreateGuiController.platform.isSizeChanged = true;
 		}
 		return new Vector2f(x, y);
 	}

@@ -60,7 +60,11 @@ public class AbstractPlatform {
 
     public String string_image_name;
     @JsonIgnore
-    public boolean isImageChanged = false;
+    public boolean isImageChanged = true;
+    @JsonIgnore
+    public boolean isSizeChanged = true;
+    @JsonIgnore
+    public boolean isMouseMoved = true;
 
     @JsonIgnore
     public static final int flagPosition_background_preserve_ratio = 0;
@@ -208,21 +212,29 @@ public class AbstractPlatform {
                     create_gui.vbox_background_order.getChildren().add(imageCell);
                 }
             }
-            guiController.getBackgroundImageCellList().get(0).setPrefWidth(max_x - min_x);
-            guiController.getBackgroundImageCellList().get(0).setPrefHeight(max_y - min_y);
+
+        }
+        if (isSizeChanged) {
+            isSizeChanged = false;
+            guiController.getCanvas().setWidth(max_x - min_x);
+            guiController.getCanvas().setHeight(max_y - min_y);
+            guiController.getCanvas().setLayoutX(min_x);
+            guiController.getCanvas().setLayoutY(min_y);
+            for (var background : guiController.getBackgroundImageCellList()) {
+                background.setPrefWidth(max_x - min_x);
+                background.setPrefHeight(max_y - min_y);
+            }
+        }
+        if (isMouseMoved) {
+            isMouseMoved = false;
+            guiController.getChoicePaneParent().setScaleX(scale);
+            guiController.getChoicePaneParent().setScaleY(scale);
+            updateMouseCoordinate();
         }
 
-        guiController.getChoicePaneParent().setScaleX(scale);
-        guiController.getChoicePaneParent().setScaleY(scale);
-
-        guiController.getCanvas().setWidth(max_x - min_x);
-        guiController.getCanvas().setHeight(max_y - min_y);
-        guiController.getCanvas().setLayoutX(min_x);
-        guiController.getCanvas().setLayoutY(min_y);
-        updateMouseCoordinate();
-        setNodeDepth();
         if (needUpdate) {
             needUpdate = false;
+            setNodeDepth();
             choiceSetList.forEach(d -> {
                 d.updateSizeFrom();
                 d.updateSize();
@@ -252,6 +264,7 @@ public class AbstractPlatform {
     }
 
     public void updateTranslationAll(double x, double y) {
+        this.isMouseMoved = true;
         for (var node : choiceSetList) {
             node.updateCoordinate(x, y);
         }
@@ -295,6 +308,7 @@ public class AbstractPlatform {
 
     public void updateColor(Color color_new) {
         color_background = color_new;
-        this.guiController.getChoicePaneParent().setStyle("-fx-background-color: " + color_new.toString().replace("0x", "#") + ";");
+        if (guiController != null)
+            guiController.getChoicePaneParent().setStyle("-fx-background-color: " + color_new.toString().replace("0x", "#") + ";");
     }
 }

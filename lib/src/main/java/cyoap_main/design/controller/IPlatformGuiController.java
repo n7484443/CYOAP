@@ -73,6 +73,7 @@ public interface IPlatformGuiController extends Initializable {
                 getPlatform().scale = getPlatform().minimize;
             if (getPlatform().scale >= getPlatform().maximize)
                 getPlatform().scale = getPlatform().maximize;
+            getPlatform().isMouseMoved = true;
         });
     }
 
@@ -97,6 +98,7 @@ public interface IPlatformGuiController extends Initializable {
             getPlatform().local_y = getPlatform().min_y - allow_margin;
 
         getPlatform().updateMouseCoordinate();
+        getPlatform().isMouseMoved = true;
     }
 
     public default double getChoicePaneRealWidth(){

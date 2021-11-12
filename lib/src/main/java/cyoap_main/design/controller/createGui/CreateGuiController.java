@@ -153,6 +153,9 @@ public class CreateGuiController implements IPlatformGuiController {
     public MFXComboBox<String> combo_text_size;
 
     @FXML
+    public MFXTextField text_round;
+
+    @FXML
     public VBox vbox_background_order;
     @FXML
     public MFXScrollPane scrollpane_background_order;
@@ -280,6 +283,7 @@ public class CreateGuiController implements IPlatformGuiController {
         if (dataSet.string_image_name != null && !dataSet.string_image_name.isEmpty()) {
             image = LoadUtil.loadImage(dataSet.string_image_name);
             imagecell_describe.setImage(image.getKey());
+            imagecell_describe.setCut(dataSet.round);
         }
         for (int i = 0; i < button_list.size(); i++) {
             button_list.get(i).setSelected(FlagUtil.getFlag(dataSet.flag, i));
@@ -470,6 +474,7 @@ public class CreateGuiController implements IPlatformGuiController {
             }
             e.consume();
         });
+
         pane_position.setOnDragDropped(e -> {
             Dragboard db = e.getDragboard();
             var success = false;
@@ -483,10 +488,12 @@ public class CreateGuiController implements IPlatformGuiController {
             e.setDropCompleted(success);
             e.consume();
         });
+
         pane_position.setOnMousePressed(e -> {
             platform.start_mouse_x = e.getSceneX();
             platform.start_mouse_y = e.getSceneY();
         });
+
         pane_position.setOnMouseReleased(e -> {
             if (e.getButton().equals(MouseButton.PRIMARY)) {
                 if (!e.getTarget().equals(menu_mouse)) {

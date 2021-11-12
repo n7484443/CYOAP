@@ -1,18 +1,24 @@
 package cyoap_main.design.node_extension;
 
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.property.ReadOnlyDoubleWrapper;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
+import javafx.scene.shape.Rectangle;
 
 public class ImageCell extends Region {
 	private final ImageView imageView;
 	public boolean isPreserveRatio = true;
 	public float pos_x = 0;
 	public float pos_y = 0;
+	public ReadOnlyDoubleWrapper width_real = new ReadOnlyDoubleWrapper();
+	public ReadOnlyDoubleWrapper height_real = new ReadOnlyDoubleWrapper();
+	public Rectangle rectangle;
 
 	public ImageCell(Image image) {
 		imageView = new ImageView(image);
@@ -34,6 +40,25 @@ public class ImageCell extends Region {
 
 	public final ObjectProperty<Image> imageProperty() {
 		return imageView.imageProperty();
+	}
+
+	public void setCut(float r) {
+		rectangle = new Rectangle(getRealWidth(), getRealHeight());
+		rectangle.widthProperty().bind(width_real);
+		rectangle.heightProperty().bind(height_real);
+		rectangle.xProperty().bind(widthProperty().subtract(width_real).divide(2));
+		rectangle.yProperty().bind(heightProperty().subtract(height_real).divide(2));
+		rectangle.setArcWidth(r);
+		rectangle.setArcHeight(r);
+		setClip(rectangle);
+	}
+
+	public double getRealWidth() {
+		return width_real.get();
+	}
+
+	public double getRealHeight() {
+		return height_real.get();
 	}
 
 	@Override
@@ -58,6 +83,8 @@ public class ImageCell extends Region {
 			if (Double.isFinite(factor) && factor > 0) {
 				imageView.setFitHeight(factor * imageHeight);
 				imageView.setFitWidth(factor * imageWidth);
+				this.width_real.set(factor * imageWidth);
+				this.height_real.set(factor * imageHeight);
 				imageView.setVisible(true);
 			} else {
 				imageView.setVisible(false);

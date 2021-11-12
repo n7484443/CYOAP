@@ -55,6 +55,8 @@ public class ChoiceSet {
     public float height;
     public boolean isClicked = false;
 
+    public float round = 0;
+
     @JsonIgnore
     public Bound2f bound;
 

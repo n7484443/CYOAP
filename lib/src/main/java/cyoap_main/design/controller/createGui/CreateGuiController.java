@@ -175,6 +175,8 @@ public class CreateGuiController implements IPlatformGuiController {
 
     public Bound2f copyBound;
 
+    public Vector2f round_resize;
+
     public CreateGuiController() {
         CreateGuiController.instance = this;
         platform = new CreatePlatform(instance);
@@ -387,6 +389,7 @@ public class CreateGuiController implements IPlatformGuiController {
         } catch (IOException e1) {
             e1.printStackTrace();
         }
+
         colorpicker_text_editor.valueProperty().addListener(e -> {
             var range = text_editor.getSelection();
             editTextCss(range, "-color-text", colorpicker_text_editor.getValue().toString().replace("0x", "#"));
@@ -408,6 +411,7 @@ public class CreateGuiController implements IPlatformGuiController {
         });
 
         colorpicker.getStyleClass().add("button");
+
 
         button_borderless.setOnMouseClicked(e ->
                 getPlatform().choiceSetList.forEach(t -> {
@@ -450,6 +454,16 @@ public class CreateGuiController implements IPlatformGuiController {
             }
             e.setDropCompleted(success);
             e.consume();
+        });
+        imagecell_describe.setOnMouseClicked(e -> {
+            round_resize = new Vector2f((float) e.getX(), (float) e.getY());
+        });
+        imagecell_describe.setOnMouseDragged(e -> {
+            var vec = new Vector2f((float) e.getX(), (float) e.getY());
+            var new_vec = vec.sub(round_resize).pow(2);
+            var size = (int) Math.round(Math.sqrt(new_vec.x() + new_vec.y()));
+            nowEditDataSet.round = size;
+            imagecell_describe.round.set(size);
         });
         view_var_field.setOnMouseClicked(e -> {
             if (e.getButton().equals(MouseButton.PRIMARY)) {

@@ -460,10 +460,11 @@ public class CreateGuiController implements IPlatformGuiController {
         });
         imagecell_describe.setOnMouseDragged(e -> {
             var vec = new Vector2f((float) e.getX(), (float) e.getY());
-            var new_vec = vec.sub(round_resize).pow(2);
-            var size = (int) Math.round(Math.sqrt(new_vec.x() + new_vec.y()));
-            nowEditDataSet.round = size;
-            imagecell_describe.round.set(size);
+            var out = vec.sub(round_resize).sum() / 150f;
+            System.out.println(out);
+            nowEditDataSet.round = (int) Math.min(Math.max(nowEditDataSet.round + out, 0), 200);
+            System.out.println(nowEditDataSet.round);
+            imagecell_describe.round.set(nowEditDataSet.round);
         });
         view_var_field.setOnMouseClicked(e -> {
             if (e.getButton().equals(MouseButton.PRIMARY)) {

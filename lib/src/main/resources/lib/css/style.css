@@ -36,8 +36,8 @@
 }
 
 #pane_create{
-	-fx-effect: dropshadow(gaussian, rgba(0.0,0.0,0.0,0.3), 10.0, 0.0, 3.0, 3.0);
-	-fx-background-color: derive(#525252,20.0%);
+    -fx-effect: dropshadow(gaussian, rgba(0.0, 0.0, 0.0, 0.3), 10.0, 0.0, 3.0, 3.0);
+    -fx-background-color: #D9D9D9;
 }
 
 #anchorPane_slider,#menu_mouse{

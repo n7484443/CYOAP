@@ -155,22 +155,22 @@
                                                     <right>
                                                         <VBox BorderPane.alignment="CENTER">
                                                             <children>
-                                                                <ImageView fx:id="image_text_bold" fitHeight="20.0"
-                                                                           fitWidth="20.0" pickOnBounds="true"
+                                                                <ImageView fx:id="image_text_bold" fitHeight="16.0"
+                                                                           fitWidth="16.0" pickOnBounds="true"
                                                                            preserveRatio="true">
                                                                     <VBox.margin>
                                                                         <Insets left="2.0" right="2.0" top="2.0"/>
                                                                     </VBox.margin>
                                                                 </ImageView>
-                                                                <ImageView fx:id="image_text_italic" fitHeight="20.0"
-                                                                           fitWidth="20.0" pickOnBounds="true"
+                                                                <ImageView fx:id="image_text_italic" fitHeight="16.0"
+                                                                           fitWidth="16.0" pickOnBounds="true"
                                                                            preserveRatio="true">
                                                                     <VBox.margin>
                                                                         <Insets left="2.0" right="2.0" top="2.0"/>
                                                                     </VBox.margin>
                                                                 </ImageView>
-                                                                <ImageView fx:id="image_text_underline" fitHeight="20.0"
-                                                                           fitWidth="20.0" pickOnBounds="true"
+                                                                <ImageView fx:id="image_text_underline" fitHeight="32.0"
+                                                                           fitWidth="16.0" pickOnBounds="true"
                                                                            preserveRatio="true">
                                                                     <VBox.margin>
                                                                         <Insets left="2.0" right="2.0" top="2.0"/>
@@ -246,8 +246,8 @@
                                                         <Insets bottom="4.0"/>
                                                     </GridPane.margin>
                                                 </HBox>
-                                                <MFXTextField fx:id="text_round" alignment="CENTER" prefHeight="22.0"
-                                                              prefWidth="1012.0" text="Round" GridPane.columnIndex="1"
+                                                <MFXTextField fx:id="text_round" alignment="CENTER" prefHeight="25.0"
+                                                              prefWidth="100.0" text="Round" GridPane.columnIndex="1"
                                                               GridPane.halignment="CENTER" GridPane.rowIndex="2"
                                                               GridPane.valignment="CENTER">
                                                     <GridPane.margin>

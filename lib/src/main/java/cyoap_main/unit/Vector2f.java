@@ -22,4 +22,8 @@ public record Vector2f(float x, float y) {
     public float mul_scala(Vector2f v) {
         return x * v.x() + y * v.y();
     }
+
+    public float sum() {
+        return x + y;
+    }
 }

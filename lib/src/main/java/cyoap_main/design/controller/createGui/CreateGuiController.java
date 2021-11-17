@@ -455,6 +455,14 @@ public class CreateGuiController implements IPlatformGuiController {
             e.setDropCompleted(success);
             e.consume();
         });
+        imagecell_describe.setOnMouseMoved(e -> {
+            var base_width = (imagecell_describe.getWidth() - imagecell_describe.getRealWidth()) / 2f;
+            var base_height = (imagecell_describe.getHeight() - imagecell_describe.getRealHeight()) / 2f;
+            SizeUtil.setCursorRound(e.getX() - base_width, e.getY() - base_height, imagecell_describe.getRealWidth(), imagecell_describe.getRealHeight(), 15, imagecell_describe.round.get());
+        });
+        imagecell_describe.setOnMouseExited(e -> {
+            JavaFxMain.instance.scene_create.setCursor(Cursor.DEFAULT);
+        });
         imagecell_describe.setOnMouseClicked(e -> {
             round_resize = new Vector2f((float) e.getX(), (float) e.getY());
         });

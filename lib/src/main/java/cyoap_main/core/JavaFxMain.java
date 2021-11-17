@@ -7,9 +7,7 @@ import cyoap_main.design.controller.IPlatformGuiController;
 import cyoap_main.design.controller.createGui.CreateGuiController;
 import cyoap_main.grammer.VarData;
 import cyoap_main.grammer.VarData.ValueType;
-import cyoap_main.util.FontLoader;
-import cyoap_main.util.LoadUtil;
-import cyoap_main.util.LocalizationUtil;
+import cyoap_main.util.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -39,6 +37,7 @@ public class JavaFxMain extends Application {
 			instance = this;
 			new LoadUtil();
 			new FontLoader();
+			new TranslationUtil();
 
 			new LocalizationUtil().loadLocalization();
 

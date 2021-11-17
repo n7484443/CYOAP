@@ -317,12 +317,6 @@ public class CreateGuiController implements IPlatformGuiController {
             imagecell_tutorialImage.setOnMouseClicked(t ->
                     anchorpane_create.getChildren().remove(imagecell_tutorialImage)
             );
-
-            var image_bold = new Image(LoadUtil.instance.loadInternalImage(image_source + "icon_text_bold.png"));
-            var image_italic = new Image(LoadUtil.instance.loadInternalImage(image_source + "icon_text_italic.png"));
-            var image_underline = new Image(LoadUtil.instance.loadInternalImage(image_source + "icon_text_underline.png"));
-            image_text_bold.setImage(image_bold);
-            image_text_bold.setSmooth(true);
             image_text_bold.setOnMouseClicked(e -> {
                 var range = text_editor.getSelection();
                 var v = getTextCss(range, "-fx-font-weight");
@@ -332,8 +326,6 @@ public class CreateGuiController implements IPlatformGuiController {
                     removeTextCss(range, "-fx-font-weight");
                 }
             });
-            image_text_italic.setImage(image_italic);
-            image_text_italic.setSmooth(true);
             image_text_italic.setOnMouseClicked(e -> {
                 var range = text_editor.getSelection();
                 var v = getTextCss(range, "-fx-font-style");
@@ -343,8 +335,6 @@ public class CreateGuiController implements IPlatformGuiController {
                     removeTextCss(range, "-fx-font-style");
                 }
             });
-            image_text_underline.setImage(image_underline);
-            image_text_underline.setSmooth(true);
             image_text_underline.setOnMouseClicked(e -> {
                 var range = text_editor.getSelection();
                 var v = getTextCss(range, "-fx-underline");

@@ -458,9 +458,9 @@ public class CreateGuiController implements IPlatformGuiController {
         });
         imagecell_describe.setOnMouseDragged(e -> {
             var vec = new Vector2f((float) e.getX(), (float) e.getY());
-            var out = vec.sub(round_resize).sum() / 150f;
+            var out = vec.sub(round_resize).sum();
             System.out.println(out);
-            nowEditDataSet.round = (int) Math.min(Math.max(nowEditDataSet.round + out, 0), 200);
+            nowEditDataSet.round = (int) Math.min(Math.max(out, 0), 200);
             System.out.println(nowEditDataSet.round);
             imagecell_describe.round.set(nowEditDataSet.round);
         });
@@ -506,7 +506,6 @@ public class CreateGuiController implements IPlatformGuiController {
             platform.start_mouse_x = e.getSceneX();
             platform.start_mouse_y = e.getSceneY();
         });
-
         pane_position.setOnMouseReleased(e -> {
             if (e.getButton().equals(MouseButton.PRIMARY)) {
                 if (!e.getTarget().equals(menu_mouse)) {

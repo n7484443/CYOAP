@@ -7,11 +7,11 @@
  */
 
 plugins {
-	id 'java-library'
-	id 'eclipse'
-	id 'application'
-	id 'org.openjfx.javafxplugin' version '0.0.10'
-	id 'org.beryx.jlink' version '2.24.2'
+    id 'java-library'
+    id 'eclipse'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.10'
+    id 'org.beryx.jlink' version '2.24.2'
 }
 
 repositories {
@@ -21,32 +21,58 @@ sourceCompatibility = 17
 targetCompatibility = 17
 
 dependencies {
-	implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
-	implementation 'org.fxmisc.richtext:richtextfx:0.10.7'
-	implementation 'com.twelvemonkeys.imageio:imageio-webp:3.7.0'
-	implementation 'com.twelvemonkeys.imageio:imageio-jpeg:3.7.0'
-	implementation 'org.apache.maven:maven-artifact:3.8.3'
-	implementation 'org.kohsuke:github-api:1.135'
-	implementation 'net.lingala.zip4j:zip4j:2.9.0'
-	implementation 'io.github.palexdev:materialfx:11.12.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
+    implementation 'org.fxmisc.richtext:richtextfx:0.10.7'
+    implementation 'com.twelvemonkeys.imageio:imageio-webp:3.7.0'
+    implementation 'com.twelvemonkeys.imageio:imageio-jpeg:3.7.0'
+    implementation 'org.apache.maven:maven-artifact:3.8.3'
+    implementation 'org.kohsuke:github-api:1.301'
+    implementation 'net.lingala.zip4j:zip4j:2.9.1'
+    implementation 'io.github.palexdev:materialfx:11.12.0'
 }
 
-javafx{
-	version="17.0.1"
-	modules = ['javafx.controls', 'javafx.fxml', 'javafx.swing']
+javafx {
+    version = "17.0.1"
+    modules = ['javafx.controls', 'javafx.fxml', 'javafx.swing']
 }
+
 
 application.mainModule = 'cyoap_module'
 mainClassName = 'cyoap_main.core.JavaFxMain'
 compileJava.options.encoding = 'UTF-8'
 
 jlink {
-	mergedModule{
-		additive = true
-		requires "com.fasterxml.jackson.databind"
-	}
-	addExtraDependencies("javafx")
+    mergedModule {
+        additive = true
+        requires "com.fasterxml.jackson.databind"
+    }
+    addExtraDependencies("javafx")
     launcher {
         name = 'cyoap'
     }
+}
+
+task createDist(type: Zip){
+    def t = layout.projectDirectory.file("src/main/resources/lib/version.properties")
+    InputStream inputStream = new FileInputStream(t.asFile);
+    Properties versionProperties = new Properties()
+    versionProperties.load(inputStream)
+
+    def vVersion = versionProperties['VERSION_NAME']
+
+    inputStream.close()
+
+    def zip_name = 'cyoap_' + vVersion.replace("-", "_") + ".zip"
+
+    archiveFileName = zip_name
+    destinationDirectory = layout.buildDirectory
+
+    from(layout.buildDirectory.dir("image")){
+        into "image"
+    }
+    from(layout.buildDirectory.dir("../../rust/update/target/debug")){
+        into "debug"
+    }
+    from layout.buildDirectory.file("../../start.bat")
+
 }

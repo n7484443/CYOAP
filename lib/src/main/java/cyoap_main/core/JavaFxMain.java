@@ -1,6 +1,8 @@
 package cyoap_main.core;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
 
 import cyoap_main.design.controller.IPlatformGuiController;
@@ -18,7 +20,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class JavaFxMain extends Application {
-    public static String version = "1.2.4-alpha";
+	public static String version;
 
 	public static JavaFxMain instance;
 	public Stage stage;
@@ -33,6 +35,12 @@ public class JavaFxMain extends Application {
 	@Override
 	public void start(Stage primaryStage){
 		try {
+			Properties property_version = new Properties();
+			var loader = JavaFxMain.class.getClassLoader().getResourceAsStream("lib/version.properties");
+			property_version.load(loader);
+			version = property_version.getProperty("VERSION_NAME");
+
+			System.out.println("Version|" + version);
 			System.out.println("javafx.runtime.version: " + System.getProperties().get("javafx.runtime.version"));
 			instance = this;
 			new LoadUtil();
@@ -122,7 +130,6 @@ public class JavaFxMain extends Application {
 	}
 
 	public static void main(String[] args) {
-		System.out.println("Version|" + version);
 		launch(args);
 	}
 

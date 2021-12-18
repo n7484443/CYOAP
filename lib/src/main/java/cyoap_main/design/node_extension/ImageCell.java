@@ -48,8 +48,8 @@ public class ImageCell extends Region {
 		rectangle.heightProperty().bind(height_real);
 		rectangle.xProperty().bind(widthProperty().subtract(width_real).divide(2));
 		rectangle.yProperty().bind(heightProperty().subtract(height_real).divide(2));
-		rectangle.arcWidthProperty().bind(round);
-		rectangle.arcHeightProperty().bind(round);
+		rectangle.arcWidthProperty().bind(width_real.divide(20).multiply(round));
+		rectangle.arcHeightProperty().bind(width_real.divide(20).multiply(round));
 		setClip(rectangle);
 	}
 

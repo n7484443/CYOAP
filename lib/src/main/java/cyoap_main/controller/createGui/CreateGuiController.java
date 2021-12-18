@@ -29,6 +29,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
+import javafx.util.StringConverter;
 import org.fxmisc.richtext.InlineCssTextArea;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -170,8 +171,6 @@ public class CreateGuiController implements IGuiController {
 
     public Bound2f copyBound;
 
-    public Vector2f round_resize;
-
     public CreateGuiController() {
         CreateGuiController.instance = this;
         platform = new CreatePlatform(instance);
@@ -239,6 +238,7 @@ public class CreateGuiController implements IGuiController {
             if (image != null)
                 nowEditDataSet.string_image_name = image.getValue();
             nowEditDataSet.color = colorpicker.getValue();
+            nowEditDataSet.round = imagecell_describe.round.get();
 
             var v = button_list.stream().map(ToggleButton::isSelected).collect(Collectors.toList());
             nowEditDataSet.flag = FlagUtil.createFlag(v);
@@ -448,18 +448,27 @@ public class CreateGuiController implements IGuiController {
         imagecell_describe.setOnMouseExited(e -> {
             JavaFxMain.instance.scene_create.setCursor(Cursor.DEFAULT);
         });
-        imagecell_describe.setOnMouseClicked(e -> {
-            round_resize = new Vector2f((float) e.getX(), (float) e.getY());
-        });
-        imagecell_describe.setOnMouseDragged(e -> {
-            if (nowEditDataSet != null) {
-                var vec = new Vector2f((float) e.getX(), (float) e.getY());
-                var out = vec.sub(round_resize).sum();
-                System.out.println(out);
-                nowEditDataSet.round = (int) Math.min(Math.max(out, 0), 200);
-                imagecell_describe.round.set(nowEditDataSet.round);
+
+        text_round.textProperty().bindBidirectional(imagecell_describe.round, new StringConverter<Number>() {
+            @Override
+            public String toString(Number object) {
+                return object.toString();
+            }
+
+            @Override
+            public Integer fromString(String string) {
+                try {
+                    var round = Integer.valueOf(string);
+                    if (round <= 0) {
+                        return 0;
+                    }
+                    return round;
+                } catch (Exception e) {
+                    return 0;
+                }
             }
         });
+
         view_var_field.setOnMouseClicked(e -> {
             if (e.getButton().equals(MouseButton.PRIMARY)) {
                 if (e.getClickCount() == 2) {

@@ -99,6 +99,7 @@ public class ChoiceSetGuiComponent {
         area.setEditable(false);
 
         image.setId("image_choiceset");
+        image.setCut(0);
 
         pane_border.setMouseTransparent(true);
         float border = 9.5f;
@@ -202,6 +203,7 @@ public class ChoiceSetGuiComponent {
             var simpleEntry = LoadUtil.loadImage(motherChoiceSet.string_image_name);
             image.setImage(simpleEntry.getKey());
         }
+        image.round.set(motherChoiceSet.round);
     }
 
     public void render(GraphicsContext gc, double time) {

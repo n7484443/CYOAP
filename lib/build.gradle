@@ -53,6 +53,7 @@ jlink {
 }
 
 task createDist(type: Zip){
+    dependsOn 'jlink'
     def t = layout.projectDirectory.file("src/main/resources/lib/version.properties")
     InputStream inputStream = new FileInputStream(t.asFile);
     Properties versionProperties = new Properties()

@@ -105,7 +105,7 @@ public class PlayGuiController implements IGuiController {
 
 	@Override
 	public boolean isEditable() {
-		return true;
+		return false;
 	}
 
 	@Override

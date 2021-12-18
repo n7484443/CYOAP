@@ -3,7 +3,7 @@ package cyoap_main.util;
 import cyoap_main.command.SizeChangeCommand;
 import cyoap_main.core.JavaFxMain;
 import cyoap_main.design.choice.ChoiceSet;
-import cyoap_main.design.controller.createGui.CreateGuiController;
+import cyoap_main.controller.createGui.CreateGuiController;
 import cyoap_main.unit.Vector2f;
 import javafx.scene.Cursor;
 

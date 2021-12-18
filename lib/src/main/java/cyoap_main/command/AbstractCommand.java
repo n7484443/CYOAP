@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import cyoap_main.design.choice.ChoiceSet;
-import cyoap_main.design.controller.createGui.CreateGuiController;
+import cyoap_main.controller.createGui.CreateGuiController;
 import cyoap_main.unit.Vector2f;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.PUBLIC_ONLY, setterVisibility = JsonAutoDetect.Visibility.NONE)

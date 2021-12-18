@@ -1,22 +1,28 @@
-package cyoap_main.design.controller;
+package cyoap_main.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import cyoap_main.core.JavaFxMain;
 import cyoap_main.design.node_extension.ImageCell;
 import cyoap_main.design.node_extension.ResizableCanvas;
-import cyoap_main.design.platform.AbstractPlatform;
-import cyoap_main.design.platform.PlayPlatform;
+import cyoap_main.platform.AbstractPlatform;
+import cyoap_main.platform.PlayPlatform;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
-public class PlayGuiController implements IPlatformGuiController {
+public class PlayGuiController implements IGuiController {
 	public static PlayGuiController instance;
 
 	public AbstractPlatform platform;
@@ -52,6 +58,11 @@ public class PlayGuiController implements IPlatformGuiController {
 	}
 
 	@Override
+	public void load() {
+		loadPlatform();
+	}
+
+	@Override
 	public List<ImageCell> getBackgroundImageCellList() {
 		var list = new ArrayList<ImageCell>();
 		list.add(imagecell_background);
@@ -66,6 +77,11 @@ public class PlayGuiController implements IPlatformGuiController {
 	@Override
 	public Pane getChoicePaneParent() {
 		return pane_play_parent;
+	}
+
+	@Override
+	public void setPlatform(AbstractPlatform abstractPlatform) {
+		this.platform = abstractPlatform;
 	}
 
 	@Override

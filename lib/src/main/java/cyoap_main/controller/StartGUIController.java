@@ -1,10 +1,10 @@
-package cyoap_main.design.controller;
+package cyoap_main.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import cyoap_main.core.JavaFxMain;
-import cyoap_main.design.controller.createGui.CreateGuiController;
+import cyoap_main.controller.createGui.CreateGuiController;
 import cyoap_main.util.LoadUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

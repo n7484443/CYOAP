@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cyoap_main.core.JavaFxMain;
-import cyoap_main.design.controller.createGui.CreateGuiController;
+import cyoap_main.controller.createGui.CreateGuiController;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.PUBLIC_ONLY, setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class CommandTimeline {

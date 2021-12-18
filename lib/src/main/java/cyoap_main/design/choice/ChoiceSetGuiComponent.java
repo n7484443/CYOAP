@@ -14,7 +14,7 @@ import org.fxmisc.richtext.InlineCssTextArea;
 import cyoap_main.command.CombineCommand;
 import cyoap_main.command.MoveCommand;
 import cyoap_main.core.JavaFxMain;
-import cyoap_main.design.controller.createGui.CreateGuiController;
+import cyoap_main.controller.createGui.CreateGuiController;
 import cyoap_main.design.node_extension.ImageCell;
 import cyoap_main.unit.Bound2f;
 import cyoap_main.util.FlagUtil;

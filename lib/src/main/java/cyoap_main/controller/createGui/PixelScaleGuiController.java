@@ -1,4 +1,4 @@
-package cyoap_main.design.controller.createGui;
+package cyoap_main.controller.createGui;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -6,14 +6,10 @@ import java.util.ResourceBundle;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXSlider;
-import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -23,7 +19,6 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
-import javafx.util.converter.NumberStringConverter;
 
 public class PixelScaleGuiController implements Initializable {
     public static PixelScaleGuiController instance;

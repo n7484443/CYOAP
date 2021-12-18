@@ -1,7 +1,7 @@
 package cyoap_main.util;
 
-import cyoap_main.design.controller.createGui.CreateGuiController;
-import cyoap_main.design.platform.AbstractPlatform;
+import cyoap_main.controller.createGui.CreateGuiController;
+import cyoap_main.platform.AbstractPlatform;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 

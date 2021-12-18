@@ -1,12 +1,11 @@
 package cyoap_main.core;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
 
-import cyoap_main.design.controller.IPlatformGuiController;
-import cyoap_main.design.controller.createGui.CreateGuiController;
+import cyoap_main.controller.IGuiController;
+import cyoap_main.controller.createGui.CreateGuiController;
 import cyoap_main.grammer.VarData;
 import cyoap_main.grammer.VarData.ValueType;
 import cyoap_main.util.*;
@@ -27,13 +26,15 @@ public class JavaFxMain extends Application {
 	public Scene scene_create;
 	public Scene scene_start;
 	public Scene scene_play;
-	public static IPlatformGuiController controller = null;
+
+	public static IGuiController controller = null;
+	public File directory;
 
 	public int window_width = (int) (1920 / 2 * 1.5f);// 1440
 	public int window_height = (int) (1080 / 2 * 1.5f);// 810
 
 	@Override
-	public void start(Stage primaryStage){
+	public void start(Stage primaryStage) {
 		try {
 			Properties property_version = new Properties();
 			var loader = JavaFxMain.class.getClassLoader().getResourceAsStream("lib/version.properties");
@@ -122,8 +123,6 @@ public class JavaFxMain extends Application {
 			controller.getPlatform().render(gc, time);
 		}
 	}
-
-	public File directory;
 
 	public void loadFiles(File directory) {
 		this.directory = directory;

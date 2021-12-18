@@ -1,32 +1,27 @@
-package cyoap_main.design.platform;
+package cyoap_main.platform;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import cyoap_main.controller.IGuiController;
 import cyoap_main.core.JavaFxMain;
 import cyoap_main.design.choice.ChoiceSet;
-import cyoap_main.design.controller.IPlatformGuiController;
-import cyoap_main.design.controller.createGui.CreateGuiController;
+import cyoap_main.controller.createGui.CreateGuiController;
 import cyoap_main.design.node_extension.ImageCell;
 import cyoap_main.unit.Vector2f;
 import cyoap_main.util.FlagUtil;
 import cyoap_main.util.LoadUtil;
-import javafx.geometry.Insets;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.transform.Affine;
-import javafx.scene.transform.Scale;
 
 @JsonAutoDetect(getterVisibility = Visibility.PUBLIC_ONLY)
 public class AbstractPlatform {
@@ -70,12 +65,12 @@ public class AbstractPlatform {
     public static final int flagPosition_background_preserve_ratio = 0;
 
     @JsonIgnore
-    public IPlatformGuiController guiController;
+    public IGuiController guiController;
     public int flag = 0;
 
     public boolean needUpdate = true;
 
-    public void setUp(IPlatformGuiController guiController) {
+    public AbstractPlatform(IGuiController guiController) {
         this.guiController = guiController;
     }
 
@@ -172,7 +167,7 @@ public class AbstractPlatform {
     public AbstractPlatform() {
     }
 
-    public AbstractPlatform(IPlatformGuiController guiController) {
+    public void setUp(IGuiController guiController) {
         this.guiController = guiController;
     }
 

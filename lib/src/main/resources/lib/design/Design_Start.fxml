@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Text?>
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/17"
-            fx:controller="cyoap_main.design.controller.StartGUIController">
+            fx:controller="cyoap_main.controller.StartGUIController">
     <children>
         <GridPane prefHeight="810.0" prefWidth="1440.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
                   AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

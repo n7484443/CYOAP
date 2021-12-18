@@ -1,7 +1,7 @@
 package cyoap_main.command;
 
 import cyoap_main.design.choice.ChoiceSet;
-import cyoap_main.design.controller.createGui.CreateGuiController;
+import cyoap_main.controller.createGui.CreateGuiController;
 
 public class CombineCommand extends AbstractCommand {
 	public ChoiceSet choiceSet_parent;

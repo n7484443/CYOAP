@@ -1,4 +1,4 @@
-package cyoap_main.design.controller;
+package cyoap_main.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,19 +13,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import cyoap_main.core.JavaFxMain;
 import cyoap_main.design.choice.ChoiceSet;
 import cyoap_main.design.node_extension.ImageCell;
-import cyoap_main.design.platform.AbstractPlatform;
+import cyoap_main.platform.AbstractPlatform;
 import cyoap_main.util.LoadUtil;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
-public interface IPlatformGuiController extends Initializable {
+public interface IGuiController extends Initializable {
     List<ImageCell> getBackgroundImageCellList();
 
     Pane getChoicePane();
 
     Pane getChoicePaneParent();
+
+    void setPlatform(AbstractPlatform abstractPlatform);
 
     AbstractPlatform getPlatform();
 
@@ -64,6 +65,31 @@ public interface IPlatformGuiController extends Initializable {
             LoadUtil.loadChoiceSetParents(v);
         }
         getPlatform().update();
+    }
+
+    default void loadPlatform() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            File file_platform_json = new File(JavaFxMain.instance.directory.getAbsolutePath() + "/platform.json");
+            if (file_platform_json.exists()) {
+                var writer = new InputStreamReader(new FileInputStream(JavaFxMain.instance.directory.getAbsolutePath() + "/platform.json"), StandardCharsets.UTF_8);
+                setPlatform(objectMapper.readValue(writer, AbstractPlatform.class));
+                getPlatform().setUp(this);
+                getPlatform().isImageChanged = true;
+                getPlatform().updateFlag();
+                loadPlatformSetup();
+
+            } else {
+                getPlatform().local_x = -getChoicePaneRealWidth() / 2;
+                getPlatform().local_y = -getChoicePaneRealHeight() / 2;
+                getChoicePane().setPrefSize(getPlatform().max_x - getPlatform().min_x, getPlatform().max_y - getPlatform().min_y);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    default void loadPlatformSetup() {
     }
 
     default void setUp() {

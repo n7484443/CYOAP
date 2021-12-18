@@ -1,4 +1,4 @@
-package cyoap_main.design.controller.createGui;
+package cyoap_main.controller.createGui;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -6,14 +6,11 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 import javax.imageio.*;
-import javax.imageio.stream.FileImageOutputStream;
-import javax.imageio.stream.ImageOutputStream;
 
 import cyoap_main.command.*;
 import cyoap_main.design.node_extension.ImageCell;
@@ -25,7 +22,6 @@ import cyoap_main.util.SizeUtil;
 import io.github.palexdev.materialfx.controls.*;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
@@ -39,16 +35,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cyoap_main.core.JavaFxMain;
 import cyoap_main.design.choice.ChoiceSet;
-import cyoap_main.design.controller.IPlatformGuiController;
-import cyoap_main.design.platform.AbstractPlatform;
-import cyoap_main.design.platform.CreatePlatform;
+import cyoap_main.controller.IGuiController;
+import cyoap_main.platform.AbstractPlatform;
+import cyoap_main.platform.CreatePlatform;
 import cyoap_main.grammer.Analyser;
 import cyoap_main.grammer.VarData;
 import cyoap_main.util.FlagUtil;
 import cyoap_main.util.LoadUtil;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
-import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.Image;
@@ -60,7 +55,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Transform;
 
-public class CreateGuiController implements IPlatformGuiController {
+public class CreateGuiController implements IGuiController {
     public static CreateGuiController instance;
     @FXML
     public AnchorPane anchorpane_create;
@@ -745,25 +740,9 @@ public class CreateGuiController implements IPlatformGuiController {
         combo_text_size.getSelectionModel().selectItem("12");
     }
 
-    public void loadPlatform() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            File file_platform_json = new File(JavaFxMain.instance.directory.getAbsolutePath() + "/platform.json");
-            if (file_platform_json.exists()) {
-                InputStreamReader writer = new InputStreamReader(new FileInputStream(JavaFxMain.instance.directory.getAbsolutePath() + "/platform.json"), StandardCharsets.UTF_8);
-                platform = objectMapper.readValue(writer, AbstractPlatform.class);
-                platform.setUp(this);
-                platform.isImageChanged = true;
-                platform.updateFlag();
-                this.button_background_preserve_ratio.setSelected(FlagUtil.getFlag(platform.flag, AbstractPlatform.flagPosition_background_preserve_ratio));
-            } else {
-                platform.local_x = -getChoicePaneRealWidth() / 2;
-                platform.local_y = -getChoicePaneRealHeight() / 2;
-                getChoicePane().setPrefSize(platform.max_x - platform.min_x, platform.max_y - platform.min_y);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    @Override
+    public void loadPlatformSetup() {
+        this.button_background_preserve_ratio.setSelected(FlagUtil.getFlag(platform.flag, AbstractPlatform.flagPosition_background_preserve_ratio));
     }
 
     public void undo_shortcut() {
@@ -794,6 +773,11 @@ public class CreateGuiController implements IPlatformGuiController {
     @Override
     public AbstractPlatform getPlatform() {
         return platform;
+    }
+
+    @Override
+    public void setPlatform(AbstractPlatform abstractPlatform) {
+        this.platform = abstractPlatform;
     }
 
     @Override

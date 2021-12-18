@@ -235,7 +235,6 @@ public class LoadUtil {
         if (!isIDE) {
             String repoURL = "n7484443/CYOAP";
             try {
-                System.setProperty("https.protocols", "TLSv1.2");
                 GitHub github = GitHub.connectAnonymously();
 
                 GHRepository repo = github.getRepository(repoURL);

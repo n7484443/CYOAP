@@ -23,8 +23,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="anchorpane_create" stylesheets="@../css/style.css"
-            xmlns="http://javafx.com/javafx/17"
-            fx:controller="cyoap_main.controller.createGui.CreateGuiController">
+            xmlns="http://javafx.com/javafx/17" fx:controller="cyoap_main.controller.createGui.CreateGuiController">
     <children>
         <GridPane fx:id="gridpane_mainGui" prefHeight="675.0" prefWidth="1200.0" AnchorPane.bottomAnchor="0.0"
                   AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -36,8 +35,8 @@
                 <RowConstraints percentHeight="100" vgrow="SOMETIMES"/>
             </rowConstraints>
             <children>
-                <GridPane GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER"
-                          GridPane.vgrow="ALWAYS">
+                <GridPane fx:id="gridpane_side" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS"
+                          GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
                     </columnConstraints>
@@ -48,36 +47,36 @@
                         <RowConstraints percentHeight="25" vgrow="SOMETIMES"/>
                     </rowConstraints>
                     <children>
-                        <MFXTextField GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER"
-                                      GridPane.vgrow="ALWAYS">
+                        <MFXTextField alignment="CENTER" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS"
+                                      GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                             <opaqueInsets>
                                 <Insets/>
                             </opaqueInsets>
                             <GridPane.margin>
-                                <Insets/>
+                                <Insets left="5.0" right="5.0"/>
                             </GridPane.margin>
                         </MFXTextField>
                         <MFXListView fx:id="view_var_field" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS"
                                      GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                             <GridPane.margin>
-                                <Insets top="5.0"/>
+                                <Insets left="5.0" right="5.0" top="5.0"/>
                             </GridPane.margin>
                         </MFXListView>
                         <MFXListView fx:id="view_var_type" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS"
                                      GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                             <GridPane.margin>
-                                <Insets top="5.0"/>
+                                <Insets left="5.0" right="5.0" top="5.0"/>
                             </GridPane.margin>
                         </MFXListView>
                         <MFXListView fx:id="view_command_timeline" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS"
                                      GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                             <GridPane.margin>
-                                <Insets bottom="5.0" top="5.0"/>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
                             </GridPane.margin>
                         </MFXListView>
                     </children>
                     <GridPane.margin>
-                        <Insets left="5.0" right="5.0" />
+                        <Insets/>
                     </GridPane.margin>
                 </GridPane>
                 <TabPane fx:id="tabpane_make" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="1">
@@ -95,7 +94,7 @@
                                 </ContextMenu>
                             </contextMenu>
                             <AnchorPane fx:id="pane_position_parent">
-                                <AnchorPane fx:id="pane_position" stylesheets="@../css/style.css" />
+                                <AnchorPane fx:id="pane_position"/>
                             </AnchorPane>
                         </Tab>
                         <Tab fx:id="tab_describe" text="Describe">

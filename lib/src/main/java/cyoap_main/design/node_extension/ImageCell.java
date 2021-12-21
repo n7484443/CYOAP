@@ -1,5 +1,6 @@
 package cyoap_main.design.node_extension;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -16,6 +17,7 @@ public class ImageCell extends Region {
 	public float pos_y = 0;
 	public ReadOnlyDoubleWrapper width_real = new ReadOnlyDoubleWrapper();
 	public ReadOnlyDoubleWrapper height_real = new ReadOnlyDoubleWrapper();
+	public DoubleProperty min_real = new SimpleDoubleProperty();
 	public IntegerProperty round = new SimpleIntegerProperty();
 	public Rectangle rectangle;
 
@@ -48,8 +50,9 @@ public class ImageCell extends Region {
 		rectangle.heightProperty().bind(height_real);
 		rectangle.xProperty().bind(widthProperty().subtract(width_real).divide(2));
 		rectangle.yProperty().bind(heightProperty().subtract(height_real).divide(2));
-		rectangle.arcWidthProperty().bind(width_real.divide(20).multiply(round));
-		rectangle.arcHeightProperty().bind(width_real.divide(20).multiply(round));
+		min_real.bind(Bindings.min(width_real, height_real));
+		rectangle.arcWidthProperty().bind(min_real.divide(100).multiply(round));
+		rectangle.arcHeightProperty().bind(min_real.divide(100).multiply(round));
 		setClip(rectangle);
 	}
 

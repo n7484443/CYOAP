@@ -17,8 +17,7 @@ import cyoap_main.design.node_extension.ImageCell;
 import cyoap_main.design.node_extension.ResizableCanvas;
 import cyoap_main.unit.Bound2f;
 import cyoap_main.unit.Vector2f;
-import cyoap_main.util.FontLoader;
-import cyoap_main.util.SizeUtil;
+import cyoap_main.util.*;
 import io.github.palexdev.materialfx.controls.*;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -41,8 +40,6 @@ import cyoap_main.platform.AbstractPlatform;
 import cyoap_main.platform.CreatePlatform;
 import cyoap_main.grammer.Analyser;
 import cyoap_main.grammer.VarData;
-import cyoap_main.util.FlagUtil;
-import cyoap_main.util.LoadUtil;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
@@ -55,6 +52,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Transform;
+
+import static cyoap_main.util.LocalizationUtil.getLocalization;
 
 public class CreateGuiController implements IGuiController {
     public static CreateGuiController instance;
@@ -601,6 +600,13 @@ public class CreateGuiController implements IGuiController {
                 }
             }
         });
+
+        setLocalization();
+    }
+
+    public void setLocalization() {
+        button_darkmode.setText(getLocalization("generalSetting.darkmode"));
+        button_background_preserve_ratio.setText(getLocalization("generalSetting.background_preserve"));
     }
 
     public Vector2f getPositionFromMouse(double mouse_x, double mouse_y) {

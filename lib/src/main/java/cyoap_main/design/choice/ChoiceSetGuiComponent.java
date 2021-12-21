@@ -100,6 +100,7 @@ public class ChoiceSetGuiComponent {
 
         image.setId("image_choiceset");
         image.setCut(0);
+        image.setPadding(new Insets(5));
 
         pane_border.setMouseTransparent(true);
         float border = 9.5f;

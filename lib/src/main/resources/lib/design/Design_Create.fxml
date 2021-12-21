@@ -12,6 +12,7 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -28,15 +29,17 @@
         <GridPane fx:id="gridpane_mainGui" prefHeight="675.0" prefWidth="1200.0" AnchorPane.bottomAnchor="0.0"
                   AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" percentWidth="14.2"/>
-                <ColumnConstraints hgrow="SOMETIMES" percentWidth="86.8"/>
+                <ColumnConstraints hgrow="SOMETIMES" percentWidth="15.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" percentWidth="65.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="20.0" prefWidth="100.0"/>
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints percentHeight="100" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" percentHeight="5.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints percentHeight="95.0" vgrow="SOMETIMES"/>
             </rowConstraints>
             <children>
                 <GridPane fx:id="gridpane_side" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS"
-                          GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                          GridPane.rowSpan="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
                     </columnConstraints>
@@ -79,15 +82,16 @@
                         <Insets/>
                     </GridPane.margin>
                 </GridPane>
-                <TabPane fx:id="tabpane_make" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="1">
+                <TabPane fx:id="tabpane_make" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="1"
+                         GridPane.columnSpan="2" GridPane.rowSpan="2">
                     <tabs>
                         <Tab fx:id="tab_position" text="Position">
                             <contextMenu>
                                 <ContextMenu fx:id="menu_mouse">
                                     <items>
-                                        <MenuItem fx:id="menu_create" mnemonicParsing="false" text="Create" />
-                                        <MenuItem fx:id="menu_delete" mnemonicParsing="false" text="Delete" />
-                                        <MenuItem fx:id="menu_copySize" mnemonicParsing="false" text="Copy Size" />
+                                        <MenuItem fx:id="menu_create" mnemonicParsing="false" text="Create"/>
+                                        <MenuItem fx:id="menu_delete" mnemonicParsing="false" text="Delete"/>
+                                        <MenuItem fx:id="menu_copySize" mnemonicParsing="false" text="Copy Size"/>
                                         <MenuItem fx:id="menu_saveAsImage" mnemonicParsing="false" text="Save as Image">
                                         </MenuItem>
                                     </items>
@@ -155,42 +159,41 @@
                                                     <right>
                                                         <VBox BorderPane.alignment="CENTER">
                                                             <children>
-                                                                <ImageView fx:id="image_text_bold" fitHeight="20.0"
-                                                                           fitWidth="20.0" pickOnBounds="true"
+                                                                <ImageView fx:id="image_text_bold" fitHeight="24.0"
+                                                                           fitWidth="24.0" pickOnBounds="true"
                                                                            preserveRatio="true">
                                                                     <VBox.margin>
-                                                                        <Insets left="2.0" right="2.0" top="2.0"/>
+                                                                        <Insets/>
                                                                     </VBox.margin>
                                                                     <image>
                                                                         <Image url="@../image/icon_text_bold.png"/>
                                                                     </image>
                                                                 </ImageView>
-                                                                <ImageView fx:id="image_text_italic" fitHeight="20.0"
-                                                                           fitWidth="20.0" pickOnBounds="true"
+                                                                <ImageView fx:id="image_text_italic" fitHeight="24.0"
+                                                                           fitWidth="24.0" pickOnBounds="true"
                                                                            preserveRatio="true">
                                                                     <VBox.margin>
-                                                                        <Insets left="2.0" right="2.0" top="2.0"/>
+                                                                        <Insets top="2.0"/>
                                                                     </VBox.margin>
                                                                     <image>
                                                                         <Image url="@../image/icon_text_italic.png"/>
                                                                     </image>
                                                                 </ImageView>
-                                                                <ImageView fx:id="image_text_underline" fitHeight="20.0"
-                                                                           fitWidth="20.0" pickOnBounds="true"
+                                                                <ImageView fx:id="image_text_underline" fitHeight="24.0"
+                                                                           fitWidth="24.0" pickOnBounds="true"
                                                                            preserveRatio="true">
                                                                     <VBox.margin>
-                                                                        <Insets left="2.0" right="2.0" top="2.0"/>
+                                                                        <Insets top="2.0"/>
                                                                     </VBox.margin>
                                                                     <image>
                                                                         <Image url="@../image/icon_text_underline.png"/>
                                                                     </image>
                                                                 </ImageView>
-                                                                <ImageView fx:id="image_translation" fitHeight="20.0"
-                                                                           fitWidth="20.0" pickOnBounds="true"
+                                                                <ImageView fx:id="image_translation" fitHeight="24.0"
+                                                                           fitWidth="24.0" pickOnBounds="true"
                                                                            preserveRatio="true">
                                                                     <VBox.margin>
-                                                                        <Insets bottom="2.0" left="2.0" right="2.0"
-                                                                                top="2.0"/>
+                                                                        <Insets top="2.0"/>
                                                                     </VBox.margin>
                                                                     <image>
                                                                         <Image url="@../image/icon_translation.png"/>
@@ -356,7 +359,7 @@
                                                 </ColorPicker>
                                             </children>
                                             <padding>
-                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
                                             </padding>
                                         </GridPane>
                                     </children>
@@ -365,6 +368,37 @@
                         </Tab>
                     </tabs>
                 </TabPane>
+                <HBox alignment="TOP_RIGHT" prefHeight="52.0" prefWidth="509.0" GridPane.columnIndex="2"
+                      GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.valignment="CENTER"
+                      GridPane.vgrow="NEVER">
+                    <GridPane.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    </GridPane.margin>
+                    <children>
+                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true"
+                                   rotate="180.0">
+                            <HBox.margin>
+                                <Insets/>
+                            </HBox.margin>
+                            <image>
+                                <Image url="@../image/icon_arrow.png"/>
+                            </image>
+                        </ImageView>
+                        <TextField fx:id="textfield_page" alignment="CENTER" prefHeight="24.0" prefWidth="72.0">
+                            <HBox.margin>
+                                <Insets left="10.0" right="10.0"/>
+                            </HBox.margin>
+                        </TextField>
+                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                            <HBox.margin>
+                                <Insets right="10.0"/>
+                            </HBox.margin>
+                            <image>
+                                <Image url="@../image/icon_arrow.png"/>
+                            </image>
+                        </ImageView>
+                    </children>
+                </HBox>
             </children>
         </GridPane>
     </children>

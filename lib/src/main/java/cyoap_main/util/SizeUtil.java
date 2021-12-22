@@ -43,7 +43,6 @@ public class SizeUtil {
     }
 
     public static boolean setCursorRound(double x, double y, double width_origin, double height_origin, float border, float round) {
-        boolean b = true;
         if (round <= 10) round = 10;
         float b_small = (round - border) * (round - border);
         if (round < border) {
@@ -73,10 +72,10 @@ public class SizeUtil {
         } else if (isInside(b_small, rd, b_big)) {
             scene_create.setCursor(Cursor.SE_RESIZE);
         } else {
-            b = false;
             JavaFxMain.instance.scene_create.setCursor(Cursor.DEFAULT);
+            return false;
         }
-        return b;
+        return true;
     }
 
     public static void changeSize(SimpleEntry<ChoiceSet, SizeChangeCommand> nowSizeChange, float move_x, float move_y) {
@@ -87,43 +86,43 @@ public class SizeUtil {
         if (!nowControl.isClicked) nowControl.isClicked = true;
 
         if (cursor.equals(Cursor.NW_RESIZE)) {
-            nowControl.changeSize(-move_x + sizeChangeCommand.before_size.x(),
-                    -move_y + sizeChangeCommand.before_size.y());
-            nowControl.setPosition(move_x + sizeChangeCommand.before_pos.x(),
-                    move_y + sizeChangeCommand.before_pos.y());
+            nowControl.changeSize(-move_x + sizeChangeCommand.before.width,
+                    -move_y + sizeChangeCommand.before.height);
+            nowControl.setPosition(move_x + sizeChangeCommand.before.x,
+                    move_y + sizeChangeCommand.before.y);
         } else if (cursor.equals(Cursor.SE_RESIZE)) {
-            nowControl.changeSize(move_x + sizeChangeCommand.before_size.x(),
-                    move_y + sizeChangeCommand.before_size.y());
-            nowControl.setPosition(sizeChangeCommand.before_pos.x(), sizeChangeCommand.before_pos.y());
+            nowControl.changeSize(move_x + sizeChangeCommand.before.width,
+                    move_y + sizeChangeCommand.before.height);
+            nowControl.setPosition(sizeChangeCommand.before.x, sizeChangeCommand.before.y);
         } else if (cursor.equals(Cursor.SW_RESIZE)) {
-            nowControl.changeSize(-move_x + sizeChangeCommand.before_size.x(),
-                    move_y + sizeChangeCommand.before_size.y());
-            nowControl.setPosition(move_x + sizeChangeCommand.before_pos.x(),
-                    sizeChangeCommand.before_pos.y());
+            nowControl.changeSize(-move_x + sizeChangeCommand.before.width,
+                    move_y + sizeChangeCommand.before.height);
+            nowControl.setPosition(move_x + sizeChangeCommand.before.x,
+                    sizeChangeCommand.before.y);
         } else if (cursor.equals(Cursor.NE_RESIZE)) {
-            nowControl.changeSize(move_x + sizeChangeCommand.before_size.x(),
-                    -move_y + sizeChangeCommand.before_size.y());
-            nowControl.setPosition(sizeChangeCommand.before_pos.x(),
-                    move_y + sizeChangeCommand.before_pos.y());
+            nowControl.changeSize(move_x + sizeChangeCommand.before.width,
+                    -move_y + sizeChangeCommand.before.height);
+            nowControl.setPosition(sizeChangeCommand.before.x,
+                    move_y + sizeChangeCommand.before.y);
         } else if (cursor.equals(Cursor.W_RESIZE)) {
-            nowControl.changeSize(-move_x + sizeChangeCommand.before_size.x(),
-                    sizeChangeCommand.before_size.y());
-            nowControl.setPosition(move_x + sizeChangeCommand.before_pos.x(),
-                    sizeChangeCommand.before_pos.y());
+            nowControl.changeSize(-move_x + sizeChangeCommand.before.width,
+                    sizeChangeCommand.before.height);
+            nowControl.setPosition(move_x + sizeChangeCommand.before.x,
+                    sizeChangeCommand.before.y);
         } else if (cursor.equals(Cursor.E_RESIZE)) {
-            nowControl.changeSize(move_x + sizeChangeCommand.before_size.x(),
-                    sizeChangeCommand.before_size.y());
-            nowControl.setPosition(sizeChangeCommand.before_pos.x(),
-                    sizeChangeCommand.before_pos.y());
+            nowControl.changeSize(move_x + sizeChangeCommand.before.width,
+                    sizeChangeCommand.before.height);
+            nowControl.setPosition(sizeChangeCommand.before.x,
+                    sizeChangeCommand.before.y);
         } else if (cursor.equals(Cursor.N_RESIZE)) {
-            nowControl.changeSize(sizeChangeCommand.before_size.x(),
-                    -move_y + sizeChangeCommand.before_size.y());
-            nowControl.setPosition(sizeChangeCommand.before_pos.x(),
-                    move_y + sizeChangeCommand.before_pos.y());
+            nowControl.changeSize(sizeChangeCommand.before.width,
+                    -move_y + sizeChangeCommand.before.height);
+            nowControl.setPosition(sizeChangeCommand.before.x,
+                    move_y + sizeChangeCommand.before.y);
         } else if (cursor.equals(Cursor.S_RESIZE)) {
-            nowControl.changeSize(sizeChangeCommand.before_size.x(),
-                    move_y + sizeChangeCommand.before_size.y());
-            nowControl.setPosition(sizeChangeCommand.before_pos.x(), sizeChangeCommand.before_pos.y());
+            nowControl.changeSize(sizeChangeCommand.before.width,
+                    move_y + sizeChangeCommand.before.height);
+            nowControl.setPosition(sizeChangeCommand.before.x, sizeChangeCommand.before.y);
         }
     }
 

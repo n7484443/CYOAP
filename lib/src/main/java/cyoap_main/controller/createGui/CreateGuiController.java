@@ -520,7 +520,7 @@ public class CreateGuiController implements IGuiController {
                     nowSizeChange.getKey().updateSizeFrom();
 
                     nowSizeChange.getKey().isClicked = false;
-                    nowSizeChange.getValue().set(nowSizeChange.getKey());
+                    nowSizeChange.getValue().set();
                     commandTimeline.addCommand(nowSizeChange.getValue());
                     nowSizeChange = null;
                 }

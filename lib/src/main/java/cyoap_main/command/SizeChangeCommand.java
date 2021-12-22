@@ -1,40 +1,36 @@
 package cyoap_main.command;
 
 import cyoap_main.design.choice.ChoiceSet;
-import cyoap_main.unit.Vector2f;
+import cyoap_main.unit.Bound2f;
 
 public class SizeChangeCommand extends AbstractCommand {
-    public Vector2f before_size;
-    public Vector2f before_pos;
+    public Bound2f before;
     public ChoiceSet choiceset;
-    public Vector2f after_size;
-    public Vector2f after_pos;
+    public Bound2f after;
 
     public SizeChangeCommand() {
     }
 
     public SizeChangeCommand(ChoiceSet choiceSet) {
         this.choiceset = choiceSet;
-        this.before_size = new Vector2f(choiceset.width, choiceset.height);
-        this.before_pos = new Vector2f(choiceset.pos_x, choiceset.pos_y);
+        this.before = new Bound2f(choiceset.pos_x, choiceset.pos_y, choiceset.width, choiceset.height);
     }
 
-    public void set(ChoiceSet choiceSet) {
-        this.after_size = new Vector2f(choiceSet.width, choiceSet.height);
-        this.after_pos = new Vector2f(choiceSet.pos_x, choiceSet.pos_y);
+    public void set() {
+        this.after = new Bound2f(choiceset.pos_x, choiceset.pos_y, choiceset.width, choiceset.height);
     }
 
     @Override
     public void execute() {
-        choiceset.setPosition(after_pos.x(), after_pos.y());
-        choiceset.changeSize(after_size.x(), after_size.y());
+        choiceset.setPosition(after.x, after.y);
+        choiceset.changeSize(after.width, after.height);
         choiceset.update();
     }
 
     @Override
     public void undo() {
-        choiceset.setPosition(before_pos.x(), before_pos.y());
-        choiceset.changeSize(before_size.x(), before_size.y());
+        choiceset.setPosition(before.x, before.y);
+        choiceset.changeSize(before.width, before.height);
         choiceset.update();
     }
 

@@ -7,7 +7,9 @@ import cyoap_main.command.SizeChangeCommand;
 import cyoap_main.unit.Vector2f;
 import cyoap_main.util.RenderUtil;
 import cyoap_main.util.SizeUtil;
+import javafx.collections.ListChangeListener;
 import javafx.geometry.*;
+import javafx.scene.Node;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import org.fxmisc.richtext.InlineCssTextArea;
@@ -37,7 +39,7 @@ public class ChoiceSetGuiComponent {
      */
     public final AnchorPane pane = new AnchorPane();
     public final InlineCssTextArea area = new InlineCssTextArea();
-    public final ChoiceSet motherChoiceSet;
+    public final ChoiceSet mainChoiceSet;
     private final GridPane pane_surround = new GridPane();
     private final Pane pane_border = new Pane();
     private final GridPane pane_inner = new GridPane();
@@ -45,16 +47,20 @@ public class ChoiceSetGuiComponent {
     private final ImageCell image = new ImageCell();
     private final HBox hbox_title = new HBox();
 
+    private Rectangle rectangle = new Rectangle(150, 150);
+
     public Color color;
     private final Label title = new Label();
 
     public ChoiceSetGuiComponent(ChoiceSet choiceSet) {
-        motherChoiceSet = choiceSet;
+        mainChoiceSet = choiceSet;
     }
 
     public void setUp() {
-        pane.setLayoutX(motherChoiceSet.pos_x);
-        pane.setLayoutY(motherChoiceSet.pos_y);
+        pane.setId("pane_choiceset");
+
+        pane.setLayoutX(mainChoiceSet.pos_x);
+        pane.setLayoutY(mainChoiceSet.pos_y);
 
         pane.getChildren().add(pane_surround);
         pane.getChildren().add(pane_border);
@@ -69,7 +75,6 @@ public class ChoiceSetGuiComponent {
         pane_border.setMouseTransparent(true);
         pane_surround.add(pane_inner, 0, 0);
         pane_surround.add(hbox_subChoiceSet, 0, 1);
-        hbox_subChoiceSet.setVisible(false);
 
         try {
             area.setWrapText(true);
@@ -81,7 +86,6 @@ public class ChoiceSetGuiComponent {
         } catch (IOException e1) {
             e1.printStackTrace();
         }
-        Rectangle rectangle = new Rectangle(150, 150);
         rectangle.setArcWidth(10.0f);
         rectangle.setArcHeight(10.0f);
         rectangle.widthProperty().bind(pane.widthProperty());
@@ -92,14 +96,12 @@ public class ChoiceSetGuiComponent {
 
         GridPane.setHgrow(pane_inner, Priority.ALWAYS);
         GridPane.setVgrow(pane_inner, Priority.ALWAYS);
-        pane.setId("pane_choiceset");
 
         hbox_title.getChildren().add(title);
         pane_inner.add(hbox_title, 0, 0);
         pane_inner.add(image, 0, 1);
         pane_inner.add(area, 0, 2);
         pane_inner.setAlignment(Pos.CENTER);
-        pane_inner.setPadding(Insets.EMPTY);
 
         title.setTextAlignment(TextAlignment.CENTER);
         title.setAlignment(Pos.CENTER);
@@ -118,16 +120,16 @@ public class ChoiceSetGuiComponent {
 
         if (JavaFxMain.controller.isEditable()) {
             pane.setOnMouseMoved(e -> {
-                boolean b = SizeUtil.setCursor(e.getX(), e.getY(), this.motherChoiceSet.getWidth(), this.motherChoiceSet.getHeight(), border);
+                boolean b = SizeUtil.setCursor(e.getX(), e.getY(), this.mainChoiceSet.getWidth(), this.mainChoiceSet.getHeight(), border);
                 if (b) {
-                    CreateGuiController.instance.nowSizeChange = new AbstractMap.SimpleEntry<>(motherChoiceSet, new SizeChangeCommand(motherChoiceSet));
+                    CreateGuiController.instance.nowSizeChange = new AbstractMap.SimpleEntry<>(mainChoiceSet, new SizeChangeCommand(mainChoiceSet));
                 }
             });
             pane.setOnMouseClicked(e -> {
                 if (e.getButton().equals(MouseButton.PRIMARY)) {
                     if (e.getClickCount() == 2) {
-                        CreateGuiController.instance.nowEditDataSet = motherChoiceSet;
-                        CreateGuiController.instance.loadFromDataSet(motherChoiceSet);
+                        CreateGuiController.instance.nowEditDataSet = mainChoiceSet;
+                        CreateGuiController.instance.loadFromDataSet(mainChoiceSet);
                         CreateGuiController.instance.changeTab(CreateGuiController.instance.tab_describe);
                         e.consume();
                     }
@@ -138,7 +140,7 @@ public class ChoiceSetGuiComponent {
             pane.setOnMouseDragged(e -> {
                 if (e.getButton().equals(MouseButton.MIDDLE)) {
                     if (moveCommand == null) {
-                        moveCommand = new MoveCommand(motherChoiceSet.pos_x, motherChoiceSet.pos_y, motherChoiceSet);
+                        moveCommand = new MoveCommand(mainChoiceSet.pos_x, mainChoiceSet.pos_y, mainChoiceSet);
                     }
                     var platform = CreateGuiController.platform;
                     var pos_before = CreateGuiController.instance.getPositionFromMouse(platform.start_mouse_x, platform.start_mouse_y);
@@ -149,7 +151,7 @@ public class ChoiceSetGuiComponent {
 
                     CreateGuiController.platform.start_mouse_x = e.getSceneX();
                     CreateGuiController.platform.start_mouse_y = e.getSceneY();
-                    motherChoiceSet.updatePosition(move.x(), move.y());
+                    mainChoiceSet.updatePosition(move.x(), move.y());
                     update();
                 }
                 this.pane.toFront();
@@ -159,45 +161,45 @@ public class ChoiceSetGuiComponent {
                 if (e.getButton().equals(MouseButton.MIDDLE)) {
                     if (moveCommand == null)
                         return;
-                    if (moveCommand.start_x != motherChoiceSet.pos_x || moveCommand.start_y != motherChoiceSet.pos_y) {
-                        var v = moveCommand.checkOutline(this.motherChoiceSet, motherChoiceSet.pos_x, motherChoiceSet.pos_y);
+                    if (moveCommand.start_x != mainChoiceSet.pos_x || moveCommand.start_y != mainChoiceSet.pos_y) {
+                        var v = moveCommand.checkOutline(this.mainChoiceSet, mainChoiceSet.pos_x, mainChoiceSet.pos_y);
                         moveCommand.setEnd(v.x(), v.y());
-                        motherChoiceSet.setPosition(v.x(), v.y());
+                        mainChoiceSet.setPosition(v.x(), v.y());
                         CreateGuiController.instance.commandTimeline.addCommand(moveCommand);
                     }
                     moveCommand = null;
 
                     ChoiceSet final_choice = null;
-                    Bound2f bound = new Bound2f(motherChoiceSet.bound);
+                    Bound2f bound = new Bound2f(mainChoiceSet.bound);
                     float mul = 0.8f;
                     bound.x += bound.width * (1f - mul) * 0.5f;
                     bound.y += bound.height * (1f - mul) * 0.5f;
                     bound.width *= mul;
                     bound.height *= mul;
                     for (var choiceSet : CreateGuiController.platform.choiceSetList) {
-                        if (choiceSet == motherChoiceSet)
+                        if (choiceSet == mainChoiceSet)
                             continue;
                         if (bound.intersect(choiceSet.bound)) {
                             final_choice = choiceSet;
                             break;
                         }
                     }
-                    var t = CreateGuiController.platform.checkLine(motherChoiceSet, 10f);
+                    var t = CreateGuiController.platform.checkLine(mainChoiceSet, 10f);
                     if (t != null) {
                         var v = t.getKey();
-                        motherChoiceSet.setPosition(v.x() == 0 ? motherChoiceSet.pos_x : v.x(), v.y() == 0 ? motherChoiceSet.pos_y : v.y());
+                        mainChoiceSet.setPosition(v.x() == 0 ? mainChoiceSet.pos_x : v.x(), v.y() == 0 ? mainChoiceSet.pos_y : v.y());
                     }
                     if (final_choice != null) {
                         CreateGuiController.instance.commandTimeline
-                                .excuteCommand(new CombineCommand(final_choice, motherChoiceSet));
+                                .excuteCommand(new CombineCommand(final_choice, mainChoiceSet));
                     }
                 }
                 this.pane.setViewOrder(0.0d);
             });
-            pane.setOnMouseEntered(e -> CreateGuiController.instance.nowMouseInDataSet = motherChoiceSet);
+            pane.setOnMouseEntered(e -> CreateGuiController.instance.nowMouseInDataSet = mainChoiceSet);
 
             pane.setOnMouseExited(e -> {
-                if (!motherChoiceSet.isClicked)
+                if (!mainChoiceSet.isClicked)
                     JavaFxMain.instance.scene_create.setCursor(Cursor.DEFAULT);
             });
         }
@@ -209,13 +211,13 @@ public class ChoiceSetGuiComponent {
     public MoveCommand moveCommand = null;
 
     public void update() {
-        title.setText(motherChoiceSet.string_title);
+        title.setText(mainChoiceSet.string_title);
         updateColor();
-        if (motherChoiceSet.string_image_name != null && !motherChoiceSet.string_image_name.isEmpty()) {
-            var simpleEntry = LoadUtil.loadImage(motherChoiceSet.string_image_name);
+        if (mainChoiceSet.string_image_name != null && !mainChoiceSet.string_image_name.isEmpty()) {
+            var simpleEntry = LoadUtil.loadImage(mainChoiceSet.string_image_name);
             image.setImage(simpleEntry.getKey());
         }
-        image.round.set(motherChoiceSet.round);
+        image.round.set(mainChoiceSet.round);
     }
 
     public void setBorder(boolean b) {
@@ -229,8 +231,8 @@ public class ChoiceSetGuiComponent {
 
         RenderUtil.setStroke(gc, time, Color.CORNFLOWERBLUE);
         if (JavaFxMain.controller instanceof CreateGuiController create_gui) {
-            if (moveCommand != null && motherChoiceSet.equals(moveCommand.choiceset)) {
-                var entry = platform.checkLine(motherChoiceSet, 10f);
+            if (moveCommand != null && mainChoiceSet.equals(moveCommand.choiceset)) {
+                var entry = platform.checkLine(mainChoiceSet, 10f);
                 if (entry != null) {
                     var show_x = entry.getValue().x();
                     var show_y = entry.getValue().y();
@@ -242,10 +244,10 @@ public class ChoiceSetGuiComponent {
                     }
                 }
             }
-            if (create_gui.nowSizeChange != null && motherChoiceSet.equals(create_gui.nowSizeChange.getKey())) {
+            if (create_gui.nowSizeChange != null && mainChoiceSet.equals(create_gui.nowSizeChange.getKey())) {
                 var cursor = JavaFxMain.instance.scene_create.getCursor();
 
-                var list_point = SizeUtil.pointMagnet(motherChoiceSet);
+                var list_point = SizeUtil.pointMagnet(mainChoiceSet);
 
                 Vector2f point = null;
                 if (list_point[0] != null && (cursor.equals(Cursor.W_RESIZE) || cursor.equals(Cursor.N_RESIZE) || cursor.equals(Cursor.NW_RESIZE))) {//x and y are negative
@@ -270,13 +272,13 @@ public class ChoiceSetGuiComponent {
             }
         }
 
-        if (motherChoiceSet.equals(CreateGuiController.instance.nowMouseInDataSet)) {
+        if (mainChoiceSet.equals(CreateGuiController.instance.nowMouseInDataSet)) {
             RenderUtil.setStroke(gc, time, Color.BLUE);
             var gap = 4;
-            var x_start = motherChoiceSet.pos_x - gap - min_x;
-            var y_start = motherChoiceSet.pos_y - gap - min_y;
+            var x_start = mainChoiceSet.pos_x - gap - min_x;
+            var y_start = mainChoiceSet.pos_y - gap - min_y;
 
-            gc.strokeRect(x_start, y_start, motherChoiceSet.getAnchorPane().getLayoutBounds().getWidth() + gap * 2, motherChoiceSet.getAnchorPane().getLayoutBounds().getHeight() + gap * 2);
+            gc.strokeRect(x_start, y_start, mainChoiceSet.getAnchorPane().getLayoutBounds().getWidth() + gap * 2, mainChoiceSet.getAnchorPane().getLayoutBounds().getHeight() + gap * 2);
         }
     }
 
@@ -303,26 +305,21 @@ public class ChoiceSetGuiComponent {
 
     public void combineSubChoiceSetComponent(ChoiceSet sub) {
         if (sub.choiceSet_parent != null) {
-            sub.choiceSet_parent.getAnchorPane().getChildren().remove(sub.getAnchorPane());
+            sub.choiceSet_parent.guiComponent.hbox_subChoiceSet.getChildren().remove(sub.getAnchorPane());
         }
-        if (!hbox_subChoiceSet.isVisible()) hbox_subChoiceSet.setVisible(true);
-
-        if (!hbox_subChoiceSet.getChildren().contains(sub.getAnchorPane())) {
-            hbox_subChoiceSet.getChildren().add(sub.getAnchorPane());
-        }
+        hbox_subChoiceSet.getChildren().add(sub.getAnchorPane());
     }
 
     public void separateSubChoiceSetComponent(ChoiceSet sub) {
         hbox_subChoiceSet.getChildren().remove(sub.getAnchorPane());
         CreateGuiController.instance.pane_position.getChildren().add(sub.getAnchorPane());
-        if (hbox_subChoiceSet.getChildren().isEmpty()) hbox_subChoiceSet.setVisible(false);
     }
 
     public void setEmptyImage(boolean b) {
         if (b) {
-            if ((motherChoiceSet.string_image_name == null || motherChoiceSet.string_image_name.isEmpty()) && pane_inner.getChildren().contains(image)) {
+            if ((mainChoiceSet.string_image_name == null || mainChoiceSet.string_image_name.isEmpty()) && pane_inner.getChildren().contains(image)) {
                 pane_inner.getChildren().remove(image);
-                if (FlagUtil.getFlag(motherChoiceSet.flag, ChoiceSet.flagPosition_horizontal)) {
+                if (FlagUtil.getFlag(mainChoiceSet.flag, ChoiceSet.flagPosition_horizontal)) {
                     GridPane.setColumnIndex(area, 0);
                     GridPane.setColumnSpan(area, 2);
                     GridPane.setRowIndex(area, 1);
@@ -336,7 +333,7 @@ public class ChoiceSetGuiComponent {
             }
         } else {
             if (!pane_inner.getChildren().contains(image)) {
-                setHorizontal(FlagUtil.getFlag(motherChoiceSet.flag, ChoiceSet.flagPosition_horizontal));
+                setHorizontal(FlagUtil.getFlag(mainChoiceSet.flag, ChoiceSet.flagPosition_horizontal));
             }
         }
     }

@@ -185,7 +185,7 @@ public class LoadUtil {
                 loadChoiceSetParents(c);
             } else {
                 c.choiceSet_parent = choiceSet;
-                choiceSet.guiComponent.hbox.getChildren().add(c.getAnchorPane());
+                choiceSet.guiComponent.addChoiceSetGui(c.getAnchorPane());
             }
         }
     }

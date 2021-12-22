@@ -8,6 +8,7 @@ import cyoap_main.unit.Vector2f;
 import cyoap_main.util.RenderUtil;
 import cyoap_main.util.SizeUtil;
 import javafx.geometry.*;
+import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import org.fxmisc.richtext.InlineCssTextArea;
 
@@ -23,39 +24,54 @@ import javafx.scene.Cursor;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
 public class ChoiceSetGuiComponent {
-    public GridPane pane = new GridPane();
-    public GridPane pane_border = new GridPane();
-    public HBox hbox = new HBox();
-    public ImageCell image = new ImageCell();
+    public static Border border_default = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(5), new BorderWidths(2)));
+    /*
+    pane─┬─pane_surround─┬──pane_inner─┬─hbox_title──title
+         │               │             ├─image
+         │               │             └─area
+         └─pane_border   └──hbox_subChoiceSet──subChoiceSet
+     */
+    public AnchorPane pane = new AnchorPane();
+    private GridPane pane_surround = new GridPane();
+    private Pane pane_border = new Pane();
+    private GridPane pane_inner = new GridPane();
+    private HBox hbox_subChoiceSet = new HBox();
     public InlineCssTextArea area = new InlineCssTextArea();
-    public HBox hbox_title = new HBox();
-    public Label title = new Label();
+    private ImageCell image = new ImageCell();
+    private HBox hbox_title = new HBox();
 
     public ChoiceSet motherChoiceSet;
 
     public Color color;
-
-    public static Border border_default = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(5), new BorderWidths(1)));
+    private Label title = new Label();
 
     public ChoiceSetGuiComponent(ChoiceSet choiceSet) {
         motherChoiceSet = choiceSet;
     }
 
     public void setUp() {
+        pane.setLayoutX(motherChoiceSet.pos_x);
+        pane.setLayoutY(motherChoiceSet.pos_y);
+
+        pane.getChildren().add(pane_surround);
+        pane.getChildren().add(pane_border);
+        AnchorPane.setLeftAnchor(pane_surround, 0d);
+        AnchorPane.setRightAnchor(pane_surround, 0d);
+        AnchorPane.setTopAnchor(pane_surround, 0d);
+        AnchorPane.setBottomAnchor(pane_surround, 0d);
+        AnchorPane.setLeftAnchor(pane_border, 0d);
+        AnchorPane.setRightAnchor(pane_border, 0d);
+        AnchorPane.setTopAnchor(pane_border, 0d);
+        AnchorPane.setBottomAnchor(pane_border, 0d);
+        pane_border.setMouseTransparent(true);
+        pane_surround.add(pane_inner, 0, 0);
+        pane_surround.add(hbox_subChoiceSet, 0, 1);
+        hbox_subChoiceSet.setVisible(false);
+
         try {
             area.setWrapText(true);
             area.getStylesheets().add(LoadUtil.instance.loadCss("/lib/css/text_editor.css"));
@@ -73,22 +89,18 @@ public class ChoiceSetGuiComponent {
         rectangle.heightProperty().bind(pane.heightProperty());
 
         pane.setClip(rectangle);
+        pane_border.setBorder(border_default);
 
-        pane.setLayoutX(motherChoiceSet.pos_x);
-        pane.setLayoutY(motherChoiceSet.pos_y);
-        pane.setBorder(border_default);
-        pane.add(pane_border, 0, 0);
-
-        GridPane.setHgrow(pane_border, Priority.ALWAYS);
-        GridPane.setVgrow(pane_border, Priority.ALWAYS);
+        GridPane.setHgrow(pane_inner, Priority.ALWAYS);
+        GridPane.setVgrow(pane_inner, Priority.ALWAYS);
         pane.setId("pane_choiceset");
 
         hbox_title.getChildren().add(title);
-        pane_border.add(hbox_title, 0, 0);
-        pane_border.add(image, 0, 1);
-        pane_border.add(area, 0, 2);
-        pane_border.setAlignment(Pos.CENTER);
-        pane_border.setPadding(Insets.EMPTY);
+        pane_inner.add(hbox_title, 0, 0);
+        pane_inner.add(image, 0, 1);
+        pane_inner.add(area, 0, 2);
+        pane_inner.setAlignment(Pos.CENTER);
+        pane_inner.setPadding(Insets.EMPTY);
 
         title.setTextAlignment(TextAlignment.CENTER);
         title.setAlignment(Pos.CENTER);
@@ -102,7 +114,7 @@ public class ChoiceSetGuiComponent {
         image.setCut(0);
         image.setPadding(new Insets(5));
 
-        pane_border.setMouseTransparent(true);
+        pane_inner.setMouseTransparent(true);
         float border = 9.5f;
 
         if (JavaFxMain.controller.isEditable()) {
@@ -207,6 +219,10 @@ public class ChoiceSetGuiComponent {
         image.round.set(motherChoiceSet.round);
     }
 
+    public void setBorder(boolean b) {
+        pane_border.setVisible(!b);
+    }
+
     public void render(GraphicsContext gc, double time) {
         var platform = JavaFxMain.controller.getPlatform();
         var min_x = platform.min_x;
@@ -290,24 +306,23 @@ public class ChoiceSetGuiComponent {
         if (sub.choiceSet_parent != null) {
             sub.choiceSet_parent.getAnchorPane().getChildren().remove(sub.getAnchorPane());
         }
-        if (!pane.getChildren().contains(hbox)) {
-            pane.add(hbox, 0, 3);
-        }
-        if (!hbox.getChildren().contains(sub.getAnchorPane())) {
-            hbox.getChildren().add(sub.getAnchorPane());
+        if (!hbox_subChoiceSet.isVisible()) hbox_subChoiceSet.setVisible(true);
+
+        if (!hbox_subChoiceSet.getChildren().contains(sub.getAnchorPane())) {
+            hbox_subChoiceSet.getChildren().add(sub.getAnchorPane());
         }
     }
 
     public void separateSubChoiceSetComponent(ChoiceSet sub) {
-        pane.getChildren().remove(hbox);
-        hbox.getChildren().remove(sub.getAnchorPane());
+        hbox_subChoiceSet.getChildren().remove(sub.getAnchorPane());
         CreateGuiController.instance.pane_position.getChildren().add(sub.getAnchorPane());
+        if (hbox_subChoiceSet.getChildren().isEmpty()) hbox_subChoiceSet.setVisible(false);
     }
 
     public void setEmptyImage(boolean b) {
         if (b) {
-            if ((motherChoiceSet.string_image_name == null || motherChoiceSet.string_image_name.isEmpty()) && pane_border.getChildren().contains(image)) {
-                pane_border.getChildren().remove(image);
+            if ((motherChoiceSet.string_image_name == null || motherChoiceSet.string_image_name.isEmpty()) && pane_inner.getChildren().contains(image)) {
+                pane_inner.getChildren().remove(image);
                 if (FlagUtil.getFlag(motherChoiceSet.flag, ChoiceSet.flagPosition_horizontal)) {
                     GridPane.setColumnIndex(area, 0);
                     GridPane.setColumnSpan(area, 2);
@@ -321,7 +336,7 @@ public class ChoiceSetGuiComponent {
                 }
             }
         } else {
-            if (!pane_border.getChildren().contains(image)) {
+            if (!pane_inner.getChildren().contains(image)) {
                 setHorizontal(FlagUtil.getFlag(motherChoiceSet.flag, ChoiceSet.flagPosition_horizontal));
             }
         }
@@ -333,18 +348,18 @@ public class ChoiceSetGuiComponent {
         GridPane.setHalignment(hbox_title, HPos.CENTER);
         GridPane.setValignment(hbox_title, VPos.CENTER);
 
-        pane_border.getChildren().remove(hbox_title);
-        pane_border.getChildren().remove(image);
-        pane_border.getChildren().remove(area);
-        pane_border.getColumnConstraints().clear();
-        pane_border.getRowConstraints().clear();
-        pane_border.setVgap(0);
-        pane_border.setHgap(0);
-        pane_border.add(hbox_title, 0, 0);
+        pane_inner.getChildren().remove(hbox_title);
+        pane_inner.getChildren().remove(image);
+        pane_inner.getChildren().remove(area);
+        pane_inner.getColumnConstraints().clear();
+        pane_inner.getRowConstraints().clear();
+        pane_inner.setVgap(0);
+        pane_inner.setHgap(0);
+        pane_inner.add(hbox_title, 0, 0);
         if (b) {
             GridPane.setColumnSpan(hbox_title, 2);
-            pane_border.add(image, 0, 1);
-            pane_border.add(area, 1, 1);
+            pane_inner.add(image, 0, 1);
+            pane_inner.add(area, 1, 1);
 
             ColumnConstraints col1 = new ColumnConstraints();
             ColumnConstraints col2 = new ColumnConstraints();
@@ -360,12 +375,12 @@ public class ChoiceSetGuiComponent {
             row2.setPercentHeight(90);
             row2.setVgrow(Priority.ALWAYS);
 
-            pane_border.getColumnConstraints().addAll(col1, col2);
-            pane_border.getRowConstraints().addAll(row1, row2);
+            pane_inner.getColumnConstraints().addAll(col1, col2);
+            pane_inner.getRowConstraints().addAll(row1, row2);
         } else {
             GridPane.setColumnSpan(hbox_title, 1);
-            pane_border.add(image, 0, 1);
-            pane_border.add(area, 0, 2);
+            pane_inner.add(image, 0, 1);
+            pane_inner.add(area, 0, 2);
 
             ColumnConstraints col1 = new ColumnConstraints();
             RowConstraints row1 = new RowConstraints();
@@ -381,8 +396,12 @@ public class ChoiceSetGuiComponent {
             row3.setPercentHeight(90 * 0.32);
             row3.setVgrow(Priority.ALWAYS);
 
-            pane_border.getColumnConstraints().addAll(col1);
-            pane_border.getRowConstraints().addAll(row1, row2, row3);
+            pane_inner.getColumnConstraints().addAll(col1);
+            pane_inner.getRowConstraints().addAll(row1, row2, row3);
         }
+    }
+
+    public void addChoiceSetGui(Pane pane) {
+        hbox_subChoiceSet.getChildren().add(pane);
     }
 }

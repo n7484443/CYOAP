@@ -53,7 +53,6 @@
 #title_choiceset {
     -fx-font-size: 12.0pt;
     -fx-font-family: NanumGothicOTFBold;
-    -fx-background-radius: 5pt, 5pt, 0, 0;
 }
 
 #text_title {

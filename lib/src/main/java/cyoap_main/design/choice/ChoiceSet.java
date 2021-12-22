@@ -200,11 +200,7 @@ public class ChoiceSet {
     }
 
     public void updateFlag() {
-        if (FlagUtil.getFlag(flag, flagPosition_selectable)) {
-            guiComponent.pane.setBorder(null);
-        } else {
-            guiComponent.pane.setBorder(ChoiceSetGuiComponent.border_default);
-        }
+        guiComponent.setBorder(FlagUtil.getFlag(flag, flagPosition_selectable));
         if (FlagUtil.getFlag(flag, flagPosition_horizontal)) {
             guiComponent.setHorizontal(true);
         } else {
@@ -234,7 +230,7 @@ public class ChoiceSet {
     }
 
     @JsonIgnore
-    public GridPane getAnchorPane() {
+    public Pane getAnchorPane() {
         return guiComponent.pane;
     }
 

@@ -39,10 +39,6 @@ public class ImageCell extends Region {
 		return imageView.getImage();
 	}
 
-	public final ObjectProperty<Image> imageProperty() {
-		return imageView.imageProperty();
-	}
-
 	public void setCut(int r) {
 		round.set(r);
 		rectangle = new Rectangle(getRealWidth(), getRealHeight());

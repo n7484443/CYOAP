@@ -7,9 +7,7 @@ import cyoap_main.command.SizeChangeCommand;
 import cyoap_main.unit.Vector2f;
 import cyoap_main.util.RenderUtil;
 import cyoap_main.util.SizeUtil;
-import javafx.collections.ListChangeListener;
 import javafx.geometry.*;
-import javafx.scene.Node;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import org.fxmisc.richtext.InlineCssTextArea;
@@ -47,7 +45,7 @@ public class ChoiceSetGuiComponent {
     private final ImageCell image = new ImageCell();
     private final HBox hbox_title = new HBox();
 
-    private Rectangle rectangle = new Rectangle(150, 150);
+    private final Rectangle rectangle = new Rectangle(150, 150);
 
     public Color color;
     private final Label title = new Label();
@@ -120,8 +118,7 @@ public class ChoiceSetGuiComponent {
 
         if (JavaFxMain.controller.isEditable()) {
             pane.setOnMouseMoved(e -> {
-                boolean b = SizeUtil.setCursor(e.getX(), e.getY(), this.mainChoiceSet.getWidth(), this.mainChoiceSet.getHeight(), border);
-                if (b) {
+                if (SizeUtil.setCursor(e.getX(), e.getY(), this.mainChoiceSet.getWidth(), this.mainChoiceSet.getHeight(), border)) {
                     CreateGuiController.instance.nowSizeChange = new AbstractMap.SimpleEntry<>(mainChoiceSet, new SizeChangeCommand(mainChoiceSet));
                 }
             });

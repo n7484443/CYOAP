@@ -1,46 +1,40 @@
 package cyoap_main.command;
 
 import cyoap_main.design.choice.ChoiceSet;
+import cyoap_main.unit.Vector2f;
 
 public class SizeChangeCommand extends AbstractCommand {
-    public float before_width;
-    public float before_height;
-    public float before_pos_x;
-    public float before_pos_y;
+    public Vector2f before_size;
+    public Vector2f before_pos;
     public ChoiceSet choiceset;
-    public float after_width;
-    public float after_height;
-    public float after_pos_x;
-    public float after_pos_y;
+    public Vector2f after_size;
+    public Vector2f after_pos;
+
     public SizeChangeCommand() {
     }
 
     public SizeChangeCommand(ChoiceSet choiceSet) {
         this.choiceset = choiceSet;
-        this.before_width = choiceset.width;
-        this.before_height = choiceset.height;
-        this.before_pos_x = choiceset.pos_x;
-        this.before_pos_y = choiceset.pos_y;
+        this.before_size = new Vector2f(choiceset.width, choiceset.height);
+        this.before_pos = new Vector2f(choiceset.pos_x, choiceset.pos_y);
     }
 
     public void set(ChoiceSet choiceSet) {
-        this.after_width = choiceSet.width;
-        this.after_height = choiceSet.height;
-        this.after_pos_x = choiceSet.pos_x;
-        this.after_pos_y = choiceSet.pos_y;
+        this.after_size = new Vector2f(choiceSet.width, choiceSet.height);
+        this.after_pos = new Vector2f(choiceSet.pos_x, choiceSet.pos_y);
     }
 
     @Override
     public void execute() {
-        choiceset.setPosition(after_pos_x, after_pos_y);
-        choiceset.changeSize(after_width, after_height);
+        choiceset.setPosition(after_pos.x(), after_pos.y());
+        choiceset.changeSize(after_size.x(), after_size.y());
         choiceset.update();
     }
 
     @Override
     public void undo() {
-        choiceset.setPosition(before_pos_x, before_pos_y);
-        choiceset.changeSize(before_width, before_height);
+        choiceset.setPosition(before_pos.x(), before_pos.y());
+        choiceset.changeSize(before_size.x(), before_size.y());
         choiceset.update();
     }
 

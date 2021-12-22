@@ -52,7 +52,6 @@ public interface IGuiController extends Initializable {
                 data.setUp(getChoicePane());
                 data.update();
                 getPlatform().choiceSetList.add(data);
-                data.updateFlag();
                 LoadUtil.loadSegment(data.guiComponent.area, data.segmentList);
             }
         } catch (IOException e) {
@@ -105,7 +104,7 @@ public interface IGuiController extends Initializable {
 
     public int allow_margin = 50;
 
-    public default void updateMouseCoord(double move_x, double move_y, double start_move_x, double start_move_y) {
+    default void updateMouseCoord(double move_x, double move_y, double start_move_x, double start_move_y) {
         getPlatform().local_x -= move_x;
         getPlatform().local_y -= move_y;
         getPlatform().start_mouse_x = start_move_x;
@@ -127,10 +126,11 @@ public interface IGuiController extends Initializable {
         getPlatform().isMouseMoved = true;
     }
 
-    public default double getChoicePaneRealWidth(){
+    default double getChoicePaneRealWidth() {
         return getChoicePane().getParent().getParent().getBoundsInLocal().getWidth();
     }
-    public default double getChoicePaneRealHeight(){
+
+    default double getChoicePaneRealHeight() {
         return getChoicePane().getParent().getParent().getBoundsInLocal().getHeight();
     }
 }

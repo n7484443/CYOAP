@@ -39,7 +39,6 @@ public class CreateCommand extends AbstractCommand{
 
 	@Override
 	public void undo() {
-		control.getChoicePane().getChildren().remove(choiceSet.getAnchorPane());
 		control.getPlatform().choiceSetList.remove(choiceSet);
 		control.nowMouseInDataSet = null;
 	}

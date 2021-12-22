@@ -24,7 +24,7 @@ public class DeleteCommand extends AbstractCommand {
 
 	@Override
 	public void undo() {
-		choiceSet.setUp(control.getChoicePane());
+		control.getChoicePane().getChildren().add(choiceSet.getAnchorPane());
 		control.getPlatform().choiceSetList.add(choiceSet);
 		choiceSet.updateCoordinate(-local_x, -local_y);
 		choiceSet.updateFlag();

@@ -171,11 +171,15 @@ public class ChoiceSet {
         sub.choiceSet_parent = this;
 
         guiComponent.combineSubChoiceSetComponent(sub);
+
+        sub.update();
+        update();
     }
 
     public void separateSubChoiceSet(ChoiceSet sub) {
-        this.choiceSet_child.remove(sub);
         CreateGuiController.platform.choiceSetList.add(sub);
+
+        this.choiceSet_child.remove(sub);
         sub.choiceSet_parent = null;
 
         guiComponent.separateSubChoiceSetComponent(sub);

@@ -20,6 +20,7 @@ import java.util.stream.Stream;
 
 import javax.imageio.ImageIO;
 
+import javafx.embed.swing.SwingFXUtils;
 import net.lingala.zip4j.ZipFile;
 import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.fxmisc.richtext.InlineCssTextArea;
@@ -116,23 +117,10 @@ public class LoadUtil {
         if (!f.toString().contains(".webp") && !f.toString().contains(".jpeg")) {
             image = new Image(f.toURI().toString());
         } else {
-            int[] pixels = null;
             try {
                 BufferedImage image_base = ImageIO.read(f);
-                int width = image_base.getWidth();
-                int height = image_base.getHeight();
-
-                pixels = image_base.getRaster().getPixels(0, 0, width, height, (int[]) null);
-
-                for (int i = 0; i < width; i++) {
-                    for (int j = 0; j < height; j++) {
-                        pixels[i + j * width] = image_base.getRGB(i, j);
-                    }
-                }
-
-                WritableImage img = new WritableImage(width, height);
-                img.getPixelWriter().setPixels(0, 0, width, height, PixelFormat.getIntArgbInstance(), pixels, 0,
-                        width);
+                WritableImage img = new WritableImage(image_base.getWidth(), image_base.getHeight());
+                SwingFXUtils.toFXImage(image_base, img);
                 image = img;
             } catch (IOException e) {
                 e.printStackTrace();

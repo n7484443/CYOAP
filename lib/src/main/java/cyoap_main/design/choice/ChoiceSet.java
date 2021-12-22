@@ -31,7 +31,7 @@ public class ChoiceSet {
     @JsonIgnore
     public static final int flagPosition_horizontal = 1;
     @JsonIgnore
-    public static final int flagPosition_emptyimage = 2;
+    public static final int flagPosition_emptyImage = 2;
     @JsonIgnore
     public final float minWidth = 150;
     @JsonIgnore
@@ -97,10 +97,6 @@ public class ChoiceSet {
         guiComponent.color = baseColor;
         guiComponent.setUp();
         pane_mother.getChildren().add(guiComponent.pane);
-    }
-
-    public boolean check_intersect(ChoiceSet a, ChoiceSet b) {
-        return a.bound.intersect(b.bound);
     }
 
     public boolean check_intersect(ChoiceSet a, float x, float y) {
@@ -201,7 +197,7 @@ public class ChoiceSet {
     public void updateFlag() {
         guiComponent.setBorder(FlagUtil.getFlag(flag, flagPosition_selectable));
         guiComponent.setHorizontal(FlagUtil.getFlag(flag, flagPosition_horizontal));
-        guiComponent.setEmptyImage(FlagUtil.getFlag(flag, flagPosition_emptyimage));
+        guiComponent.setEmptyImage(FlagUtil.getFlag(flag, flagPosition_emptyImage));
     }
 
     // 화면상의 위치

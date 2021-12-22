@@ -15,7 +15,7 @@ public class CombineCommand extends AbstractCommand {
 	}
 
 	@Override
-	public void excute() {
+	public void execute() {
 		choiceSet_parent.combineSubChoiceSet(choiceSet_children);
 	}
 

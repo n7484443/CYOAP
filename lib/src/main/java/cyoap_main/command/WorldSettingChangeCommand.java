@@ -2,8 +2,8 @@ package cyoap_main.command;
 
 public class WorldSettingChangeCommand extends AbstractCommand{
 	@Override
-	public void excute() {
-		
+	public void execute() {
+
 	}
 
 	@Override

@@ -51,7 +51,7 @@ public class CommandTimeline {
 		if (command_now < commandList.size() - 1) {
 			command_now += 1;
 			var command = commandList.get(command_now);
-			command.excute();
+			command.execute();
 			isCommandListUpdated = true;
 		}
 	}
@@ -70,7 +70,7 @@ public class CommandTimeline {
 	}
 
 	public void excuteCommand(AbstractCommand command) {
-		command.excute();
+		command.execute();
 		addCommand(command);
 	}
 

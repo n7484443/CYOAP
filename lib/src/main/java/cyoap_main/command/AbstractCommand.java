@@ -11,7 +11,7 @@ import cyoap_main.unit.Vector2f;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.PUBLIC_ONLY, setterVisibility = JsonAutoDetect.Visibility.NONE)
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
 public abstract class AbstractCommand {
-	public abstract void excute();
+	public abstract void execute();
 
 	public abstract void undo();
 

@@ -16,7 +16,7 @@ public class DeleteCommand extends AbstractCommand {
 	}
 
 	@Override
-	public void excute() {
+	public void execute() {
 		control.getChoicePane().getChildren().remove(choiceSet.getAnchorPane());
 		control.getPlatform().choiceSetList.remove(choiceSet);
 		control.nowMouseInDataSet = null;

@@ -21,8 +21,9 @@ public class MoveCommand extends AbstractCommand{
 		this.end_x = end_x;
 		this.end_y = end_y;
 	}
+
 	@Override
-	public void excute() {
+	public void execute() {
 		choiceset.setPosition(end_x, end_y);
 	}
 

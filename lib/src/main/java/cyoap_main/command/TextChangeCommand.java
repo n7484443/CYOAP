@@ -33,7 +33,7 @@ public class TextChangeCommand extends AbstractCommand{
 	}
 	
 	@Override
-	public void excute() {
+	public void execute() {
 		choiceSet.string_title = this.string_title_after;
 		choiceSet.setSegmentList(this.string_describe_after);
 		choiceSet.string_image_name = this.string_image_name_after;

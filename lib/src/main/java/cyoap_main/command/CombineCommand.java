@@ -21,7 +21,7 @@ public class CombineCommand extends AbstractCommand {
 
 	@Override
 	public void undo() {
-		choiceSet_parent.seperateSubChoiceSet(choiceSet_children);
+		choiceSet_parent.separateSubChoiceSet(choiceSet_children);
 		CreateGuiController.platform.updateMouseCoordinate();
 	}
 

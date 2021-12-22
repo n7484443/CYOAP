@@ -35,19 +35,18 @@ public class ChoiceSetGuiComponent {
          │               │             └─area
          └─pane_border   └──hbox_subChoiceSet──subChoiceSet
      */
-    public AnchorPane pane = new AnchorPane();
-    private GridPane pane_surround = new GridPane();
-    private Pane pane_border = new Pane();
-    private GridPane pane_inner = new GridPane();
-    private HBox hbox_subChoiceSet = new HBox();
-    public InlineCssTextArea area = new InlineCssTextArea();
-    private ImageCell image = new ImageCell();
-    private HBox hbox_title = new HBox();
-
-    public ChoiceSet motherChoiceSet;
+    public final AnchorPane pane = new AnchorPane();
+    public final InlineCssTextArea area = new InlineCssTextArea();
+    public final ChoiceSet motherChoiceSet;
+    private final GridPane pane_surround = new GridPane();
+    private final Pane pane_border = new Pane();
+    private final GridPane pane_inner = new GridPane();
+    private final HBox hbox_subChoiceSet = new HBox();
+    private final ImageCell image = new ImageCell();
+    private final HBox hbox_title = new HBox();
 
     public Color color;
-    private Label title = new Label();
+    private final Label title = new Label();
 
     public ChoiceSetGuiComponent(ChoiceSet choiceSet) {
         motherChoiceSet = choiceSet;
@@ -229,7 +228,7 @@ public class ChoiceSetGuiComponent {
         var min_y = platform.min_y;
 
         RenderUtil.setStroke(gc, time, Color.CORNFLOWERBLUE);
-        if (JavaFxMain.controller instanceof CreateGuiController creategui) {
+        if (JavaFxMain.controller instanceof CreateGuiController create_gui) {
             if (moveCommand != null && motherChoiceSet.equals(moveCommand.choiceset)) {
                 var entry = platform.checkLine(motherChoiceSet, 10f);
                 if (entry != null) {
@@ -243,7 +242,7 @@ public class ChoiceSetGuiComponent {
                     }
                 }
             }
-            if (creategui.nowSizeChange != null && motherChoiceSet.equals(creategui.nowSizeChange.getKey())) {
+            if (create_gui.nowSizeChange != null && motherChoiceSet.equals(create_gui.nowSizeChange.getKey())) {
                 var cursor = JavaFxMain.instance.scene_create.getCursor();
 
                 var list_point = SizeUtil.pointMagnet(motherChoiceSet);

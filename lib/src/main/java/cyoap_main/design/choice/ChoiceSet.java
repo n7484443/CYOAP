@@ -19,7 +19,6 @@ import cyoap_main.unit.Vector2f;
 import cyoap_main.util.FlagUtil;
 import cyoap_main.util.LoadUtil;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
@@ -178,7 +177,7 @@ public class ChoiceSet {
         guiComponent.combineSubChoiceSetComponent(sub);
     }
 
-    public void seperateSubChoiceSet(ChoiceSet sub) {
+    public void separateSubChoiceSet(ChoiceSet sub) {
         this.choiceSet_child.remove(sub);
         CreateGuiController.platform.choiceSetList.add(sub);
         sub.choiceSet_parent = null;
@@ -201,11 +200,7 @@ public class ChoiceSet {
 
     public void updateFlag() {
         guiComponent.setBorder(FlagUtil.getFlag(flag, flagPosition_selectable));
-        if (FlagUtil.getFlag(flag, flagPosition_horizontal)) {
-            guiComponent.setHorizontal(true);
-        } else {
-            guiComponent.setHorizontal(false);
-        }
+        guiComponent.setHorizontal(FlagUtil.getFlag(flag, flagPosition_horizontal));
         guiComponent.setEmptyImage(FlagUtil.getFlag(flag, flagPosition_emptyimage));
     }
 
@@ -269,10 +264,10 @@ public class ChoiceSet {
             if (v.isBlank()) {
                 segmentList.add(null);
             } else {
-                var splitedStr = v.split("\\}:\\{");
-                splitedStr[0] = splitedStr[0].substring(1);
-                splitedStr[1] = splitedStr[1].substring(0, splitedStr[1].length() - 1);
-                var segment = new StyledSegment<>(splitedStr[0], splitedStr[1]);
+                var splitStr = v.split("\\}:\\{");
+                splitStr[0] = splitStr[0].substring(1);
+                splitStr[1] = splitStr[1].substring(0, splitStr[1].length() - 1);
+                var segment = new StyledSegment<>(splitStr[0], splitStr[1]);
                 segmentList.add(segment);
             }
         }

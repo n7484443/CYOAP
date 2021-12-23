@@ -39,12 +39,12 @@ import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
 
 public class LoadUtil {
-    public static LoadUtil instance;
+    static final LoadUtil instance = new LoadUtil();
 
     public static boolean isIDE = true;
 
-    public LoadUtil() {
-        instance = this;
+    public static LoadUtil getInstance() {
+        return instance;
     }
 
     public Pane loadFXML(String path) throws IOException {

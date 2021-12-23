@@ -35,15 +35,19 @@ public class ChoiceSetGuiComponent {
          │               │             └─area
          └─pane_border   └──hbox_subChoiceSet──subChoiceSet
      */
+    public final ChoiceSet mainChoiceSet;
+    //////////////////////////////////////////////////////////////////////////////////////////
     public final AnchorPane pane = new AnchorPane();
     public final InlineCssTextArea area = new InlineCssTextArea();
-    public final ChoiceSet mainChoiceSet;
-    private final GridPane pane_surround = new GridPane();
     private final Pane pane_border = new Pane();
-    private final GridPane pane_inner = new GridPane();
+    //////////////////////////////////////////////////////////////////////////////////////////
+    private final GridPane pane_surround = new GridPane();
     private final HBox hbox_subChoiceSet = new HBox();
-    private final ImageCell image = new ImageCell();
+    //////////////////////////////////////////////////////////////////////////////////////////
+    private final GridPane pane_inner = new GridPane();
+    //////////////////////////////////////////////////////////////////////////////////////////
     private final HBox hbox_title = new HBox();
+    private final ImageCell image = new ImageCell();
 
     private final Rectangle rectangle = new Rectangle(150, 150);
 
@@ -75,15 +79,16 @@ public class ChoiceSetGuiComponent {
         pane_surround.add(hbox_subChoiceSet, 0, 1);
 
         try {
-            area.setWrapText(true);
-            area.getStylesheets().add(LoadUtil.instance.loadCss("/lib/css/text_editor.css"));
-            area.getStyleClass().add("text-editor");
-            area.setStyle("-color-text: white ;");
-            area.setAutoHeight(true);
-            area.setId("area_choiceSet");
+            area.getStylesheets().add(LoadUtil.getInstance().loadCss("/lib/css/text_editor.css"));
         } catch (IOException e1) {
             e1.printStackTrace();
         }
+        area.setWrapText(true);
+        area.getStyleClass().add("text-editor");
+        area.setStyle("-color-text: white ;");
+        area.setAutoHeight(true);
+        area.setId("area_choiceSet");
+
         rectangle.setArcWidth(10.0f);
         rectangle.setArcHeight(10.0f);
         rectangle.widthProperty().bind(pane.widthProperty());
@@ -234,10 +239,10 @@ public class ChoiceSetGuiComponent {
                     var show_x = entry.getValue().x();
                     var show_y = entry.getValue().y();
                     if (show_x != Float.MAX_VALUE) {
-                        gc.strokeLine(show_x - min_x, CreateGuiController.instance.getPlatform().min_y - min_y, show_x - min_x, CreateGuiController.instance.getPlatform().max_y - min_y);
+                        gc.strokeLine(show_x - min_x, CreateGuiController.platform.min_y - min_y, show_x - min_x, CreateGuiController.platform.max_y - min_y);
                     }
                     if (show_y != Float.MAX_VALUE) {
-                        gc.strokeLine(CreateGuiController.instance.getPlatform().min_x - min_x, show_y - min_y, CreateGuiController.instance.getPlatform().max_x - min_x, show_y - min_y);
+                        gc.strokeLine(CreateGuiController.platform.min_x - min_x, show_y - min_y, CreateGuiController.platform.max_x - min_x, show_y - min_y);
                     }
                 }
             }

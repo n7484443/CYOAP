@@ -97,6 +97,7 @@ public class ChoiceSet {
         guiComponent.color = baseColor;
         guiComponent.setUp();
         pane_mother.getChildren().add(guiComponent.pane);
+        update();
     }
 
     public boolean check_intersect(ChoiceSet a, float x, float y) {

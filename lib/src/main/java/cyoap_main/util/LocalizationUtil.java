@@ -10,13 +10,13 @@ public class LocalizationUtil {
     public static String i18n_public = "en_us";
     public static Properties localized_properties_current;
     public static Properties localized_properties_public;
-    public LocalizationUtil instance;
+    static final LocalizationUtil instance = new LocalizationUtil();
 
-    public LocalizationUtil() {
-        instance = this;
+    public static LocalizationUtil getInstance() {
+        return instance;
     }
 
-    public static String getLocalization(String unLocalizedString) {
+    public String getLocalization(String unLocalizedString) {
         if (localized_properties_current.containsKey(unLocalizedString)) {
             return localized_properties_current.getProperty(unLocalizedString);
         } else {

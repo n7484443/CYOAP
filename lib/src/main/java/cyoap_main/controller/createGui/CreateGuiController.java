@@ -53,8 +53,6 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Transform;
 
-import static cyoap_main.util.LocalizationUtil.getLocalization;
-
 public class CreateGuiController implements IGuiController {
     public static CreateGuiController instance;
     @FXML
@@ -306,7 +304,7 @@ public class CreateGuiController implements IGuiController {
         anchorpane_create.getChildren().add(imagecell_tutorialImage);
         try {
             var image_source = "/lib/image/";
-            Image image = new Image(LoadUtil.instance.loadInternalImage(image_source + "tutorial_image.png"));
+            Image image = new Image(LoadUtil.getInstance().loadInternalImage(image_source + "tutorial_image.png"));
             imagecell_tutorialImage.setImage(image);
             imagecell_tutorialImage.setOnMouseClicked(t ->
                     anchorpane_create.getChildren().remove(imagecell_tutorialImage)
@@ -367,7 +365,7 @@ public class CreateGuiController implements IGuiController {
 
         try {
             text_editor.setWrapText(true);
-            text_editor.getStylesheets().add(LoadUtil.instance.loadCss("/lib/css/text_editor.css"));
+            text_editor.getStylesheets().add(LoadUtil.getInstance().loadCss("/lib/css/text_editor.css"));
             text_editor.getStyleClass().add("text-editor");
             text_editor.setStyle("-color-text: white ;");
         } catch (IOException e1) {
@@ -605,8 +603,8 @@ public class CreateGuiController implements IGuiController {
     }
 
     public void setLocalization() {
-        button_darkmode.setText(getLocalization("generalSetting.darkmode"));
-        button_background_preserve_ratio.setText(getLocalization("generalSetting.background_preserve"));
+        button_darkmode.setText(LocalizationUtil.getInstance().getLocalization("generalSetting.darkmode"));
+        button_background_preserve_ratio.setText(LocalizationUtil.getInstance().getLocalization("generalSetting.background_preserve"));
     }
 
     public Vector2f getPositionFromMouse(double mouse_x, double mouse_y) {

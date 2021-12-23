@@ -9,23 +9,26 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
 public class TranslationUtil {
-    public static String sourceLanguage = "ko";
-    public static String targetLanguage = "en";
-    public static String clientId = "CwYh_xvUi4tm5hWsmZb_";
-    public static String clientSecret = "fj4UJJCZQI";
-    public static String apiURL = "https://openapi.naver.com/v1/papago/n2mt";
+    static final TranslationUtil instance = new TranslationUtil();
+    public final String clientId = "CwYh_xvUi4tm5hWsmZb_";
+    public final String clientSecret = "fj4UJJCZQI";
+    public final String apiURL = "https://openapi.naver.com/v1/papago/n2mt";
+    public String sourceLanguage = "ko";
+    public String targetLanguage = "en";
 
-    public TranslationUtil() {
+    public static TranslationUtil getInstance() {
+        return instance;
     }
 
-    public static String getTranslate(String input) {
+    public String getTranslate(String input) {
         String text;
         try {
-            text = URLEncoder.encode("안녕하세요. 숨쉬듯 잘 되어가나요?", "UTF-8");
+            text = URLEncoder.encode("안녕하세요. 숨쉬듯 잘 되어가나요?", StandardCharsets.UTF_8);
         } catch (Exception e) {
             throw new RuntimeException("인코딩 실패", e);
         }
@@ -50,7 +53,7 @@ public class TranslationUtil {
         return null;
     }
 
-    private static String post(String apiUrl, Map<String, String> requestHeaders, String text) {
+    private String post(String apiUrl, Map<String, String> requestHeaders, String text) {
         HttpURLConnection con = connect(apiUrl);
         String postParams = "source=" + sourceLanguage + "&target=" + targetLanguage + "&text=" + text; //원본언어: 한국어 (ko) -> 목적언어: 영어 (en)
         try {
@@ -78,7 +81,7 @@ public class TranslationUtil {
         }
     }
 
-    private static HttpURLConnection connect(String apiUrl) {
+    private HttpURLConnection connect(String apiUrl) {
         try {
             URL url = new URL(apiUrl);
             return (HttpURLConnection) url.openConnection();
@@ -89,7 +92,7 @@ public class TranslationUtil {
         }
     }
 
-    private static String readBody(InputStream body) {
+    private String readBody(InputStream body) {
         InputStreamReader streamReader = new InputStreamReader(body);
 
         try (BufferedReader lineReader = new BufferedReader(streamReader)) {

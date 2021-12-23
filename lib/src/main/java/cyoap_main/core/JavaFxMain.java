@@ -36,6 +36,7 @@ public class JavaFxMain extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+			instance = this;
 			Properties property_version = new Properties();
 			var loader = JavaFxMain.class.getClassLoader().getResourceAsStream("lib/version.properties");
 			property_version.load(loader);
@@ -43,15 +44,13 @@ public class JavaFxMain extends Application {
 
 			System.out.println("Version|" + version);
 			System.out.println("javafx.runtime.version: " + System.getProperties().get("javafx.runtime.version"));
-			instance = this;
-			new LoadUtil();
-			new FontLoader();
-			new TranslationUtil();
 
-			new LocalizationUtil().loadLocalization();
+			new FontLoader();
+
+			LocalizationUtil.getInstance().loadLocalization();
 
 			stage = primaryStage;
-			scene_create = new Scene(LoadUtil.instance.loadFXML("/lib/design/Design_Create.fxml"), window_width,
+			scene_create = new Scene(LoadUtil.getInstance().loadFXML("/lib/design/Design_Create.fxml"), window_width,
 					window_height);
 			scene_create.addEventHandler(KeyEvent.KEY_PRESSED, (e) -> {
 				KeyCombination comb_save = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
@@ -77,14 +76,14 @@ public class JavaFxMain extends Application {
 					CreateGuiController.instance.getPlatform().scale = 1.f;
 				}
 			});
-			scene_start = new Scene(LoadUtil.instance.loadFXML("/lib/design/Design_Start.fxml"), window_width,
+			scene_start = new Scene(LoadUtil.getInstance().loadFXML("/lib/design/Design_Start.fxml"), window_width,
 					window_height);
-			scene_play = new Scene(LoadUtil.instance.loadFXML("/lib/design/Design_Play.fxml"), window_width,
+			scene_play = new Scene(LoadUtil.getInstance().loadFXML("/lib/design/Design_Play.fxml"), window_width,
 					window_height);
-			scene_create.getStylesheets().add(LoadUtil.instance.loadCss("/lib/css/style.css"));
+			scene_create.getStylesheets().add(LoadUtil.getInstance().loadCss("/lib/css/style.css"));
 
-			var v = LoadUtil.instance.loadFXML("/lib/design/Design_Create_Slider.fxml");
-			v.getStylesheets().add(LoadUtil.instance.loadCss("/lib/css/text.css"));
+			var v = LoadUtil.getInstance().loadFXML("/lib/design/Design_Create_Slider.fxml");
+			v.getStylesheets().add(LoadUtil.getInstance().loadCss("/lib/css/text.css"));
 			stage.setTitle("CYOAP " + version);
 			stage.setScene(scene_start);
 
@@ -104,7 +103,7 @@ public class JavaFxMain extends Application {
 			future.thenAccept(result -> {
 				if (result == 1) {
 					System.out.println("update complete! Please restart program.");
-					stage.setTitle("CYOAP " + version + " | " + LocalizationUtil.getLocalization("system.update_complete"));
+					stage.setTitle("CYOAP " + version + " | " + LocalizationUtil.getInstance().getLocalization("system.update_complete"));
 				}
 			});
 		} catch (Exception e) {

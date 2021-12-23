@@ -452,7 +452,7 @@ public class CreateGuiController implements IGuiController {
                 }
                 if (nowSizeChange != null) {
                     SizeUtil.setSizeComplete(nowSizeChange);
-                    nowSizeChange.getKey().updateSizeFrom();
+                    nowSizeChange.getKey().update();
 
                     nowSizeChange.getKey().isClicked = false;
                     nowSizeChange.getValue().set();

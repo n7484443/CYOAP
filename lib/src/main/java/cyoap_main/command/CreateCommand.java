@@ -10,7 +10,6 @@ public class CreateCommand extends AbstractCommand{
 	public CreateCommand() {}
 	
 	public CreateCommand(float x, float y) {
-		choiceSet = new ChoiceSet(x, y);
 		
 		int leftLimit = 48; // numeral '0'
 	    int rightLimit = 122; // letter 'z'
@@ -23,7 +22,7 @@ public class CreateCommand extends AbstractCommand{
 				.collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
 				.toString();
 
-		choiceSet.string_title = generatedString;
+		choiceSet = new ChoiceSet(generatedString, x, y, ChoiceSet.default_size.x(), ChoiceSet.default_size.y());
 		var v = checkOutline(choiceSet, x, y);
 		choiceSet.setPosition(v.x(), v.y());
 	}

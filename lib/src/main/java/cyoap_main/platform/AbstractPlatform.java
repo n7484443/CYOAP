@@ -1,20 +1,13 @@
 package cyoap_main.platform;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cyoap_main.controller.IGuiController;
+import cyoap_main.controller.createGui.CreateGuiController;
 import cyoap_main.core.JavaFxMain;
 import cyoap_main.design.choice.ChoiceSet;
-import cyoap_main.controller.createGui.CreateGuiController;
 import cyoap_main.design.node_extension.ImageCell;
 import cyoap_main.unit.Vector2f;
 import cyoap_main.util.FlagUtil;
@@ -22,6 +15,14 @@ import cyoap_main.util.LoadUtil;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.ArrayList;
+import java.util.List;
 
 @JsonAutoDetect(getterVisibility = Visibility.PUBLIC_ONLY)
 public class AbstractPlatform {
@@ -120,11 +121,11 @@ public class AbstractPlatform {
         if (x_new == Float.MAX_VALUE && y_new == Float.MAX_VALUE) {
             return null;
         } else if (x_new == Float.MAX_VALUE && y_new != Float.MAX_VALUE) {
-            return new SimpleEntry<Vector2f, Vector2f>(new Vector2f(0, y_new), new Vector2f(x_line, y_line));
+            return new SimpleEntry<>(new Vector2f(0, y_new), new Vector2f(x_line, y_line));
         } else if (x_new != Float.MAX_VALUE && y_new == Float.MAX_VALUE) {
-            return new SimpleEntry<Vector2f, Vector2f>(new Vector2f(x_new, 0), new Vector2f(x_line, y_line));
+            return new SimpleEntry<>(new Vector2f(x_new, 0), new Vector2f(x_line, y_line));
         } else {
-            return new SimpleEntry<Vector2f, Vector2f>(new Vector2f(x_new, y_new), new Vector2f(x_line, y_line));
+            return new SimpleEntry<>(new Vector2f(x_new, y_new), new Vector2f(x_line, y_line));
         }
     }
 
@@ -234,10 +235,7 @@ public class AbstractPlatform {
         if (needUpdate) {
             needUpdate = false;
             setNodeDepth();
-            choiceSetList.forEach(d -> {
-                d.updateSizeFrom();
-                d.updateSize();
-            });
+            choiceSetList.forEach(ChoiceSet::update);
         }
     }
 

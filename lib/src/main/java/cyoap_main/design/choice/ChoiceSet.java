@@ -21,6 +21,7 @@ public class ChoiceSet {
     public static final int flagPosition_selectable = 0;
     public static final int flagPosition_horizontal = 1;
     public static final int flagPosition_emptyImage = 2;
+    public static final Vector2f default_size = new Vector2f(150, 150);
 
     public String string_title;
     public List<StyledSegment<String, String>> segmentList = new ArrayList<>();
@@ -51,8 +52,8 @@ public class ChoiceSet {
         this("title", null, pos_x, pos_y, 0, 0);
     }
 
-    public ChoiceSet(String title) {
-        this(title, null, 0, 0, 0, 0);
+    public ChoiceSet(String title, float pos_x, float pos_y, float width, float height) {
+        this(title, null, pos_x, pos_y, width, height);
     }
 
     public ChoiceSet(String title, String image_name, float pos_x, float pos_y, float width, float height) {
@@ -105,8 +106,7 @@ public class ChoiceSet {
 
     public void update() {
         updateFlag();
-        updateSize();
-        updateBounds();
+        setSize(bound.width, bound.height);
         updateColor();
         updateSegment();
         guiComponent.update();
@@ -114,21 +114,6 @@ public class ChoiceSet {
 
     public void updateSegment() {
         LoadUtil.loadSegment(guiComponent.area, this.segmentList);
-    }
-
-    public void updateSize() {
-        setSize(bound.width, bound.height);
-        updateSizeFrom();
-    }
-
-    public void updateSizeFrom() {
-        bound.width = (float) getAnchorPane().getLayoutBounds().getWidth();
-        bound.height = (float) getAnchorPane().getLayoutBounds().getHeight();
-    }
-
-    public void updateBounds() {
-        bound.width = getWidth();
-        bound.height = getHeight();
     }
 
     public void combineSubChoiceSet(ChoiceSet sub) {
@@ -181,14 +166,14 @@ public class ChoiceSet {
         bound.x += move_x;
         bound.y += move_y;
         guiComponent.setPosition(bound.x, bound.y);
-        updateBounds();
+        setSize(bound.width, bound.height);
     }
 
     public void setPosition(float pos_x, float pos_y) {
         bound.x = pos_x;
         bound.y = pos_y;
         guiComponent.setPosition(bound.x, bound.y);
-        updateBounds();
+        setSize(bound.width, bound.height);
     }
 
     @JsonIgnore

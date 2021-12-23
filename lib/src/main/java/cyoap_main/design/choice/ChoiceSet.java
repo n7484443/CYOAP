@@ -83,12 +83,15 @@ public class ChoiceSet {
         bound.width = width;
         bound.height = height;
 
-        if (width < guiComponent.pane.getMinWidth()) {
-            bound.width = (float) guiComponent.pane.getMinWidth();
+        var width_min = (float) Math.max(guiComponent.pane.getMinWidth(), 50);
+        var height_min = (float) Math.max(guiComponent.pane.getMinHeight(), 50);
+        if (width < width_min) {
+            bound.width = width_min;
         }
-        if (height < guiComponent.pane.getMinHeight()) {
-            bound.height = (float) guiComponent.pane.getMinHeight();
+        if (height < height_min) {
+            bound.height = height_min;
         }
+
         getAnchorPane().setPrefWidth(bound.width);
         getAnchorPane().setPrefHeight(bound.height);
         getAnchorPane().requestLayout();

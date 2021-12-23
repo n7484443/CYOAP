@@ -1,16 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXRadioButton?>
+<?import io.github.palexdev.materialfx.controls.MFXSlider?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<GridPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17"
-          fx:controller="cyoap_main.controller.createGui.DescribeGuiController" fx:id="gridpane_describe"
-          prefHeight="642.0" prefWidth="1031.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-          AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+<GridPane xmlns:fx="http://javafx.com/fxml/1" fx:id="gridpane_describe" prefHeight="642.0" prefWidth="1031.0"
+          AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+          AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/17"
+          fx:controller="cyoap_main.controller.createGui.DescribeGuiController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="10.0" prefWidth="100.0"/>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="40.0" prefWidth="100.0"/>
@@ -18,41 +28,30 @@
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="10.5" prefWidth="100.0"/>
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints maxHeight="209.0" minHeight="0.0" percentHeight="6.0"
-                        prefHeight="0.0" vgrow="SOMETIMES"/>
-        <RowConstraints maxHeight="428.0" minHeight="10.0" percentHeight="80.0"
-                        prefHeight="428.0" vgrow="SOMETIMES"/>
-        <RowConstraints maxHeight="428.0" minHeight="10.0" percentHeight="8.0"
-                        prefHeight="428.0" vgrow="SOMETIMES"/>
-        <RowConstraints minHeight="10.0" percentHeight="6.0" prefHeight="30.0"
-                        vgrow="SOMETIMES"/>
+        <RowConstraints maxHeight="209.0" minHeight="0.0" percentHeight="6.0" prefHeight="0.0" vgrow="SOMETIMES"/>
+        <RowConstraints maxHeight="428.0" minHeight="10.0" percentHeight="80.0" prefHeight="428.0" vgrow="SOMETIMES"/>
+        <RowConstraints maxHeight="428.0" minHeight="10.0" percentHeight="8.0" prefHeight="428.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="10.0" percentHeight="6.0" prefHeight="30.0" vgrow="SOMETIMES"/>
     </rowConstraints>
     <children>
-        <BorderPane fx:id="pane_text_editor" prefHeight="200.0"
-                    prefWidth="200.0" GridPane.columnIndex="2"
-                    GridPane.hgrow="ALWAYS" GridPane.rowIndex="1"
-                    GridPane.vgrow="ALWAYS">
+        <BorderPane fx:id="pane_text_editor" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2"
+                    GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
             <top>
-                <HBox fx:id="hbox_setting" prefHeight="30.0" prefWidth="200.0"
-                      BorderPane.alignment="CENTER">
+                <HBox fx:id="hbox_setting" prefHeight="30.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                     <children>
-                        <ColorPicker fx:id="colorpicker_text_editor"
-                                     prefWidth="100.0">
+                        <ColorPicker fx:id="colorpicker_text_editor" prefWidth="100.0">
                             <HBox.margin>
                                 <Insets bottom="5.0" left="5.0" top="5.0"/>
                             </HBox.margin>
                         </ColorPicker>
-                        <MFXComboBox fx:id="combo_text_font" prefHeight="27.0"
-                                     prefWidth="196.0">
+                        <MFXComboBox fx:id="combo_text_font" prefHeight="27.0" prefWidth="196.0">
                             <HBox.margin>
                                 <Insets bottom="5.0" left="5.0" top="5.0"/>
                             </HBox.margin>
                         </MFXComboBox>
-                        <MFXComboBox fx:id="combo_text_size" prefHeight="27.0"
-                                     prefWidth="30.0">
+                        <MFXComboBox fx:id="combo_text_size" prefHeight="27.0" prefWidth="30.0">
                             <HBox.margin>
-                                <Insets bottom="5.0" left="5.0" right="5.0"
-                                        top="5.0"/>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
                             </HBox.margin>
                         </MFXComboBox>
                     </children>
@@ -64,8 +63,7 @@
             <right>
                 <VBox BorderPane.alignment="CENTER">
                     <children>
-                        <ImageView fx:id="image_text_bold" fitHeight="24.0"
-                                   fitWidth="24.0" pickOnBounds="true"
+                        <ImageView fx:id="image_text_bold" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true"
                                    preserveRatio="true">
                             <VBox.margin>
                                 <Insets/>
@@ -74,8 +72,7 @@
                                 <Image url="@../image/icon_text_bold.png"/>
                             </image>
                         </ImageView>
-                        <ImageView fx:id="image_text_italic" fitHeight="24.0"
-                                   fitWidth="24.0" pickOnBounds="true"
+                        <ImageView fx:id="image_text_italic" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true"
                                    preserveRatio="true">
                             <VBox.margin>
                                 <Insets top="2.0"/>
@@ -84,8 +81,7 @@
                                 <Image url="@../image/icon_text_italic.png"/>
                             </image>
                         </ImageView>
-                        <ImageView fx:id="image_text_underline" fitHeight="24.0"
-                                   fitWidth="24.0" pickOnBounds="true"
+                        <ImageView fx:id="image_text_underline" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true"
                                    preserveRatio="true">
                             <VBox.margin>
                                 <Insets top="2.0"/>
@@ -94,8 +90,7 @@
                                 <Image url="@../image/icon_text_underline.png"/>
                             </image>
                         </ImageView>
-                        <ImageView fx:id="image_translation" fitHeight="24.0"
-                                   fitWidth="24.0" pickOnBounds="true"
+                        <ImageView fx:id="image_translation" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true"
                                    preserveRatio="true">
                             <VBox.margin>
                                 <Insets top="2.0"/>
@@ -111,40 +106,34 @@
                 </VBox>
             </right>
         </BorderPane>
-        <MFXTextField fx:id="text_title" alignment="CENTER" prefHeight="22.0"
-                      prefWidth="1012.0" text="Title" GridPane.columnSpan="4"
-                      GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS"
+        <MFXTextField fx:id="text_title" alignment="CENTER" prefHeight="22.0" prefWidth="1012.0" text="Title"
+                      GridPane.columnSpan="4" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS"
                       GridPane.vgrow="ALWAYS">
             <GridPane.margin>
                 <Insets/>
             </GridPane.margin>
         </MFXTextField>
-        <ColorPicker fx:id="colorpicker" prefHeight="25.0" prefWidth="95.0"
-                     GridPane.rowIndex="3">
+        <ColorPicker fx:id="colorpicker" prefHeight="25.0" prefWidth="95.0" GridPane.rowIndex="3">
             <GridPane.margin>
                 <Insets left="4.0" right="4.0"/>
             </GridPane.margin>
         </ColorPicker>
-        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3"
-              GridPane.rowIndex="1">
+        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
             <children>
-                <MFXRadioButton fx:id="button_horizon" mnemonicParsing="false"
-                                prefHeight="18.0" prefWidth="125.0"
+                <MFXRadioButton fx:id="button_horizon" mnemonicParsing="false" prefHeight="18.0" prefWidth="125.0"
                                 text="가로로 설정">
                     <VBox.margin>
                         <Insets top="3.0"/>
                     </VBox.margin>
                 </MFXRadioButton>
-                <MFXRadioButton fx:id="button_outline" mnemonicParsing="false"
-                                prefHeight="18.0" prefWidth="125.0"
+                <MFXRadioButton fx:id="button_outline" mnemonicParsing="false" prefHeight="18.0" prefWidth="125.0"
                                 text="외곽선 제거">
                     <VBox.margin>
                         <Insets top="3.0"/>
                     </VBox.margin>
                 </MFXRadioButton>
-                <MFXRadioButton fx:id="button_emptyimage"
-                                mnemonicParsing="false" prefHeight="18.0"
-                                prefWidth="125.0" text="빈칸 줄이기">
+                <MFXRadioButton fx:id="button_emptyimage" mnemonicParsing="false" prefHeight="18.0" prefWidth="125.0"
+                                text="빈칸 줄이기">
                     <VBox.margin>
                         <Insets top="3.0"/>
                     </VBox.margin>
@@ -154,17 +143,14 @@
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
             </GridPane.margin>
         </VBox>
-        <HBox alignment="BOTTOM_RIGHT" GridPane.columnIndex="3"
-              GridPane.rowIndex="3">
+        <HBox alignment="BOTTOM_RIGHT" GridPane.columnIndex="3" GridPane.rowIndex="3">
             <children>
-                <MFXButton fx:id="button_save" mnemonicParsing="false"
-                           text="Save">
+                <MFXButton fx:id="button_save" mnemonicParsing="false" text="Save">
                     <HBox.margin>
                         <Insets right="4.0"/>
                     </HBox.margin>
                 </MFXButton>
-                <MFXButton fx:id="button_next" mnemonicParsing="false"
-                           text="Next">
+                <MFXButton fx:id="button_next" mnemonicParsing="false" text="Next">
                     <HBox.margin>
                         <Insets/>
                     </HBox.margin>
@@ -174,14 +160,34 @@
                 <Insets bottom="4.0"/>
             </GridPane.margin>
         </HBox>
-        <MFXTextField fx:id="text_round" alignment="CENTER" prefHeight="25.0"
-                      prefWidth="100.0" text="Round" GridPane.columnSpan="2"
-                      GridPane.halignment="CENTER" GridPane.rowIndex="2"
-                      GridPane.valignment="TOP">
+        <GridPane alignment="CENTER" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="2"
+                  GridPane.valignment="CENTER">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="70.0" prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="30.0" prefWidth="100.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+            <children>
+                <MFXSlider fx:id="slider_round" prefHeight="5.0" prefWidth="244.0" GridPane.halignment="RIGHT"
+                           GridPane.valignment="CENTER">
+                    <GridPane.margin>
+                        <Insets right="5.0"/>
+                    </GridPane.margin>
+                </MFXSlider>
+                <MFXTextField fx:id="text_round" alignment="CENTER_RIGHT" minWidth="49.0" prefHeight="25.0"
+                              prefWidth="49.0" GridPane.columnIndex="1" GridPane.halignment="LEFT"
+                              GridPane.valignment="CENTER">
+                    <GridPane.margin>
+                        <Insets left="5.0"/>
+                    </GridPane.margin>
+                </MFXTextField>
+            </children>
             <GridPane.margin>
-                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
             </GridPane.margin>
-        </MFXTextField>
+        </GridPane>
     </children>
     <padding>
         <Insets left="5.0" right="5.0"/>

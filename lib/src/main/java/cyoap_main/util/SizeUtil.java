@@ -38,46 +38,6 @@ public class SizeUtil {
         return true;
     }
 
-    public static boolean isInside(double a, double x, double b) {
-        return (a <= x & x <= b) || (a >= x & x >= b);
-    }
-
-    public static boolean setCursorRound(double x, double y, double width_origin, double height_origin, float border, float round) {
-        if (round <= 10) round = 10;
-        float b_small = (round - border) * (round - border);
-        if (round < border) {
-            b_small = 0;
-        }
-        var b_big = round * round;
-
-        var pos = new Vector2f((float) x, (float) y);
-
-        var left_up = new Vector2f(round, round);
-        var right_up = new Vector2f((float) (width_origin - round), round);
-        var left_down = new Vector2f(round, (float) (height_origin - round));
-        var right_down = new Vector2f((float) (width_origin - round), (float) (height_origin - round));
-
-        var lu = left_up.sub(pos).pow(2).sum();
-        var ru = right_up.sub(pos).pow(2).sum();
-        var ld = left_down.sub(pos).pow(2).sum();
-        var rd = right_down.sub(pos).pow(2).sum();
-
-        var scene_create = JavaFxMain.instance.scene_create;
-        if (isInside(b_small, lu, b_big)) {
-            scene_create.setCursor(Cursor.NW_RESIZE);
-        } else if (isInside(b_small, ru, b_big)) {
-            scene_create.setCursor(Cursor.NE_RESIZE);
-        } else if (isInside(b_small, ld, b_big)) {
-            scene_create.setCursor(Cursor.SW_RESIZE);
-        } else if (isInside(b_small, rd, b_big)) {
-            scene_create.setCursor(Cursor.SE_RESIZE);
-        } else {
-            JavaFxMain.instance.scene_create.setCursor(Cursor.DEFAULT);
-            return false;
-        }
-        return true;
-    }
-
     public static void setSize(SimpleEntry<ChoiceSet, SizeChangeCommand> nowSizeChange, float move_x, float move_y) {
         var scene_create = JavaFxMain.instance.scene_create;
         var nowControl = nowSizeChange.getKey();

@@ -9,6 +9,7 @@ import cyoap_main.util.LoadUtil;
 import cyoap_main.util.SizeUtil;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXRadioButton;
+import io.github.palexdev.materialfx.controls.MFXSlider;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -62,6 +63,8 @@ public class DescribeGuiController implements IController {
 
     @FXML
     public MFXTextField text_round;
+    @FXML
+    public MFXSlider slider_round;
 
     @FXML
     public MFXComboBox<Label> combo_text_font;
@@ -103,6 +106,11 @@ public class DescribeGuiController implements IController {
         button_list.add(button_outline);
         button_list.add(button_horizon);
         button_list.add(button_emptyimage);
+
+        slider_round.setMin(0);
+        slider_round.setMax(100);
+        slider_round.setUnitIncrement(1);
+        slider_round.setDecimalPrecision(0);
     }
 
     public void eventInit() {
@@ -169,18 +177,13 @@ public class DescribeGuiController implements IController {
                 editTextCss(range, "-fx-font-size", newVal + "pt");
             }
         });
-        imagecell_describe.setOnMouseMoved(e -> {
-            var base_width = (imagecell_describe.getWidth() - imagecell_describe.getRealWidth()) / 2f;
-            var base_height = (imagecell_describe.getHeight() - imagecell_describe.getRealHeight()) / 2f;
-            SizeUtil.setCursorRound(e.getX() - base_width, e.getY() - base_height, imagecell_describe.getRealWidth(), imagecell_describe.getRealHeight(), 15, imagecell_describe.round.get());
-        });
         imagecell_describe.setOnMouseExited(e -> {
             JavaFxMain.instance.scene_create.setCursor(Cursor.DEFAULT);
         });
-        text_round.textProperty().bindBidirectional(imagecell_describe.round, new StringConverter<Number>() {
+        text_round.textProperty().bindBidirectional(slider_round.valueProperty(), new StringConverter<Number>() {
             @Override
             public String toString(Number object) {
-                return object.toString();
+                return String.valueOf(object.intValue());
             }
 
             @Override
@@ -195,6 +198,9 @@ public class DescribeGuiController implements IController {
                     return 0;
                 }
             }
+        });
+        slider_round.valueProperty().addListener((before, after, e) -> {
+            imagecell_describe.round.set(after.intValue());
         });
 
         button_save.setOnMouseClicked(e -> CreateGuiController.instance.save_describe_pane());

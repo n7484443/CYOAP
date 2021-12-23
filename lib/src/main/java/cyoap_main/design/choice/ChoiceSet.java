@@ -1,11 +1,6 @@
 package cyoap_main.design.choice;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.*;
-import org.fxmisc.richtext.model.StyledSegment;
-
 import cyoap_main.controller.createGui.CreateGuiController;
 import cyoap_main.unit.Bound2f;
 import cyoap_main.unit.Vector2f;
@@ -14,22 +9,19 @@ import cyoap_main.util.LoadUtil;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import org.fxmisc.richtext.model.StyledSegment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.PUBLIC_ONLY, setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class ChoiceSet {
-    @JsonIgnore
     public static final Color baseColor = Color.web("#E1E3ED");
-    @JsonIgnore
     public static final int flagPosition_selectable = 0;
-    @JsonIgnore
     public static final int flagPosition_horizontal = 1;
-    @JsonIgnore
     public static final int flagPosition_emptyImage = 2;
-    @JsonIgnore
-    public final float minWidth = 150;
-    @JsonIgnore
-    public final float minHeight = 150;
+
     public String string_title;
     public List<StyledSegment<String, String>> segmentList = new ArrayList<>();
     public String string_image_name;
@@ -41,8 +33,6 @@ public class ChoiceSet {
     public List<ChoiceSet> choiceSet_child = new ArrayList<>();
     @JsonBackReference
     public ChoiceSet choiceSet_parent = null;
-    public float width;
-    public float height;
     public boolean isClicked = false;
 
     public int round = 0;
@@ -68,18 +58,13 @@ public class ChoiceSet {
     public ChoiceSet(String title, String image_name, float pos_x, float pos_y, float width, float height) {
         this.string_title = title;
         this.string_image_name = image_name;
-        if (width < minWidth) {
-            this.width = minWidth;
-        } else {
-            this.width = width;
+        bound = new Bound2f(pos_x, pos_y, width, height);
+        if (width < guiComponent.pane.getMinWidth()) {
+            bound.width = (float) guiComponent.pane.getMinWidth();
         }
-        if (width < minWidth) {
-            this.height = minHeight;
-        } else {
-            this.height = height;
+        if (height < guiComponent.pane.getMinHeight()) {
+            bound.height = (float) guiComponent.pane.getMinHeight();
         }
-
-        bound = new Bound2f(pos_x, pos_y, getWidth(), getHeight());
     }
 
     public void setUp(Pane pane_mother) {
@@ -93,34 +78,29 @@ public class ChoiceSet {
         return a.bound.intersect(new Vector2f(x, y));
     }
 
-    public float getWidth() {
-        width = (float) getAnchorPane().getLayoutBounds().getWidth();
-        return width;
-    }
+    public void setSize(float width, float height) {
+        bound.width = width;
+        bound.height = height;
 
-    public void setWidth(float width) {
-        if (width < minWidth) {
-            this.width = minWidth;
-        } else {
-            this.width = width;
+        if (width < guiComponent.pane.getMinWidth()) {
+            bound.width = (float) guiComponent.pane.getMinWidth();
         }
-        getAnchorPane().setPrefWidth(this.width);
+        if (height < guiComponent.pane.getMinHeight()) {
+            bound.height = (float) guiComponent.pane.getMinHeight();
+        }
+        getAnchorPane().setPrefWidth(bound.width);
+        getAnchorPane().setPrefHeight(bound.height);
         getAnchorPane().requestLayout();
     }
 
+    @JsonIgnore
     public float getHeight() {
-        height = (float) getAnchorPane().getLayoutBounds().getHeight();
-        return height;
+        return bound.height;
     }
 
-    public void setHeight(float height) {
-        if (height < minHeight) {
-            this.height = minHeight;
-        } else {
-            this.height = height;
-        }
-        getAnchorPane().setPrefHeight(this.height);
-        getAnchorPane().requestLayout();
+    @JsonIgnore
+    public float getWidth() {
+        return bound.width;
     }
 
     public void update() {
@@ -137,14 +117,13 @@ public class ChoiceSet {
     }
 
     public void updateSize() {
-        setWidth(width);
-        setHeight(height);
+        setSize(bound.width, bound.height);
         updateSizeFrom();
     }
 
     public void updateSizeFrom() {
-        width = (float) getAnchorPane().getLayoutBounds().getWidth();
-        height = (float) getAnchorPane().getLayoutBounds().getHeight();
+        bound.width = (float) getAnchorPane().getLayoutBounds().getWidth();
+        bound.height = (float) getAnchorPane().getLayoutBounds().getHeight();
     }
 
     public void updateBounds() {
@@ -259,11 +238,6 @@ public class ChoiceSet {
                 segmentList.add(segment);
             }
         }
-    }
-
-    public void changeSize(float w, float h) {
-        setWidth(w);
-        setHeight(h);
     }
 
     @JsonIgnore

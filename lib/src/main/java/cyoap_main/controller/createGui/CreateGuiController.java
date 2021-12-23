@@ -451,7 +451,7 @@ public class CreateGuiController implements IGuiController {
                     menu_mouse.hide();
                 }
                 if (nowSizeChange != null) {
-                    SizeUtil.changeSizeComplete(nowSizeChange);
+                    SizeUtil.setSizeComplete(nowSizeChange);
                     nowSizeChange.getKey().updateSizeFrom();
 
                     nowSizeChange.getKey().isClicked = false;
@@ -487,7 +487,7 @@ public class CreateGuiController implements IGuiController {
                     copyBound = nowMouseInDataSet.bound;
                     menu_copySize.setText("Paste Size");
                 } else {
-                    nowMouseInDataSet.changeSize(copyBound.width, copyBound.height);
+                    nowMouseInDataSet.setSize(copyBound.width, copyBound.height);
                     copyBound = null;
                     menu_copySize.setText("Copy Size");
                 }
@@ -510,7 +510,7 @@ public class CreateGuiController implements IGuiController {
                     move = move_after.sub(move_before).mul((float) platform.sensitivity);
                     updateMouseCoord(move.x(), move.y(), e.getSceneX(), e.getSceneY());
                 } else if (nowSizeChange != null) {
-                    SizeUtil.changeSize(nowSizeChange, move.x(), move.y());
+                    SizeUtil.setSize(nowSizeChange, move.x(), move.y());
                 }
             }
         });

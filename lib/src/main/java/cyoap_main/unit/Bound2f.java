@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class Bound2f {
-	public float x, y;
-	public float width, height;
+	public float x, y, width, height;
 
 	public Bound2f() {
 		this(0, 0, 0, 0);

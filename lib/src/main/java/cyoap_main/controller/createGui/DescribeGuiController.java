@@ -1,5 +1,6 @@
 package cyoap_main.controller.createGui;
 
+import cyoap_main.controller.IController;
 import cyoap_main.core.JavaFxMain;
 import cyoap_main.design.choice.ChoiceSet;
 import cyoap_main.design.node_extension.ImageCell;
@@ -28,10 +29,8 @@ import javafx.util.StringConverter;
 import org.fxmisc.richtext.InlineCssTextArea;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class DescribeGuiController implements IController {
     @FXML
@@ -205,12 +204,13 @@ public class DescribeGuiController implements IController {
         });
     }
 
+    public StringBuilder builder = new StringBuilder();
     public String getTextCss(IndexRange range, String css) {
         if (range.getStart() == range.getEnd()) return "error";
 
         String value = null;
         for (int i = range.getStart(); i < range.getEnd(); i++) {
-            StringBuilder builder = new StringBuilder();
+            builder.setLength(0);
             var cssCombined = text_editor.getStyleOfChar(i);
             if (cssCombined.contains(css)) {
                 var pos = cssCombined.indexOf(css);
@@ -230,26 +230,16 @@ public class DescribeGuiController implements IController {
         if (range.getStart() == range.getEnd()) return;
 
         for (int i = range.getStart(); i < range.getEnd(); i++) {
-            StringBuilder builder = new StringBuilder();
+            builder.setLength(0);
             var cssCombined = text_editor.getStyleOfChar(i);
             if (cssCombined.contains(css)) {
                 var pos = cssCombined.indexOf(css);
                 var after_pos = cssCombined.indexOf(";", pos + 1);
                 var beforeCssAttribute = cssCombined.substring(0, pos);
                 var afterSemicolon = cssCombined.substring(after_pos + 1);
-                builder.append(beforeCssAttribute);
-                builder.append(css);
-                builder.append(":");
-                builder.append(value);
-                builder.append(";");
-                builder.append(afterSemicolon);
+                builder.append(beforeCssAttribute).append(css).append(":").append(value).append(";").append(afterSemicolon);
             } else {
-                builder.append(cssCombined);
-                builder.append("\n");
-                builder.append(css);
-                builder.append(":");
-                builder.append(value);
-                builder.append(";");
+                builder.append(cssCombined).append("\n").append(css).append(":").append(value).append(";");
             }
             text_editor.setStyle(i, i + 1, builder.toString());
         }
@@ -259,18 +249,16 @@ public class DescribeGuiController implements IController {
         if (range.getStart() == range.getEnd()) return;
 
         for (int i = range.getStart(); i < range.getEnd(); i++) {
-            StringBuilder builder = new StringBuilder();
+            builder.setLength(0);
             var cssCombined = text_editor.getStyleOfChar(i);
             if (cssCombined.contains(css)) {
                 var pos = cssCombined.indexOf(css);
                 var after_pos = cssCombined.indexOf(";", pos + 1);
                 var beforeCssAttribute = cssCombined.substring(0, pos);
                 var afterSemicolon = cssCombined.substring(after_pos + 1);
-                builder.append(beforeCssAttribute);
-                builder.append(afterSemicolon);
+                builder.append(beforeCssAttribute).append(afterSemicolon);
             } else {
-                builder.append(cssCombined);
-                builder.append("\n");
+                builder.append(cssCombined).append("\n");
             }
             text_editor.setStyle(i, i + 1, builder.toString());
         }

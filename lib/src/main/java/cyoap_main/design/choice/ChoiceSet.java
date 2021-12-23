@@ -3,15 +3,8 @@ package cyoap_main.design.choice;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.*;
 import org.fxmisc.richtext.model.StyledSegment;
-
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
 
 import cyoap_main.controller.createGui.CreateGuiController;
 import cyoap_main.unit.Bound2f;
@@ -22,6 +15,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.PUBLIC_ONLY, setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class ChoiceSet {
     @JsonIgnore
@@ -47,15 +41,12 @@ public class ChoiceSet {
     public List<ChoiceSet> choiceSet_child = new ArrayList<>();
     @JsonBackReference
     public ChoiceSet choiceSet_parent = null;
-    public float pos_x;
-    public float pos_y;
     public float width;
     public float height;
     public boolean isClicked = false;
 
     public int round = 0;
 
-    @JsonIgnore
     public Bound2f bound;
 
     public ChoiceSet() {
@@ -77,8 +68,6 @@ public class ChoiceSet {
     public ChoiceSet(String title, String image_name, float pos_x, float pos_y, float width, float height) {
         this.string_title = title;
         this.string_image_name = image_name;
-        this.pos_x = pos_x;
-        this.pos_y = pos_y;
         if (width < minWidth) {
             this.width = minWidth;
         } else {
@@ -159,8 +148,6 @@ public class ChoiceSet {
     }
 
     public void updateBounds() {
-        bound.x = pos_x;
-        bound.y = pos_y;
         bound.width = getWidth();
         bound.height = getHeight();
     }
@@ -212,16 +199,16 @@ public class ChoiceSet {
 
     // 실제 위치
     public void updatePosition(double move_x, double move_y) {
-        pos_x += move_x;
-        pos_y += move_y;
-        guiComponent.setPosition(pos_x, pos_y);
+        bound.x += move_x;
+        bound.y += move_y;
+        guiComponent.setPosition(bound.x, bound.y);
         updateBounds();
     }
 
     public void setPosition(float pos_x, float pos_y) {
-        this.pos_x = pos_x;
-        this.pos_y = pos_y;
-        guiComponent.setPosition(this.pos_x, this.pos_y);
+        bound.x = pos_x;
+        bound.y = pos_y;
+        guiComponent.setPosition(bound.x, bound.y);
         updateBounds();
     }
 
@@ -282,18 +269,18 @@ public class ChoiceSet {
     @JsonIgnore
     public List<Float> get_snapList_x() {
         List<Float> arrayList = new ArrayList<>();
-        arrayList.add(pos_x);
-        arrayList.add(pos_x + getWidth());
-        arrayList.add(pos_x + getWidth() / 2f);
+        arrayList.add(bound.x);
+        arrayList.add(bound.x + getWidth());
+        arrayList.add(bound.x + getWidth() / 2f);
         return arrayList;
     }
 
     @JsonIgnore
     public List<Float> get_snapList_y() {
         List<Float> arrayList = new ArrayList<>();
-        arrayList.add(pos_y);
-        arrayList.add(pos_y + getHeight());
-        arrayList.add(pos_y + getHeight() / 2f);
+        arrayList.add(bound.y);
+        arrayList.add(bound.y + getHeight());
+        arrayList.add(bound.y + getHeight() / 2f);
         return arrayList;
     }
 }

@@ -33,7 +33,7 @@ public class CreateCommand extends AbstractCommand{
 		choiceSet.setUp(control.getChoicePane());
 		choiceSet.update();
 		control.getPlatform().choiceSetList.add(choiceSet);
-		choiceSet.setPosition(choiceSet.pos_x, choiceSet.pos_y);
+		choiceSet.setPosition(choiceSet.bound.x, choiceSet.bound.y);
 		control.getPlatform().isMouseMoved = true;
 	}
 

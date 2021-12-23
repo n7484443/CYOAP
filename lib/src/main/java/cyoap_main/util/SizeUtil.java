@@ -140,42 +140,42 @@ public class SizeUtil {
 
         if (list_point[0] != null && (cursor.equals(Cursor.W_RESIZE) || cursor.equals(Cursor.N_RESIZE) || cursor.equals(Cursor.NW_RESIZE))) {//x and y are negative
             if (list_point[0].x() == Float.MAX_VALUE && list_point[0].y() != Float.MAX_VALUE) {//only change y
-                nowControl.changeSize(nowControl.getWidth(), nowControl.pos_y - list_point[0].y() + nowControl.getHeight());
-                nowControl.setPosition(nowControl.pos_x, list_point[0].y());
+                nowControl.changeSize(nowControl.getWidth(), nowControl.bound.y - list_point[0].y() + nowControl.getHeight());
+                nowControl.setPosition(nowControl.bound.x, list_point[0].y());
             } else if (list_point[0].x() != Float.MAX_VALUE && list_point[0].y() == Float.MAX_VALUE) {//only change x
-                nowControl.changeSize(nowControl.pos_x - list_point[0].x() + nowControl.getWidth(), nowControl.getHeight());
-                nowControl.setPosition(list_point[0].x(), nowControl.pos_y);
+                nowControl.changeSize(nowControl.bound.x - list_point[0].x() + nowControl.getWidth(), nowControl.getHeight());
+                nowControl.setPosition(list_point[0].x(), nowControl.bound.y);
             } else {//both change
-                nowControl.changeSize(nowControl.pos_x - list_point[0].x() + nowControl.getWidth(), nowControl.pos_y - list_point[0].y() + nowControl.getHeight());
+                nowControl.changeSize(nowControl.bound.x - list_point[0].x() + nowControl.getWidth(), nowControl.bound.y - list_point[0].y() + nowControl.getHeight());
                 nowControl.setPosition(list_point[0].x(), list_point[0].y());
             }
         } else if (list_point[3] != null && (cursor.equals(Cursor.S_RESIZE) || cursor.equals(Cursor.E_RESIZE) || cursor.equals(Cursor.SE_RESIZE))) {//x and y are positive
             if (list_point[3].x() == Float.MAX_VALUE && list_point[3].y() != Float.MAX_VALUE) {//only change y
-                nowControl.changeSize(nowControl.getWidth(), list_point[3].y() - nowControl.pos_y);
+                nowControl.changeSize(nowControl.getWidth(), list_point[3].y() - nowControl.bound.y);
             } else if (list_point[3].x() != Float.MAX_VALUE && list_point[3].y() == Float.MAX_VALUE) {//only change x
-                nowControl.changeSize(list_point[3].x() - nowControl.pos_x, nowControl.getHeight());
+                nowControl.changeSize(list_point[3].x() - nowControl.bound.x, nowControl.getHeight());
             } else {//both change
-                nowControl.changeSize(list_point[3].x() - nowControl.pos_x, list_point[3].y() - nowControl.pos_y);
+                nowControl.changeSize(list_point[3].x() - nowControl.bound.x, list_point[3].y() - nowControl.bound.y);
             }
         } else if (list_point[2] != null && cursor.equals(Cursor.SW_RESIZE)) {
             if (list_point[2].x() == Float.MAX_VALUE && list_point[2].y() != Float.MAX_VALUE) {//only change y
-                nowControl.changeSize(nowControl.getWidth(), list_point[2].y() - nowControl.pos_y);
+                nowControl.changeSize(nowControl.getWidth(), list_point[2].y() - nowControl.bound.y);
             } else if (list_point[2].x() != Float.MAX_VALUE && list_point[2].y() == Float.MAX_VALUE) {//only change x
-                nowControl.changeSize(nowControl.pos_x - list_point[2].x() + nowControl.getWidth(), nowControl.getHeight());
-                nowControl.setPosition(list_point[2].x(), nowControl.pos_y);
+                nowControl.changeSize(nowControl.bound.x - list_point[2].x() + nowControl.getWidth(), nowControl.getHeight());
+                nowControl.setPosition(list_point[2].x(), nowControl.bound.y);
             } else {//both change
-                nowControl.changeSize(nowControl.pos_x - list_point[2].x() + nowControl.getWidth(), list_point[2].y() - nowControl.pos_y);
-                nowControl.setPosition(list_point[2].x(), nowControl.pos_y);
+                nowControl.changeSize(nowControl.bound.x - list_point[2].x() + nowControl.getWidth(), list_point[2].y() - nowControl.bound.y);
+                nowControl.setPosition(list_point[2].x(), nowControl.bound.y);
             }
         } else if (list_point[1] != null && cursor.equals(Cursor.NE_RESIZE)) {
             if (list_point[1].x() == Float.MAX_VALUE && list_point[1].y() != Float.MAX_VALUE) {//only change y
-                nowControl.changeSize(nowControl.getWidth(), nowControl.pos_y - list_point[2].y() + nowControl.getHeight());
-                nowControl.setPosition(nowControl.pos_x, list_point[1].y());
+                nowControl.changeSize(nowControl.getWidth(), nowControl.bound.y - list_point[2].y() + nowControl.getHeight());
+                nowControl.setPosition(nowControl.bound.x, list_point[1].y());
             } else if (list_point[1].x() != Float.MAX_VALUE && list_point[1].y() == Float.MAX_VALUE) {//only change x
-                nowControl.changeSize(list_point[1].x() - nowControl.pos_x, nowControl.getHeight());
+                nowControl.changeSize(list_point[1].x() - nowControl.bound.x, nowControl.getHeight());
             } else {//both change
-                nowControl.changeSize(list_point[1].x() - nowControl.pos_x, nowControl.pos_y - list_point[2].y() + nowControl.getHeight());
-                nowControl.setPosition(nowControl.pos_x, list_point[1].y());
+                nowControl.changeSize(list_point[1].x() - nowControl.bound.x, nowControl.bound.y - list_point[2].y() + nowControl.getHeight());
+                nowControl.setPosition(nowControl.bound.x, list_point[1].y());
             }
         }
     }
@@ -183,10 +183,10 @@ public class SizeUtil {
     public static Vector2f[] pointMagnet(ChoiceSet nowControl) {
         var list_point = new Vector2f[4];
 
-        list_point[0] = CreateGuiController.platform.checkPoint(nowControl, new Vector2f(nowControl.pos_x, nowControl.pos_y), 10f);
-        list_point[1] = CreateGuiController.platform.checkPoint(nowControl, new Vector2f(nowControl.pos_x + nowControl.getWidth(), nowControl.pos_y), 10f);
-        list_point[2] = CreateGuiController.platform.checkPoint(nowControl, new Vector2f(nowControl.pos_x, nowControl.pos_y + nowControl.getHeight()), 10f);
-        list_point[3] = CreateGuiController.platform.checkPoint(nowControl, new Vector2f(nowControl.pos_x + nowControl.getWidth(), nowControl.pos_y + nowControl.getHeight()), 10f);
+        list_point[0] = CreateGuiController.platform.checkPoint(nowControl, new Vector2f(nowControl.bound.x, nowControl.bound.y), 10f);
+        list_point[1] = CreateGuiController.platform.checkPoint(nowControl, new Vector2f(nowControl.bound.x + nowControl.getWidth(), nowControl.bound.y), 10f);
+        list_point[2] = CreateGuiController.platform.checkPoint(nowControl, new Vector2f(nowControl.bound.x, nowControl.bound.y + nowControl.getHeight()), 10f);
+        list_point[3] = CreateGuiController.platform.checkPoint(nowControl, new Vector2f(nowControl.bound.x + nowControl.getWidth(), nowControl.bound.y + nowControl.getHeight()), 10f);
 
         return list_point;
     }

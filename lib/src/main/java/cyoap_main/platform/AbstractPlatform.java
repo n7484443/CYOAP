@@ -101,7 +101,7 @@ public class AbstractPlatform {
                     l = Math.abs(v_ori_x - v_sub_x);
                     if (l < bias && l < size_x) {
                         size_x = l;
-                        x_new = v_sub_x - (v_ori_x - choiceSet.pos_x);
+                        x_new = v_sub_x - (v_ori_x - choiceSet.bound.x);
                         x_line = v_sub_x;
                     }
                 }
@@ -111,7 +111,7 @@ public class AbstractPlatform {
                     l = Math.abs(v_ori_y - v_sub_y);
                     if (l < bias && l < size_y) {
                         size_y = l;
-                        y_new = v_sub_y - (v_ori_y - choiceSet.pos_y);
+                        y_new = v_sub_y - (v_ori_y - choiceSet.bound.y);
                         y_line = v_sub_y;
                     }
                 }

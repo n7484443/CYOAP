@@ -10,13 +10,11 @@ import java.util.stream.Stream;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import cyoap_main.controller.createGui.IController;
 import cyoap_main.core.JavaFxMain;
 import cyoap_main.design.choice.ChoiceSet;
 import cyoap_main.design.node_extension.ImageCell;
 import cyoap_main.platform.AbstractPlatform;
 import cyoap_main.util.LoadUtil;
-import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.Pane;
 
@@ -51,7 +49,6 @@ public interface IGuiController extends IController {
 
                 var data = objectMapper.readValue(writer, ChoiceSet.class);
                 data.setUp(getChoicePane());
-                data.update();
                 getPlatform().choiceSetList.add(data);
                 LoadUtil.loadSegment(data.guiComponent.area, data.segmentList);
             }

@@ -61,8 +61,8 @@ public class ChoiceSetGuiComponent {
     public void setUp() {
         pane.setId("pane_choiceset");
 
-        pane.setLayoutX(mainChoiceSet.pos_x);
-        pane.setLayoutY(mainChoiceSet.pos_y);
+        pane.setLayoutX(mainChoiceSet.bound.x);
+        pane.setLayoutY(mainChoiceSet.bound.y);
 
         pane.getChildren().add(pane_surround);
         pane.getChildren().add(pane_border);
@@ -142,7 +142,7 @@ public class ChoiceSetGuiComponent {
             pane.setOnMouseDragged(e -> {
                 if (e.getButton().equals(MouseButton.MIDDLE)) {
                     if (moveCommand == null) {
-                        moveCommand = new MoveCommand(mainChoiceSet.pos_x, mainChoiceSet.pos_y, mainChoiceSet);
+                        moveCommand = new MoveCommand(mainChoiceSet.bound.x, mainChoiceSet.bound.y, mainChoiceSet);
                     }
                     var platform = CreateGuiController.platform;
                     var pos_before = CreateGuiController.instance.getPositionFromMouse(platform.start_mouse_x, platform.start_mouse_y);
@@ -163,8 +163,8 @@ public class ChoiceSetGuiComponent {
                 if (e.getButton().equals(MouseButton.MIDDLE)) {
                     if (moveCommand == null)
                         return;
-                    if (moveCommand.start_x != mainChoiceSet.pos_x || moveCommand.start_y != mainChoiceSet.pos_y) {
-                        var v = moveCommand.checkOutline(this.mainChoiceSet, mainChoiceSet.pos_x, mainChoiceSet.pos_y);
+                    if (moveCommand.start_x != mainChoiceSet.bound.x || moveCommand.start_y != mainChoiceSet.bound.y) {
+                        var v = moveCommand.checkOutline(this.mainChoiceSet, mainChoiceSet.bound.x, mainChoiceSet.bound.y);
                         moveCommand.setEnd(v.x(), v.y());
                         mainChoiceSet.setPosition(v.x(), v.y());
                         CreateGuiController.instance.commandTimeline.addCommand(moveCommand);
@@ -189,7 +189,7 @@ public class ChoiceSetGuiComponent {
                     var t = CreateGuiController.platform.checkLine(mainChoiceSet, 10f);
                     if (t != null) {
                         var v = t.getKey();
-                        mainChoiceSet.setPosition(v.x() == 0 ? mainChoiceSet.pos_x : v.x(), v.y() == 0 ? mainChoiceSet.pos_y : v.y());
+                        mainChoiceSet.setPosition(v.x() == 0 ? mainChoiceSet.bound.x : v.x(), v.y() == 0 ? mainChoiceSet.bound.y : v.y());
                     }
                     if (final_choice != null) {
                         CreateGuiController.instance.commandTimeline
@@ -277,8 +277,8 @@ public class ChoiceSetGuiComponent {
         if (mainChoiceSet.equals(CreateGuiController.instance.nowMouseInDataSet)) {
             RenderUtil.setStroke(gc, time, Color.BLUE);
             var gap = 4;
-            var x_start = mainChoiceSet.pos_x - gap - min_x;
-            var y_start = mainChoiceSet.pos_y - gap - min_y;
+            var x_start = mainChoiceSet.bound.x - gap - min_x;
+            var y_start = mainChoiceSet.bound.y - gap - min_y;
 
             gc.strokeRect(x_start, y_start, mainChoiceSet.getAnchorPane().getLayoutBounds().getWidth() + gap * 2, mainChoiceSet.getAnchorPane().getLayoutBounds().getHeight() + gap * 2);
         }

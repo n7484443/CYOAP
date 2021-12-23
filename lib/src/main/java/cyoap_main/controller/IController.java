@@ -1,4 +1,4 @@
-package cyoap_main.controller.createGui;
+package cyoap_main.controller;
 
 import javafx.fxml.Initializable;
 

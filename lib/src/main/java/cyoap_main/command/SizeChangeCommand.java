@@ -13,11 +13,11 @@ public class SizeChangeCommand extends AbstractCommand {
 
     public SizeChangeCommand(ChoiceSet choiceSet) {
         this.choiceset = choiceSet;
-        this.before = new Bound2f(choiceset.pos_x, choiceset.pos_y, choiceset.width, choiceset.height);
+        this.before = new Bound2f(choiceset.bound.x, choiceset.bound.y, choiceset.width, choiceset.height);
     }
 
     public void set() {
-        this.after = new Bound2f(choiceset.pos_x, choiceset.pos_y, choiceset.width, choiceset.height);
+        this.after = new Bound2f(choiceset.bound.x, choiceset.bound.y, choiceset.width, choiceset.height);
     }
 
     @Override

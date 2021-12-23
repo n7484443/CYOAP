@@ -12,7 +12,6 @@ import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
@@ -34,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class DescribeGuiController implements Initializable {
+public class DescribeGuiController implements IController {
     @FXML
     public GridPane gridpane_describe;
     @FXML
@@ -81,36 +80,8 @@ public class DescribeGuiController implements Initializable {
     public List<MFXRadioButton> button_list = new ArrayList<>();
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void nodeInit() {
         try {
-            image_text_bold.setOnMouseClicked(e -> {
-                var range = text_editor.getSelection();
-                var v = getTextCss(range, "-fx-font-weight");
-                if (v == null || v.equals("error")) {
-                    editTextCss(range, "-fx-font-weight", "bold");
-                } else {
-                    removeTextCss(range, "-fx-font-weight");
-                }
-            });
-            image_text_italic.setOnMouseClicked(e -> {
-                var range = text_editor.getSelection();
-                var v = getTextCss(range, "-fx-font-style");
-                if (v == null || v.equals("error")) {
-                    editTextCss(range, "-fx-font-style", "italic");
-                } else {
-                    removeTextCss(range, "-fx-font-style");
-                }
-            });
-            image_text_underline.setOnMouseClicked(e -> {
-                var range = text_editor.getSelection();
-                var v = getTextCss(range, "-fx-underline");
-                if (v == null || v.equals("error")) {
-                    editTextCss(range, "-fx-underline", "true");
-                } else {
-                    removeTextCss(range, "-fx-underline");
-                }
-            });
-
             text_editor.setWrapText(true);
             text_editor.getStylesheets().add(LoadUtil.getInstance().loadCss("/lib/css/text_editor.css"));
             text_editor.getStyleClass().add("text-editor");
@@ -128,16 +99,45 @@ public class DescribeGuiController implements Initializable {
         gridpane_describe.add(imagecell_describe, 0, 1, 2, 1);
 
         colorpicker_text_editor.getStyleClass().add("button");
-        colorpicker_text_editor.valueProperty().addListener(e -> {
-            var range = text_editor.getSelection();
-            editTextCss(range, "-color-text", colorpicker_text_editor.getValue().toString().replace("0x", "#"));
-        });
         pane_text_editor.setCenter(text_editor);
 
         button_list.add(button_outline);
         button_list.add(button_horizon);
         button_list.add(button_emptyimage);
+    }
 
+    public void eventInit() {
+        image_text_bold.setOnMouseClicked(e -> {
+            var range = text_editor.getSelection();
+            var v = getTextCss(range, "-fx-font-weight");
+            if (v == null || v.equals("error")) {
+                editTextCss(range, "-fx-font-weight", "bold");
+            } else {
+                removeTextCss(range, "-fx-font-weight");
+            }
+        });
+        image_text_italic.setOnMouseClicked(e -> {
+            var range = text_editor.getSelection();
+            var v = getTextCss(range, "-fx-font-style");
+            if (v == null || v.equals("error")) {
+                editTextCss(range, "-fx-font-style", "italic");
+            } else {
+                removeTextCss(range, "-fx-font-style");
+            }
+        });
+        image_text_underline.setOnMouseClicked(e -> {
+            var range = text_editor.getSelection();
+            var v = getTextCss(range, "-fx-underline");
+            if (v == null || v.equals("error")) {
+                editTextCss(range, "-fx-underline", "true");
+            } else {
+                removeTextCss(range, "-fx-underline");
+            }
+        });
+        colorpicker_text_editor.valueProperty().addListener(e -> {
+            var range = text_editor.getSelection();
+            editTextCss(range, "-color-text", colorpicker_text_editor.getValue().toString().replace("0x", "#"));
+        });
         gridpane_describe.setOnDragOver(e -> {
             if (e.getGestureSource() == null && e.getDragboard().hasFiles()) {
                 /* allow for both copying and moving, whatever user chooses */

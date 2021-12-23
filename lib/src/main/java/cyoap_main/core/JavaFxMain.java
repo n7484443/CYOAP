@@ -134,7 +134,6 @@ public class JavaFxMain extends Application {
 	@Override
 	public void init() throws Exception {
 		super.init();
-		new VarData();
 		var x = new ValueType(123f);
 		var y = new ValueType(12);
 		VarData.setValue("dataTest", x);

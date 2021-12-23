@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import cyoap_main.controller.createGui.IController;
 import cyoap_main.core.JavaFxMain;
 import cyoap_main.design.choice.ChoiceSet;
 import cyoap_main.design.node_extension.ImageCell;
@@ -19,7 +20,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.Pane;
 
-public interface IGuiController extends Initializable {
+public interface IGuiController extends IController {
     List<ImageCell> getBackgroundImageCellList();
 
     Pane getChoicePane();

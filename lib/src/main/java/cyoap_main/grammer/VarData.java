@@ -6,10 +6,14 @@ import java.util.Map;
 import cyoap_main.grammer.FunctionList.Function_for_d;
 
 public class VarData {
-	public static VarData instance;
+	static final VarData instance = new VarData();
 	public static Map<String, ValueType> var_map = new HashMap<String, ValueType>();
-	public static boolean isUpdated;
-	
+	public static boolean isUpdated = false;
+
+	public static VarData getInstance() {
+		return instance;
+	}
+
 	public static void setValue(String name, ValueType value) {
 		var_map.put(name, value);
 		isUpdated = true;
@@ -55,11 +59,6 @@ public class VarData {
 		public String toString() {
 			return toStr;
 		}
-	}
-
-	public VarData() {
-		VarData.instance = this;
-		isUpdated = false;
 	}
 	
 

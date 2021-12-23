@@ -46,12 +46,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class CreateGuiController implements IGuiController {
@@ -252,7 +250,7 @@ public class CreateGuiController implements IGuiController {
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void nodeInit() {
         setUp();
         ImageCell imagecell_tutorialImage = new ImageCell();
         anchorpane_create.getChildren().add(imagecell_tutorialImage);
@@ -266,7 +264,6 @@ public class CreateGuiController implements IGuiController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         scrollpane_background_order.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         pane_position_parent.getChildren().add(canvas);
@@ -276,10 +273,120 @@ public class CreateGuiController implements IGuiController {
 
         canvas.setMouseTransparent(true);
         canvas.toFront();
+    }
 
+    @Override
+    public void localizationInit() {
+        button_darkmode.setText(LocalizationUtil.getInstance().getLocalization("generalSetting.darkmode"));
+        button_background_preserve_ratio.setText(LocalizationUtil.getInstance().getLocalization("generalSetting.background_preserve"));
+    }
+
+    public Vector2f getPositionFromMouse(double mouse_x, double mouse_y) {
+        Point2D mousePoint = new Point2D(mouse_x, mouse_y);
+        Point2D posInZoomTarget = pane_position.sceneToLocal(mousePoint);
+
+        return new Vector2f((float) (platform.local_x + posInZoomTarget.getX()),
+                (float) (platform.local_y + posInZoomTarget.getY()));
+    }
+    public SimpleEntry<Image, String> image = null;
+
+    public void update() {
+        if (isImageChanged) {
+            isImageChanged = false;
+            image = LoadUtil.loadImage(dropped.get(0));
+            describeGuiController.imagecell_describe.setImage(image.getKey());
+        }
+
+        if (VarData.isUpdated) {
+            VarData.isUpdated = false;
+            List<String> name_list = new ArrayList<>();
+            for (var key : VarData.var_map.keySet()) {
+                var value = VarData.var_map.get(key);
+                name_list.add(key + "  |  " + value.data + "  |  " + value.type.toString());
+            }
+            view_var_field.getItems().clear();
+            view_var_field.getItems().setAll(name_list);
+            if (view_var_field.getItems().size() < 10) {
+                for (int i = view_var_field.getItems().size(); i < 10; i++) {
+                    view_var_field.getItems().add("");
+                }
+            }
+        }
+        commandTimeline.update();
+        platform.update();
+    }
+
+    public void changeTab(Tab tab) {
+        tabpane_make.getSelectionModel().select(tab);
+    }
+
+    public void save_shortcut() {
+        getPlatform().save();
+        save_describe_pane();
+        save_position_pane();
+        commandTimeline.save();
+    }
+
+    public void load_shortcut() {
+        loadPlatform();
+        load();
+        commandTimeline.load();
+        describeGuiController.afterInit();
+    }
+
+    @Override
+    public void loadPlatformSetup() {
+        this.button_background_preserve_ratio.setSelected(FlagUtil.getFlag(platform.flag, AbstractPlatform.flagPosition_background_preserve_ratio));
+    }
+
+    public void undo_shortcut() {
+        commandTimeline.undoCommand();
+    }
+
+    public void redo_shortcut() {
+        commandTimeline.redoCommand();
+    }
+
+    @Override
+    public List<ImageCell> getBackgroundImageCellList() {
+        var list = new ArrayList<ImageCell>();
+        list.add(imagecell_background);
+        return list;
+    }
+
+    @Override
+    public Pane getChoicePane() {
+        return pane_position;
+    }
+
+    @Override
+    public Pane getChoicePaneParent() {
+        return pane_position_parent;
+    }
+
+    @Override
+    public AbstractPlatform getPlatform() {
+        return platform;
+    }
+
+    @Override
+    public void setPlatform(AbstractPlatform abstractPlatform) {
+        platform = abstractPlatform;
+    }
+
+    @Override
+    public ResizableCanvas getCanvas() {
+        return canvas;
+    }
+
+    @Override
+    public boolean isEditable() {
+        return true;
+    }
+
+    @Override
+    public void eventInit() {
         colorpicker_background.valueProperty().addListener(e -> getPlatform().updateColor(colorpicker_background.getValue()));
-
-
         button_borderless.setOnMouseClicked(e ->
                 getPlatform().choiceSetList.forEach(t -> {
                     t.flag = FlagUtil.setFlag(t.flag, ChoiceSet.flagPosition_selectable, true);
@@ -428,115 +535,5 @@ public class CreateGuiController implements IGuiController {
                 }
             }
         });
-
-        setLocalization();
-    }
-
-    public void setLocalization() {
-        button_darkmode.setText(LocalizationUtil.getInstance().getLocalization("generalSetting.darkmode"));
-        button_background_preserve_ratio.setText(LocalizationUtil.getInstance().getLocalization("generalSetting.background_preserve"));
-    }
-
-    public Vector2f getPositionFromMouse(double mouse_x, double mouse_y) {
-        Point2D mousePoint = new Point2D(mouse_x, mouse_y);
-        Point2D posInZoomTarget = pane_position.sceneToLocal(mousePoint);
-
-        return new Vector2f((float) (platform.local_x + posInZoomTarget.getX()),
-                (float) (platform.local_y + posInZoomTarget.getY()));
-    }
-    public SimpleEntry<Image, String> image = null;
-
-    public void update() {
-        if (isImageChanged) {
-            isImageChanged = false;
-            image = LoadUtil.loadImage(dropped.get(0));
-            describeGuiController.imagecell_describe.setImage(image.getKey());
-        }
-
-        if (VarData.isUpdated) {
-            VarData.isUpdated = false;
-            List<String> name_list = new ArrayList<>();
-            for (var key : VarData.var_map.keySet()) {
-                var value = VarData.var_map.get(key);
-                name_list.add(key + "  |  " + value.data + "  |  " + value.type.toString());
-            }
-            view_var_field.getItems().clear();
-            view_var_field.getItems().setAll(name_list);
-            if (view_var_field.getItems().size() < 10) {
-                for (int i = view_var_field.getItems().size(); i < 10; i++) {
-                    view_var_field.getItems().add("");
-                }
-            }
-        }
-        commandTimeline.update();
-        platform.update();
-    }
-
-    public void changeTab(Tab tab) {
-        tabpane_make.getSelectionModel().select(tab);
-    }
-
-    public void save_shortcut() {
-        getPlatform().save();
-        save_describe_pane();
-        save_position_pane();
-        commandTimeline.save();
-    }
-
-    public void load_shortcut() {
-        loadPlatform();
-        load();
-        commandTimeline.load();
-        describeGuiController.afterInit();
-    }
-
-    @Override
-    public void loadPlatformSetup() {
-        this.button_background_preserve_ratio.setSelected(FlagUtil.getFlag(platform.flag, AbstractPlatform.flagPosition_background_preserve_ratio));
-    }
-
-    public void undo_shortcut() {
-        commandTimeline.undoCommand();
-    }
-
-    public void redo_shortcut() {
-        commandTimeline.redoCommand();
-    }
-
-    @Override
-    public List<ImageCell> getBackgroundImageCellList() {
-        var list = new ArrayList<ImageCell>();
-        list.add(imagecell_background);
-        return list;
-    }
-
-    @Override
-    public Pane getChoicePane() {
-        return pane_position;
-    }
-
-    @Override
-    public Pane getChoicePaneParent() {
-        return pane_position_parent;
-    }
-
-    @Override
-    public AbstractPlatform getPlatform() {
-        return platform;
-    }
-
-    @Override
-    public void setPlatform(AbstractPlatform abstractPlatform) {
-        this.platform = abstractPlatform;
-    }
-
-    @Override
-    public ResizableCanvas getCanvas() {
-        return canvas;
-    }
-
-    @Override
-    public boolean isEditable() {
-        return true;
     }
 }

@@ -1,6 +1,9 @@
 package cyoap_main.controller.createGui;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.annotations.Beta;
+import com.google.common.io.MoreFiles;
+import com.google.common.io.RecursiveDeleteOption;
 import cyoap_main.command.*;
 import cyoap_main.controller.IGuiController;
 import cyoap_main.core.JavaFxMain;
@@ -39,7 +42,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.transform.Transform;
-import org.apache.commons.io.FileUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -200,12 +202,12 @@ public class CreateGuiController implements IGuiController {
         }
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     public void save_position_pane() {
         ObjectMapper objectMapper = new ObjectMapper();
         File dir = new File(JavaFxMain.instance.directory.getAbsolutePath() + "/choiceSet");
-
         try {
-            FileUtils.deleteDirectory(dir);
+            MoreFiles.deleteRecursively(dir.toPath(), RecursiveDeleteOption.ALLOW_INSECURE);
             dir.mkdir();
             for (var choiceSet : platform.choiceSetList) {
                 OutputStreamWriter writer = new OutputStreamWriter(

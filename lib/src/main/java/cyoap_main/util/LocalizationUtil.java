@@ -5,7 +5,7 @@ import java.net.URISyntaxException;
 import java.util.Properties;
 
 public class LocalizationUtil {
-    public static final String localizationFolder = "lib/i18n/";
+    static final String localizationFolder = "lib/i18n/";
     public static String i18n_current = "ko_kr";
     public static String i18n_public = "en_us";
     public static Properties localized_properties_current;
@@ -42,7 +42,7 @@ public class LocalizationUtil {
         }
     }
 
-    public void changeLocalization(String str) {
+    public void changeLanguage(String str) {
         i18n_current = str;
         loadLocalization();
     }

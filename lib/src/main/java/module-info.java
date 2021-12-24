@@ -1,6 +1,6 @@
 open module cyoap_module {
 	requires org.fxmisc.richtext;
-	requires org.apache.commons.io;
+	requires com.google.common;
 
 	requires javafx.swing;
 	requires javafx.graphics;

@@ -7,34 +7,34 @@ import cyoap_main.grammer.FunctionList.Function_for_d;
 
 public class VarData {
 	static final VarData instance = new VarData();
-	public static Map<String, ValueType> var_map = new HashMap<String, ValueType>();
-	public static boolean isUpdated = false;
+	public static Map<String, ValueType> var_map = new HashMap<>();
+	public boolean isUpdated = false;
 
 	public static VarData getInstance() {
 		return instance;
 	}
 
-	public static void setValue(String name, ValueType value) {
+	public void setValue(String name, ValueType value) {
 		var_map.put(name, value);
 		isUpdated = true;
 	}
 
 
-	public static boolean hasValue(String name) {
+	public boolean hasValue(String name) {
 		return var_map.containsKey(name);
 	}
-	
-	public static void changeValue(String name, ValueType value) {
+
+	public void changeValue(String name, ValueType value) {
 		var v = var_map.get(name);
-		if(v == null) {
+		if (v == null) {
 			setValue(name, value);
 			return;
 		}
-		if(v.type.equals(types.ints) && value.type.equals(types.ints)) {
+		if (v.type.equals(types.ints) && value.type.equals(types.ints)) {
 			v.data = String.valueOf(Integer.parseInt(v.data) + Integer.parseInt(value.data));
-		}else if(v.type.equals(types.floats) && value.type.equals(types.floats)){
+		} else if (v.type.equals(types.floats) && value.type.equals(types.floats)) {
 			v.data = String.valueOf(Float.parseFloat(v.data) + Float.parseFloat(value.data));
-		}else if(v.type.equals(types.floats) && value.type.equals(types.ints)){
+		} else if (v.type.equals(types.floats) && value.type.equals(types.ints)) {
 			v.data = String.valueOf(Float.parseFloat(v.data) + Float.parseFloat(value.data));
 		}else{
 			var_map.get(name).data += value.data;
@@ -42,8 +42,8 @@ public class VarData {
 		
 		isUpdated = true;
 	}
-	
-	public static ValueType getValue(String name) {
+
+	public ValueType getValue(String name) {
 		return var_map.get(name);
 	}
 	

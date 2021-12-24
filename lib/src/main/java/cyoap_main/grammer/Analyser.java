@@ -258,7 +258,7 @@ public class Analyser {
 		} else{
 			Recursive_Parser new_parser = new Recursive_Parser();
 			if(func.get(i) == others_string) {
-				new_parser.value = new ValueType(VarData.getValue(data.get(i)));
+				new_parser.value = new ValueType(VarData.getInstance().getValue(data.get(i)));
 			}else {
 				new_parser.value = new ValueType(getTypeFromInt(func.get(i)));
 				new_parser.value.setData(data.get(i));
@@ -321,16 +321,16 @@ public class Analyser {
 		ValueType vatype = null;
 		if (func.get(equal_pos - 1) == others_string) {
 			name = data.get(equal_pos - 1);
-			if(VarData.hasValue(data.get(equal_pos - 1))) {
-				vatype = VarData.getValue(data.get(equal_pos - 1));
-			}else {
+			if (VarData.getInstance().hasValue(data.get(equal_pos - 1))) {
+				vatype = VarData.getInstance().getValue(data.get(equal_pos - 1));
+			} else {
 				vatype = new ValueType();
 			}
 		} else if (func.get(equal_pos - 2) == others_string) {
 			name = data.get(equal_pos - 2);
-			if(VarData.hasValue(data.get(equal_pos - 2))) {
-				vatype = VarData.getValue(data.get(equal_pos - 2));
-			}else {
+			if (VarData.getInstance().hasValue(data.get(equal_pos - 2))) {
+				vatype = VarData.getInstance().getValue(data.get(equal_pos - 2));
+			} else {
 				System.err.println("non exist name!");
 			}
 		}
@@ -348,7 +348,7 @@ public class Analyser {
 		} else {
 			vatype.set(datas);
 		}
-		VarData.setValue(name, vatype);
+		VarData.getInstance().setValue(name, vatype);
 		System.out.println("all parsing end");
 
 		// for (int i = 0; i < data.size(); i++) {
@@ -359,7 +359,7 @@ public class Analyser {
 
 	public ValueType checkValueType(String data, int ty) {
 		if (ty == others_string) {
-			return VarData.getValue(data);
+			return VarData.getInstance().getValue(data);
 		} else if (ty == strs) {
 			return new ValueType(types.strings, data);
 		} else if (ty == ints) {

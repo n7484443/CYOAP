@@ -136,8 +136,8 @@ public class JavaFxMain extends Application {
 		super.init();
 		var x = new ValueType(123f);
 		var y = new ValueType(12);
-		VarData.setValue("dataTest", x);
-		VarData.setValue("dataTest2", y);
+		VarData.getInstance().setValue("dataTest", x);
+		VarData.getInstance().setValue("dataTest2", y);
 	}
 
 	@Override

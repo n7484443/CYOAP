@@ -173,7 +173,7 @@ public class CreateGuiController implements IGuiController {
     }
 
     public void save_describe_pane() {
-        VarData.isUpdated = true;
+        VarData.getInstance().isUpdated = true;
 
         Analyser.getInstance().parser(describeGuiController.text_editor.getText());
         if (nowEditDataSet != null) {
@@ -291,8 +291,8 @@ public class CreateGuiController implements IGuiController {
             describeGuiController.imagecell_describe.setImage(image.getKey());
         }
 
-        if (VarData.isUpdated) {
-            VarData.isUpdated = false;
+        if (VarData.getInstance().isUpdated) {
+            VarData.getInstance().isUpdated = false;
             List<String> name_list = new ArrayList<>();
             for (var key : VarData.var_map.keySet()) {
                 var value = VarData.var_map.get(key);

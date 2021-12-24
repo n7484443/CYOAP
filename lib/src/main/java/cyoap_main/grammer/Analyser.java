@@ -1,39 +1,49 @@
 package cyoap_main.grammer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cyoap_main.grammer.VarData.ValueType;
 import cyoap_main.grammer.VarData.types;
 import javafx.util.Pair;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Analyser {
-	public static final int plus = 1;// +
-	public static final int minus = 2;// -
-	public static final int multi = 3;// *
-	public static final int div = 4;// /
-	public static final int equal = 5;// =
+	static final Analyser instance = new Analyser();
+	final int plus = 1;// +
+	final int minus = 2;// -
+	final int multi = 3;// *
+	final int div = 4;// /
+	final int equal = 5;// =
 
-	public static final int ints = 6;// 정수
-	public static final int floats = 7;// 소수점 붙음
-	public static final int booleans = 8;// true or false
-	public static final int strs = 9;// string, ""로 표시
+	final int ints = 6;// 정수
+	final int floats = 7;// 소수점 붙음
+	final int booleans = 8;// true or false
+	final int strs = 9;// string, ""로 표시
 
-	public static final int others_string = 10;// 변수명
+	final int others_string = 10;// 변수명
 
-	public static final int trues = 15;// 그외
-	public static final int falses = 16;// 그외
+	final int trues = 15;// 그외
+	final int falses = 16;// 그외
 
-	public static final int function = 20;
-	public static final int function_start = 21;// (
-	public static final int function_end = 22;// )
-	public static final int function_comma = 23;// ,
-	public static final int function_semi = 24;// ;
-	
+	final int function = 20;
+	final int function_start = 21;// (
+	final int function_end = 22;// )
+	final int function_comma = 23;// ,
+	final int function_semi = 24;// ;
+	public boolean b = false;
+	// 같은 값이 반환시->다음값으로
+	// null 일때->함수 입력 끝
+	public Recursive_Parser parser_null = null;
+	public Recursive_Parser parser_comma = new Recursive_Parser();
+
+	public static Analyser getInstance() {
+		return instance;
+	}
+
 	/*
 	 * 문자 입력->텍스트와 문법을 분리 {} 내부에 문법 사용. 즉, 실제 사용 가능한 것은 [], () 정도.
 	 */
-	public static List<String> parser(String str) {
+	public List<String> parser(String str) {
 		if (str == null)
 			return null;
 		if (str.chars().filter(e -> e == '{').count() != str.chars().filter(e -> e == '}').count()) {
@@ -69,9 +79,7 @@ public class Analyser {
 			return null;
 	}
 
-	public static boolean b = false;
-
-	public static Pair<List<Integer>, List<String>> replace(String s) {
+	public Pair<List<Integer>, List<String>> replace(String s) {
 		var str = s.replaceAll(" ", "").replaceAll("\n", "");
 		List<Integer> func_int_List = new ArrayList<Integer>();
 		List<String> func_string_List = new ArrayList<String>();
@@ -192,7 +200,7 @@ public class Analyser {
 
 	}
 
-	public static boolean isStringDouble(String s) {
+	public boolean isStringDouble(String s) {
 		try {
 			Double.parseDouble(s);
 			return true;
@@ -201,30 +209,26 @@ public class Analyser {
 		}
 	}
 
-	public static types getTypeFromInt(int t) {
+	public types getTypeFromInt(int t) {
 		switch (t) {
-		case ints:
-			return types.ints;
-		case floats:
-			return types.floats;
-		case booleans:
-			return types.booleans;
-		case strs:
-			return types.strings;
-		case function:
+			case ints:
+				return types.ints;
+			case floats:
+				return types.floats;
+			case booleans:
+				return types.booleans;
+			case strs:
+				return types.strings;
+			case function:
 			return types.functions;
 		default:
 			return types.nulls;
 		}
 	}
 
-	// 같은 값이 반환시->다음값으로
-	// null 일때->함수 입력 끝
-	public static Recursive_Parser parser_null = null;
-	public static Recursive_Parser parser_comma = new Recursive_Parser();
-	public static Pair<Recursive_Parser, Integer> create_parser(int i, List<Integer> func, List<String> data,
-			Recursive_Parser motherParser) {
-		if(i >= func.size())return new Pair<Recursive_Parser, Integer>(motherParser, i);
+	public Pair<Recursive_Parser, Integer> create_parser(int i, List<Integer> func, List<String> data,
+														 Recursive_Parser motherParser) {
+		if (i >= func.size()) return new Pair<Recursive_Parser, Integer>(motherParser, i);
 		if (func.get(i) == function_start) {
 			while (true) {
 				var inner = create_parser(i + 1, func, data, motherParser);
@@ -302,13 +306,13 @@ public class Analyser {
 		}
 	}
 
-	public static void analyse(Pair<List<Integer>, List<String>> analysed_data) {
+	public void analyse(Pair<List<Integer>, List<String>> analysed_data) {
 		var func = analysed_data.getKey();
 		var data = analysed_data.getValue();
 
 		int equal_pos = func.indexOf(equal);
 		Recursive_Parser parser = new Recursive_Parser();
-		
+
 		System.out.println("end parser");
 		var parser_ans = create_parser(equal_pos + 1, func, data, parser);
 		//parser_ans.getKey().checkParser(0);
@@ -353,7 +357,7 @@ public class Analyser {
 
 	}
 
-	public static ValueType checkValueType(String data, int ty) {
+	public ValueType checkValueType(String data, int ty) {
 		if (ty == others_string) {
 			return VarData.getValue(data);
 		} else if (ty == strs) {
@@ -370,12 +374,11 @@ public class Analyser {
 
 	}
 
-	public static ValueType innerLoop_right(List<Integer> func, List<String> data, ValueType v) {
-
+	public ValueType innerLoop_right(List<Integer> func, List<String> data, ValueType v) {
 		return v;
 	}
 
-	public static void analyse(List<String> str_list) {
+	public void analyse(List<String> str_list) {
 		for (var str : str_list) {
 			analyse(replace(str));
 		}

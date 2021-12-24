@@ -24,14 +24,12 @@ public class SizeChangeCommand extends AbstractCommand {
     public void execute() {
         choiceset.setPosition(after.x, after.y);
         choiceset.setSize(after.width, after.height);
-        choiceset.update();
     }
 
     @Override
     public void undo() {
         choiceset.setPosition(before.x, before.y);
         choiceset.setSize(before.width, before.height);
-        choiceset.update();
     }
 
     @Override

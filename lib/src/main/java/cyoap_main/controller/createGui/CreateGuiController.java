@@ -39,6 +39,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.transform.Transform;
+import org.apache.commons.io.FileUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -152,8 +153,6 @@ public class CreateGuiController implements IGuiController {
         File f = new File(JavaFxMain.instance.directory.getAbsolutePath() + File.separator + "file." + imageType);
         try {
             var imageOutputStream = ImageIO.createImageOutputStream(f);
-            if (!ImageIO.write(tempImg, imageType, imageOutputStream)) {
-            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -174,10 +173,7 @@ public class CreateGuiController implements IGuiController {
     public void save_describe_pane() {
         VarData.isUpdated = true;
 
-        var text = Analyser.parser(describeGuiController.text_editor.getText());
-        StringBuilder builder = new StringBuilder();
-        if (text != null)
-            text.forEach(builder::append);
+        Analyser.getInstance().parser(describeGuiController.text_editor.getText());
         if (nowEditDataSet != null) {
             var command = new TextChangeCommand(nowEditDataSet);
             if (!describeGuiController.text_title.getText().equals(nowEditDataSet.string_title)) {
@@ -198,7 +194,7 @@ public class CreateGuiController implements IGuiController {
 
             LoadUtil.paragraphToSegment(describeGuiController.text_editor.getDocument().getParagraphs(), nowEditDataSet.segmentList);
 
-            nowEditDataSet.update();
+            nowEditDataSet.needUpdate = true;
             command.setText(nowEditDataSet);
             commandTimeline.addCommand(command);
         }
@@ -207,14 +203,10 @@ public class CreateGuiController implements IGuiController {
     public void save_position_pane() {
         ObjectMapper objectMapper = new ObjectMapper();
         File dir = new File(JavaFxMain.instance.directory.getAbsolutePath() + "/choiceSet");
-        if (dir.exists()) {
-            for (var f : dir.listFiles()) {
-                f.delete();
-            }
-        } else {
-            dir.mkdir();
-        }
+
         try {
+            FileUtils.deleteDirectory(dir);
+            dir.mkdir();
             for (var choiceSet : platform.choiceSetList) {
                 OutputStreamWriter writer = new OutputStreamWriter(
                         new FileOutputStream(dir.getAbsolutePath() + "/" + choiceSet.string_title + ".json"),
@@ -452,7 +444,7 @@ public class CreateGuiController implements IGuiController {
                 }
                 if (nowSizeChange != null) {
                     SizeUtil.setSizeComplete(nowSizeChange);
-                    nowSizeChange.getKey().update();
+                    nowSizeChange.getKey().needUpdate = true;
 
                     nowSizeChange.getKey().isClicked = false;
                     nowSizeChange.getValue().set();

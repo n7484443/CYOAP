@@ -235,8 +235,10 @@ public class AbstractPlatform {
         if (needUpdate) {
             needUpdate = false;
             setNodeDepth();
-            choiceSetList.forEach(ChoiceSet::update);
         }
+        choiceSetList.forEach(c -> {
+            if (c.needUpdate) c.update();
+        });
     }
 
     public void render(GraphicsContext gc, double time) {

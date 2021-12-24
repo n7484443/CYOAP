@@ -40,6 +40,9 @@ public class ChoiceSet {
 
     public Bound2f bound;
 
+    @JsonIgnore
+    public boolean needUpdate = true;
+
     public ChoiceSet() {
         this("title", null, 0, 0, 0, 0);
     }
@@ -72,7 +75,7 @@ public class ChoiceSet {
         guiComponent.color = baseColor;
         guiComponent.setUp();
         pane_mother.getChildren().add(guiComponent.pane);
-        update();
+        needUpdate = true;
     }
 
     public boolean check_intersect(ChoiceSet a, float x, float y) {
@@ -95,6 +98,8 @@ public class ChoiceSet {
         getAnchorPane().setPrefWidth(bound.width);
         getAnchorPane().setPrefHeight(bound.height);
         getAnchorPane().requestLayout();
+
+        needUpdate = true;
     }
 
     @JsonIgnore
@@ -113,6 +118,7 @@ public class ChoiceSet {
         updateColor();
         updateSegment();
         guiComponent.update();
+        needUpdate = false;
     }
 
     public void updateSegment() {
@@ -127,8 +133,7 @@ public class ChoiceSet {
 
         guiComponent.combineSubChoiceSetComponent(sub);
 
-        sub.update();
-        update();
+        needUpdate = true;
     }
 
     public void separateSubChoiceSet(ChoiceSet sub) {
@@ -138,13 +143,15 @@ public class ChoiceSet {
         sub.choiceSet_parent = null;
 
         guiComponent.separateSubChoiceSetComponent(sub);
+        needUpdate = true;
     }
 
-    public void updateColor(Color t) {
+    public void changeColor(Color t) {
         if (this.color != t) {
             this.color = t;
             this.guiComponent.color = t;
             this.guiComponent.updateColor();
+            needUpdate = true;
         }
     }
 
@@ -170,6 +177,7 @@ public class ChoiceSet {
         bound.y += move_y;
         guiComponent.setPosition(bound.x, bound.y);
         setSize(bound.width, bound.height);
+        needUpdate = true;
     }
 
     public void setPosition(float pos_x, float pos_y) {
@@ -177,6 +185,7 @@ public class ChoiceSet {
         bound.y = pos_y;
         guiComponent.setPosition(bound.x, bound.y);
         setSize(bound.width, bound.height);
+        needUpdate = true;
     }
 
     @JsonIgnore
@@ -189,7 +198,7 @@ public class ChoiceSet {
     }
 
     public void setColor(String s) {
-        updateColor(Color.web(s));
+        changeColor(Color.web(s));
     }
 
     public void render(GraphicsContext gc, double time) {
@@ -219,13 +228,14 @@ public class ChoiceSet {
             if (v.isBlank()) {
                 segmentList.add(null);
             } else {
-                var splitStr = v.split("\\}:\\{");
+                var splitStr = v.split("}:\\{");
                 splitStr[0] = splitStr[0].substring(1);
                 splitStr[1] = splitStr[1].substring(0, splitStr[1].length() - 1);
                 var segment = new StyledSegment<>(splitStr[0], splitStr[1]);
                 segmentList.add(segment);
             }
         }
+        needUpdate = true;
     }
 
     @JsonIgnore

@@ -100,7 +100,7 @@ public interface IGuiController extends IController {
         });
     }
 
-    public int allow_margin = 50;
+    int allow_margin = 50;
 
     default void updateMouseCoord(double move_x, double move_y, double start_move_x, double start_move_y) {
         getPlatform().local_x -= move_x;

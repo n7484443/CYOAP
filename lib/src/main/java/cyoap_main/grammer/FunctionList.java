@@ -2,8 +2,8 @@ package cyoap_main.grammer;
 
 import java.util.Random;
 
-import cyoap_main.grammer.VarData.ValueType;
-import cyoap_main.grammer.VarData.types;
+import cyoap_main.grammer.VariableDataBase.ValueType;
+import cyoap_main.grammer.VariableDataBase.types;
 
 public class FunctionList {
 	final static Func_two func_plus = (a, b) -> {

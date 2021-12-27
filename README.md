@@ -22,3 +22,7 @@ This program is CYOA Player. You can make CYOA story, also can play CYOA.
 [palexdev/MaterialFX](https://github.com/palexdev/MaterialFX)
 
 [MavenAritfact](https://maven.apache.org/ref/3.8.2/maven-artifact/)
+
+[guava](https://github.com/google/guava)
+
+[junit](https://github.com/junit-team/junit5)

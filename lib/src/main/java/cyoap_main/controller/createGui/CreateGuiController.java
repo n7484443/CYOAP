@@ -1,7 +1,6 @@
 package cyoap_main.controller.createGui;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.annotations.Beta;
 import com.google.common.io.MoreFiles;
 import com.google.common.io.RecursiveDeleteOption;
 import cyoap_main.command.*;
@@ -11,7 +10,7 @@ import cyoap_main.design.choice.ChoiceSet;
 import cyoap_main.design.node_extension.ImageCell;
 import cyoap_main.design.node_extension.ResizableCanvas;
 import cyoap_main.grammer.Analyser;
-import cyoap_main.grammer.VarData;
+import cyoap_main.grammer.VariableDataBase;
 import cyoap_main.platform.AbstractPlatform;
 import cyoap_main.platform.CreatePlatform;
 import cyoap_main.unit.Bound2f;
@@ -173,7 +172,7 @@ public class CreateGuiController implements IGuiController {
     }
 
     public void save_describe_pane() {
-        VarData.getInstance().isUpdated = true;
+        VariableDataBase.getInstance().isUpdated = true;
 
         Analyser.getInstance().parser(describeGuiController.text_editor.getText());
         if (nowEditDataSet != null) {
@@ -291,11 +290,11 @@ public class CreateGuiController implements IGuiController {
             describeGuiController.imagecell_describe.setImage(image.getKey());
         }
 
-        if (VarData.getInstance().isUpdated) {
-            VarData.getInstance().isUpdated = false;
+        if (VariableDataBase.getInstance().isUpdated) {
+            VariableDataBase.getInstance().isUpdated = false;
             List<String> name_list = new ArrayList<>();
-            for (var key : VarData.var_map.keySet()) {
-                var value = VarData.var_map.get(key);
+            for (var key : VariableDataBase.getInstance().var_map.keySet()) {
+                var value = VariableDataBase.getInstance().var_map.get(key);
                 name_list.add(key + "  |  " + value.data + "  |  " + value.type.toString());
             }
             view_var_field.getItems().clear();
@@ -404,7 +403,7 @@ public class CreateGuiController implements IGuiController {
                     if (variable >= 0) {
                         var text = addTextIntoString(describeGuiController.text_editor.getText(), describeGuiController.text_editor.getAnchor(),
                                 describeGuiController.text_editor.getCaretPosition(),
-                                "{" + VarData.var_map.keySet().toArray()[variable] + "}");
+                                "{" + VariableDataBase.getInstance().var_map.keySet().toArray()[variable] + "}");
                         describeGuiController.text_editor.clear();
                         describeGuiController.text_editor.appendText(text);
                     }

@@ -5,12 +5,12 @@ import java.util.Map;
 
 import cyoap_main.grammer.FunctionList.Function_for_d;
 
-public class VarData {
-	static final VarData instance = new VarData();
-	public static Map<String, ValueType> var_map = new HashMap<>();
+public class VariableDataBase {
+	static final VariableDataBase instance = new VariableDataBase();
+	public Map<String, ValueType> var_map = new HashMap<>();
 	public boolean isUpdated = false;
 
-	public static VarData getInstance() {
+	public static VariableDataBase getInstance() {
 		return instance;
 	}
 

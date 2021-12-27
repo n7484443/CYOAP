@@ -6,8 +6,8 @@ import java.util.concurrent.CompletableFuture;
 
 import cyoap_main.controller.IGuiController;
 import cyoap_main.controller.createGui.CreateGuiController;
-import cyoap_main.grammer.VarData;
-import cyoap_main.grammer.VarData.ValueType;
+import cyoap_main.grammer.VariableDataBase;
+import cyoap_main.grammer.VariableDataBase.ValueType;
 import cyoap_main.util.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -135,8 +135,8 @@ public class JavaFxMain extends Application {
 	public void init() throws Exception {
 		var x = new ValueType(123f);
 		var y = new ValueType(12);
-		VarData.getInstance().setValue("dataTest", x);
-		VarData.getInstance().setValue("dataTest2", y);
+		VariableDataBase.getInstance().setValue("dataTest", x);
+		VariableDataBase.getInstance().setValue("dataTest2", y);
 	}
 
 	@Override

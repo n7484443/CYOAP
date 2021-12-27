@@ -3,6 +3,7 @@ package cyoap_main.controller;
 import cyoap_main.design.node_extension.ImageCell;
 import cyoap_main.design.node_extension.ResizableCanvas;
 import cyoap_main.platform.AbstractPlatform;
+import cyoap_main.platform.PlayPlatform;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.MouseButton;
@@ -83,38 +84,38 @@ public class PlayGuiController implements IGuiController {
 	}
 
 	@Override
-	public boolean isEditable() {
-		return false;
-	}
-
-	@Override
 	public Canvas getCanvas() {
 		return canvas;
 	}
 
-    @Override
-    public double getChoicePaneRealWidth() {
-        return gridpane_base.getWidth() - gridpane_play_side.getWidth();
-    }
+	@Override
+	public double getChoicePaneRealWidth() {
+		return gridpane_base.getWidth() - gridpane_play_side.getWidth();
+	}
 
-    @Override
-    public double getChoicePaneRealHeight() {
-        return gridpane_base.getHeight();
-    }
+	@Override
+	public double getChoicePaneRealHeight() {
+		return gridpane_base.getHeight();
+	}
 
-    @Override
-    public void eventInit() {
-        pane_position_play.setOnMousePressed(e -> {
-            platform.start_mouse_x = e.getSceneX();
-            platform.start_mouse_y = e.getSceneY();
-        });
+	@Override
+	public void eventInit() {
+		pane_position_play.setOnMousePressed(e -> {
+			platform.start_mouse_x = e.getSceneX();
+			platform.start_mouse_y = e.getSceneY();
+		});
 
-        pane_position_play.setOnMouseDragged(e -> {
-            if (e.getButton().equals(MouseButton.PRIMARY)) {
-                double move_x = platform.sensitivity * (e.getSceneX() - platform.start_mouse_x);
-                double move_y = platform.sensitivity * (e.getSceneY() - platform.start_mouse_y);
-                updateMouseCoord(move_x, move_y, e.getSceneX(), e.getSceneY());
-            }
-        });
-    }
+		pane_position_play.setOnMouseDragged(e -> {
+			if (e.getButton().equals(MouseButton.PRIMARY)) {
+				double move_x = platform.sensitivity * (e.getSceneX() - platform.start_mouse_x);
+				double move_y = platform.sensitivity * (e.getSceneY() - platform.start_mouse_y);
+				updateMouseCoord(move_x, move_y, e.getSceneX(), e.getSceneY());
+			}
+		});
+	}
+
+	@Override
+	public <T> Class<? extends AbstractPlatform> getPlatformClass() {
+		return PlayPlatform.class;
+	}
 }

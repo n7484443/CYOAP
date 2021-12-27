@@ -26,6 +26,11 @@ import java.util.List;
 
 @JsonAutoDetect(getterVisibility = Visibility.PUBLIC_ONLY)
 public class AbstractPlatform {
+
+    public boolean isEditable() {
+        return false;
+    }
+
     @JsonIgnore
     public List<ChoiceSet> choiceSetList = new ArrayList<>();
 
@@ -86,7 +91,6 @@ public class AbstractPlatform {
         var vec_original_x = choiceSet.get_snapList_x();
         var vec_original_y = choiceSet.get_snapList_y();
 
-        int i = 0;
         for (var choice : choiceSetList) {
             float size_x = Float.POSITIVE_INFINITY;
             float size_y = Float.POSITIVE_INFINITY;
@@ -120,9 +124,9 @@ public class AbstractPlatform {
         }
         if (x_new == Float.MAX_VALUE && y_new == Float.MAX_VALUE) {
             return null;
-        } else if (x_new == Float.MAX_VALUE && y_new != Float.MAX_VALUE) {
+        } else if (x_new == Float.MAX_VALUE) {
             return new SimpleEntry<>(new Vector2f(0, y_new), new Vector2f(x_line, y_line));
-        } else if (x_new != Float.MAX_VALUE && y_new == Float.MAX_VALUE) {
+        } else if (y_new == Float.MAX_VALUE) {
             return new SimpleEntry<>(new Vector2f(x_new, 0), new Vector2f(x_line, y_line));
         } else {
             return new SimpleEntry<>(new Vector2f(x_new, y_new), new Vector2f(x_line, y_line));
@@ -133,7 +137,6 @@ public class AbstractPlatform {
         float x_new = Float.MAX_VALUE;
         float y_new = Float.MAX_VALUE;
 
-        int i = 0;
         for (var choice : choiceSetList) {
             float size_x = Float.POSITIVE_INFINITY;
             float size_y = Float.POSITIVE_INFINITY;

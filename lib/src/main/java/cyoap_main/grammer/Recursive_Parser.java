@@ -8,14 +8,9 @@ import cyoap_main.grammer.VariableDataBase.ValueType;
 
 public class Recursive_Parser {
 	public Recursive_Parser[] child_node = new Recursive_Parser[3];
-	public Recursive_Parser parent_node;
 	public ValueType value;
 	// 노드마다 가지는 최대의 데이터:3
 	// if ( a, then, else)
-
-	public Recursive_Parser() {
-
-	}
 
 	public void add(Recursive_Parser parser) {
 		for (int i = 0; i < child_node.length; i++) {

@@ -117,7 +117,7 @@ public class ChoiceSetGuiComponent {
         pane_inner.setMouseTransparent(true);
         float border = 9.5f;
 
-        if (JavaFxMain.controller.isEditable()) {
+        if (JavaFxMain.controller.getPlatform().isEditable()) {
             pane.setOnMouseMoved(e -> {
                 if (SizeUtil.setCursor(e.getX(), e.getY(), this.mainChoiceSet.getWidth(), this.mainChoiceSet.getHeight(), border)) {
                     CreateGuiController.instance.nowSizeChange = new AbstractMap.SimpleEntry<>(mainChoiceSet, new SizeChangeCommand(mainChoiceSet));

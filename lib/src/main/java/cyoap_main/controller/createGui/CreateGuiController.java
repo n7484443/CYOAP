@@ -309,6 +309,11 @@ public class CreateGuiController implements IGuiController {
         platform.update();
     }
 
+    @Override
+    public Class<CreatePlatform> getPlatformClass() {
+        return CreatePlatform.class;
+    }
+
     public void changeTab(Tab tab) {
         tabpane_make.getSelectionModel().select(tab);
     }
@@ -370,11 +375,6 @@ public class CreateGuiController implements IGuiController {
     @Override
     public ResizableCanvas getCanvas() {
         return canvas;
-    }
-
-    @Override
-    public boolean isEditable() {
-        return true;
     }
 
     @Override

@@ -14,6 +14,7 @@ import cyoap_main.core.JavaFxMain;
 import cyoap_main.design.choice.ChoiceSet;
 import cyoap_main.design.node_extension.ImageCell;
 import cyoap_main.platform.AbstractPlatform;
+import cyoap_main.platform.CreatePlatform;
 import cyoap_main.util.LoadUtil;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.Pane;
@@ -33,7 +34,7 @@ public interface IGuiController extends IController {
 
     void update();
 
-    boolean isEditable();
+    <T> Class<? extends AbstractPlatform> getPlatformClass();
 
     default void load() {
         getPlatform().clearNodeOnPanePosition();
@@ -70,7 +71,7 @@ public interface IGuiController extends IController {
             File file_platform_json = new File(JavaFxMain.instance.directory.getAbsolutePath() + "/platform.json");
             if (file_platform_json.exists()) {
                 var writer = new InputStreamReader(new FileInputStream(JavaFxMain.instance.directory.getAbsolutePath() + "/platform.json"), StandardCharsets.UTF_8);
-                setPlatform(objectMapper.readValue(writer, AbstractPlatform.class));
+                setPlatform(objectMapper.readValue(writer, getPlatformClass()));
                 getPlatform().setUp(this);
                 getPlatform().isImageChanged = true;
                 getPlatform().updateFlag();

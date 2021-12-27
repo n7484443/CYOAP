@@ -59,9 +59,6 @@ public interface IGuiController extends IController {
         for (var v : getPlatform().choiceSetList) {
             LoadUtil.setupChoiceSet(v);
         }
-        for (var v : getPlatform().choiceSetList) {
-            LoadUtil.loadChoiceSetParents(v);
-        }
         getPlatform().update();
     }
 

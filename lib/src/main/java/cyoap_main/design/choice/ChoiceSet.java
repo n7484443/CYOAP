@@ -21,7 +21,8 @@ public class ChoiceSet {
     public static final int flagPosition_selectable = 0;
     public static final int flagPosition_horizontal = 1;
     public static final int flagPosition_emptyImage = 2;
-    public static final Vector2f default_size = new Vector2f(150, 150);
+    public static final Vector2f default_size = new Vector2f(150, 230);
+    public static final Vector2f default_size_horizontal = new Vector2f(50, 230);
 
     public String string_title;
     public List<StyledSegment<String, String>> segmentList = new ArrayList<>();
@@ -86,8 +87,10 @@ public class ChoiceSet {
         bound.width = width;
         bound.height = height;
 
-        var width_min = (float) Math.max(guiComponent.pane.getMinWidth(), 50);
-        var height_min = (float) Math.max(guiComponent.pane.getMinHeight(), 50);
+        boolean b = FlagUtil.getFlag(flagPosition_horizontal, flag);
+
+        var width_min = (float) Math.max(guiComponent.pane.getMinWidth(), b ? default_size.x() : default_size_horizontal.x());
+        var height_min = (float) Math.max(guiComponent.pane.getMinHeight(), b ? default_size.y() : default_size_horizontal.y());
         if (width < width_min) {
             bound.width = width_min;
         }
@@ -97,7 +100,6 @@ public class ChoiceSet {
 
         getAnchorPane().setPrefWidth(bound.width);
         getAnchorPane().setPrefHeight(bound.height);
-        getAnchorPane().requestLayout();
 
         needUpdate = true;
     }

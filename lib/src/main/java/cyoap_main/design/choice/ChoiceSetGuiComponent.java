@@ -108,7 +108,7 @@ public class ChoiceSetGuiComponent {
         title.setId("title_choiceset");
         title.setTextAlignment(TextAlignment.CENTER);
         title.setAlignment(Pos.CENTER);
-        title.setPrefHeight(12 + 10);
+        title.setMinHeight(23);
 
         image.setId("image_choiceset");
         image.setCut(0);

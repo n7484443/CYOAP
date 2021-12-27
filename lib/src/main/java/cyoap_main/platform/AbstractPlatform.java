@@ -27,6 +27,7 @@ import java.util.List;
 @JsonAutoDetect(getterVisibility = Visibility.PUBLIC_ONLY)
 public class AbstractPlatform {
 
+    @JsonIgnore
     public boolean isEditable() {
         return false;
     }

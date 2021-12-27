@@ -163,20 +163,12 @@ public class LoadUtil {
                 setupChoiceSet(c);
             } else {
                 c.guiComponent.setUp();
-            }
-        }
-    }
-
-    public static void loadChoiceSetParents(ChoiceSet choiceSet) {
-        for (var c : choiceSet.choiceSet_child) {
-            if (!c.choiceSet_child.isEmpty()) {
-                loadChoiceSetParents(c);
-            } else {
                 c.choiceSet_parent = choiceSet;
                 choiceSet.guiComponent.addChoiceSetGui(c.getAnchorPane());
             }
         }
     }
+
 
     public String loadFile(String str_path) throws URISyntaxException {
         URL url = LoadUtil.class.getClassLoader().getResource(str_path);

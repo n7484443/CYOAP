@@ -30,7 +30,7 @@ import javafx.scene.text.TextAlignment;
 public class ChoiceSetGuiComponent {
     public static Border border_default = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(5), new BorderWidths(2)));
     /*
-    pane─┬─pane_surround─┬──pane_inner─┬─hbox_title──title
+    pane─┬─pane_surround─┬──pane_inner─┬─title
          │               │             ├─image
          │               │             └─area
          └─pane_border   └──hbox_subChoiceSet──subChoiceSet
@@ -46,7 +46,6 @@ public class ChoiceSetGuiComponent {
     //////////////////////////////////////////////////////////////////////////////////////////
     private final GridPane pane_inner = new GridPane();
     //////////////////////////////////////////////////////////////////////////////////////////
-    private final HBox hbox_title = new HBox();
     private final ImageCell image = new ImageCell();
 
     private final Rectangle rectangle = new Rectangle(150, 150);
@@ -88,6 +87,7 @@ public class ChoiceSetGuiComponent {
         area.setStyle("-color-text: white ;");
         area.setAutoHeight(true);
         area.setId("area_choiceSet");
+        area.setEditable(false);
 
         rectangle.setArcWidth(10.0f);
         rectangle.setArcHeight(10.0f);
@@ -100,19 +100,15 @@ public class ChoiceSetGuiComponent {
         GridPane.setHgrow(pane_inner, Priority.ALWAYS);
         GridPane.setVgrow(pane_inner, Priority.ALWAYS);
 
-        hbox_title.getChildren().add(title);
-        pane_inner.add(hbox_title, 0, 0);
+        pane_inner.add(title, 0, 0);
         pane_inner.add(image, 0, 1);
         pane_inner.add(area, 0, 2);
         pane_inner.setAlignment(Pos.CENTER);
 
+        title.setId("title_choiceset");
         title.setTextAlignment(TextAlignment.CENTER);
         title.setAlignment(Pos.CENTER);
-        HBox.setHgrow(hbox_title, Priority.ALWAYS);
-        hbox_title.setAlignment(Pos.CENTER);
-        hbox_title.setId("title_choiceset");
-
-        area.setEditable(false);
+        title.setPrefHeight(12 + 10);
 
         image.setId("image_choiceset");
         image.setCut(0);
@@ -297,7 +293,7 @@ public class ChoiceSetGuiComponent {
     public void updateColor() {
         pane.setStyle("-fx-background-color: #" + color.toString().replace("0x", "") + ";");
         Color c = color.deriveColor(30, 1.0, 1 / 0.7f, 1.0);
-        hbox_title.setStyle("-fx-background-color: #" + c.toString().replace("0x", "") + ";");
+        title.setStyle("-fx-background-color: #" + c.toString().replace("0x", "") + ";");
         if (c.getBrightness() < 0.5) {
             title.setStyle("-fx-text-fill: #" + Color.WHITE.toString().replace("0x", "") + ";");
         } else {
@@ -341,21 +337,19 @@ public class ChoiceSetGuiComponent {
     }
 
     public void setHorizontal(boolean b) {
-        int size = 20;
-        hbox_title.setPrefHeight(size);
-        GridPane.setHalignment(hbox_title, HPos.CENTER);
-        GridPane.setValignment(hbox_title, VPos.CENTER);
+        GridPane.setHalignment(title, HPos.CENTER);
+        GridPane.setValignment(title, VPos.CENTER);
 
-        pane_inner.getChildren().remove(hbox_title);
+        pane_inner.getChildren().remove(title);
         pane_inner.getChildren().remove(image);
         pane_inner.getChildren().remove(area);
         pane_inner.getColumnConstraints().clear();
         pane_inner.getRowConstraints().clear();
         pane_inner.setVgap(0);
         pane_inner.setHgap(0);
-        pane_inner.add(hbox_title, 0, 0);
+        pane_inner.add(title, 0, 0);
         if (b) {
-            GridPane.setColumnSpan(hbox_title, 2);
+            GridPane.setColumnSpan(title, 2);
             pane_inner.add(image, 0, 1);
             pane_inner.add(area, 1, 1);
 
@@ -376,7 +370,7 @@ public class ChoiceSetGuiComponent {
             pane_inner.getColumnConstraints().addAll(col1, col2);
             pane_inner.getRowConstraints().addAll(row1, row2);
         } else {
-            GridPane.setColumnSpan(hbox_title, 1);
+            GridPane.setColumnSpan(title, 1);
             pane_inner.add(image, 0, 1);
             pane_inner.add(area, 0, 2);
 

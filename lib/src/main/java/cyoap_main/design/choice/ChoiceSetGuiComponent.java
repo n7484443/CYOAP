@@ -1,31 +1,33 @@
 package cyoap_main.design.choice;
 
-import java.io.IOException;
-import java.util.AbstractMap;
-
-import cyoap_main.command.SizeChangeCommand;
-import cyoap_main.unit.Vector2f;
-import cyoap_main.util.RenderUtil;
-import cyoap_main.util.SizeUtil;
-import javafx.geometry.*;
-import javafx.scene.layout.*;
-import javafx.scene.shape.Rectangle;
-import org.fxmisc.richtext.InlineCssTextArea;
-
 import cyoap_main.command.CombineCommand;
 import cyoap_main.command.MoveCommand;
-import cyoap_main.core.JavaFxMain;
+import cyoap_main.command.SizeChangeCommand;
 import cyoap_main.controller.createGui.CreateGuiController;
+import cyoap_main.core.JavaFxMain;
 import cyoap_main.design.node_extension.ImageCell;
 import cyoap_main.unit.Bound2f;
+import cyoap_main.unit.Vector2f;
 import cyoap_main.util.FlagUtil;
 import cyoap_main.util.LoadUtil;
+import cyoap_main.util.RenderUtil;
+import cyoap_main.util.SizeUtil;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Cursor;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
+import org.fxmisc.richtext.InlineCssTextArea;
+
+import java.io.IOException;
+import java.util.AbstractMap;
 
 public class ChoiceSetGuiComponent {
     public static Border border_default = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(5), new BorderWidths(2)));
@@ -182,14 +184,16 @@ public class ChoiceSetGuiComponent {
                             break;
                         }
                     }
-                    var t = CreateGuiController.platform.checkLine(mainChoiceSet, 10f);
-                    if (t != null) {
-                        var v = t.getKey();
-                        mainChoiceSet.setPosition(v.x() == 0 ? mainChoiceSet.bound.x : v.x(), v.y() == 0 ? mainChoiceSet.bound.y : v.y());
-                    }
+
                     if (final_choice != null) {
                         CreateGuiController.instance.commandTimeline
                                 .excuteCommand(new CombineCommand(final_choice, mainChoiceSet));
+                    } else {
+                        var t = CreateGuiController.platform.checkLine(mainChoiceSet, 10f);
+                        if (t != null) {
+                            var v = t.getKey();
+                            mainChoiceSet.setPosition(v.x() == 0 ? mainChoiceSet.bound.x : v.x(), v.y() == 0 ? mainChoiceSet.bound.y : v.y());
+                        }
                     }
                 }
                 this.pane.setViewOrder(0.0d);
@@ -302,10 +306,14 @@ public class ChoiceSetGuiComponent {
     }
 
     public void combineSubChoiceSetComponent(ChoiceSet sub) {
-        if (sub.choiceSet_parent != null) {
-            sub.choiceSet_parent.guiComponent.hbox_subChoiceSet.getChildren().remove(sub.getAnchorPane());
-        }
-        hbox_subChoiceSet.getChildren().add(sub.getAnchorPane());
+        var pane_sub = sub.getAnchorPane();
+        var pane_position = CreateGuiController.instance.pane_position;
+
+        pane_position.getChildren().remove(pane_sub);
+        pane_sub.setTranslateX(0);
+        pane_sub.setTranslateY(0);
+
+        hbox_subChoiceSet.getChildren().add(pane_sub);
     }
 
     public void separateSubChoiceSetComponent(ChoiceSet sub) {

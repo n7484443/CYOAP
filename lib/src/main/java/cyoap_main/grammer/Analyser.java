@@ -17,13 +17,11 @@ public class Analyser {
 
 	final int ints = 6;// 정수
 	final int floats = 7;// 소수점 붙음
-	final int booleans = 8;// true or false
-	final int strs = 9;// string, ""로 표시
+	final int trues = 8;// 그외
+	final int falses = 9;// 그외
+	final int strs = 10;// string, ""로 표시
 
-	final int others_string = 10;// 변수명
-
-	final int trues = 15;// 그외
-	final int falses = 16;// 그외
+	final int others_string = 15;// 변수명
 
 	final int function = 20;
 	final int function_start = 21;// (
@@ -43,7 +41,7 @@ public class Analyser {
 	/*
 	 * 문자 입력->텍스트와 문법을 분리 {} 내부에 문법 사용. 즉, 실제 사용 가능한 것은 [], () 정도.
 	 */
-	public List<String> parser(String str) {
+	public Pair<List<String>, List<String>> parser(String str) {
 		if (str == null)
 			return null;
 		if (str.chars().filter(e -> e == '{').count() != str.chars().filter(e -> e == '}').count()) {
@@ -61,20 +59,24 @@ public class Analyser {
 		if (str.contains("{")) {
 			List<String> str_text = new ArrayList<>();
 			List<String> str_func = new ArrayList<>();
-			var first_str = str.split("\\{");
-			for (int i = 0; i < first_str.length; i++) {
-				if (i == 0) {
-					str_text.add(first_str[0]);
-				} else {
-					var second_str = first_str[i].split("\\}");
-					str_func.add(second_str[0]);
-					if (second_str.length == 2) {
-						str_text.add(second_str[1]);
-					}
+			String str_tmp = String.copyValueOf(str.toCharArray());
+			while (true) {
+				int pos_first = str_tmp.indexOf("{");
+				int pos_second = str_tmp.indexOf("}");
+				if (pos_first == -1 || pos_second == -1) {
+					str_text.addAll(List.of(str_tmp.split("\n")));
+					break;
 				}
+
+				var str_tmp_inner = str_tmp.substring(pos_first + 1, pos_second);
+				var str_tmp_front = str_tmp.substring(0, pos_first - 1).trim();
+				if (!str_tmp_front.isEmpty()) {
+					str_text.add(str_tmp.substring(0, pos_first - 1));
+				}
+				str_func.add(str_tmp_inner);
+				str_tmp = str_tmp.substring(pos_second + 1);
 			}
-			analyse(str_func);
-			return str_text;
+			return new Pair<>(str_text, str_func);
 		} else
 			return null;
 	}
@@ -84,9 +86,7 @@ public class Analyser {
 		List<Integer> func_int_List = new ArrayList<>();
 		List<String> func_string_List = new ArrayList<>();
 		int i = 0;
-		while (true) {
-			if (str.length() <= i)
-				break;
+		while (str.length() > i) {
 			var c = str.charAt(i);
 			var size = func_string_List.size() - 1;
 			switch (c) {
@@ -186,7 +186,7 @@ public class Analyser {
 
 			i++;
 		}
-		return new Pair<List<Integer>, List<String>>(func_int_List, func_string_List);
+		return new Pair<>(func_int_List, func_string_List);
 
 	}
 
@@ -200,20 +200,14 @@ public class Analyser {
 	}
 
 	public types getTypeFromInt(int t) {
-		switch (t) {
-			case ints:
-				return types.ints;
-			case floats:
-				return types.floats;
-			case booleans:
-				return types.booleans;
-			case strs:
-				return types.strings;
-			case function:
-			return types.functions;
-		default:
-			return types.nulls;
-		}
+		return switch (t) {
+			case ints -> types.ints;
+			case floats -> types.floats;
+			case trues, falses -> types.booleans;
+			case strs -> types.strings;
+			case function -> types.functions;
+			default -> types.nulls;
+		};
 	}
 
 	public Pair<Recursive_Parser, Integer> create_parser(int i, List<Integer> func, List<String> data,
@@ -305,7 +299,7 @@ public class Analyser {
 
 		System.out.println("end parser");
 		var parser_ans = create_parser(equal_pos + 1, func, data, parser);
-		//parser_ans.getKey().checkParser(0);
+
 		System.out.println("recursive parse end");
 		String name = "";
 		ValueType vartype = null;
@@ -343,10 +337,6 @@ public class Analyser {
 		}
 		VariableDataBase.getInstance().setValue(name, vartype);
 		System.out.println("all parsing end");
-
-		// for (int i = 0; i < data.size(); i++) {
-		// System.out.println(func.get(i) + ":" + data.get(i));
-		// }
 
 	}
 

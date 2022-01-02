@@ -60,10 +60,6 @@ public class VariableDataBase {
 			return toStr;
 		}
 	}
-	
-
-
-	
 
 	public static class ValueType {
 		public String data;
@@ -99,8 +95,13 @@ public class VariableDataBase {
 		}
 		
 		public ValueType(ValueType v) {
-			this.type = v.type;
-			this.data = v.data;
+			if (v == null) {
+				this.type = types.nulls;
+				this.data = "";
+			} else {
+				this.type = v.type;
+				this.data = v.data;
+			}
 		}
 		
 		public ValueType() {
@@ -109,7 +110,7 @@ public class VariableDataBase {
 
 		public <T> void setData(T b) {
 			if (type.equals(types.booleans))
-				data = ((boolean) b ? "true" : "false");
+				data = (String) b;
 			else
 				data = b.toString();
 		}

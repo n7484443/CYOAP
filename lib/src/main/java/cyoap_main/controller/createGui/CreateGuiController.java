@@ -174,7 +174,8 @@ public class CreateGuiController implements IGuiController {
     public void save_describe_pane() {
         VariableDataBase.getInstance().isUpdated = true;
 
-        Analyser.getInstance().parser(describeGuiController.text_editor.getText());
+        var pair = Analyser.getInstance().parser(describeGuiController.text_editor.getText());
+        Analyser.getInstance().analyse(pair.getValue());
         if (nowEditDataSet != null) {
             var command = new TextChangeCommand(nowEditDataSet);
             if (!describeGuiController.text_title.getText().equals(nowEditDataSet.string_title)) {

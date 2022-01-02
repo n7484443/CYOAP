@@ -35,7 +35,10 @@ public class ChoiceSet {
     public List<ChoiceSet> choiceSet_child = new ArrayList<>();
     @JsonBackReference
     public ChoiceSet choiceSet_parent = null;
+    @JsonIgnore
     public boolean isClicked = false;
+
+    public boolean isSelected = false;
 
     public int round = 0;
 

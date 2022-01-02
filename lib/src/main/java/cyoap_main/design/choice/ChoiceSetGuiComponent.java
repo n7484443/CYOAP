@@ -78,6 +78,8 @@ public class ChoiceSetGuiComponent {
         pane_border.setMouseTransparent(true);
         pane_surround.add(pane_inner, 0, 0);
         pane_surround.add(hbox_subChoiceSet, 0, 1);
+        GridPane.setHgrow(hbox_subChoiceSet, Priority.ALWAYS);
+        GridPane.setVgrow(hbox_subChoiceSet, Priority.ALWAYS);
 
         try {
             area.getStylesheets().add(LoadUtil.getInstance().loadCss("/lib/css/text_editor.css"));
@@ -117,11 +119,18 @@ public class ChoiceSetGuiComponent {
         image.setPadding(new Insets(5));
 
         pane_inner.setMouseTransparent(true);
-        float border = 9.5f;
 
+        eventInit();
+
+        updateColor();
+        setHorizontal(false);
+    }
+
+    public void eventInit() {
         if (JavaFxMain.controller.getPlatform().isEditable()) {
+            float border = 9.5f;
             pane.setOnMouseMoved(e -> {
-                if (SizeUtil.setCursor(e.getX(), e.getY(), this.mainChoiceSet.getWidth(), this.mainChoiceSet.getHeight(), border)) {
+                if (SizeUtil.setCursor(e.getX(), e.getY(), this.mainChoiceSet.getWidth(), this.mainChoiceSet.getHeight(), border * JavaFxMain.controller.getPlatform().scale)) {
                     CreateGuiController.instance.nowSizeChange = new AbstractMap.SimpleEntry<>(mainChoiceSet, new SizeChangeCommand(mainChoiceSet));
                 }
             });
@@ -204,10 +213,13 @@ public class ChoiceSetGuiComponent {
                 if (!mainChoiceSet.isClicked)
                     JavaFxMain.instance.scene_create.setCursor(Cursor.DEFAULT);
             });
+        } else {
+            pane.setOnMouseClicked(e -> {
+                if (e.getButton().equals(MouseButton.PRIMARY)) {
+                    mainChoiceSet.isSelected = !mainChoiceSet.isSelected;
+                }
+            });
         }
-
-        updateColor();
-        setHorizontal(false);
     }
 
     public MoveCommand moveCommand = null;
@@ -273,12 +285,15 @@ public class ChoiceSetGuiComponent {
                 }
             }
         }
+        var gap = 4;
+        var x_start = mainChoiceSet.bound.x - gap - min_x;
+        var y_start = mainChoiceSet.bound.y - gap - min_y;
+        if (mainChoiceSet.isSelected) {
+            RenderUtil.setStroke(gc, time, Color.RED);
 
-        if (mainChoiceSet.equals(CreateGuiController.instance.nowMouseInDataSet)) {
+            gc.strokeRect(x_start, y_start, mainChoiceSet.getAnchorPane().getLayoutBounds().getWidth() + gap * 2, mainChoiceSet.getAnchorPane().getLayoutBounds().getHeight() + gap * 2);
+        } else if (mainChoiceSet.equals(CreateGuiController.instance.nowMouseInDataSet)) {
             RenderUtil.setStroke(gc, time, Color.BLUE);
-            var gap = 4;
-            var x_start = mainChoiceSet.bound.x - gap - min_x;
-            var y_start = mainChoiceSet.bound.y - gap - min_y;
 
             gc.strokeRect(x_start, y_start, mainChoiceSet.getAnchorPane().getLayoutBounds().getWidth() + gap * 2, mainChoiceSet.getAnchorPane().getLayoutBounds().getHeight() + gap * 2);
         }

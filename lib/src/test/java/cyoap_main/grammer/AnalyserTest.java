@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class AnalyserTest {
     @Test
     public void testAnalyseString() {
+        var ins = VariableDataBase.getInstance();
         String str_test = """
                 가나다라마바사
                 {aaa = 3}
@@ -20,6 +21,7 @@ class AnalyserTest {
                 가다ㅏㄷ
                 {e = false}
                 {f = 3 + 5.5}
+                {if(f == 4, alpha = 4, alpha = 3)}
                 """;
         var t = Analyser.getInstance().parser(str_test);
         var text = t.getKey();
@@ -31,15 +33,16 @@ class AnalyserTest {
         assertEquals("a = 3 + 5", func.get(1).strip());
 
         Analyser.getInstance().analyse(func);
-        assertEquals(3, (int) VariableDataBase.getInstance().getValue("aaa").getData());
-        assertEquals(8, (int) VariableDataBase.getInstance().getValue("a").getData());
-        assertEquals(5, (int) VariableDataBase.getInstance().getValue("func1").getData());
-        assertEquals(5, (int) VariableDataBase.getInstance().getValue("func2").getData());
-        assertEquals(4, (int) VariableDataBase.getInstance().getValue("func3").getData());
-        assertEquals(4, (int) VariableDataBase.getInstance().getValue("func4").getData());
-        assertEquals("dddddd", VariableDataBase.getInstance().getValue("c").getData());
-        assertTrue((boolean) VariableDataBase.getInstance().getValue("d").getData());
-        assertFalse((boolean) VariableDataBase.getInstance().getValue("e").getData());
-        assertEquals(8.5f, (float) VariableDataBase.getInstance().getValue("f").getData());
+        assertEquals(3, (int) ins.getValue("aaa").getData());
+        assertEquals(8, (int) ins.getValue("a").getData());
+        assertEquals(5, (int) ins.getValue("func1").getData());
+        assertEquals(5, (int) ins.getValue("func2").getData());
+        assertEquals(4, (int) ins.getValue("func3").getData());
+        assertEquals(4, (int) ins.getValue("func4").getData());
+        assertEquals("dddddd", ins.getValue("c").getData());
+        assertTrue((boolean) ins.getValue("d").getData());
+        assertFalse((boolean) ins.getValue("e").getData());
+        assertEquals(8.5f, (float) ins.getValue("f").getData());
+        assertEquals(4, (int) ins.getValue("alpha").getData());
     }
 }

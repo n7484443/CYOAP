@@ -1,21 +1,16 @@
 package cyoap_main.grammer;
 
-import cyoap_main.grammer.VariableDataBase.ValueType;
+import com.google.common.collect.Range;
 import cyoap_main.grammer.VariableDataBase.types;
 
 import java.util.Random;
 
 public class FunctionList {
-	final static Func_two_input func_substitute = (a, b) -> {
-		a = new ValueType(b);
-		return a;
-	};
 	final static Func_two_input func_plus = (a, b) -> {
 		if (b == null) {
 			System.err.println("null error!");
 			return null;
 		}
-		System.out.println("plusTest:" + a.data + ":" + b.data);
 		if (a.type.equals(types.strings)) {
 			a.data += b.data;
 			return a;
@@ -132,7 +127,15 @@ public class FunctionList {
 		}
 	};
 
-	public static Function_for_d getFunction(String s) {
+	final static float epsilon = 0.0001f;
+
+	final static Func_three_input func_if = (bool, then, not) -> {
+		if (bool == null) return null;
+		if (bool.getData() == null) return null;
+		return (boolean) bool.getData() ? then : not;
+	};
+
+	public static iFunction getFunction(String s) {
 		return switch (s) {
 			case "if" -> func_if;
 			case "floor" -> func_floor;
@@ -142,42 +145,40 @@ public class FunctionList {
 			case "-" -> func_minus;
 			case "*" -> func_multi;
 			case "/" -> func_div;
-			case "=" -> func_substitute;
+			case "==" -> func_isEqual;
 			case "random" -> func_rand;
-			case "isEqual" -> func_isEqual;
 			default -> null;
 		};
 	}
 
-	final static Func_three_input func_if = (bool, then, not) -> {
-		if (bool == null) return null;
-		if (bool.getData() == null) return null;
-		return (boolean) bool.getData() ? then : not;
-	};
+	@FunctionalInterface
+	public interface Func_three_input extends iFunction {
+		ValueType func(ValueType b, ValueType x, ValueType nor);
+	}
 
 	@FunctionalInterface
-	public interface Func_three_input extends Function_for_d {
-		ValueType func(ValueType b, ValueType x, ValueType nor);
+	public interface Func_two_input extends iFunction {
+		ValueType func(ValueType b, ValueType x);
 	}
 
 	final static Func_two_input func_isEqual = (a, b) -> {
 		if (a == b) return new ValueType(true);
-		if (a.type == b.type && a.getData() == b.getData()) return new ValueType(true);
+		if (a.type == types.ints && b.type == types.ints && a.getData() == b.getData()) return new ValueType(true);
+		if (a.type == types.floats && b.type == types.floats) {
+			float a_data = (float) a.getData();
+			float b_data = (float) b.getData();
+			return new ValueType(Range.closed(-epsilon, epsilon).contains(a_data - b_data));
+		}
 		if (((a.type == types.ints && b.type == types.floats) || (a.type == types.floats && b.type == types.ints))
 				&& a.getData() == b.getData()) return new ValueType(true);
 		return new ValueType(false);
 	};
 
-	@FunctionalInterface
-	public interface Func_two_input extends Function_for_d {
-		ValueType func(ValueType b, ValueType x);
-	}
-
-	public interface Function_for_d {
+	public interface iFunction {
 	}
 
 	@FunctionalInterface
-	public interface Func_one_input extends Function_for_d {
+	public interface Func_one_input extends iFunction {
 		ValueType func(ValueType b);
 	}
 

@@ -2,8 +2,7 @@ package cyoap_main.grammer;
 
 import cyoap_main.grammer.FunctionList.Func_one_input;
 import cyoap_main.grammer.FunctionList.Func_two_input;
-import cyoap_main.grammer.FunctionList.Function_for_d;
-import cyoap_main.grammer.VariableDataBase.ValueType;
+import cyoap_main.grammer.FunctionList.iFunction;
 
 public class Recursive_Parser {
 	public Recursive_Parser[] child_node = new Recursive_Parser[3];
@@ -21,9 +20,9 @@ public class Recursive_Parser {
 	}
 
 	public int checkParser(int i) {
-		if(value != null)System.out.println(i + ":" + value.data + ":" + value.type);
-		for(int k = 0; k < 3; k++) {
-			if(child_node[k] != null) {
+		if (value != null) System.out.println(i + ":" + value.data + ":" + value.type);
+		for (int k = 0; k < 3; k++) {
+			if (child_node[k] != null) {
 				i++;
 				i = child_node[k].checkParser(i);
 			}
@@ -31,12 +30,16 @@ public class Recursive_Parser {
 		return i;
 	}
 
+	public void checkParser() {
+		checkParser(0);
+	}
+
 	public ValueType unzip() {
-		if (value.getData() instanceof Function_for_d func) {
+		if (value.getData() instanceof iFunction func) {
 			if (func instanceof Func_one_input func_oneInput) {
 				return func_oneInput.func(child_node[0].unzip());
-			} else if (func instanceof Func_two_input func_two) {
-				return func_two.func(child_node[0].unzip(), child_node[1].unzip());
+			} else if (func instanceof Func_two_input func_twoInput) {
+				return func_twoInput.func(child_node[0].unzip(), child_node[1].unzip());
 			} else {
 				FunctionList.Func_three_input func_three = (FunctionList.Func_three_input) func;
 				return func_three.func(child_node[0].unzip(), child_node[1].unzip(), child_node[2].unzip());

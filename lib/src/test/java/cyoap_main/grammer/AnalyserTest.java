@@ -20,9 +20,12 @@ class AnalyserTest {
                 {d = true}
                 가다ㅏㄷ
                 {e = false}
-                {f = 3 + 5.5}
-                {t = isEqual(f, 8.5)}
-                {if(isEqual(f, 4), alpha = 4, alpha = 3)}
+                {f = 6-5.5}
+                {t = f == 0.5}
+                {if(f == 0.5, alpha = 11, alpha = 15)}
+                {if(f == 8.5, beta = 12, beta = 16)}
+                {test_alpha = 1}
+                {test_alpha += 3}
                 """;
         var t = Analyser.getInstance().parser(str_test);
         var text = t.getKey();
@@ -32,10 +35,8 @@ class AnalyserTest {
         assertEquals("가다ㅏㄷ", text.get(1).strip());
         assertEquals("aaa = 3", func.get(0).strip());
         assertEquals("a = 3 + 5", func.get(1).strip());
-        for (var str : func) {
-            System.out.println(Analyser.getInstance().replace(str));
-        }
-        Analyser.getInstance().analyse(func);
+
+        Analyser.getInstance().analyseList(func);
         assertEquals(3, (int) ins.getValue("aaa").getData());
         assertEquals(8, (int) ins.getValue("a").getData());
         assertEquals(5, (int) ins.getValue("func1").getData());
@@ -45,8 +46,13 @@ class AnalyserTest {
         assertEquals("dddddd", ins.getValue("c").getData());
         assertTrue((boolean) ins.getValue("d").getData());
         assertFalse((boolean) ins.getValue("e").getData());
-        assertEquals(8.5f, (float) ins.getValue("f").getData());
+        assertEquals(0.5f, (float) ins.getValue("f").getData());
+
         assertTrue((boolean) ins.getValue("t").getData());
-        assertEquals(3, (int) ins.getValue("alpha").getData());
+
+        assertEquals(11, (int) ins.getValue("alpha").getData());
+        assertEquals(12, (int) ins.getValue("beta").getData());
+
+        assertEquals(4, (int) ins.getValue("test_alpha").getData());
     }
 }

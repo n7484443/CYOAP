@@ -7,7 +7,7 @@ import java.util.concurrent.CompletableFuture;
 import cyoap_main.controller.IGuiController;
 import cyoap_main.controller.createGui.CreateGuiController;
 import cyoap_main.grammer.VariableDataBase;
-import cyoap_main.grammer.VariableDataBase.ValueType;
+import cyoap_main.grammer.ValueType;
 import cyoap_main.util.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;

@@ -242,8 +242,10 @@ public class ChoiceSetGuiComponent {
         var platform = JavaFxMain.controller.getPlatform();
         var min_x = platform.min_x;
         var min_y = platform.min_y;
+        var width = mainChoiceSet.getAnchorPane().getLayoutBounds().getWidth();
+        var height = mainChoiceSet.getAnchorPane().getLayoutBounds().getHeight();
 
-        RenderUtil.setStroke(gc, time, Color.CORNFLOWERBLUE);
+        RenderUtil.setStroke(gc, time, Color.CORNFLOWERBLUE, 1);
         if (JavaFxMain.controller instanceof CreateGuiController create_gui) {
             if (moveCommand != null && mainChoiceSet.equals(moveCommand.choiceset)) {
                 var entry = platform.checkLine(mainChoiceSet, 10f);
@@ -251,10 +253,10 @@ public class ChoiceSetGuiComponent {
                     var show_x = entry.getValue().x();
                     var show_y = entry.getValue().y();
                     if (show_x != Float.MAX_VALUE) {
-                        gc.strokeLine(show_x - min_x, CreateGuiController.platform.min_y - min_y, show_x - min_x, CreateGuiController.platform.max_y - min_y);
+                        gc.strokeLine(show_x - min_x, 0, show_x - min_x, CreateGuiController.platform.max_y - min_y);
                     }
                     if (show_y != Float.MAX_VALUE) {
-                        gc.strokeLine(CreateGuiController.platform.min_x - min_x, show_y - min_y, CreateGuiController.platform.max_x - min_x, show_y - min_y);
+                        gc.strokeLine(0, show_y - min_y, CreateGuiController.platform.max_x - min_x, show_y - min_y);
                     }
                 }
             }
@@ -286,16 +288,20 @@ public class ChoiceSetGuiComponent {
             }
         }
         var gap = 4;
+        var side = 30;
         var x_start = mainChoiceSet.bound.x - gap - min_x;
         var y_start = mainChoiceSet.bound.y - gap - min_y;
+        var x_start_without_gap = mainChoiceSet.bound.x - min_x;
+        var y_start_without_gap = mainChoiceSet.bound.y - min_y;
         if (mainChoiceSet.isSelected) {
-            RenderUtil.setStroke(gc, time, Color.RED);
-
-            gc.strokeRect(x_start, y_start, mainChoiceSet.getAnchorPane().getLayoutBounds().getWidth() + gap * 2, mainChoiceSet.getAnchorPane().getLayoutBounds().getHeight() + gap * 2);
+            RenderUtil.setStroke(gc, time, Color.RED, 2);
+            gc.strokeLine(x_start_without_gap + side, y_start_without_gap, x_start_without_gap, y_start_without_gap + side);
+            RenderUtil.setStroke(gc, time, Color.RED, 2);
+            gc.strokeRect(x_start, y_start, width + gap * 2, height + gap * 2);
         } else if (mainChoiceSet.equals(CreateGuiController.instance.nowMouseInDataSet)) {
-            RenderUtil.setStroke(gc, time, Color.BLUE);
+            RenderUtil.setStroke(gc, time, Color.BLUE, 1);
 
-            gc.strokeRect(x_start, y_start, mainChoiceSet.getAnchorPane().getLayoutBounds().getWidth() + gap * 2, mainChoiceSet.getAnchorPane().getLayoutBounds().getHeight() + gap * 2);
+            gc.strokeRect(x_start, y_start, width + gap * 2, height + gap * 2);
         }
     }
 

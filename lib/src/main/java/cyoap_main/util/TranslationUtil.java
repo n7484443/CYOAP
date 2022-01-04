@@ -1,6 +1,5 @@
 package cyoap_main.util;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -28,7 +27,7 @@ public class TranslationUtil {
     public String getTranslate(String input) {
         String text;
         try {
-            text = URLEncoder.encode("안녕하세요. 숨쉬듯 잘 되어가나요?", StandardCharsets.UTF_8);
+            text = URLEncoder.encode(input, StandardCharsets.UTF_8);
         } catch (Exception e) {
             throw new RuntimeException("인코딩 실패", e);
         }

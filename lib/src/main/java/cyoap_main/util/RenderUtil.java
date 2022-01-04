@@ -6,9 +6,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class RenderUtil {
-    public static void setStroke(GraphicsContext gc, double time, Color color) {
+    public static void setStroke(GraphicsContext gc, double time, Color color, float lineWidth) {
         gc.setStroke(color);
-        gc.setLineWidth(1);
+        gc.setLineWidth(lineWidth);
         gc.setLineDashes(5);
         gc.setLineDashOffset((time * 20) % 1000);
     }

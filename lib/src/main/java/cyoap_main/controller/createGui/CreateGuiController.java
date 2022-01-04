@@ -154,6 +154,8 @@ public class CreateGuiController implements IGuiController {
         File f = new File(JavaFxMain.instance.directory.getAbsolutePath() + File.separator + "file." + imageType);
         try {
             var imageOutputStream = ImageIO.createImageOutputStream(f);
+            if (!ImageIO.write(tempImg, imageType, imageOutputStream)) {
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

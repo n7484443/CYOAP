@@ -1,7 +1,6 @@
 package cyoap_main.util;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Properties;
 
 public class LocalizationUtil {

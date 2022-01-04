@@ -14,7 +14,6 @@ import cyoap_main.core.JavaFxMain;
 import cyoap_main.design.choice.ChoiceSet;
 import cyoap_main.design.node_extension.ImageCell;
 import cyoap_main.platform.AbstractPlatform;
-import cyoap_main.platform.CreatePlatform;
 import cyoap_main.util.LoadUtil;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.Pane;

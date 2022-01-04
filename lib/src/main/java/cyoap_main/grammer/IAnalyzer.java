@@ -1,19 +1,19 @@
 package cyoap_main.grammer;
 
 public interface IAnalyzer {
-    final int ints = 1;// 정수
-    final int floats = 2;// 소수점 붙음
-    final int trues = 3;// 그외
-    final int falses = 4;// 그외
-    final int strs = 5;// string, ""로 표시
+    int ints = 1;// 정수
+    int floats = 2;// 소수점 붙음
+    int trues = 3;// 그외
+    int falses = 4;// 그외
+    int strs = 5;// string, ""로 표시
 
-    final int equal = -1;
+    int equal = -1;
 
-    final int variable_name = 10;// 변수명
+    int variable_name = 10;// 변수명
 
-    final int function_unspecified = 19;
-    final int function = 20;
-    final int function_start = 21;// (
-    final int function_end = 22;// )
-    final int function_comma = 23;// ,
+    int function_unspecified = 19;
+    int function = 20;
+    int function_start = 21;// (
+    int function_end = 22;// )
+    int function_comma = 23;// ,
 }

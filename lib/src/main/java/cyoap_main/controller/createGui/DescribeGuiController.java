@@ -6,7 +6,6 @@ import cyoap_main.design.choice.ChoiceSet;
 import cyoap_main.design.node_extension.ImageCell;
 import cyoap_main.util.FontLoader;
 import cyoap_main.util.LoadUtil;
-import cyoap_main.util.SizeUtil;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXRadioButton;
 import io.github.palexdev.materialfx.controls.MFXSlider;
@@ -177,10 +176,8 @@ public class DescribeGuiController implements IController {
                 editTextCss(range, "-fx-font-size", newVal + "pt");
             }
         });
-        imagecell_describe.setOnMouseExited(e -> {
-            JavaFxMain.instance.scene_create.setCursor(Cursor.DEFAULT);
-        });
-        text_round.textProperty().bindBidirectional(slider_round.valueProperty(), new StringConverter<Number>() {
+        imagecell_describe.setOnMouseExited(e -> JavaFxMain.instance.scene_create.setCursor(Cursor.DEFAULT));
+        text_round.textProperty().bindBidirectional(slider_round.valueProperty(), new StringConverter<>() {
             @Override
             public String toString(Number object) {
                 return String.valueOf(object.intValue());
@@ -189,7 +186,7 @@ public class DescribeGuiController implements IController {
             @Override
             public Integer fromString(String string) {
                 try {
-                    var round = Integer.valueOf(string);
+                    var round = Integer.getInteger(string);
                     if (round <= 0) {
                         return 0;
                     }
@@ -199,9 +196,7 @@ public class DescribeGuiController implements IController {
                 }
             }
         });
-        slider_round.valueProperty().addListener((before, after, e) -> {
-            imagecell_describe.round.set(after.intValue());
-        });
+        slider_round.valueProperty().addListener((before, after, e) -> imagecell_describe.round.set(after.intValue()));
 
         button_save.setOnMouseClicked(e -> CreateGuiController.instance.save_describe_pane());
         button_next.setOnMouseClicked(e -> {

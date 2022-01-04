@@ -16,7 +16,7 @@ class AnalyserTest {
                 {func2 = ceil(4.8)}
                 {func3 = floor(4.8)}
                 {func4 = floor(4)}
-                {c = "dddddd"}
+                {c = "abcdefg가나다라마바사"}
                 {d = true}
                 가다ㅏㄷ
                 {e = false}
@@ -50,7 +50,7 @@ class AnalyserTest {
         assertEquals(5, (int) ins.getValue("func2").getData());
         assertEquals(4, (int) ins.getValue("func3").getData());
         assertEquals(4, (int) ins.getValue("func4").getData());
-        assertEquals("dddddd", ins.getValue("c").getData());
+        assertEquals("abcdefg가나다라마바사", ins.getValue("c").getData());
         assertTrue((boolean) ins.getValue("d").getData());
         assertFalse((boolean) ins.getValue("e").getData());
         assertEquals(0.5f, (float) ins.getValue("f").getData());

@@ -21,7 +21,9 @@ class AnalyserTest {
                 가다ㅏㄷ
                 {e = false}
                 {f = 6-5.5}
-                {t = f == 0.5}
+                {comp1 = f == 0.5}
+                {comp2 = f >= 0.5}
+                {comp3 = f > 0.5}
                 {if(f == 0.5, alpha = 11, alpha = 15)}
                 {if(f == 8.5, beta = 12, beta = 16)}
                 {test_alpha = 1}
@@ -55,7 +57,9 @@ class AnalyserTest {
         assertFalse((boolean) ins.getValue("e").getData());
         assertEquals(0.5f, (float) ins.getValue("f").getData());
 
-        assertTrue((boolean) ins.getValue("t").getData());
+        assertTrue((boolean) ins.getValue("comp1").getData());
+        assertTrue((boolean) ins.getValue("comp2").getData());
+        assertFalse((boolean) ins.getValue("comp3").getData());
 
         assertEquals(11, (int) ins.getValue("alpha").getData());
         assertEquals(12, (int) ins.getValue("beta").getData());

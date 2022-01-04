@@ -23,17 +23,21 @@ public class LexicalAnalyzer implements IAnalyzer {
             var c = str.charAt(i);
             var size = func.size() - 1;
             switch (c) {
-                case '+', '-', '*', '/' -> {
+                case '+', '-', '*', '/', '<', '>' -> {
                     func.add(new ParsingUnit(function_unspecified, String.valueOf(c)));
                 }
                 case '=' -> {
-                    if (str.charAt(i - 1) == '=') {
-                        func.set(size, new ParsingUnit(function_unspecified, "=="));
+                    String s_front = String.valueOf(str.charAt(i - 1));
+                    if (str.charAt(i - 1) == '=' || str.charAt(i - 1) == '!') {
+                        func.set(size, new ParsingUnit(function_unspecified, s_front + "="));
+                    } else if (str.charAt(i - 1) == '<' || str.charAt(i - 1) == '>') {
+                        func.remove(size);
+                        func.add(new ParsingUnit(function_unspecified, s_front + "="));
                     } else if (str.charAt(i - 1) == '+' || str.charAt(i - 1) == '-' || str.charAt(i - 1) == '*' || str.charAt(i - 1) == '/') {
                         func.remove(size);
                         func.add(new ParsingUnit(equal, "="));
                         func.add(new ParsingUnit(variable_name, func.get(0).data()));//a += b 를 a = a + b 꼴로 변환
-                        func.add(new ParsingUnit(function_unspecified, String.valueOf(str.charAt(i - 1))));//a += b 를 a = a + b 꼴로 변환
+                        func.add(new ParsingUnit(function_unspecified, s_front));//a += b 를 a = a + b 꼴로 변환
                     } else {
                         func.add(new ParsingUnit(equal, "="));
                     }

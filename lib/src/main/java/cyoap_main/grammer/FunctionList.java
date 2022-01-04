@@ -6,6 +6,40 @@ import cyoap_main.grammer.VariableDataBase.types;
 import java.util.Random;
 
 public class FunctionList {
+	public static iFunction getFunction(String s) {
+		return switch (s) {
+			case "if" -> func_if;
+			case "floor" -> func_floor;
+			case "round" -> func_round;
+			case "ceil" -> func_ceil;
+			case "+" -> func_plus;
+			case "-" -> func_minus;
+			case "*" -> func_multi;
+			case "/" -> func_div;
+			case "==" -> func_isEqual;
+			case "!=" -> func_isNotEqual;
+			case ">" -> func_bigger;
+			case "<" -> func_smaller;
+			case ">=" -> func_bigger_equal;
+			case "<=" -> func_smaller_equal;
+			case "random" -> func_rand;
+			default -> null;
+		};
+	}
+
+	public interface iFunction {
+	}
+
+	@FunctionalInterface
+	public interface Func_one_input extends iFunction {
+		ValueType func(ValueType a);
+	}
+
+	@FunctionalInterface
+	public interface Func_two_input extends iFunction {
+		ValueType func(ValueType a, ValueType b);
+	}
+
 	final static Func_two_input func_plus = (a, b) -> {
 		if (b == null) {
 			System.err.println("null error!");
@@ -135,30 +169,9 @@ public class FunctionList {
 		return (boolean) bool.getData() ? then : not;
 	};
 
-	public static iFunction getFunction(String s) {
-		return switch (s) {
-			case "if" -> func_if;
-			case "floor" -> func_floor;
-			case "round" -> func_round;
-			case "ceil" -> func_ceil;
-			case "+" -> func_plus;
-			case "-" -> func_minus;
-			case "*" -> func_multi;
-			case "/" -> func_div;
-			case "==" -> func_isEqual;
-			case "random" -> func_rand;
-			default -> null;
-		};
-	}
-
 	@FunctionalInterface
 	public interface Func_three_input extends iFunction {
-		ValueType func(ValueType b, ValueType x, ValueType nor);
-	}
-
-	@FunctionalInterface
-	public interface Func_two_input extends iFunction {
-		ValueType func(ValueType b, ValueType x);
+		ValueType func(ValueType a, ValueType b, ValueType c);
 	}
 
 	final static Func_two_input func_isEqual = (a, b) -> {
@@ -174,13 +187,62 @@ public class FunctionList {
 		return new ValueType(false);
 	};
 
-	public interface iFunction {
-	}
+	final static Func_two_input func_isNotEqual = (a, b) -> {
+		boolean bool_isEqaul = func_isEqual.func(a, b).getData();
+		return new ValueType(!bool_isEqaul);
+	};
+	final static Func_two_input func_bigger_equal = (a, b) -> {
+		if (a.type == types.ints && b.type == types.ints) {
+			int alpha = (int) a.getData();
+			int beta = (int) b.getData();
+			return new ValueType(alpha >= beta);
+		} else if (a.type == types.floats && b.type == types.ints) {
+			float alpha = (float) a.getData();
+			int beta = (int) b.getData();
+			return new ValueType(alpha >= beta);
+		} else if (a.type == types.ints && b.type == types.floats) {
+			int alpha = (int) a.getData();
+			float beta = (float) b.getData();
+			return new ValueType(alpha >= beta);
+		} else if (a.type == types.floats && b.type == types.floats) {
+			float alpha = (float) a.getData();
+			float beta = (float) b.getData();
+			return new ValueType(alpha >= beta);
+		} else {
+			return new ValueType(false);
+		}
+	};
 
-	@FunctionalInterface
-	public interface Func_one_input extends iFunction {
-		ValueType func(ValueType b);
-	}
+	final static Func_two_input func_smaller_equal = (a, b) -> {
+		if (a.type == types.ints && b.type == types.ints) {
+			int alpha = (int) a.getData();
+			int beta = (int) b.getData();
+			return new ValueType(alpha <= beta);
+		} else if (a.type == types.floats && b.type == types.ints) {
+			float alpha = (float) a.getData();
+			int beta = (int) b.getData();
+			return new ValueType(alpha <= beta);
+		} else if (a.type == types.ints && b.type == types.floats) {
+			int alpha = (int) a.getData();
+			float beta = (float) b.getData();
+			return new ValueType(alpha <= beta);
+		} else if (a.type == types.floats && b.type == types.floats) {
+			float alpha = (float) a.getData();
+			float beta = (float) b.getData();
+			return new ValueType(alpha <= beta);
+		} else {
+			return new ValueType(false);
+		}
+	};
+	static Func_two_input func_bigger = (a, b) -> {
+		boolean bool_isEqaul = func_smaller_equal.func(a, b).getData();
+		return new ValueType(!bool_isEqaul);
+	};
+
+	final static Func_two_input func_smaller = (a, b) -> {
+		boolean bool_isEqaul = func_bigger_equal.func(a, b).getData();
+		return new ValueType(!bool_isEqaul);
+	};
 
 
 	final static Func_one_input func_floor = (input) -> {

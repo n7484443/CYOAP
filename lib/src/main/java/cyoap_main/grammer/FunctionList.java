@@ -6,7 +6,11 @@ import cyoap_main.grammer.VariableDataBase.types;
 import java.util.Random;
 
 public class FunctionList {
-	final static Func_two func_plus = (a, b) -> {
+	final static Func_two_input func_substitute = (a, b) -> {
+		a = new ValueType(b);
+		return a;
+	};
+	final static Func_two_input func_plus = (a, b) -> {
 		if (b == null) {
 			System.err.println("null error!");
 			return null;
@@ -40,7 +44,7 @@ public class FunctionList {
 			return null;
 		}
 	};
-	final static Func_two func_minus = (a, b) -> {
+	final static Func_two_input func_minus = (a, b) -> {
 		if (b == null) {
 			System.err.println("null error!");
 			return null;
@@ -69,7 +73,7 @@ public class FunctionList {
 			return null;
 		}
 	};
-	final static Func_two func_multi = (a, b) -> {
+	final static Func_two_input func_multi = (a, b) -> {
 		if (b == null) {
 			System.err.println("null error!");
 			return null;
@@ -98,7 +102,7 @@ public class FunctionList {
 			return null;
 		}
 	};
-	final static Func_two func_div = (a, b) -> {
+	final static Func_two_input func_div = (a, b) -> {
 		if (b == null) {
 			System.err.println("null error!");
 			return null;
@@ -127,11 +131,6 @@ public class FunctionList {
 			return null;
 		}
 	};
-	final static Func_three func_if = (bool, then, not) -> {
-		if (bool == null) return null;
-		if (bool.getData() == null) return null;
-		return (boolean) bool.getData() ? then : not;
-	};
 
 	public static Function_for_d getFunction(String s) {
 		return switch (s) {
@@ -139,35 +138,51 @@ public class FunctionList {
 			case "floor" -> func_floor;
 			case "round" -> func_round;
 			case "ceil" -> func_ceil;
-			case "plus" -> func_plus;
-			case "minus" -> func_minus;
-			case "multi" -> func_multi;
-			case "div" -> func_div;
+			case "+" -> func_plus;
+			case "-" -> func_minus;
+			case "*" -> func_multi;
+			case "/" -> func_div;
+			case "=" -> func_substitute;
 			case "random" -> func_rand;
+			case "isEqual" -> func_isEqual;
 			default -> null;
 		};
+	}
+
+	final static Func_three_input func_if = (bool, then, not) -> {
+		if (bool == null) return null;
+		if (bool.getData() == null) return null;
+		return (boolean) bool.getData() ? then : not;
+	};
+
+	@FunctionalInterface
+	public interface Func_three_input extends Function_for_d {
+		ValueType func(ValueType b, ValueType x, ValueType nor);
+	}
+
+	final static Func_two_input func_isEqual = (a, b) -> {
+		if (a == b) return new ValueType(true);
+		if (a.type == b.type && a.getData() == b.getData()) return new ValueType(true);
+		if (((a.type == types.ints && b.type == types.floats) || (a.type == types.floats && b.type == types.ints))
+				&& a.getData() == b.getData()) return new ValueType(true);
+		return new ValueType(false);
+	};
+
+	@FunctionalInterface
+	public interface Func_two_input extends Function_for_d {
+		ValueType func(ValueType b, ValueType x);
 	}
 
 	public interface Function_for_d {
 	}
 
 	@FunctionalInterface
-	public interface Func_three extends Function_for_d {
-		ValueType func(ValueType b, ValueType x, ValueType nor);
-	}
-
-	@FunctionalInterface
-	public interface Func_two extends Function_for_d {
-		ValueType func(ValueType b, ValueType x);
-	}
-
-	@FunctionalInterface
-	public interface Func_one extends Function_for_d {
+	public interface Func_one_input extends Function_for_d {
 		ValueType func(ValueType b);
 	}
 
 
-	final static Func_one func_floor = (input) -> {
+	final static Func_one_input func_floor = (input) -> {
 		if (input.type == types.ints) {
 			int f = input.getData();
 			int i = (int) Math.floor(f);
@@ -183,7 +198,7 @@ public class FunctionList {
 	};
 
 
-	final static Func_one func_round = (input) -> {
+	final static Func_one_input func_round = (input) -> {
 		if (input.type == types.ints || input.type == types.floats) {
 			int f = Math.round(input.getData());
 			input.setData(String.valueOf(f));
@@ -192,7 +207,7 @@ public class FunctionList {
 		return input;
 	};
 
-	final static Func_one func_ceil = (input) -> {
+	final static Func_one_input func_ceil = (input) -> {
 		if (input.type == types.ints || input.type == types.floats) {
 			float f = input.getData();
 			int i = (int) Math.ceil(f);
@@ -202,7 +217,7 @@ public class FunctionList {
 		return input;
 	};
 
-	final static Func_one func_rand = (input) -> {
+	final static Func_one_input func_rand = (input) -> {
 		float f;
 		if (input.type.equals(types.ints)) {
 			int i = input.getData();

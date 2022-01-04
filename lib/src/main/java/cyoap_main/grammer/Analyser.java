@@ -27,7 +27,6 @@ public class Analyser {
 	final int function_start = 21;// (
 	final int function_end = 22;// )
 	final int function_comma = 23;// ,
-	final int function_semi = 24;// ;
 	public boolean b = false;
 	// 같은 값이 반환시->다음값으로
 	// null 일때->함수 입력 끝
@@ -85,8 +84,7 @@ public class Analyser {
 		var str = s.replaceAll(" ", "").replaceAll("\n", "");
 		List<Integer> func_int_List = new ArrayList<>();
 		List<String> func_string_List = new ArrayList<>();
-		int i = 0;
-		while (str.length() > i) {
+		for (int i = 0; i < str.length(); i++) {
 			var c = str.charAt(i);
 			var size = func_string_List.size() - 1;
 			switch (c) {
@@ -107,8 +105,13 @@ public class Analyser {
 					func_string_List.add("/");
 				}
 				case '=' -> {
-					func_int_List.add(equal);
-					func_string_List.add("=");
+					if (str.charAt(i - 1) == '=') {
+						func_int_List.set(func_int_List.size() - 1, function);
+						func_string_List.set(func_string_List.size() - 1, "isEqual");
+					} else {
+						func_int_List.add(equal);
+						func_string_List.add("=");
+					}
 				}
 				case '"' -> b = !b;
 				case '(' -> {
@@ -128,10 +131,6 @@ public class Analyser {
 					func_int_List.add(function_comma);
 					func_string_List.add(",");
 				}
-				case ';' -> {
-					func_int_List.add(function_semi);
-					func_string_List.add(";");
-				}
 				default -> {
 					if (b) {
 						if (func_int_List.get(size).equals(strs)) {
@@ -150,8 +149,8 @@ public class Analyser {
 							func_int_List.set(size, floats);
 							if (!isStringDouble(func_string_List.get(size))) {
 								System.err.println("error! float has more than two point(.)");
-						}
-					} else if (isDigit) {
+							}
+						} else if (isDigit) {
 							if (func_int_List.get(size) == others_string) {
 								func_string_List.set(size, func_string_List.get(size) + c);
 							} else if (func_int_List.get(size) == ints) {
@@ -179,12 +178,10 @@ public class Analyser {
 									func_int_List.set(size, falses);
 								}
 							}
+						}
 					}
 				}
 			}
-			}
-
-			i++;
 		}
 		return new Pair<>(func_int_List, func_string_List);
 
@@ -221,7 +218,7 @@ public class Analyser {
 				if (inner_parser == parser_comma) {
 					i++;
 					continue;
-				} else if (inner_parser == null) {
+				} else if (inner_parser == parser_null) {
 					System.out.println("break");
 					break;
 				}

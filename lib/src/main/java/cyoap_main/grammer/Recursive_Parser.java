@@ -1,8 +1,7 @@
 package cyoap_main.grammer;
 
-import cyoap_main.grammer.FunctionList.Func_one;
-import cyoap_main.grammer.FunctionList.Func_three;
-import cyoap_main.grammer.FunctionList.Func_two;
+import cyoap_main.grammer.FunctionList.Func_one_input;
+import cyoap_main.grammer.FunctionList.Func_two_input;
 import cyoap_main.grammer.FunctionList.Function_for_d;
 import cyoap_main.grammer.VariableDataBase.ValueType;
 
@@ -10,7 +9,7 @@ public class Recursive_Parser {
 	public Recursive_Parser[] child_node = new Recursive_Parser[3];
 	public ValueType value;
 	// 노드마다 가지는 최대의 데이터:3
-	// if ( a, then, else)
+	// if ( a, then, else) 가 최대
 
 	public void add(Recursive_Parser parser) {
 		for (int i = 0; i < child_node.length; i++) {
@@ -34,12 +33,12 @@ public class Recursive_Parser {
 
 	public ValueType unzip() {
 		if (value.getData() instanceof Function_for_d func) {
-			if (func instanceof Func_one func_one) {
-				return func_one.func(child_node[0].unzip());
-			} else if (func instanceof Func_two func_two) {
+			if (func instanceof Func_one_input func_oneInput) {
+				return func_oneInput.func(child_node[0].unzip());
+			} else if (func instanceof Func_two_input func_two) {
 				return func_two.func(child_node[0].unzip(), child_node[1].unzip());
 			} else {
-				Func_three func_three = (Func_three) func;
+				FunctionList.Func_three_input func_three = (FunctionList.Func_three_input) func;
 				return func_three.func(child_node[0].unzip(), child_node[1].unzip(), child_node[2].unzip());
 			}
 		} else {

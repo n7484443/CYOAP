@@ -27,6 +27,13 @@ class AnalyserTest {
                 {test_alpha = 1}
                 {test_alpha += 3}
                 """;
+        String str_test_2 = """
+                {a123123aa = 3}
+                """;
+        var l = Analyser.getInstance().parser(str_test_2);
+        Analyser.getInstance().analyseList(l.getValue());
+        assertEquals(3, (int) ins.getValue("a123123aa").getData());
+
         var t = Analyser.getInstance().parser(str_test);
         var text = t.getKey();
         var func = t.getValue();

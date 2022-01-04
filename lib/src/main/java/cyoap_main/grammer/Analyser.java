@@ -1,6 +1,5 @@
 package cyoap_main.grammer;
 
-import com.google.common.collect.Lists;
 import cyoap_main.grammer.VariableDataBase.types;
 import javafx.util.Pair;
 
@@ -47,8 +46,11 @@ public class Analyser implements IAnalyzer {
 				}
 
 				var str_tmp_inner = str_tmp.substring(pos_first + 1, pos_second);
-				var str_tmp_front = str_tmp.substring(0, pos_first - 1).trim();
-				if (!str_tmp_front.isEmpty()) {
+				String str_tmp_front = null;
+				if (pos_first != 0) {
+					str_tmp_front = str_tmp.substring(0, pos_first - 1).trim();
+				}
+				if (str_tmp_front != null && !str_tmp_front.isEmpty()) {
 					str_text.add(str_tmp.substring(0, pos_first - 1));
 				}
 				str_func.add(str_tmp_inner);

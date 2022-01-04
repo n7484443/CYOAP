@@ -175,7 +175,9 @@ public class CreateGuiController implements IGuiController {
         VariableDataBase.getInstance().isUpdated = true;
 
         var pair = Analyser.getInstance().parser(describeGuiController.text_editor.getText());
-        Analyser.getInstance().analyseList(pair.getValue());
+        if (pair != null) {
+            Analyser.getInstance().analyseList(pair.getValue());
+        }
         if (nowEditDataSet != null) {
             var command = new TextChangeCommand(nowEditDataSet);
             if (!describeGuiController.text_title.getText().equals(nowEditDataSet.string_title)) {

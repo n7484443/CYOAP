@@ -17,6 +17,7 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import javafx.concurrent.*;
 
 public class JavaFxMain extends Application {
 	public static String version;

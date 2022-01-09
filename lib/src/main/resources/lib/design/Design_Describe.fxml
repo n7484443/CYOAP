@@ -23,8 +23,8 @@
           fx:controller="cyoap_main.controller.createGui.DescribeGuiController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="10.0" prefWidth="100.0"/>
-        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="40.0" prefWidth="100.0"/>
-        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="39.5" prefWidth="100.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="32.0" prefWidth="100.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="47.5" prefWidth="100.0"/>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="10.5" prefWidth="100.0"/>
     </columnConstraints>
     <rowConstraints>
@@ -36,34 +36,10 @@
     <children>
         <BorderPane fx:id="pane_text_editor" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2"
                     GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
-            <top>
-                <HBox fx:id="hbox_setting" prefHeight="30.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                    <children>
-                        <ColorPicker fx:id="colorpicker_text_editor" prefWidth="100.0">
-                            <HBox.margin>
-                                <Insets bottom="5.0" left="5.0" top="5.0"/>
-                            </HBox.margin>
-                        </ColorPicker>
-                        <MFXComboBox fx:id="combo_text_font" prefHeight="27.0" prefWidth="196.0">
-                            <HBox.margin>
-                                <Insets bottom="5.0" left="5.0" top="5.0"/>
-                            </HBox.margin>
-                        </MFXComboBox>
-                        <MFXComboBox fx:id="combo_text_size" prefHeight="27.0" prefWidth="30.0">
-                            <HBox.margin>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                            </HBox.margin>
-                        </MFXComboBox>
-                    </children>
-                    <BorderPane.margin>
-                        <Insets/>
-                    </BorderPane.margin>
-                </HBox>
-            </top>
             <right>
                 <VBox BorderPane.alignment="CENTER">
                     <children>
-                        <ImageView fx:id="image_text_bold" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true"
+                        <ImageView fx:id="image_text_bold" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true"
                                    preserveRatio="true">
                             <VBox.margin>
                                 <Insets/>
@@ -72,7 +48,7 @@
                                 <Image url="@../image/icon_text_bold.png"/>
                             </image>
                         </ImageView>
-                        <ImageView fx:id="image_text_italic" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true"
+                        <ImageView fx:id="image_text_italic" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true"
                                    preserveRatio="true">
                             <VBox.margin>
                                 <Insets top="2.0"/>
@@ -81,7 +57,7 @@
                                 <Image url="@../image/icon_text_italic.png"/>
                             </image>
                         </ImageView>
-                        <ImageView fx:id="image_text_underline" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true"
+                        <ImageView fx:id="image_text_underline" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true"
                                    preserveRatio="true">
                             <VBox.margin>
                                 <Insets top="2.0"/>
@@ -90,7 +66,7 @@
                                 <Image url="@../image/icon_text_underline.png"/>
                             </image>
                         </ImageView>
-                        <ImageView fx:id="image_translation" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true"
+                        <ImageView fx:id="image_translation" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true"
                                    preserveRatio="true">
                             <VBox.margin>
                                 <Insets top="2.0"/>
@@ -100,11 +76,50 @@
                             </image>
                         </ImageView>
                     </children>
-                    <padding>
-                        <Insets top="2.0"/>
-                    </padding>
+                    <opaqueInsets>
+                        <Insets/>
+                    </opaqueInsets>
+                    <BorderPane.margin>
+                        <Insets bottom="10.0" top="10.0"/>
+                    </BorderPane.margin>
                 </VBox>
             </right>
+            <top>
+                <GridPane fx:id="grid_setting" alignment="CENTER" BorderPane.alignment="CENTER">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="20.0" prefWidth="100.0"/>
+                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" percentWidth="50.0"
+                                           prefWidth="100.0"/>
+                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" percentWidth="30.0"
+                                           prefWidth="100.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="ALWAYS"/>
+                    </rowConstraints>
+                    <children>
+                        <ColorPicker fx:id="colorpicker_text_editor" prefWidth="100.0" GridPane.halignment="CENTER"
+                                     GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                            <GridPane.margin>
+                                <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
+                            </GridPane.margin>
+                        </ColorPicker>
+                        <MFXComboBox fx:id="combo_text_font" scaleShape="false" GridPane.columnIndex="1"
+                                     GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER"
+                                     GridPane.vgrow="ALWAYS">
+                            <GridPane.margin>
+                                <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
+                            </GridPane.margin>
+                        </MFXComboBox>
+                        <MFXComboBox fx:id="combo_text_size" GridPane.columnIndex="2" GridPane.halignment="CENTER"
+                                     GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                            <GridPane.margin>
+                                <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
+                            </GridPane.margin>
+                        </MFXComboBox>
+                        <MFXComboBox fx:id="combo_text_font1" layoutX="169.0" layoutY="12.0"/>
+                    </children>
+                </GridPane>
+            </top>
         </BorderPane>
         <MFXTextField fx:id="text_title" alignment="CENTER" prefHeight="22.0" prefWidth="1012.0" text="Title"
                       GridPane.columnSpan="4" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS"

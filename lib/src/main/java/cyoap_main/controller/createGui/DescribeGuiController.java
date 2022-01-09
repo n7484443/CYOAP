@@ -38,7 +38,7 @@ public class DescribeGuiController implements IController {
     @FXML
     public BorderPane pane_text_editor;
     @FXML
-    public HBox hbox_setting;
+    public GridPane grid_setting;
     @FXML
     public MFXTextField text_title;
 
@@ -95,7 +95,7 @@ public class DescribeGuiController implements IController {
 
         BorderPane.setMargin(text_editor, new Insets(2.5f, 0, 0, 0));
         GridPane.setMargin(imagecell_describe, new Insets(5));
-        hbox_setting.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, new CornerRadii(2), new BorderWidths(2), null)));
+        grid_setting.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, new CornerRadii(2), new BorderWidths(2), null)));
 
         gridpane_describe.add(imagecell_describe, 0, 1, 2, 1);
 

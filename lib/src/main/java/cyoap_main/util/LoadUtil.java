@@ -46,10 +46,17 @@ public class LoadUtil {
         return instance;
     }
 
-    public Pane loadFXML(String path) throws IOException {
-        URL url = LoadUtil.class.getResource(path);
-        Pane root = FXMLLoader.load(url);
-        return root;
+    public static List<StyledSegment<String, String>> paragraphToSegment(List<Paragraph<String, String, String>> p, List<StyledSegment<String, String>> styleSeg) {
+        styleSeg.clear();
+        for (var a : p) {
+            var b = a.getStyledSegments();
+            styleSeg.addAll(b);
+            if (p.size() - 1 != p.indexOf(a)) {
+                styleSeg.add(new StyledSegment<>(System.lineSeparator(), ""));
+            }
+        }
+
+        return styleSeg;
     }
 
     public String loadCss(String path) throws IOException {
@@ -80,19 +87,9 @@ public class LoadUtil {
         return LoadUtil.class.getResourceAsStream(path);
     }
 
-    public static List<StyledSegment<String, String>> paragraphToSegment(List<Paragraph<String, String, String>> p, List<StyledSegment<String, String>> styleSeg) {
-        styleSeg.clear();
-        for (var a : p) {
-            var b = a.getStyledSegments();
-            for (var c : b) {
-                styleSeg.add(c);
-            }
-            if (p.size() - 1 != p.indexOf(a)) {
-                styleSeg.add(new StyledSegment<>(System.lineSeparator(), ""));
-            }
-        }
-
-        return styleSeg;
+    public Pane loadFXML(String path) throws IOException {
+        URL url = LoadUtil.class.getResource(path);
+        return FXMLLoader.load(url);
     }
 
     public static File loadFolder() {
@@ -201,7 +198,7 @@ public class LoadUtil {
         }
         Stream<Path> walk = Files.walk(myPath, 1);
         boolean b = true;
-        List<Path> pathList = new ArrayList<Path>();
+        List<Path> pathList = new ArrayList<>();
         for (Iterator<Path> it = walk.iterator(); it.hasNext(); ) {
             if (b) {
                 b = false;

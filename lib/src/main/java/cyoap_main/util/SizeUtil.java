@@ -93,11 +93,7 @@ public class SizeUtil {
 
         var list_point = pointMagnet(nowControl);
 
-        boolean b = true;
-        for (var v : list_point) {
-            if (v != null) b = false;
-        }
-        if (b) return;
+        if (Arrays.stream(list_point).toList().isEmpty()) return;
 
         if (list_point[0] != null && (cursor.equals(Cursor.W_RESIZE) || cursor.equals(Cursor.N_RESIZE) || cursor.equals(Cursor.NW_RESIZE))) {//x and y are negative
             if (list_point[0].x() == Float.MAX_VALUE && list_point[0].y() != Float.MAX_VALUE) {//only change y

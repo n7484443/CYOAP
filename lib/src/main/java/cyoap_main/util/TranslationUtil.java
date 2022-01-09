@@ -40,7 +40,7 @@ public class TranslationUtil {
             System.err.println("target language and source language are same!");
             return null;
         }
-        String responseBody = post(apiURL, requestHeaders, text);
+        String responseBody = post(requestHeaders, text);
         ObjectMapper mapper = new ObjectMapper();
         try {
             var jsonData = mapper.readTree(responseBody);
@@ -52,8 +52,8 @@ public class TranslationUtil {
         return null;
     }
 
-    private String post(String apiUrl, Map<String, String> requestHeaders, String text) {
-        HttpURLConnection con = connect(apiUrl);
+    private String post(Map<String, String> requestHeaders, String text) {
+        HttpURLConnection con = connect(apiURL);
         String postParams = "source=" + sourceLanguage + "&target=" + targetLanguage + "&text=" + text; //원본언어: 한국어 (ko) -> 목적언어: 영어 (en)
         try {
             con.setRequestMethod("POST");

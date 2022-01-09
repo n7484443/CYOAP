@@ -95,7 +95,6 @@ public class AbstractPlatform {
         for (var choice : choiceSetList) {
             float size_x = Float.POSITIVE_INFINITY;
             float size_y = Float.POSITIVE_INFINITY;
-            float l = 0;
             if (choice == choiceSet)
                 continue;
 
@@ -104,7 +103,7 @@ public class AbstractPlatform {
 
             for (var v_ori_x : vec_original_x) {
                 for (var v_sub_x : vec_sub_x) {
-                    l = Math.abs(v_ori_x - v_sub_x);
+                    float l = Math.abs(v_ori_x - v_sub_x);
                     if (l < bias && l < size_x) {
                         size_x = l;
                         x_new = v_sub_x - (v_ori_x - choiceSet.bound.x);
@@ -114,7 +113,7 @@ public class AbstractPlatform {
             }
             for (var v_ori_y : vec_original_y) {
                 for (var v_sub_y : vec_sub_y) {
-                    l = Math.abs(v_ori_y - v_sub_y);
+                    float l = Math.abs(v_ori_y - v_sub_y);
                     if (l < bias && l < size_y) {
                         size_y = l;
                         y_new = v_sub_y - (v_ori_y - choiceSet.bound.y);
@@ -141,7 +140,6 @@ public class AbstractPlatform {
         for (var choice : choiceSetList) {
             float size_x = Float.POSITIVE_INFINITY;
             float size_y = Float.POSITIVE_INFINITY;
-            float l = 0;
             if (choice == choiceSet)
                 continue;
 
@@ -149,14 +147,14 @@ public class AbstractPlatform {
             var vec_sub_y = choice.get_snapList_y();
 
             for (var v_sub_x : vec_sub_x) {
-                l = Math.abs(point.x() - v_sub_x);
+                float l = Math.abs(point.x() - v_sub_x);
                 if (l < bias && l < size_x) {
                     size_x = l;
                     x_new = v_sub_x;
                 }
             }
             for (var v_sub_y : vec_sub_y) {
-                l = Math.abs(point.y() - v_sub_y);
+                float l = Math.abs(point.y() - v_sub_y);
                 if (l < bias && l < size_y) {
                     size_y = l;
                     y_new = v_sub_y;

@@ -16,8 +16,8 @@ targetCompatibility = 17
 dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.1'
     implementation 'org.fxmisc.richtext:richtextfx:0.10.7'
-    implementation 'com.twelvemonkeys.imageio:imageio-webp:3.8.0'
-    implementation 'com.twelvemonkeys.imageio:imageio-jpeg:3.8.0'
+    implementation 'com.twelvemonkeys.imageio:imageio-webp:3.8.1'
+    implementation 'com.twelvemonkeys.imageio:imageio-jpeg:3.8.1'
     implementation 'org.apache.maven:maven-artifact:3.8.4'
     implementation 'com.google.guava:guava:31.0.1-jre'
     implementation 'org.kohsuke:github-api:1.301'

@@ -113,9 +113,6 @@ public class CreateGuiController implements IGuiController {
 
     public ResizableCanvas canvas = new ResizableCanvas();
 
-    public List<File> dropped;
-    public boolean isImageChanged = false;
-
     public CommandTimeline commandTimeline = new CommandTimeline();
     public static AbstractPlatform platform;
 
@@ -154,8 +151,7 @@ public class CreateGuiController implements IGuiController {
         File f = new File(JavaFxMain.instance.directory.getAbsolutePath() + File.separator + "file." + imageType);
         try {
             var imageOutputStream = ImageIO.createImageOutputStream(f);
-            if (!ImageIO.write(tempImg, imageType, imageOutputStream)) {
-            }
+            ImageIO.write(tempImg, imageType, imageOutputStream);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -190,8 +186,8 @@ public class CreateGuiController implements IGuiController {
                     System.err.println("duplicated title! " + nowEditDataSet.string_title);
                 }
             }
-            if (image != null)
-                nowEditDataSet.string_image_name = image.getValue();
+            if (describeGuiController.image != null)
+                nowEditDataSet.string_image_name = describeGuiController.image.getValue();
             nowEditDataSet.color = describeGuiController.colorpicker.getValue();
             nowEditDataSet.round = describeGuiController.imagecell_describe.round.get();
 
@@ -229,8 +225,8 @@ public class CreateGuiController implements IGuiController {
         LoadUtil.loadSegment(describeGuiController.text_editor, dataSet.segmentList);
         describeGuiController.colorpicker.setValue(dataSet.color);
         if (dataSet.string_image_name != null && !dataSet.string_image_name.isEmpty()) {
-            image = LoadUtil.loadImage(dataSet.string_image_name);
-            describeGuiController.imagecell_describe.setImage(image.getKey());
+            describeGuiController.image = LoadUtil.loadImage(dataSet.string_image_name);
+            describeGuiController.imagecell_describe.setImage(describeGuiController.image.getKey());
             describeGuiController.imagecell_describe.setCut(dataSet.round);
         }
         for (int i = 0; i < describeGuiController.button_list.size(); i++) {
@@ -242,8 +238,6 @@ public class CreateGuiController implements IGuiController {
     public void next() {
         CreateGuiController.instance.changeTab(CreateGuiController.instance.tab_position);
         this.describeGuiController.clear();
-        this.image = null;
-        this.dropped = null;
         this.nowEditDataSet = null;
     }
 
@@ -286,14 +280,9 @@ public class CreateGuiController implements IGuiController {
         return new Vector2f((float) (platform.local_x + posInZoomTarget.getX()),
                 (float) (platform.local_y + posInZoomTarget.getY()));
     }
-    public SimpleEntry<Image, String> image = null;
 
     public void update() {
-        if (isImageChanged) {
-            isImageChanged = false;
-            image = LoadUtil.loadImage(dropped.get(0));
-            describeGuiController.imagecell_describe.setImage(image.getKey());
-        }
+        describeGuiController.update();
 
         if (VariableDataBase.getInstance().isUpdated) {
             VariableDataBase.getInstance().isUpdated = false;

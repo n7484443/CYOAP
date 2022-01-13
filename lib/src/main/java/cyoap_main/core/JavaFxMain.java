@@ -1,14 +1,12 @@
 package cyoap_main.core;
 
-import java.io.File;
-import java.util.Properties;
-import java.util.concurrent.CompletableFuture;
-
 import cyoap_main.controller.IGuiController;
 import cyoap_main.controller.createGui.CreateGuiController;
-import cyoap_main.grammer.VariableDataBase;
 import cyoap_main.grammer.ValueType;
-import cyoap_main.util.*;
+import cyoap_main.grammer.VariableDataBase;
+import cyoap_main.util.FontLoader;
+import cyoap_main.util.LoadUtil;
+import cyoap_main.util.LocalizationUtil;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -17,6 +15,10 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+
+import java.io.File;
+import java.util.Properties;
+import java.util.concurrent.CompletableFuture;
 
 public class JavaFxMain extends Application {
 	public static String version;
@@ -112,7 +114,9 @@ public class JavaFxMain extends Application {
 	}
 
 	public void update(double time) {
-		if(controller != null)controller.update();
+		if (controller != null) {
+			controller.update();
+		}
 	}
 
 	public void render(double time) {

@@ -19,6 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.IndexRange;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -28,7 +29,9 @@ import javafx.scene.text.Font;
 import javafx.util.StringConverter;
 import org.fxmisc.richtext.InlineCssTextArea;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,6 +82,12 @@ public class DescribeGuiController implements IController {
     public MFXRadioButton button_emptyimage;
 
     public List<MFXRadioButton> button_list = new ArrayList<>();
+
+    public boolean isImageChanged = false;
+
+    public AbstractMap.SimpleEntry<Image, String> image;
+
+    public List<File> dropped;
 
     @Override
     public void nodeInit() {
@@ -155,8 +164,8 @@ public class DescribeGuiController implements IController {
             Dragboard db = e.getDragboard();
             var success = false;
             if (db.hasFiles()) {
-                CreateGuiController.instance.dropped = db.getFiles();
-                CreateGuiController.instance.isImageChanged = true;
+                dropped = db.getFiles();
+                isImageChanged = true;
                 success = true;
             }
             e.setDropCompleted(success);
@@ -271,6 +280,8 @@ public class DescribeGuiController implements IController {
         colorpicker.setValue(ChoiceSet.baseColor);
         text_title.setText("Title");
         button_outline.setSelected(false);
+        dropped = null;
+        image = null;
     }
 
     public void afterInit() {
@@ -292,5 +303,13 @@ public class DescribeGuiController implements IController {
             combo_text_size.getItems().add(String.valueOf(i));
         }
         combo_text_size.getSelectionModel().selectItem("12");
+    }
+
+    public void update() {
+        if (isImageChanged) {
+            isImageChanged = false;
+            image = LoadUtil.loadImage(dropped.get(0));
+            imagecell_describe.setImage(image.getKey());
+        }
     }
 }

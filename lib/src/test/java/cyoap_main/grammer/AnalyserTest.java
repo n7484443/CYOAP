@@ -9,39 +9,33 @@ class AnalyserTest {
     public void testAnalyseString() {
         var ins = VariableDataBase.getInstance();
         String str_test = """
-                가나다라마바사
-                {aaa = 3}
-                {a = 3 + 5}
-                {func1 = round(4.8)}
-                {func2 = ceil(4.8)}
-                {func3 = floor(4.8)}
-                {func4 = floor(4)}
-                {c = "abcdefg가나다라마바사"}
-                {d = true}
-                가다ㅏㄷ
-                {e = false}
-                {f = 6-5.5}
-                {comp1 = f == 0.5}
-                {comp2 = f >= 0.5}
-                {comp3 = f > 0.5}
-                {if(f == 0.5, alpha = 11, alpha = 15)}
-                {if(f == 8.5, beta = 12, beta = 16)}
-                {test_alpha = 1}
-                {test_alpha += 3}
+                aaa = 3
+                a = 3 + 5
+                func1 = round(4.8)
+                func2 = ceil(4.8)
+                func3 = floor(4.8)
+                func4 = floor(4)
+                c = "abcdefg가나다라마바사"
+                d = true
+                e = false
+                f = 6-5.5
+                comp1 = f == 0.5
+                comp2 = f >= 0.5
+                comp3 = f > 0.5
+                if(f == 0.5, alpha = 11, alpha = 15)
+                if(f == 8.5, beta = 12, beta = 16)
+                test_alpha = 1
+                test_alpha += 3
                 """;
         String str_test_2 = """
-                {a123123aa = 3}
+                a123123aa = 3
                 """;
         var l = Analyser.getInstance().parser(str_test_2);
-        Analyser.getInstance().analyseList(l.getValue());
+        Analyser.getInstance().analyseList(l);
         assertEquals(3, (int) ins.getValue("a123123aa").getData());
 
-        var t = Analyser.getInstance().parser(str_test);
-        var text = t.getKey();
-        var func = t.getValue();
+        var func = Analyser.getInstance().parser(str_test);
 
-        assertEquals("가나다라마바사", text.get(0).strip());
-        assertEquals("가다ㅏㄷ", text.get(1).strip());
         assertEquals("aaa = 3", func.get(0).strip());
         assertEquals("a = 3 + 5", func.get(1).strip());
 

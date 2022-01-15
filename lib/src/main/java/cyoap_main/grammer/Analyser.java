@@ -4,6 +4,7 @@ import cyoap_main.grammer.VariableDataBase.types;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Analyser implements IAnalyzer {
@@ -18,47 +19,10 @@ public class Analyser implements IAnalyzer {
 	/*
 	 * 문자 입력->텍스트와 문법을 분리 {} 내부에 문법 사용. 즉, 실제 사용 가능한 것은 [], () 정도.
 	 */
-	public Pair<List<String>, List<String>> parser(String str) {
+	public List<String> parser(String str) {
 		if (str == null)
 			return null;
-		if (str.chars().filter(e -> e == '{').count() != str.chars().filter(e -> e == '}').count()) {
-			System.err.println("{와 }의 개수가 다릅니다!");
-			return null;
-		}
-		if (str.chars().filter(e -> e == '(').count() != str.chars().filter(e -> e == ')').count()) {
-			System.err.println("(와 )의 개수가 다릅니다!");
-			return null;
-		}
-		if (str.chars().filter(e -> e == '[').count() != str.chars().filter(e -> e == ']').count()) {
-			System.err.println("[와 ]의 개수가 다릅니다!");
-			return null;
-		}
-		if (str.contains("{")) {
-			List<String> str_text = new ArrayList<>();
-			List<String> str_func = new ArrayList<>();
-			String str_tmp = String.copyValueOf(str.toCharArray());
-			while (true) {
-				int pos_first = str_tmp.indexOf("{");
-				int pos_second = str_tmp.indexOf("}");
-				if (pos_first == -1 || pos_second == -1) {
-					str_text.addAll(List.of(str_tmp.split("\n")));
-					break;
-				}
-
-				var str_tmp_inner = str_tmp.substring(pos_first + 1, pos_second);
-				String str_tmp_front = null;
-				if (pos_first != 0) {
-					str_tmp_front = str_tmp.substring(0, pos_first - 1).trim();
-				}
-				if (str_tmp_front != null && !str_tmp_front.isEmpty()) {
-					str_text.add(str_tmp.substring(0, pos_first - 1));
-				}
-				str_func.add(str_tmp_inner);
-				str_tmp = str_tmp.substring(pos_second + 1);
-			}
-			return new Pair<>(str_text, str_func);
-		} else
-			return null;
+		return Arrays.stream(str.split("\n")).toList();
 	}
 
 
@@ -124,6 +88,7 @@ public class Analyser implements IAnalyzer {
 	}
 
 	public void analyse(List<ParsingUnit> analysed_data) throws Exception {
+		if (analysed_data.isEmpty()) return;
 		Recursive_Parser parser = new Recursive_Parser();
 
 		var t = analysed_data;
@@ -166,9 +131,8 @@ public class Analyser implements IAnalyzer {
 		}
 		var parser_ans = create_parser(equal_pos + 1, analysed_data, parser);
 
-		String name = null;
-		if (equal_pos != -1 && analysed_data.get(equal_pos - 1).type() == variable_name) {
-			name = analysed_data.get(equal_pos - 1).data();
+		if (analysed_data.get(equal_pos - 1).type() == variable_name) {
+			String name = analysed_data.get(equal_pos - 1).data();
 			ValueType data_answer = parser_ans.getKey().unzip();
 			VariableDataBase.getInstance().setValue(name, data_answer);
 		}

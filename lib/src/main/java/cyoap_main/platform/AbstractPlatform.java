@@ -75,6 +75,7 @@ public class AbstractPlatform {
     public IGuiController guiController;
     public int flag = 0;
 
+    @JsonIgnore
     public boolean needUpdate = true;
 
     public AbstractPlatform(IGuiController guiController) {
@@ -283,7 +284,7 @@ public class AbstractPlatform {
         try {
             OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(JavaFxMain.instance.directory.getAbsolutePath() + "/platform.json"),
                     StandardCharsets.UTF_8);
-            objectMapper.writeValue(writer, this);
+            objectMapper.writerWithDefaultPrettyPrinter().writeValue(writer, this);
         } catch (IOException e) {
             e.printStackTrace();
         }

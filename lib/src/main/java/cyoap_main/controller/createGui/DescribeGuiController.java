@@ -73,6 +73,7 @@ public class DescribeGuiController implements IController {
     @FXML
     public MFXComboBox<String> combo_text_size;
     public InlineCssTextArea text_editor = new InlineCssTextArea();
+    public InlineCssTextArea code_editor = new InlineCssTextArea();
 
     @FXML
     public MFXRadioButton button_outline;
@@ -96,6 +97,10 @@ public class DescribeGuiController implements IController {
             text_editor.getStylesheets().add(LoadUtil.getInstance().loadCss("/lib/css/text_editor.css"));
             text_editor.getStyleClass().add("text-editor");
             text_editor.setStyle("-color-text: white ;");
+            code_editor.setWrapText(true);
+            code_editor.getStylesheets().add(LoadUtil.getInstance().loadCss("/lib/css/text_editor.css"));
+            code_editor.getStyleClass().add("text-editor");
+            code_editor.setStyle("-color-text: white ;");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -103,6 +108,7 @@ public class DescribeGuiController implements IController {
         colorpicker.getStyleClass().add("button");
 
         BorderPane.setMargin(text_editor, new Insets(2.5f, 0, 0, 0));
+        BorderPane.setMargin(code_editor, new Insets(2.5f, 0, 0, 0));
         GridPane.setMargin(imagecell_describe, new Insets(5));
         grid_setting.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, new CornerRadii(2), new BorderWidths(2), null)));
 
@@ -110,6 +116,7 @@ public class DescribeGuiController implements IController {
 
         colorpicker_text_editor.getStyleClass().add("button");
         pane_text_editor.setCenter(text_editor);
+        pane_text_editor.setBottom(code_editor);
 
         button_list.add(button_outline);
         button_list.add(button_horizon);
@@ -276,6 +283,7 @@ public class DescribeGuiController implements IController {
 
     public void clear() {
         text_editor.clear();
+        code_editor.clear();
         imagecell_describe.setImage(null);
         colorpicker.setValue(ChoiceSet.baseColor);
         text_title.setText("Title");

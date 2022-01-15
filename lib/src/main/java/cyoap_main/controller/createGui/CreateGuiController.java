@@ -41,7 +41,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.transform.Transform;
-import org.fxmisc.richtext.model.Paragraph;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -193,24 +192,13 @@ public class CreateGuiController implements IGuiController {
         nowEditDataSet.flag = FlagUtil.createFlag(v);
 
 
-        var pair = Analyser.getInstance().parser(describeGuiController.text_editor.getText());
-        if (pair != null) {
-            Analyser.getInstance().analyseList(pair.getValue());
-
-            var list_paragraph = new ArrayList<Paragraph<String, String, String>>();
-            if (pair.getKey() != null) {
-                loop_paragraph:
-                for (var paragraph : describeGuiController.text_editor.getDocument().getParagraphs()) {
-                    for (var p : pair.getKey()) {
-                        if (p.contains(paragraph.getText())) {
-                            list_paragraph.add(paragraph);
-                            continue loop_paragraph;
-                        }
-                    }
-                }
-                LoadUtil.paragraphToSegment(list_paragraph, nowEditDataSet.segmentList);
-            }
+        var code = Analyser.getInstance().parser(describeGuiController.code_editor.getText());
+        if (code != null) {
+            nowEditDataSet.string_code = describeGuiController.code_editor.getText();
+            Analyser.getInstance().analyseList(code);
         }
+        LoadUtil.paragraphToSegment(describeGuiController.text_editor.getDocument().getParagraphs(), nowEditDataSet.segmentList);
+
 
         nowEditDataSet.needUpdate = true;
         command.setText(nowEditDataSet);
@@ -228,7 +216,7 @@ public class CreateGuiController implements IGuiController {
                 OutputStreamWriter writer = new OutputStreamWriter(
                         new FileOutputStream(dir.getAbsolutePath() + "/" + choiceSet.string_title + ".json"),
                         StandardCharsets.UTF_8);
-                objectMapper.writeValue(writer, choiceSet);
+                objectMapper.writerWithDefaultPrettyPrinter().writeValue(writer, choiceSet);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -237,6 +225,7 @@ public class CreateGuiController implements IGuiController {
 
     public void loadFromDataSet(ChoiceSet dataSet) {
         describeGuiController.text_title.setText(dataSet.string_title);
+
         LoadUtil.loadSegment(describeGuiController.text_editor, dataSet.segmentList);
         describeGuiController.colorpicker.setValue(dataSet.color);
         if (dataSet.string_image_name != null && !dataSet.string_image_name.isEmpty()) {

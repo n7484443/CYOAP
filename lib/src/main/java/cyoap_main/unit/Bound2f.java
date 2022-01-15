@@ -34,18 +34,27 @@ public class Bound2f {
 		return !(y > other.y + other.height);
 	}
 
-    public boolean intersect(Vector2f other) {
-        if (x + width < other.x())
-            return false;
-        if (x > other.x())
-            return false;
-        if (y + height < other.y())
-            return false;
-        return !(y > other.y());
-    }
+	public boolean intersect(Vector2f other) {
+		if (x + width < other.x())
+			return false;
+		if (x > other.x())
+			return false;
+		if (y + height < other.y())
+			return false;
+		return !(y > other.y());
+	}
 
-    public void setPosition(float x, float y) {
-        this.x = x;
-        this.y = y;
-    }
+	public Bound2f setPosition(float x, float y) {
+		this.x = x;
+		this.y = y;
+		return this;
+	}
+
+	public Bound2f mul(float scale) {
+		this.x *= scale;
+		this.y *= scale;
+		this.width *= scale;
+		this.height *= scale;
+		return this;
+	}
 }

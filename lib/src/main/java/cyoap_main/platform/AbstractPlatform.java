@@ -310,4 +310,14 @@ public class AbstractPlatform {
         if (guiController != null)
             guiController.getChoicePaneParent().setStyle("-fx-background-color: " + color_new.toString().replace("0x", "#") + ";");
     }
+
+    @JsonIgnore
+    public float getWidth() {
+        return max_x - min_x;
+    }
+
+    @JsonIgnore
+    public float getHeight() {
+        return max_y - min_y;
+    }
 }

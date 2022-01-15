@@ -37,7 +37,6 @@ public class ChoiceSet {
     public ChoiceSet choiceSet_parent = null;
     @JsonIgnore
     public boolean isClicked = false;
-
     public boolean isSelected = false;
 
     public int round = 0;

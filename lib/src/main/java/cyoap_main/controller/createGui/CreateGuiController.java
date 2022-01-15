@@ -41,6 +41,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.transform.Transform;
+import org.fxmisc.richtext.model.Paragraph;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -170,36 +171,50 @@ public class CreateGuiController implements IGuiController {
     }
 
     public void save_describe_pane() {
+        if (nowEditDataSet == null) return;
+
         VariableDataBase.getInstance().isUpdated = true;
+
+        var command = new TextChangeCommand(nowEditDataSet);
+        if (!describeGuiController.text_title.getText().equals(nowEditDataSet.string_title)) {
+            var number_of = (int) this.getPlatform().choiceSetList.stream().filter(t -> t != nowEditDataSet && t.string_title.equals(describeGuiController.text_title.getText())).count();
+            if (number_of == 0) {
+                nowEditDataSet.string_title = describeGuiController.text_title.getText();
+            } else {
+                System.err.println("duplicated title! " + nowEditDataSet.string_title);
+            }
+        }
+        if (describeGuiController.image != null)
+            nowEditDataSet.string_image_name = describeGuiController.image.getValue();
+        nowEditDataSet.color = describeGuiController.colorpicker.getValue();
+        nowEditDataSet.round = describeGuiController.imagecell_describe.round.get();
+
+        var v = describeGuiController.button_list.stream().map(ToggleButton::isSelected).collect(Collectors.toList());
+        nowEditDataSet.flag = FlagUtil.createFlag(v);
+
 
         var pair = Analyser.getInstance().parser(describeGuiController.text_editor.getText());
         if (pair != null) {
             Analyser.getInstance().analyseList(pair.getValue());
-        }
-        if (nowEditDataSet != null) {
-            var command = new TextChangeCommand(nowEditDataSet);
-            if (!describeGuiController.text_title.getText().equals(nowEditDataSet.string_title)) {
-                var number_of = (int) this.getPlatform().choiceSetList.stream().filter(t -> t != nowEditDataSet && t.string_title.equals(describeGuiController.text_title.getText())).count();
-                if (number_of == 0) {
-                    nowEditDataSet.string_title = describeGuiController.text_title.getText();
-                } else {
-                    System.err.println("duplicated title! " + nowEditDataSet.string_title);
+
+            var list_paragraph = new ArrayList<Paragraph<String, String, String>>();
+            if (pair.getKey() != null) {
+                loop_paragraph:
+                for (var paragraph : describeGuiController.text_editor.getDocument().getParagraphs()) {
+                    for (var p : pair.getKey()) {
+                        if (p.contains(paragraph.getText())) {
+                            list_paragraph.add(paragraph);
+                            continue loop_paragraph;
+                        }
+                    }
                 }
+                LoadUtil.paragraphToSegment(list_paragraph, nowEditDataSet.segmentList);
             }
-            if (describeGuiController.image != null)
-                nowEditDataSet.string_image_name = describeGuiController.image.getValue();
-            nowEditDataSet.color = describeGuiController.colorpicker.getValue();
-            nowEditDataSet.round = describeGuiController.imagecell_describe.round.get();
-
-            var v = describeGuiController.button_list.stream().map(ToggleButton::isSelected).collect(Collectors.toList());
-            nowEditDataSet.flag = FlagUtil.createFlag(v);
-
-            LoadUtil.paragraphToSegment(describeGuiController.text_editor.getDocument().getParagraphs(), nowEditDataSet.segmentList);
-
-            nowEditDataSet.needUpdate = true;
-            command.setText(nowEditDataSet);
-            commandTimeline.addCommand(command);
         }
+
+        nowEditDataSet.needUpdate = true;
+        command.setText(nowEditDataSet);
+        commandTimeline.addCommand(command);
     }
 
     @SuppressWarnings("UnstableApiUsage")

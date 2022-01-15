@@ -1,5 +1,16 @@
 package cyoap_main.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.primitives.Floats;
+import cyoap_main.core.JavaFxMain;
+import cyoap_main.design.choice.ChoiceSet;
+import cyoap_main.design.node_extension.ImageCell;
+import cyoap_main.platform.AbstractPlatform;
+import cyoap_main.unit.Bound2f;
+import cyoap_main.util.LoadUtil;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.layout.Pane;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -7,16 +18,6 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Stream;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import cyoap_main.core.JavaFxMain;
-import cyoap_main.design.choice.ChoiceSet;
-import cyoap_main.design.node_extension.ImageCell;
-import cyoap_main.platform.AbstractPlatform;
-import cyoap_main.util.LoadUtil;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.layout.Pane;
 
 public interface IGuiController extends IController {
     List<ImageCell> getBackgroundImageCellList();
@@ -99,23 +100,33 @@ public interface IGuiController extends IController {
 
     int allow_margin = 50;
 
+    @SuppressWarnings("UnstableApiUsage")
     default void updateMouseCoord(double move_x, double move_y, double start_move_x, double start_move_y) {
         getPlatform().local_x -= move_x;
         getPlatform().local_y -= move_y;
         getPlatform().start_mouse_x = start_move_x;
         getPlatform().start_mouse_y = start_move_y;
 
-        var real_width = getChoicePaneRealWidth();
-        var real_height = getChoicePaneRealHeight();
+        var l_x = (float) getPlatform().local_x;
+        var l_y = (float) getPlatform().local_y;
 
-        if (getPlatform().local_x + real_width >= getPlatform().max_x + allow_margin)
-            getPlatform().local_x = getPlatform().max_x + allow_margin - real_width;
-        if (getPlatform().local_y + real_height >= getPlatform().max_y + allow_margin)
-            getPlatform().local_y = getPlatform().max_y + allow_margin - real_height;
-        if (getPlatform().local_x <= getPlatform().min_x - allow_margin)
-            getPlatform().local_x = getPlatform().min_x - allow_margin;
-        if (getPlatform().local_y <= getPlatform().min_y - allow_margin)
-            getPlatform().local_y = getPlatform().min_y - allow_margin;
+        var real_width = (float) getChoicePaneRealWidth();
+        var real_height = (float) getChoicePaneRealHeight();
+
+        var bound = new Bound2f(getPlatform().min_x - allow_margin, getPlatform().min_y - allow_margin,
+                getPlatform().getWidth() + allow_margin * 2, getPlatform().getHeight() + allow_margin * 2);
+        bound.mul(getPlatform().scale);
+
+        if (bound.width < real_width) {
+            getPlatform().local_x = bound.x;
+        } else {
+            getPlatform().local_x = Floats.constrainToRange(l_x, bound.x, bound.x + bound.width - real_width);
+        }
+        if (bound.height < real_height) {
+            getPlatform().local_y = bound.y;
+        } else {
+            getPlatform().local_y = Floats.constrainToRange(l_y, bound.y, bound.y + bound.height - real_height);
+        }
 
         getPlatform().updateMouseCoordinate();
         getPlatform().isMouseMoved = true;

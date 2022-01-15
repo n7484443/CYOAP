@@ -27,7 +27,9 @@ public class CommandTimeline {
 	}
 
 	public void addCommand(AbstractCommand command) {
-		commandList = commandList.subList(0, command_now + 1);
+		if (command_now != 0 || !commandList.isEmpty()) {
+			commandList = commandList.subList(0, command_now + 1);
+		}
 		commandList.add(command);
 		command_now = commandList.size() - 1;
 		isCommandListUpdated = true;

@@ -4,6 +4,7 @@ import cyoap_main.controller.IController;
 import cyoap_main.core.JavaFxMain;
 import cyoap_main.design.choice.ChoiceSet;
 import cyoap_main.design.node_extension.ImageCell;
+import cyoap_main.util.FlagUtil;
 import cyoap_main.util.FontLoader;
 import cyoap_main.util.LoadUtil;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
@@ -279,6 +280,24 @@ public class DescribeGuiController implements IController {
             }
             text_editor.setStyle(i, i + 1, builder.toString());
         }
+    }
+
+
+    public void load(ChoiceSet dataSet) {
+        text_title.setText(dataSet.string_title);
+
+        LoadUtil.loadSegment(text_editor, dataSet.segmentList);
+        if (dataSet.string_code != null) code_editor.appendText(dataSet.string_code);
+        colorpicker.setValue(dataSet.color);
+        if (dataSet.string_image_name != null && !dataSet.string_image_name.isEmpty()) {
+            image = LoadUtil.loadImage(dataSet.string_image_name);
+            imagecell_describe.setImage(image.getKey());
+            imagecell_describe.setCut(dataSet.round);
+        }
+        for (int i = 0; i < button_list.size(); i++) {
+            button_list.get(i).setSelected(FlagUtil.getFlag(dataSet.flag, i));
+        }
+        dataSet.updateFlag();
     }
 
     public void clear() {

@@ -138,7 +138,7 @@ public class ChoiceSetGuiComponent {
                 if (e.getButton().equals(MouseButton.PRIMARY)) {
                     if (e.getClickCount() == 2) {
                         CreateGuiController.instance.nowEditDataSet = mainChoiceSet;
-                        CreateGuiController.instance.loadFromDataSet(mainChoiceSet);
+                        CreateGuiController.instance.describeGuiController.load(mainChoiceSet);
                         CreateGuiController.instance.changeTab(CreateGuiController.instance.tab_describe);
                         e.consume();
                     }

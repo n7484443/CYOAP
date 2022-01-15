@@ -223,22 +223,6 @@ public class CreateGuiController implements IGuiController {
         }
     }
 
-    public void loadFromDataSet(ChoiceSet dataSet) {
-        describeGuiController.text_title.setText(dataSet.string_title);
-
-        LoadUtil.loadSegment(describeGuiController.text_editor, dataSet.segmentList);
-        describeGuiController.colorpicker.setValue(dataSet.color);
-        if (dataSet.string_image_name != null && !dataSet.string_image_name.isEmpty()) {
-            describeGuiController.image = LoadUtil.loadImage(dataSet.string_image_name);
-            describeGuiController.imagecell_describe.setImage(describeGuiController.image.getKey());
-            describeGuiController.imagecell_describe.setCut(dataSet.round);
-        }
-        for (int i = 0; i < describeGuiController.button_list.size(); i++) {
-            describeGuiController.button_list.get(i).setSelected(FlagUtil.getFlag(dataSet.flag, i));
-        }
-        dataSet.updateFlag();
-    }
-
     public void next() {
         CreateGuiController.instance.changeTab(CreateGuiController.instance.tab_position);
         this.describeGuiController.clear();

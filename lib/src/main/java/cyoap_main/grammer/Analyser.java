@@ -91,8 +91,6 @@ public class Analyser implements IAnalyzer {
 		if (analysed_data.isEmpty()) return;
 		Recursive_Parser parser = new Recursive_Parser();
 
-		var t = analysed_data;
-
 		if (analysed_data.get(0).data().equals("if") && analysed_data.get(0).type() == function) {
 			int[] comma = new int[2];
 			for (int i = 0; i < analysed_data.size(); i++) {
@@ -111,12 +109,13 @@ public class Analyser implements IAnalyzer {
 
 
 			var parser_ans = create_parser(0, list_check, parser);
-			boolean check = (boolean) parser_ans.getKey().unzip().getData();
+			boolean check = parser_ans.getKey().unzip().getData();
 			if (check) {
-				t = list_true;
+				analyse(list_true);
 			} else {
-				t = list_false;
+				analyse(list_false);
 			}
+			return;
 		}
 		int equal_pos = -1;
 		for (int i = 0; i < analysed_data.size(); i++) {

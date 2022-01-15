@@ -22,8 +22,8 @@ class AnalyserTest {
                 comp1 = f == 0.5
                 comp2 = f >= 0.5
                 comp3 = f > 0.5
-                if(f == 0.5, alpha = 11, alpha = 15)
-                if(f == 8.5, beta = 12, beta = 16)
+                if(f == 0.5, alpha = 11, beta = 15)
+                if(f == 8.5, gamma = 12, omega = 16)
                 test_alpha = 1
                 test_alpha += 3
                 """;
@@ -56,7 +56,9 @@ class AnalyserTest {
         assertFalse((boolean) ins.getValue("comp3").getData());
 
         assertEquals(11, (int) ins.getValue("alpha").getData());
-        assertEquals(12, (int) ins.getValue("beta").getData());
+        assertNull(ins.getValue("beta"));
+        assertNull(ins.getValue("gamma"));
+        assertEquals(16, (int) ins.getValue("omega").getData());
 
         assertEquals(4, (int) ins.getValue("test_alpha").getData());
     }

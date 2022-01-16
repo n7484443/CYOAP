@@ -9,6 +9,10 @@ import cyoap_main.util.FontLoader;
 import cyoap_main.util.LoadUtil;
 import cyoap_main.util.LocalizationUtil;
 import io.github.palexdev.materialfx.controls.*;
+import io.github.palexdev.materialfx.controls.enums.DialogType;
+import io.github.palexdev.materialfx.controls.factories.MFXDialogFactory;
+import io.github.palexdev.materialfx.notifications.NotificationPos;
+import io.github.palexdev.materialfx.notifications.NotificationsManager;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -25,6 +29,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.util.Duration;
 import javafx.util.StringConverter;
 import org.fxmisc.richtext.InlineCssTextArea;
 
@@ -35,6 +40,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DescribeGuiController implements IController {
+    @FXML
+    public AnchorPane anchorpane_describe;
     @FXML
     public GridPane gridpane_describe;
     @FXML
@@ -231,8 +238,8 @@ public class DescribeGuiController implements IController {
 
         button_save.setOnMouseClicked(e -> CreateGuiController.instance.save_describe_pane());
         button_next.setOnMouseClicked(e -> {
-            CreateGuiController.instance.save_describe_pane();
-            CreateGuiController.instance.next();
+            if (CreateGuiController.instance.save_describe_pane() == 0)
+                CreateGuiController.instance.next();
         });
     }
 
@@ -357,5 +364,17 @@ public class DescribeGuiController implements IController {
             image = LoadUtil.loadImage(dropped.get(0));
             imagecell_describe.setImage(image.getKey());
         }
+    }
+
+    public void error() {
+        var dialog = MFXDialogFactory.buildDialog(DialogType.ERROR,
+                LocalizationUtil.getInstance().getLocalization("notification.title"),
+                LocalizationUtil.getInstance().getLocalization("notification.content"));
+
+        var notification = new MFXNotification(dialog, true, true);
+        notification.setHideAfterDuration(Duration.seconds(2));
+        dialog.setCloseHandler(closeEvent -> notification.hideNotification());
+
+        NotificationsManager.send(NotificationPos.BOTTOM_CENTER, notification);
     }
 }

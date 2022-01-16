@@ -3,7 +3,6 @@ package cyoap_main.grammer;
 import cyoap_main.grammer.VariableDataBase.types;
 import javafx.util.Pair;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -137,14 +136,10 @@ public class Analyser implements IAnalyzer {
 		}
 	}
 
-	public void analyseList(List<String> str_list) {
-		try {
-			for (var str : str_list) {
-				analyse(LexicalAnalyzer.getInstance().analyze(str));
-			}
-			System.out.println("all parsing end");
-		} catch (Exception e) {
-			e.printStackTrace();
+	public void analyseList(List<String> str_list) throws Exception {
+		for (var str : str_list) {
+			analyse(LexicalAnalyzer.getInstance().analyze(str));
 		}
+		System.out.println("all parsing end");
 	}
 }

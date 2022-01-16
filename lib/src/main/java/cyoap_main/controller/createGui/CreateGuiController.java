@@ -19,10 +19,7 @@ import cyoap_main.util.FlagUtil;
 import cyoap_main.util.LoadUtil;
 import cyoap_main.util.LocalizationUtil;
 import cyoap_main.util.SizeUtil;
-import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.MFXListView;
-import io.github.palexdev.materialfx.controls.MFXRadioButton;
-import io.github.palexdev.materialfx.controls.MFXScrollPane;
+import io.github.palexdev.materialfx.controls.*;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
@@ -169,8 +166,25 @@ public class CreateGuiController implements IGuiController {
         return before + add + after;
     }
 
-    public void save_describe_pane() {
-        if (nowEditDataSet == null) return;
+    public int save_describe_pane() {
+        if (nowEditDataSet == null) return -1;
+
+        try {
+            var code_require = Analyser.getInstance().parser(describeGuiController.code_require_editor.getText());
+            if (code_require != null) {
+                nowEditDataSet.string_code_require = describeGuiController.code_require_editor.getText();
+                Analyser.getInstance().analyseList(code_require);
+            }
+
+            var code_select = Analyser.getInstance().parser(describeGuiController.code_select_editor.getText());
+            if (code_select != null) {
+                nowEditDataSet.string_code_select = describeGuiController.code_select_editor.getText();
+                Analyser.getInstance().analyseList(code_select);
+            }
+        } catch (Exception e) {
+            describeGuiController.error();
+            return -1;
+        }
 
         VariableDataBase.getInstance().isUpdated = true;
 
@@ -192,17 +206,6 @@ public class CreateGuiController implements IGuiController {
         nowEditDataSet.flag = FlagUtil.createFlag(v);
 
 
-        var code_require = Analyser.getInstance().parser(describeGuiController.code_require_editor.getText());
-        if (code_require != null) {
-            nowEditDataSet.string_code_require = describeGuiController.code_require_editor.getText();
-            Analyser.getInstance().analyseList(code_require);
-        }
-
-        var code_select = Analyser.getInstance().parser(describeGuiController.code_select_editor.getText());
-        if (code_select != null) {
-            nowEditDataSet.string_code_select = describeGuiController.code_select_editor.getText();
-            Analyser.getInstance().analyseList(code_select);
-        }
 
         LoadUtil.paragraphToSegment(describeGuiController.text_editor.getDocument().getParagraphs(), nowEditDataSet.segmentList);
 
@@ -210,6 +213,7 @@ public class CreateGuiController implements IGuiController {
         nowEditDataSet.needUpdate = true;
         command.setText(nowEditDataSet);
         commandTimeline.addCommand(command);
+        return 0;
     }
 
     @SuppressWarnings("UnstableApiUsage")

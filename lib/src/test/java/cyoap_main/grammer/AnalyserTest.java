@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AnalyserTest {
     @Test
-    public void testAnalyseString() {
+    public void testAnalyseString() throws Exception {
         var ins = VariableDataBase.getInstance();
         String str_test = """
                 aaa = 3

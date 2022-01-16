@@ -7,10 +7,8 @@ import cyoap_main.design.node_extension.ImageCell;
 import cyoap_main.util.FlagUtil;
 import cyoap_main.util.FontLoader;
 import cyoap_main.util.LoadUtil;
-import io.github.palexdev.materialfx.controls.MFXComboBox;
-import io.github.palexdev.materialfx.controls.MFXRadioButton;
-import io.github.palexdev.materialfx.controls.MFXSlider;
-import io.github.palexdev.materialfx.controls.MFXTextField;
+import cyoap_main.util.LocalizationUtil;
+import io.github.palexdev.materialfx.controls.*;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -61,6 +59,8 @@ public class DescribeGuiController implements IController {
     public Button button_next;
 
     public ImageCell imagecell_describe = new ImageCell();
+    @FXML
+    public MFXLabel label_imagecell;
 
     @FXML
     public MFXTextField text_round;
@@ -94,16 +94,17 @@ public class DescribeGuiController implements IController {
     @Override
     public void nodeInit() {
         try {
+            var editor_css = LoadUtil.getInstance().loadCss("/lib/css/text_editor.css");
             text_editor.setWrapText(true);
-            text_editor.getStylesheets().add(LoadUtil.getInstance().loadCss("/lib/css/text_editor.css"));
+            text_editor.getStylesheets().add(editor_css);
             text_editor.getStyleClass().add("text-editor");
             text_editor.setStyle("-color-text: white ;");
             code_require_editor.setWrapText(true);
-            code_require_editor.getStylesheets().add(LoadUtil.getInstance().loadCss("/lib/css/text_editor.css"));
+            code_require_editor.getStylesheets().add(editor_css);
             code_require_editor.getStyleClass().add("text-editor");
             code_require_editor.setStyle("-color-text: white ;");
             code_select_editor.setWrapText(true);
-            code_select_editor.getStylesheets().add(LoadUtil.getInstance().loadCss("/lib/css/text_editor.css"));
+            code_select_editor.getStylesheets().add(editor_css);
             code_select_editor.getStyleClass().add("text-editor");
             code_select_editor.setStyle("-color-text: white ;");
         } catch (IOException e) {
@@ -135,6 +136,11 @@ public class DescribeGuiController implements IController {
         slider_round.setMax(100);
         slider_round.setUnitIncrement(1);
         slider_round.setDecimalPrecision(0);
+    }
+
+    @Override
+    public void localizationInit() {
+        label_imagecell.setText(LocalizationUtil.getInstance().getLocalization("describeGui.label_imagecell"));
     }
 
     public void eventInit() {

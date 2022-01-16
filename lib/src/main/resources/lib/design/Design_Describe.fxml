@@ -2,6 +2,7 @@
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXLabel?>
 <?import io.github.palexdev.materialfx.controls.MFXRadioButton?>
 <?import io.github.palexdev.materialfx.controls.MFXSlider?>
 <?import io.github.palexdev.materialfx.controls.MFXTextField?>
@@ -151,6 +152,9 @@
                     </GridPane.margin>
                 </MFXComboBox>
             </children>
+            <GridPane.margin>
+                <Insets top="3.0"/>
+            </GridPane.margin>
         </GridPane>
         <VBox alignment="TOP_CENTER" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS"
               GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
@@ -196,6 +200,8 @@
                 <Insets/>
             </opaqueInsets>
         </VBox>
+        <MFXLabel fx:id="label_imagecell" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1"
+                  GridPane.rowSpan="2" GridPane.valignment="CENTER"/>
     </children>
     <padding>
         <Insets left="5.0" right="5.0"/>

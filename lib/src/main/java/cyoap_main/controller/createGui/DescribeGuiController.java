@@ -40,8 +40,6 @@ public class DescribeGuiController implements IController {
     @FXML
     public GridPane gridpane_describe;
     @FXML
-    public BorderPane pane_text_editor;
-    @FXML
     public GridPane grid_setting;
     @FXML
     public MFXTextField text_title;
@@ -73,8 +71,10 @@ public class DescribeGuiController implements IController {
     public MFXComboBox<Label> combo_text_font;
     @FXML
     public MFXComboBox<String> combo_text_size;
+
     public InlineCssTextArea text_editor = new InlineCssTextArea();
-    public InlineCssTextArea code_editor = new InlineCssTextArea();
+    public InlineCssTextArea code_require_editor = new InlineCssTextArea();
+    public InlineCssTextArea code_select_editor = new InlineCssTextArea();
 
     @FXML
     public MFXRadioButton button_outline;
@@ -98,26 +98,34 @@ public class DescribeGuiController implements IController {
             text_editor.getStylesheets().add(LoadUtil.getInstance().loadCss("/lib/css/text_editor.css"));
             text_editor.getStyleClass().add("text-editor");
             text_editor.setStyle("-color-text: white ;");
-            code_editor.setWrapText(true);
-            code_editor.getStylesheets().add(LoadUtil.getInstance().loadCss("/lib/css/text_editor.css"));
-            code_editor.getStyleClass().add("text-editor");
-            code_editor.setStyle("-color-text: white ;");
+            code_require_editor.setWrapText(true);
+            code_require_editor.getStylesheets().add(LoadUtil.getInstance().loadCss("/lib/css/text_editor.css"));
+            code_require_editor.getStyleClass().add("text-editor");
+            code_require_editor.setStyle("-color-text: white ;");
+            code_select_editor.setWrapText(true);
+            code_select_editor.getStylesheets().add(LoadUtil.getInstance().loadCss("/lib/css/text_editor.css"));
+            code_select_editor.getStyleClass().add("text-editor");
+            code_select_editor.setStyle("-color-text: white ;");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         colorpicker.getStyleClass().add("button");
 
-        BorderPane.setMargin(text_editor, new Insets(2.5f, 0, 0, 0));
-        BorderPane.setMargin(code_editor, new Insets(2.5f, 0, 0, 0));
-        GridPane.setMargin(imagecell_describe, new Insets(5));
-        grid_setting.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, new CornerRadii(2), new BorderWidths(2), null)));
+        var border_dash = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, new CornerRadii(2), new BorderWidths(2), null));
+        BorderPane.setMargin(text_editor, new Insets(3f, 0, 0, 0));
+        GridPane.setMargin(imagecell_describe, new Insets(12f));
+        imagecell_describe.setBorder(border_dash);
+        grid_setting.setBorder(border_dash);
 
-        gridpane_describe.add(imagecell_describe, 0, 1, 2, 1);
+        gridpane_describe.add(imagecell_describe, 0, 1, 2, 2);
 
         colorpicker_text_editor.getStyleClass().add("button");
-        pane_text_editor.setCenter(text_editor);
-        pane_text_editor.setBottom(code_editor);
+        gridpane_describe.add(text_editor, 2, 2, 2, 1);
+        gridpane_describe.add(code_require_editor, 2, 3);
+        gridpane_describe.add(code_select_editor, 3, 3);
+        GridPane.setMargin(code_require_editor, new Insets(3f, 3f, 3f, 0f));
+        GridPane.setMargin(code_select_editor, new Insets(3f, 0f, 3f, 3f));
 
         button_list.add(button_outline);
         button_list.add(button_horizon);
@@ -161,14 +169,14 @@ public class DescribeGuiController implements IController {
             var range = text_editor.getSelection();
             editTextCss(range, "-color-text", colorpicker_text_editor.getValue().toString().replace("0x", "#"));
         });
-        gridpane_describe.setOnDragOver(e -> {
+        imagecell_describe.setOnDragOver(e -> {
             if (e.getGestureSource() == null && e.getDragboard().hasFiles()) {
                 /* allow for both copying and moving, whatever user chooses */
                 e.acceptTransferModes(TransferMode.COPY_OR_MOVE);
             }
             e.consume();
         });
-        gridpane_describe.setOnDragDropped(e -> {
+        imagecell_describe.setOnDragDropped(e -> {
             Dragboard db = e.getDragboard();
             var success = false;
             if (db.hasFiles()) {
@@ -287,7 +295,8 @@ public class DescribeGuiController implements IController {
         text_title.setText(dataSet.string_title);
 
         LoadUtil.loadSegment(text_editor, dataSet.segmentList);
-        if (dataSet.string_code != null) code_editor.appendText(dataSet.string_code);
+        if (dataSet.string_code_require != null) code_require_editor.appendText(dataSet.string_code_require);
+        if (dataSet.string_code_select != null) code_select_editor.appendText(dataSet.string_code_select);
         colorpicker.setValue(dataSet.color);
         if (dataSet.string_image_name != null && !dataSet.string_image_name.isEmpty()) {
             image = LoadUtil.loadImage(dataSet.string_image_name);
@@ -302,7 +311,8 @@ public class DescribeGuiController implements IController {
 
     public void clear() {
         text_editor.clear();
-        code_editor.clear();
+        code_require_editor.clear();
+        code_select_editor.clear();
         imagecell_describe.setImage(null);
         colorpicker.setValue(ChoiceSet.baseColor);
         text_title.setText("Title");

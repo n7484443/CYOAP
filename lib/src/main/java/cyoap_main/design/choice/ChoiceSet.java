@@ -26,7 +26,8 @@ public class ChoiceSet {
 
     public String string_title;
     public List<StyledSegment<String, String>> segmentList = new ArrayList<>();
-    public String string_code;
+    public String string_code_require;
+    public String string_code_select;
     public String string_image_name;
     public Color color = baseColor;// blue
     @JsonIgnore

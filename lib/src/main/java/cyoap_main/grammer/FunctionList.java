@@ -178,8 +178,8 @@ public class FunctionList {
 		if (a == b) return new ValueType(true);
 		if (a.type == types.ints && b.type == types.ints && a.getData() == b.getData()) return new ValueType(true);
 		if (a.type == types.floats && b.type == types.floats) {
-			float a_data = (float) a.getData();
-			float b_data = (float) b.getData();
+			float a_data = a.getData();
+			float b_data = b.getData();
 			return new ValueType(Range.closed(-epsilon, epsilon).contains(a_data - b_data));
 		}
 		if (((a.type == types.ints && b.type == types.floats) || (a.type == types.floats && b.type == types.ints))
@@ -193,20 +193,20 @@ public class FunctionList {
 	};
 	final static Func_two_input func_bigger_equal = (a, b) -> {
 		if (a.type == types.ints && b.type == types.ints) {
-			int alpha = (int) a.getData();
-			int beta = (int) b.getData();
+			int alpha = a.getData();
+			int beta = b.getData();
 			return new ValueType(alpha >= beta);
 		} else if (a.type == types.floats && b.type == types.ints) {
-			float alpha = (float) a.getData();
-			int beta = (int) b.getData();
+			float alpha = a.getData();
+			int beta = b.getData();
 			return new ValueType(alpha >= beta);
 		} else if (a.type == types.ints && b.type == types.floats) {
-			int alpha = (int) a.getData();
-			float beta = (float) b.getData();
+			int alpha = a.getData();
+			float beta = b.getData();
 			return new ValueType(alpha >= beta);
 		} else if (a.type == types.floats && b.type == types.floats) {
-			float alpha = (float) a.getData();
-			float beta = (float) b.getData();
+			float alpha = a.getData();
+			float beta = b.getData();
 			return new ValueType(alpha >= beta);
 		} else {
 			return new ValueType(false);
@@ -215,20 +215,20 @@ public class FunctionList {
 
 	final static Func_two_input func_smaller_equal = (a, b) -> {
 		if (a.type == types.ints && b.type == types.ints) {
-			int alpha = (int) a.getData();
-			int beta = (int) b.getData();
+			int alpha = a.getData();
+			int beta = b.getData();
 			return new ValueType(alpha <= beta);
 		} else if (a.type == types.floats && b.type == types.ints) {
-			float alpha = (float) a.getData();
-			int beta = (int) b.getData();
+			float alpha = a.getData();
+			int beta = b.getData();
 			return new ValueType(alpha <= beta);
 		} else if (a.type == types.ints && b.type == types.floats) {
-			int alpha = (int) a.getData();
-			float beta = (float) b.getData();
+			int alpha = a.getData();
+			float beta = b.getData();
 			return new ValueType(alpha <= beta);
 		} else if (a.type == types.floats && b.type == types.floats) {
-			float alpha = (float) a.getData();
-			float beta = (float) b.getData();
+			float alpha = a.getData();
+			float beta = b.getData();
 			return new ValueType(alpha <= beta);
 		} else {
 			return new ValueType(false);

@@ -192,11 +192,18 @@ public class CreateGuiController implements IGuiController {
         nowEditDataSet.flag = FlagUtil.createFlag(v);
 
 
-        var code = Analyser.getInstance().parser(describeGuiController.code_editor.getText());
-        if (code != null) {
-            nowEditDataSet.string_code = describeGuiController.code_editor.getText();
-            Analyser.getInstance().analyseList(code);
+        var code_require = Analyser.getInstance().parser(describeGuiController.code_require_editor.getText());
+        if (code_require != null) {
+            nowEditDataSet.string_code_require = describeGuiController.code_require_editor.getText();
+            Analyser.getInstance().analyseList(code_require);
         }
+
+        var code_select = Analyser.getInstance().parser(describeGuiController.code_select_editor.getText());
+        if (code_select != null) {
+            nowEditDataSet.string_code_select = describeGuiController.code_select_editor.getText();
+            Analyser.getInstance().analyseList(code_select);
+        }
+
         LoadUtil.paragraphToSegment(describeGuiController.text_editor.getDocument().getParagraphs(), nowEditDataSet.segmentList);
 
 

@@ -308,6 +308,7 @@ public class DescribeGuiController implements IController {
             image = LoadUtil.loadImage(dataSet.string_image_name);
             imagecell_describe.setImage(image.getKey());
             imagecell_describe.setCut(dataSet.round);
+            label_imagecell.setVisible(false);
         }
         for (int i = 0; i < button_list.size(); i++) {
             button_list.get(i).setSelected(FlagUtil.getFlag(dataSet.flag, i));
@@ -320,6 +321,7 @@ public class DescribeGuiController implements IController {
         code_require_editor.clear();
         code_select_editor.clear();
         imagecell_describe.setImage(null);
+        label_imagecell.setVisible(true);
         colorpicker.setValue(ChoiceSet.baseColor);
         text_title.setText("Title");
         button_outline.setSelected(false);
@@ -351,6 +353,7 @@ public class DescribeGuiController implements IController {
     public void update() {
         if (isImageChanged) {
             isImageChanged = false;
+            label_imagecell.setVisible(false);
             image = LoadUtil.loadImage(dropped.get(0));
             imagecell_describe.setImage(image.getKey());
         }

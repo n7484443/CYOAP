@@ -18,12 +18,17 @@ public class Analyser implements IAnalyzer {
 	/*
 	 * 문자 입력->텍스트와 문법을 분리 {} 내부에 문법 사용. 즉, 실제 사용 가능한 것은 [], () 정도.
 	 */
-	public List<String> parser(String str) {
+	public List<String> parserLines(String str) {
 		if (str == null)
 			return null;
 		return Arrays.stream(str.split("\n")).toList();
 	}
 
+	public String parserLine(String str) {
+		if (str == null)
+			return null;
+		return str;
+	}
 
 	public Pair<Recursive_Parser, Integer> create_parser(int i, List<ParsingUnit> data,
 														 Recursive_Parser motherParser) {
@@ -86,7 +91,7 @@ public class Analyser implements IAnalyzer {
 		}
 	}
 
-	public void analyse(List<ParsingUnit> analysed_data) throws Exception {
+	public void analyseLines(List<ParsingUnit> analysed_data) throws Exception {
 		if (analysed_data.isEmpty()) return;
 		Recursive_Parser parser = new Recursive_Parser();
 
@@ -110,9 +115,9 @@ public class Analyser implements IAnalyzer {
 			var parser_ans = create_parser(0, list_check, parser);
 			boolean check = parser_ans.getKey().unzip().getData();
 			if (check) {
-				analyse(list_true);
+				analyseLines(list_true);
 			} else {
-				analyse(list_false);
+				analyseLines(list_false);
 			}
 			return;
 		}
@@ -136,10 +141,29 @@ public class Analyser implements IAnalyzer {
 		}
 	}
 
+	public boolean analyseConditional(List<ParsingUnit> analysed_data) throws Exception {
+		if (analysed_data.isEmpty())
+			throw new Exception("something wrong!");
+		Recursive_Parser parser = new Recursive_Parser();
+
+		var parser_ans = create_parser(0, analysed_data, parser);
+
+		var t = parser_ans.getKey().unzip().getData();
+		if (t instanceof Boolean) {
+			return (boolean) t;
+		} else {
+			throw new Exception("something wrong!");
+		}
+	}
+
 	public void analyseList(List<String> str_list) throws Exception {
 		for (var str : str_list) {
-			analyse(LexicalAnalyzer.getInstance().analyze(str));
+			analyseLines(LexicalAnalyzer.getInstance().analyze(str));
 		}
 		System.out.println("all parsing end");
+	}
+
+	public boolean analyseConditional(String str) throws Exception {
+		return analyseConditional(LexicalAnalyzer.getInstance().analyze(str));
 	}
 }

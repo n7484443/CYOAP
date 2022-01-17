@@ -30,11 +30,14 @@ class AnalyserTest {
         String str_test_2 = """
                 a123123aa = 3
                 """;
-        var l = Analyser.getInstance().parser(str_test_2);
+        String str_check = """
+                f == 0.5
+                """;
+        var l = Analyser.getInstance().parserLines(str_test_2);
         Analyser.getInstance().analyseList(l);
         assertEquals(3, (int) ins.getValue("a123123aa").getData());
 
-        var func = Analyser.getInstance().parser(str_test);
+        var func = Analyser.getInstance().parserLines(str_test);
 
         assertEquals("aaa = 3", func.get(0).strip());
         assertEquals("a = 3 + 5", func.get(1).strip());
@@ -61,5 +64,8 @@ class AnalyserTest {
         assertEquals(16, (int) ins.getValue("omega").getData());
 
         assertEquals(4, (int) ins.getValue("test_alpha").getData());
+
+        var func_check = Analyser.getInstance().parserLine(str_check);
+        assertTrue(Analyser.getInstance().analyseConditional(func_check));
     }
 }

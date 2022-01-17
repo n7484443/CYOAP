@@ -170,13 +170,13 @@ public class CreateGuiController implements IGuiController {
         if (nowEditDataSet == null) return -1;
 
         try {
-            var code_require = Analyser.getInstance().parser(describeGuiController.code_require_editor.getText());
+            var code_require = Analyser.getInstance().parserLines(describeGuiController.code_require_editor.getText());
             if (code_require != null) {
                 nowEditDataSet.string_code_require = describeGuiController.code_require_editor.getText();
                 Analyser.getInstance().analyseList(code_require);
             }
 
-            var code_select = Analyser.getInstance().parser(describeGuiController.code_select_editor.getText());
+            var code_select = Analyser.getInstance().parserLines(describeGuiController.code_select_editor.getText());
             if (code_select != null) {
                 nowEditDataSet.string_code_select = describeGuiController.code_select_editor.getText();
                 Analyser.getInstance().analyseList(code_select);
@@ -273,8 +273,8 @@ public class CreateGuiController implements IGuiController {
     }
 
     public Vector2f getPositionFromMouse(double mouse_x, double mouse_y) {
-        Point2D mousePoint = new Point2D(mouse_x, mouse_y);
-        Point2D posInZoomTarget = pane_position.sceneToLocal(mousePoint);
+        var mousePoint = new Point2D(mouse_x, mouse_y);
+        var posInZoomTarget = pane_position.sceneToLocal(mousePoint);
 
         return new Vector2f((float) (platform.local_x + posInZoomTarget.getX()),
                 (float) (platform.local_y + posInZoomTarget.getY()));

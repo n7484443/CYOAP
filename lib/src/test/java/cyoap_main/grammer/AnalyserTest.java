@@ -65,7 +65,6 @@ class AnalyserTest {
 
         assertEquals(4, (int) ins.getValue("test_alpha").getData());
 
-        var func_check = Analyser.getInstance().parserLine(str_check);
-        assertTrue(Analyser.getInstance().analyseConditional(func_check));
+        assertTrue(Analyser.getInstance().analyseConditional(str_check));
     }
 }

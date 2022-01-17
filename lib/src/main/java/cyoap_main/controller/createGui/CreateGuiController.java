@@ -19,7 +19,10 @@ import cyoap_main.util.FlagUtil;
 import cyoap_main.util.LoadUtil;
 import cyoap_main.util.LocalizationUtil;
 import cyoap_main.util.SizeUtil;
-import io.github.palexdev.materialfx.controls.*;
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXListView;
+import io.github.palexdev.materialfx.controls.MFXRadioButton;
+import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
@@ -53,6 +56,7 @@ import java.util.stream.Collectors;
 
 public class CreateGuiController implements IGuiController {
     public static CreateGuiController instance;
+    public static AbstractPlatform platform;
     @FXML
     public AnchorPane anchorpane_create;
     @FXML
@@ -87,7 +91,6 @@ public class CreateGuiController implements IGuiController {
     public Tab tab_position;
     @FXML
     public Tab tab_generalSetting;
-
     public ImageCell imagecell_background = new ImageCell();
     @FXML
     public MFXRadioButton button_darkmode;
@@ -99,20 +102,14 @@ public class CreateGuiController implements IGuiController {
     public MFXButton button_borderless;
     @FXML
     public ColorPicker colorpicker_background;
-
     @FXML
     public VBox vbox_background_order;
     @FXML
     public MFXScrollPane scrollpane_background_order;
-
     @FXML
     public DescribeGuiController describeGuiController;
-
     public ResizableCanvas canvas = new ResizableCanvas();
-
     public CommandTimeline commandTimeline = new CommandTimeline();
-    public static AbstractPlatform platform;
-
     public SimpleEntry<ChoiceSet, SizeChangeCommand> nowSizeChange;
 
     public ChoiceSet nowEditDataSet;
@@ -170,19 +167,23 @@ public class CreateGuiController implements IGuiController {
         if (nowEditDataSet == null) return -1;
 
         try {
-            var code_require = Analyser.getInstance().parserLines(describeGuiController.code_require_editor.getText());
-            if (code_require != null) {
+            var code_require = describeGuiController.code_require_editor.getText();
+            if (code_require != null && !code_require.isEmpty()) {
                 nowEditDataSet.string_code_require = describeGuiController.code_require_editor.getText();
-                Analyser.getInstance().analyseList(code_require);
+                Analyser.getInstance().analyseConditional(code_require);
             }
-
+        } catch (Exception e) {
+            describeGuiController.error("code_require");
+            return -1;
+        }
+        try {
             var code_select = Analyser.getInstance().parserLines(describeGuiController.code_select_editor.getText());
             if (code_select != null) {
                 nowEditDataSet.string_code_select = describeGuiController.code_select_editor.getText();
                 Analyser.getInstance().analyseList(code_select);
             }
         } catch (Exception e) {
-            describeGuiController.error();
+            describeGuiController.error("code_select");
             return -1;
         }
 
@@ -204,7 +205,6 @@ public class CreateGuiController implements IGuiController {
 
         var v = describeGuiController.button_list.stream().map(ToggleButton::isSelected).collect(Collectors.toList());
         nowEditDataSet.flag = FlagUtil.createFlag(v);
-
 
 
         LoadUtil.paragraphToSegment(describeGuiController.text_editor.getDocument().getParagraphs(), nowEditDataSet.segmentList);

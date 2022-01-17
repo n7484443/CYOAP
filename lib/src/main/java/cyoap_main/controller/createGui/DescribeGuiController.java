@@ -16,7 +16,9 @@ import io.github.palexdev.materialfx.notifications.NotificationsManager;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.VPos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
@@ -80,8 +82,11 @@ public class DescribeGuiController implements IController {
     public MFXComboBox<String> combo_text_size;
 
     public InlineCssTextArea text_editor = new InlineCssTextArea();
+    public Label text_hint_text_editor = new Label();
     public InlineCssTextArea code_require_editor = new InlineCssTextArea();
+    public Label text_hint_require_editor = new Label();
     public InlineCssTextArea code_select_editor = new InlineCssTextArea();
+    public Label text_hint_select_editor = new Label();
 
     @FXML
     public MFXRadioButton button_outline;
@@ -97,6 +102,7 @@ public class DescribeGuiController implements IController {
     public AbstractMap.SimpleEntry<Image, String> image;
 
     public List<File> dropped;
+    public StringBuilder builder = new StringBuilder();
 
     @Override
     public void nodeInit() {
@@ -121,7 +127,6 @@ public class DescribeGuiController implements IController {
         colorpicker.getStyleClass().add("button");
 
         var border_dash = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, new CornerRadii(2), new BorderWidths(2), null));
-        BorderPane.setMargin(text_editor, new Insets(3f, 0, 0, 0));
         GridPane.setMargin(imagecell_describe, new Insets(12f));
         imagecell_describe.setBorder(border_dash);
         grid_setting.setBorder(border_dash);
@@ -129,11 +134,36 @@ public class DescribeGuiController implements IController {
         gridpane_describe.add(imagecell_describe, 0, 1, 2, 2);
 
         colorpicker_text_editor.getStyleClass().add("button");
+
         gridpane_describe.add(text_editor, 2, 2, 2, 1);
+        gridpane_describe.add(text_hint_text_editor, 2, 2, 2, 1);
+        GridPane.setValignment(text_hint_text_editor, VPos.TOP);
+        GridPane.setHalignment(text_hint_text_editor, HPos.LEFT);
+        GridPane.setMargin(text_hint_text_editor, new Insets(3f, 0, 0, 0));
+        GridPane.setMargin(text_editor, new Insets(3f, 0, 0, 0));
+        text_hint_text_editor.setWrapText(true);
+        text_hint_text_editor.setMouseTransparent(true);
+        text_hint_text_editor.setStyle("-fx-text-fill: #D9D6CF; -fx-font-size: 12pt;");
+
         gridpane_describe.add(code_require_editor, 2, 3);
-        gridpane_describe.add(code_select_editor, 3, 3);
+        gridpane_describe.add(text_hint_require_editor, 2, 3);
+        GridPane.setValignment(text_hint_require_editor, VPos.TOP);
+        GridPane.setHalignment(text_hint_require_editor, HPos.LEFT);
+        GridPane.setMargin(text_hint_require_editor, new Insets(3f, 3f, 3f, 0f));
         GridPane.setMargin(code_require_editor, new Insets(3f, 3f, 3f, 0f));
+        text_hint_require_editor.setWrapText(true);
+        text_hint_require_editor.setMouseTransparent(true);
+        text_hint_require_editor.setStyle("-fx-text-fill: #D9D6CF; -fx-font-size: 12pt;");
+
+        gridpane_describe.add(code_select_editor, 3, 3);
+        gridpane_describe.add(text_hint_select_editor, 3, 3);
+        GridPane.setValignment(text_hint_select_editor, VPos.TOP);
+        GridPane.setHalignment(text_hint_select_editor, HPos.LEFT);
+        GridPane.setMargin(text_hint_select_editor, new Insets(3f, 0f, 3f, 3f));
         GridPane.setMargin(code_select_editor, new Insets(3f, 0f, 3f, 3f));
+        text_hint_select_editor.setWrapText(true);
+        text_hint_select_editor.setMouseTransparent(true);
+        text_hint_select_editor.setStyle("-fx-text-fill: #D9D6CF; -fx-font-size: 12pt;");
 
         button_list.add(button_outline);
         button_list.add(button_horizon);
@@ -241,9 +271,19 @@ public class DescribeGuiController implements IController {
             if (CreateGuiController.instance.save_describe_pane() == 0)
                 CreateGuiController.instance.next();
         });
+        text_editor.textProperty().addListener((observable, oldValue, newValue) ->
+                text_hint_text_editor.setVisible(newValue == null || newValue.isEmpty())
+        );
+
+        code_require_editor.textProperty().addListener((observable, oldValue, newValue) ->
+                text_hint_require_editor.setVisible(newValue == null || newValue.isEmpty())
+        );
+
+        code_select_editor.textProperty().addListener((observable, oldValue, newValue) ->
+                text_hint_select_editor.setVisible(newValue == null || newValue.isEmpty())
+        );
     }
 
-    public StringBuilder builder = new StringBuilder();
     public String getTextCss(IndexRange range, String css) {
         if (range.getStart() == range.getEnd()) return "error";
 
@@ -308,8 +348,12 @@ public class DescribeGuiController implements IController {
         text_title.setText(dataSet.string_title);
 
         LoadUtil.loadSegment(text_editor, dataSet.segmentList);
-        if (dataSet.string_code_require != null) code_require_editor.appendText(dataSet.string_code_require);
-        if (dataSet.string_code_select != null) code_select_editor.appendText(dataSet.string_code_select);
+        if (dataSet.string_code_require != null && dataSet.string_code_require.isEmpty()) {
+            code_require_editor.appendText(dataSet.string_code_require);
+        }
+        if (dataSet.string_code_select != null && dataSet.string_code_select.isEmpty()) {
+            code_select_editor.appendText(dataSet.string_code_select);
+        }
         colorpicker.setValue(dataSet.color);
         if (dataSet.string_image_name != null && !dataSet.string_image_name.isEmpty()) {
             image = LoadUtil.loadImage(dataSet.string_image_name);
@@ -355,6 +399,10 @@ public class DescribeGuiController implements IController {
             combo_text_size.getItems().add(String.valueOf(i));
         }
         combo_text_size.getSelectionModel().selectItem("12");
+
+        text_hint_text_editor.setText(LocalizationUtil.getInstance().getLocalization("describeGui.text_editor"));
+        text_hint_select_editor.setText(LocalizationUtil.getInstance().getLocalization("describeGui.code_require_editor"));
+        text_hint_require_editor.setText(LocalizationUtil.getInstance().getLocalization("describeGui.code_select_editor"));
     }
 
     public void update() {
@@ -366,9 +414,9 @@ public class DescribeGuiController implements IController {
         }
     }
 
-    public void error() {
+    public void error(String s) {
         var dialog = MFXDialogFactory.buildDialog(DialogType.ERROR,
-                LocalizationUtil.getInstance().getLocalization("notification.title"),
+                LocalizationUtil.getInstance().getLocalization("notification.title." + s),
                 LocalizationUtil.getInstance().getLocalization("notification.content"));
 
         var notification = new MFXNotification(dialog, true, true);

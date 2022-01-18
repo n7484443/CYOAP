@@ -16,9 +16,7 @@ import io.github.palexdev.materialfx.notifications.NotificationsManager;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.geometry.VPos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
@@ -82,11 +80,14 @@ public class DescribeGuiController implements IController {
     public MFXComboBox<String> combo_text_size;
 
     public InlineCssTextArea text_editor = new InlineCssTextArea();
-    public Label text_hint_text_editor = new Label();
     public InlineCssTextArea code_require_editor = new InlineCssTextArea();
-    public Label text_hint_require_editor = new Label();
     public InlineCssTextArea code_select_editor = new InlineCssTextArea();
-    public Label text_hint_select_editor = new Label();
+    @FXML
+    public Label text_hint_text_editor;
+    @FXML
+    public Label text_hint_require_editor;
+    @FXML
+    public Label text_hint_select_editor;
 
     @FXML
     public MFXRadioButton button_outline;
@@ -136,34 +137,19 @@ public class DescribeGuiController implements IController {
         colorpicker_text_editor.getStyleClass().add("button");
 
         gridpane_describe.add(text_editor, 2, 2, 2, 1);
-        gridpane_describe.add(text_hint_text_editor, 2, 2, 2, 1);
-        GridPane.setValignment(text_hint_text_editor, VPos.TOP);
-        GridPane.setHalignment(text_hint_text_editor, HPos.LEFT);
         GridPane.setMargin(text_hint_text_editor, new Insets(3f, 0, 0, 0));
-        GridPane.setMargin(text_editor, new Insets(3f, 0, 0, 0));
-        text_hint_text_editor.setWrapText(true);
-        text_hint_text_editor.setMouseTransparent(true);
         text_hint_text_editor.setStyle("-fx-text-fill: #D9D6CF; -fx-font-size: 12pt;");
+        text_hint_text_editor.toFront();
 
         gridpane_describe.add(code_require_editor, 2, 3);
-        gridpane_describe.add(text_hint_require_editor, 2, 3);
-        GridPane.setValignment(text_hint_require_editor, VPos.TOP);
-        GridPane.setHalignment(text_hint_require_editor, HPos.LEFT);
-        GridPane.setMargin(text_hint_require_editor, new Insets(3f, 3f, 3f, 0f));
         GridPane.setMargin(code_require_editor, new Insets(3f, 3f, 3f, 0f));
-        text_hint_require_editor.setWrapText(true);
-        text_hint_require_editor.setMouseTransparent(true);
         text_hint_require_editor.setStyle("-fx-text-fill: #D9D6CF; -fx-font-size: 12pt;");
+        text_hint_require_editor.toFront();
 
         gridpane_describe.add(code_select_editor, 3, 3);
-        gridpane_describe.add(text_hint_select_editor, 3, 3);
-        GridPane.setValignment(text_hint_select_editor, VPos.TOP);
-        GridPane.setHalignment(text_hint_select_editor, HPos.LEFT);
-        GridPane.setMargin(text_hint_select_editor, new Insets(3f, 0f, 3f, 3f));
         GridPane.setMargin(code_select_editor, new Insets(3f, 0f, 3f, 3f));
-        text_hint_select_editor.setWrapText(true);
-        text_hint_select_editor.setMouseTransparent(true);
         text_hint_select_editor.setStyle("-fx-text-fill: #D9D6CF; -fx-font-size: 12pt;");
+        text_hint_select_editor.toFront();
 
         button_list.add(button_outline);
         button_list.add(button_horizon);
